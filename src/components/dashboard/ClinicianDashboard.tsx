@@ -1,103 +1,235 @@
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Activity,
-  AlertTriangle,
-  Clock,
-  Users,
-  TrendingUp,
-  TrendingDown,
-  Search,
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { 
+  Users, 
+  AlertTriangle, 
+  UserCheck, 
+  Calendar, 
+  TrendingUp, 
+  TrendingDown, 
   Filter,
+  Search,
   Download,
-  MessageSquare,
-  Calendar,
+  Plus,
+  Activity,
+  Brain,
+  Stethoscope,
   FileText,
-  Settings,
-  Bell,
-  UserCheck,
-  Zap,
-  Heart,
-  Brain
+  BarChart3
 } from "lucide-react";
 
-// Mock data for demonstration
+// Comprehensive mock data for demonstration
 const patientAlerts = [
   {
-    id: 1,
-    patientName: "Sarah Johnson",
-    condition: "Epilepsy",
-    alert: "Seizure cluster detected - 3 events in 24hrs",
-    severity: "high",
-    time: "2 hours ago",
-    lastActivity: "Active now"
+    id: '1',
+    patientName: 'Sarah Johnson',
+    patientId: 'P001',
+    age: 34,
+    condition: 'Temporal Lobe Epilepsy',
+    severity: 'critical',
+    message: 'Seizure cluster detected - 3 generalized tonic-clonic seizures in 24 hours',
+    timestamp: '2 hours ago',
+    action: 'Emergency contact required',
+    lastSeizure: '2 hours ago',
+    medicationAdherence: 87,
+    recentEvents: ['Seizure (Tonic-Clonic)', 'Missed PM medication', 'Aura reported']
   },
   {
-    id: 2,
-    patientName: "Michael Chen",
-    condition: "Parkinson's",
-    alert: "Medication adherence dropped to 67%",
-    severity: "medium",
-    time: "4 hours ago",
-    lastActivity: "12 hours ago"
+    id: '2',
+    patientName: 'Michael Chen',
+    patientId: 'P002', 
+    age: 68,
+    condition: "Parkinson's Disease",
+    severity: 'moderate',
+    message: 'Missed levodopa doses for 2 consecutive days, tremor worsening',
+    timestamp: '4 hours ago',
+    action: 'Schedule urgent medication review',
+    lastMedication: '36 hours ago',
+    medicationAdherence: 72,
+    recentEvents: ['Missed medication', 'Increased tremor', 'Freezing episode']
   },
   {
-    id: 3,
-    patientName: "Emma Rodriguez",
-    condition: "Essential Tremor",
-    alert: "Reported severe tremor episode",
-    severity: "medium",
-    time: "6 hours ago",
-    lastActivity: "2 hours ago"
+    id: '3',
+    patientName: 'Emily Rodriguez',
+    patientId: 'P003',
+    age: 45,
+    condition: 'Essential Tremor',
+    severity: 'low',
+    message: 'Tremor intensity increasing progressively over past week',
+    timestamp: '1 day ago',
+    action: 'Monitor and consider dose adjustment',
+    lastActivity: '6 hours ago',
+    medicationAdherence: 95,
+    recentEvents: ['Tremor worsening', 'Sleep disturbance', 'Stress reported']
+  },
+  {
+    id: '4',
+    patientName: 'Lisa Parker',
+    patientId: 'P004',
+    age: 29,
+    condition: 'Juvenile Myoclonic Epilepsy',
+    severity: 'moderate',
+    message: 'Breakthrough myoclonic jerks reported, possible stress trigger',
+    timestamp: '6 hours ago',
+    action: 'Review stress management and medication timing',
+    lastSeizure: '8 hours ago',
+    medicationAdherence: 91,
+    recentEvents: ['Myoclonic jerks', 'Work stress', 'Sleep deprivation']
+  },
+  {
+    id: '5',
+    patientName: 'Robert Kim',
+    patientId: 'P005',
+    age: 72,
+    condition: "Parkinson's Disease",
+    severity: 'critical',
+    message: 'Fall reported with injury, possible medication timing issue',
+    timestamp: '30 minutes ago',
+    action: 'Immediate assessment required',
+    lastActivity: '30 minutes ago',
+    medicationAdherence: 89,
+    recentEvents: ['Fall with injury', 'Off period prolonged', 'Balance issues']
   }
 ];
 
 const recentPatients = [
   {
-    id: 1,
-    name: "David Park",
-    condition: "Epilepsy",
-    status: "stable",
-    adherence: 94,
-    lastSeizure: "12 days ago",
-    nextAppointment: "Tomorrow 2:00 PM"
-  },
-  {
-    id: 2,
-    name: "Lisa Thompson",
-    condition: "Parkinson's",
-    status: "monitoring",
+    id: 'P001',
+    name: 'Sarah Johnson',
+    age: 34,
+    condition: 'Temporal Lobe Epilepsy',
+    diagnosisDate: '2019-03-15',
+    lastActivity: '2 hours ago',
+    status: 'critical',
+    avatar: 'SJ',
+    nextAppt: '2024-01-15',
+    primaryMedication: 'Levetiracetam 1000mg BID',
     adherence: 87,
-    motorScore: "Improving",
-    nextAppointment: "Friday 10:00 AM"
+    recentVitals: { seizureFreq: '3/week', lastSeizure: '2 hours ago' }
   },
   {
-    id: 3,
-    name: "James Wilson",
-    condition: "Movement Disorder",
-    status: "stable",
+    id: 'P002',
+    name: 'Michael Chen', 
+    age: 68,
+    condition: "Parkinson's Disease",
+    diagnosisDate: '2020-07-22',
+    lastActivity: '4 hours ago',
+    status: 'moderate',
+    avatar: 'MC',
+    nextAppt: '2024-01-18',
+    primaryMedication: 'Levodopa/Carbidopa 25/100mg TID',
+    adherence: 72,
+    recentVitals: { tremor: 'Moderate', lastDose: '36 hours ago' }
+  },
+  {
+    id: 'P003',
+    name: 'Emily Rodriguez',
+    age: 45, 
+    condition: 'Essential Tremor',
+    diagnosisDate: '2018-11-10',
+    lastActivity: '6 hours ago',
+    status: 'stable',
+    avatar: 'ER',
+    nextAppt: '2024-02-01',
+    primaryMedication: 'Propranolol 80mg BID',
+    adherence: 95,
+    recentVitals: { tremor: 'Mild-Moderate', mood: 'Good' }
+  },
+  {
+    id: 'P004',
+    name: 'David Thompson',
+    age: 22,
+    condition: 'Juvenile Myoclonic Epilepsy',
+    diagnosisDate: '2021-05-03',
+    lastActivity: '1 day ago',
+    status: 'stable', 
+    avatar: 'DT',
+    nextAppt: '2024-01-25',
+    primaryMedication: 'Valproate 500mg BID',
+    adherence: 98,
+    recentVitals: { seizureFreq: '0/month', mood: 'Excellent' }
+  },
+  {
+    id: 'P005',
+    name: 'Lisa Parker',
+    age: 29,
+    condition: 'Focal Epilepsy',
+    diagnosisDate: '2022-01-12', 
+    lastActivity: '8 hours ago',
+    status: 'moderate',
+    avatar: 'LP',
+    nextAppt: '2024-01-20',
+    primaryMedication: 'Lamotrigine 200mg BID',
+    adherence: 91,
+    recentVitals: { seizureFreq: '1/week', auras: 'Frequent' }
+  },
+  {
+    id: 'P006',
+    name: 'Robert Kim',
+    age: 72,
+    condition: "Parkinson's Disease",
+    diagnosisDate: '2019-09-18',
+    lastActivity: '30 minutes ago',
+    status: 'critical',
+    avatar: 'RK', 
+    nextAppt: '2024-01-16',
+    primaryMedication: 'Levodopa/Carbidopa 25/250mg QID',
+    adherence: 89,
+    recentVitals: { tremor: 'Severe', falls: '2 this week' }
+  },
+  {
+    id: 'P007',
+    name: 'Maria Santos',
+    age: 56,
+    condition: 'Multiple Sclerosis',
+    diagnosisDate: '2017-04-25',
+    lastActivity: '12 hours ago', 
+    status: 'stable',
+    avatar: 'MS',
+    nextAppt: '2024-02-05',
+    primaryMedication: 'Glatiramer Acetate 20mg daily',
+    adherence: 94,
+    recentVitals: { mobility: 'Good', fatigue: 'Mild' }
+  },
+  {
+    id: 'P008', 
+    name: 'James Wilson',
+    age: 41,
+    condition: 'Huntington Disease',
+    diagnosisDate: '2023-02-14',
+    lastActivity: '2 days ago',
+    status: 'stable',
+    avatar: 'JW',
+    nextAppt: '2024-01-30',
+    primaryMedication: 'Tetrabenazine 25mg TID',
     adherence: 92,
-    symptoms: "Mild",
-    nextAppointment: "Next week"
+    recentVitals: { chorea: 'Mild', cognition: 'Stable', mood: 'Fair' }
   }
 ];
 
 const cohortStats = [
   {
     label: "Total Patients",
-    value: "127",
-    change: "+3 this week",
+    value: "287",
+    change: "+12 this week",
     trend: "up",
     icon: Users,
     color: "text-primary"
   },
   {
     label: "Active Alerts",
-    value: "8",
+    value: "5",
     change: "-2 from yesterday",
     trend: "down",
     icon: AlertTriangle,
@@ -105,15 +237,15 @@ const cohortStats = [
   },
   {
     label: "Average Adherence",
-    value: "89%",
-    change: "+2% this month",
+    value: "89.7%",
+    change: "+3.2% this month",
     trend: "up",
     icon: UserCheck,
     color: "text-status-stable"
   },
   {
     label: "Upcoming Appointments",
-    value: "23",
+    value: "34",
     change: "Next 7 days",
     trend: "neutral",
     icon: Calendar,
@@ -121,10 +253,32 @@ const cohortStats = [
   }
 ];
 
+const analyticsData = {
+  seizureReduction: [
+    { month: 'Jul', reduction: -8.2 },
+    { month: 'Aug', reduction: -12.1 },
+    { month: 'Sep', reduction: -15.3 },
+    { month: 'Oct', reduction: -18.7 },
+    { month: 'Nov', reduction: -22.1 },
+    { month: 'Dec', reduction: -25.4 }
+  ],
+  adherenceRates: [
+    { condition: 'Epilepsy', rate: 87.3, patients: 156 },
+    { condition: 'Parkinson\'s', rate: 91.2, patients: 89 },
+    { condition: 'Essential Tremor', rate: 94.1, patients: 42 }
+  ],
+  qualityMetrics: {
+    patientSatisfaction: 94.2,
+    treatmentEffectiveness: 88.7,
+    sideEffectReports: 12.3,
+    emergencyVisits: -34.2
+  }
+};
+
 const getSeverityColor = (severity: string) => {
   switch (severity) {
-    case 'high': return 'destructive';
-    case 'medium': return 'secondary';
+    case 'critical': return 'destructive';
+    case 'moderate': return 'secondary';
     case 'low': return 'outline';
     default: return 'outline';
   }
@@ -134,6 +288,7 @@ const getStatusColor = (status: string) => {
   switch (status) {
     case 'stable': return 'bg-status-stable/20 text-status-stable';
     case 'monitoring': return 'bg-status-monitoring/20 text-status-monitoring';
+    case 'moderate': return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
     case 'critical': return 'bg-status-critical/20 text-status-critical';
     default: return 'bg-muted text-muted-foreground';
   }
@@ -142,6 +297,11 @@ const getStatusColor = (status: string) => {
 export default function ClinicianDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("overview");
+
+  const filteredPatients = recentPatients.filter(patient => 
+    patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    patient.condition.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -154,28 +314,27 @@ export default function ClinicianDashboard() {
                 <Brain className="h-6 w-6 text-primary" />
                 Clinical Dashboard
               </h1>
-              <p className="text-muted-foreground">Monitor and manage your neurological patients</p>
+              <p className="text-sm text-muted-foreground">
+                Monitor patient progress and manage neurological care
+              </p>
             </div>
-            
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center gap-3">
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4 mr-2" />
                 Export Data
               </Button>
-              <Button variant="outline" size="sm">
-                <Bell className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4" />
+              <Button variant="hero" size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Patient
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mb-8">
+      <div className="container mx-auto p-6">
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="patients">Patients</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -203,10 +362,10 @@ export default function ClinicianDashboard() {
                           </div>
                         )}
                       </div>
-                      <div>
-                        <p className={`text-2xl font-bold ${stat.color} mb-1`}>{stat.value}</p>
-                        <p className="text-sm text-muted-foreground">{stat.label}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{stat.change}</p>
+                      <div className="space-y-1">
+                        <p className="text-2xl font-bold">{stat.value}</p>
+                        <p className="text-xs text-muted-foreground">{stat.label}</p>
+                        <p className="text-xs text-muted-foreground">{stat.change}</p>
                       </div>
                     </Card>
                   );
@@ -214,42 +373,29 @@ export default function ClinicianDashboard() {
               </div>
             </section>
 
-            {/* Critical Alerts */}
+            {/* Critical Patient Alerts */}
             <section>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-warning" />
-                  Critical Patient Alerts
-                </h2>
-                <Button variant="outline" size="sm">View All</Button>
-              </div>
-              
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-warning" />
+                Critical Patient Alerts
+              </h2>
               <div className="space-y-3">
-                {patientAlerts.map((alert) => (
-                  <Card key={alert.id} className="medical-card p-4">
-                    <div className="flex items-center justify-between">
+                {patientAlerts.slice(0, 3).map((alert) => (
+                  <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning">
+                    <div className="flex justify-between items-start">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h4 className="font-semibold">{alert.patientName}</h4>
-                          <Badge variant="outline" className="text-xs">{alert.condition}</Badge>
-                          <Badge variant={getSeverityColor(alert.severity)} className="text-xs">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant={getSeverityColor(alert.severity)}>
                             {alert.severity.toUpperCase()}
                           </Badge>
+                          <h4 className="font-semibold">{alert.patientName}</h4>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-1">{alert.alert}</p>
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3 mr-1" />
-                          {alert.time} • Last active: {alert.lastActivity}
-                        </div>
+                        <p className="text-sm text-muted-foreground">{alert.message}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{alert.timestamp}</p>
                       </div>
-                      <div className="flex gap-2 ml-4">
-                        <Button variant="outline" size="sm">
-                          <MessageSquare className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <FileText className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      <Button variant="outline" size="sm">
+                        Review
+                      </Button>
                     </div>
                   </Card>
                 ))}
@@ -258,54 +404,47 @@ export default function ClinicianDashboard() {
 
             {/* Recent Patient Activity */}
             <section>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Recent Patient Activity</h2>
-                <Button variant="outline" size="sm">View All Patients</Button>
-              </div>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {recentPatients.map((patient) => (
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary" />
+                Recent Patient Activity
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {recentPatients.slice(0, 4).map((patient) => (
                   <Card key={patient.id} className="medical-card p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold">{patient.name}</h4>
-                      <Badge className={getStatusColor(patient.status)}>
-                        {patient.status}
-                      </Badge>
-                    </div>
-                    
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Condition:</span>
-                        <span>{patient.condition}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Adherence:</span>
-                        <span className={patient.adherence >= 85 ? 'text-status-stable' : 'text-warning'}>
-                          {patient.adherence}%
-                        </span>
-                      </div>
-                      {patient.lastSeizure && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Last seizure:</span>
-                          <span>{patient.lastSeizure}</span>
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarFallback>{patient.avatar}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold">{patient.name}</h4>
+                          <Badge 
+                            variant="outline" 
+                            className={getStatusColor(patient.status)}
+                          >
+                            {patient.status}
+                          </Badge>
                         </div>
-                      )}
-                      {patient.motorScore && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Motor score:</span>
-                          <span>{patient.motorScore}</span>
-                        </div>
-                      )}
-                      {patient.symptoms && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Symptoms:</span>
-                          <span>{patient.symptoms}</span>
-                        </div>
-                      )}
-                      <div className="pt-2 border-t">
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          Next: {patient.nextAppointment}
+                        <p className="text-sm text-muted-foreground">{patient.condition}</p>
+                        <div className="grid grid-cols-2 gap-4 mt-2">
+                          <div className="text-sm">
+                            <p><strong>Adherence:</strong> {patient.adherence}%</p>
+                            {patient.recentVitals?.seizureFreq && (
+                              <p><strong>Seizure Frequency:</strong> {patient.recentVitals.seizureFreq}</p>
+                            )}
+                            {patient.recentVitals?.lastSeizure && (
+                              <p><strong>Last Seizure:</strong> {patient.recentVitals.lastSeizure}</p>
+                            )}
+                            {patient.recentVitals?.tremor && (
+                              <p><strong>Tremor:</strong> {patient.recentVitals.tremor}</p>
+                            )}
+                            {patient.recentVitals?.mood && (
+                              <p><strong>Mood:</strong> {patient.recentVitals.mood}</p>
+                            )}
+                          </div>
+                          <div className="text-sm">
+                            <p><strong>Next Appointment:</strong> {patient.nextAppt}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -316,131 +455,164 @@ export default function ClinicianDashboard() {
           </TabsContent>
 
           <TabsContent value="patients" className="space-y-6">
-            {/* Patient Search & Filters */}
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-              <div className="flex gap-2 flex-1 max-w-md">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search patients..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
-                <Button variant="outline" size="icon">
-                  <Filter className="h-4 w-4" />
-                </Button>
+            {/* Search and Filter */}
+            <div className="flex gap-4 items-center">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search patients..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9"
+                />
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline">Export List</Button>
-                <Button variant="medical">Add Patient</Button>
-              </div>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filter
+              </Button>
             </div>
 
             {/* Patient List */}
-            <Card className="medical-card">
-              <div className="p-6">
-                <div className="space-y-4">
-                  {[...recentPatients, ...patientAlerts.map(alert => ({
-                    id: alert.id + 100,
-                    name: alert.patientName,
-                    condition: alert.condition,
-                    status: alert.severity === 'high' ? 'critical' : 'monitoring',
-                    adherence: Math.floor(Math.random() * 30) + 70,
-                    nextAppointment: 'Scheduled',
-                    symptoms: 'Varies'
-                  }))].map((patient) => (
-                    <div key={patient.id} className="flex items-center justify-between p-4 bg-accent rounded-lg hover:bg-accent/80 transition-colors cursor-pointer">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h4 className="font-semibold">{patient.name}</h4>
-                          <Badge variant="outline" className="text-xs">{patient.condition}</Badge>
-                          <Badge className={getStatusColor(patient.status)}>
-                            {patient.status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center text-sm text-muted-foreground gap-4">
-                          <span>Adherence: {patient.adherence}%</span>
-                          <span>Next: {patient.nextAppointment}</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="sm">
-                          <Activity className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <MessageSquare className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <FileText className="h-4 w-4" />
-                        </Button>
+            <div className="grid gap-4">
+              {filteredPatients.map((patient) => (
+                <Card key={patient.id} className="medical-card p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12">
+                        <AvatarFallback>{patient.avatar}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h3 className="font-semibold text-lg">{patient.name}</h3>
+                        <p className="text-muted-foreground">{patient.condition}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Age: {patient.age} • Diagnosed: {new Date(patient.diagnosisDate).getFullYear()}
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </Card>
+                    <Badge 
+                      variant="outline" 
+                      className={getStatusColor(patient.status)}
+                    >
+                      {patient.status}
+                    </Badge>
+                  </div>
+                  
+                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Primary Medication</p>
+                      <p className="font-medium">{patient.primaryMedication}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Adherence</p>
+                      <p className="font-medium">{patient.adherence}%</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Last Activity</p>
+                      <p className="font-medium">{patient.lastActivity}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Next Appointment</p>
+                      <p className="font-medium">{patient.nextAppt}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 flex gap-2">
+                    <Button variant="outline" size="sm">
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Records
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Stethoscope className="h-4 w-4 mr-2" />
+                      Schedule Visit
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      Analytics
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
-            <Card className="medical-card p-8 text-center">
-              <Zap className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Advanced Analytics</h3>
-              <p className="text-muted-foreground mb-6">
-                Comprehensive cohort analysis, treatment outcomes, and predictive insights for neurological conditions.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold text-primary">Seizure Patterns</h4>
-                  <p className="text-sm text-muted-foreground">Temporal analysis & triggers</p>
+            <Card className="medical-card p-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                  Advanced Analytics
+                </CardTitle>
+                <CardDescription>
+                  Comprehensive insights into patient outcomes and treatment effectiveness
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <Card className="p-4">
+                    <h4 className="font-semibold mb-2">Treatment Effectiveness</h4>
+                    <p className="text-2xl font-bold text-status-stable">88.7%</p>
+                    <p className="text-sm text-muted-foreground">+5.2% from last quarter</p>
+                  </Card>
+                  <Card className="p-4">
+                    <h4 className="font-semibold mb-2">Patient Satisfaction</h4>
+                    <p className="text-2xl font-bold text-primary">94.2%</p>
+                    <p className="text-sm text-muted-foreground">+2.1% from last quarter</p>
+                  </Card>
+                  <Card className="p-4">
+                    <h4 className="font-semibold mb-2">Emergency Visits</h4>
+                    <p className="text-2xl font-bold text-status-critical">-34.2%</p>
+                    <p className="text-sm text-muted-foreground">Reduction from baseline</p>
+                  </Card>
                 </div>
-                <div className="p-4 bg-secondary/10 rounded-lg">
-                  <h4 className="font-semibold text-secondary">Med Effectiveness</h4>
-                  <p className="text-sm text-muted-foreground">Response & adherence tracking</p>
+                <div className="mt-6">
+                  <Button>
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    View Detailed Analytics
+                  </Button>
                 </div>
-                <div className="p-4 bg-accent rounded-lg">
-                  <h4 className="font-semibold">Risk Stratification</h4>
-                  <p className="text-sm text-muted-foreground">Predictive modeling</p>
-                </div>
-              </div>
-              <Button variant="medical">View Detailed Analytics</Button>
+              </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="research" className="space-y-6">
-            <Card className="medical-card p-8 text-center">
-              <Heart className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Research Collaboration</h3>
-              <p className="text-muted-foreground mb-6">
-                Access anonymized cohort data, collaborate on studies, and contribute to advancing neurological research.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div className="text-left">
-                  <h4 className="font-semibold mb-2">Active Studies</h4>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Catamenial Epilepsy Patterns (23 patients)</li>
-                    <li>• Parkinson's Motor Fluctuations (41 patients)</li>
-                    <li>• Anti-seizure Drug Effectiveness (67 patients)</li>
-                  </ul>
+            <Card className="medical-card p-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-primary" />
+                  Research Collaboration
+                </CardTitle>
+                <CardDescription>
+                  Contribute to advancing neurological research and patient care
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-2">Active Studies</h4>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Participate in groundbreaking research to improve treatment outcomes
+                    </p>
+                    <Button variant="outline">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Join Research Portal
+                    </Button>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Data Contribution</h4>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Export anonymized data for research purposes
+                    </p>
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Research Data
+                    </Button>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h4 className="font-semibold mb-2">Data Contributions</h4>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• 12,450 seizure events logged</li>
-                    <li>• 89% medication adherence data</li>
-                    <li>• 156 research-grade datasets</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="flex gap-4 justify-center">
-                <Button variant="medical">View Research Portal</Button>
-                <Button variant="outline">Export Study Data</Button>
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
     </div>
   );
 }
