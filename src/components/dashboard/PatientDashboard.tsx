@@ -9,8 +9,8 @@ import MedicationModal from "@/components/tracking/MedicationModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomsModal from "@/components/tracking/SymptomsModal";
-import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Settings, Bell, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone } from "lucide-react";
 import Navbar from "@/components/ui/navbar";
+import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Settings, Bell, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone } from "lucide-react";
 const quickActions = [{
   id: "daily-tracking",
   title: "Daily Check-in",
