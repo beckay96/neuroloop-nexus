@@ -41,8 +41,8 @@ const onboardingSteps = [
   { id: 1, title: "Personal Information", icon: User },
   { id: 2, title: "Emergency Contact", icon: Phone },
   { id: 3, title: "Medical Conditions", icon: Heart },
-  { id: 4, title: "Menstrual Cycle", icon: Calendar },
-  { id: 5, title: "Medications", icon: Pill },
+  { id: 4, title: "Medications", icon: Pill },
+  { id: 5, title: "Menstrual Cycle", icon: Calendar },
   { id: 6, title: "Daily Tracking", icon: Clock },
   { id: 7, title: "Research Consent", icon: Shield },
   { id: 8, title: "First Tracking", icon: Activity }
@@ -53,41 +53,51 @@ const conditions = [
     id: "epilepsy", 
     name: "Epilepsy", 
     category: "seizure",
-    description: "A neurological disorder characterized by recurring seizures caused by abnormal electrical activity in the brain.",
+    description: "A neurological disorder affecting 65 million people worldwide. Characterized by recurring seizures due to abnormal electrical activity in the brain. Often involves unpredictable seizure patterns that can significantly impact quality of life.",
     icon: Zap,
-    color: "text-red-500"
+    color: "text-red-500",
+    bgColor: "bg-red-50 dark:bg-red-950/20",
+    borderColor: "border-red-200 dark:border-red-800"
   },
   { 
     id: "parkinsons", 
     name: "Parkinson's Disease", 
     category: "movement",
-    description: "A progressive nervous system disorder that affects movement, often causing tremor, stiffness, and difficulty with balance.",
+    description: "A progressive neurodegenerative disorder affecting over 10 million people globally. Causes tremor, rigidity, slowness of movement, and balance problems. Symptoms often fluctuate throughout the day.",
     icon: Brain,
-    color: "text-purple-500"
+    color: "text-purple-500",
+    bgColor: "bg-purple-50 dark:bg-purple-950/20",
+    borderColor: "border-purple-200 dark:border-purple-800"
   },
   { 
     id: "seizure_other", 
     name: "Other Seizure Disorders", 
     category: "seizure",
-    description: "Various types of seizure disorders including focal seizures, generalized seizures, and epileptic syndromes.",
+    description: "Various seizure conditions including focal seizures, absence seizures, and rare epileptic syndromes. Each type has unique characteristics and treatment approaches.",
     icon: AlertTriangle,
-    color: "text-orange-500"
+    color: "text-orange-500",
+    bgColor: "bg-orange-50 dark:bg-orange-950/20",
+    borderColor: "border-orange-200 dark:border-orange-800"
   },
   { 
     id: "essential_tremor", 
     name: "Essential Tremor", 
     category: "movement",
-    description: "A nervous system disorder that causes rhythmic shaking, most commonly in hands and arms.",
+    description: "The most common movement disorder, causing rhythmic shaking especially in hands and arms. Often worsens with stress, caffeine, or fatigue.",
     icon: Activity,
-    color: "text-blue-500"
+    color: "text-blue-500",
+    bgColor: "bg-blue-50 dark:bg-blue-950/20",
+    borderColor: "border-blue-200 dark:border-blue-800"
   },
   { 
     id: "movement_other", 
     name: "Other Movement Disorders", 
     category: "movement",
-    description: "Various neurological conditions affecting movement including dystonia, chorea, and ataxia.",
+    description: "Neurological conditions affecting voluntary or involuntary movements, including dystonia, chorea, ataxia, and tics. Each requires specialized tracking approaches.",
     icon: Heart,
-    color: "text-green-500"
+    color: "text-emerald-500",
+    bgColor: "bg-emerald-50 dark:bg-emerald-950/20",
+    borderColor: "border-emerald-200 dark:border-emerald-800"
   }
 ];
 
@@ -111,9 +121,6 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     // Conditions
     selectedConditions: [] as string[],
     
-    // Menstrual (if applicable)
-    trackMenstrual: false,
-    
     // Medications
     medications: [] as Array<{
       name: string;
@@ -121,6 +128,9 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
       frequency: string;
       times: string[];
     }>,
+    
+    // Menstrual (if applicable)
+    trackMenstrual: false,
     
     // Tracking
     preferredTimes: [] as string[],
@@ -137,8 +147,8 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   const handleNext = async () => {
     if (currentStep < getMaxSteps()) {
       // Skip menstrual cycle step if not female
-      if (currentStep === 3 && formData.gender !== "female") {
-        setCurrentStep(5); // Skip to medications
+      if (currentStep === 4 && formData.gender !== "female") {
+        setCurrentStep(6); // Skip menstrual cycle, go to tracking
       } else {
         setCurrentStep(prev => prev + 1);
       }
@@ -197,8 +207,8 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   const handleBack = () => {
     if (currentStep > 1) {
       // Skip menstrual cycle step if not female
-      if (currentStep === 5 && formData.gender !== "female") {
-        setCurrentStep(3); // Go back to conditions
+      if (currentStep === 6 && formData.gender !== "female") {
+        setCurrentStep(4); // Go back to medications
       } else {
         setCurrentStep(prev => prev - 1);
       }
@@ -380,16 +390,17 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             <div className="space-y-4">
               {conditions.map((condition) => {
                 const IconComponent = condition.icon;
+                const isSelected = formData.selectedConditions.includes(condition.id);
                 return (
-                  <Card key={condition.id} className={`p-6 transition-all cursor-pointer hover:shadow-glow-primary ${
-                    formData.selectedConditions.includes(condition.id) 
-                      ? 'border-primary bg-primary/5' 
-                      : 'hover:border-primary/50'
+                  <Card key={condition.id} className={`p-6 transition-all cursor-pointer hover:shadow-glow-primary hover:scale-[1.02] ${
+                    isSelected
+                      ? `${condition.bgColor} ${condition.borderColor} border-2 shadow-lg` 
+                      : 'hover:border-primary/50 border-2 border-transparent'
                   }`}>
                     <div className="flex items-start space-x-4">
                       <Checkbox
                         id={condition.id}
-                        checked={formData.selectedConditions.includes(condition.id)}
+                        checked={isSelected}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             updateFormData({
@@ -401,13 +412,21 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                             });
                           }
                         }}
+                        className="mt-1"
                       />
-                      <div className="flex-1 space-y-2">
+                      <div className="flex-1 space-y-3">
                         <div className="flex items-center space-x-3">
-                          <IconComponent className={`h-6 w-6 ${condition.color}`} />
+                          <div className={`p-2 rounded-lg ${condition.bgColor}`}>
+                            <IconComponent className={`h-6 w-6 ${condition.color}`} />
+                          </div>
                           <Label htmlFor={condition.id} className="text-lg font-semibold cursor-pointer">
                             {condition.name}
                           </Label>
+                          {(condition.id === "epilepsy" || condition.id === "parkinsons") && (
+                            <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+                              Primary Focus
+                            </span>
+                          )}
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                           {condition.description}
@@ -428,63 +447,6 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         );
 
       case 4:
-        if (formData.gender !== "female") {
-          // Skip to medications for non-female users
-          setCurrentStep(5);
-          return null;
-        }
-        
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <Calendar className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h2 className="text-2xl font-bold">Menstrual Cycle Tracking</h2>
-              <p className="text-muted-foreground">Optional - helps identify patterns with neurological symptoms</p>
-            </div>
-            
-            <Card className="p-6 border-2 border-dashed border-primary/30">
-              <div className="flex items-start space-x-4">
-                <Checkbox
-                  id="trackMenstrual"
-                  checked={formData.trackMenstrual}
-                  onCheckedChange={(checked) => updateFormData({ trackMenstrual: !!checked })}
-                />
-                <div className="flex-1 space-y-4">
-                  <div>
-                    <Label htmlFor="trackMenstrual" className="text-lg font-semibold cursor-pointer">
-                      Track menstrual cycle and basal temperature
-                    </Label>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      <strong>Research shows:</strong> Catamenial epilepsy affects up to 40% of women with epilepsy. 
-                      Hormonal fluctuations can significantly impact seizure frequency and other neurological symptoms.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-accent p-4 rounded-lg">
-                    <h4 className="font-semibold text-sm mb-2">Why track your cycle?</h4>
-                    <ul className="text-xs space-y-1 text-muted-foreground">
-                      <li>• Identify seizure patterns related to hormonal changes</li>
-                      <li>• Better medication timing and dosage optimization</li>
-                      <li>• Improved quality of life through pattern recognition</li>
-                      <li>• Valuable data for your healthcare provider</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </Card>
-            
-            {formData.trackMenstrual && (
-              <Card className="p-4 bg-success/5 border-success/20">
-                <p className="text-sm">
-                  <strong>What we'll track:</strong> Cycle start/end dates, flow intensity, 
-                  symptoms, basal body temperature, and correlation with neurological symptoms.
-                </p>
-              </Card>
-            )}
-          </div>
-        );
-
-      case 5:
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -566,6 +528,62 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
           </div>
         );
 
+      case 5:
+        if (formData.gender !== "female") {
+          // Skip to tracking for non-female users
+          setCurrentStep(6);
+          return null;
+        }
+        
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <Calendar className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-2xl font-bold">Menstrual Cycle Tracking</h2>
+              <p className="text-muted-foreground">Optional - helps identify patterns with neurological symptoms</p>
+            </div>
+            
+            <Card className="p-6 border-2 border-dashed border-primary/30">
+              <div className="flex items-start space-x-4">
+                <Checkbox
+                  id="trackMenstrual"
+                  checked={formData.trackMenstrual}
+                  onCheckedChange={(checked) => updateFormData({ trackMenstrual: !!checked })}
+                />
+                <div className="flex-1 space-y-4">
+                  <div>
+                    <Label htmlFor="trackMenstrual" className="text-lg font-semibold cursor-pointer">
+                      Track menstrual cycle and basal temperature
+                    </Label>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      <strong>Research shows:</strong> Catamenial epilepsy affects up to 40% of women with epilepsy. 
+                      Hormonal fluctuations can significantly impact seizure frequency and other neurological symptoms.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-accent p-4 rounded-lg">
+                    <h4 className="font-semibold text-sm mb-2">Critical Research Gap</h4>
+                    <ul className="text-xs space-y-1 text-muted-foreground">
+                      <li>• 65% of women report menstrual seizure patterns, yet only 12% are properly studied</li>
+                      <li>• Limited data exists on hormonal impacts on neurological conditions</li>
+                      <li>• Your data could help millions of women worldwide</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </Card>
+            
+            {formData.trackMenstrual && (
+              <Card className="p-4 bg-success/5 border-success/20">
+                <p className="text-sm">
+                  <strong>What we'll track:</strong> Cycle start/end dates, flow intensity, 
+                  symptoms, basal body temperature, and correlation with neurological symptoms.
+                </p>
+              </Card>
+            )}
+          </div>
+        );
+
       case 6:
         return (
           <div className="space-y-6">
@@ -585,6 +603,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                 </p>
                 
                 <div className="space-y-4">
+                  <p className="text-sm font-medium">Add your preferred tracking times:</p>
                   <div className="flex gap-2">
                     <Input
                       type="time"
@@ -597,6 +616,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
+                  
+                  {formData.trackMenstrual && (
+                    <div className="bg-secondary/10 p-3 rounded-lg border border-secondary/20">
+                      <p className="text-sm text-secondary-foreground">
+                        💡 <strong>Tip:</strong> Add a morning time (6-8 AM) to track basal temperature for menstrual cycle accuracy.
+                      </p>
+                    </div>
+                  )}
                   
                   <div className="space-y-2">
                     <Label>Selected Times:</Label>
@@ -669,6 +696,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                     "The lack of comprehensive patient data is the biggest barrier to developing better treatments for epilepsy and movement disorders. Every data point helps us understand these conditions better."
                     <footer className="text-xs mt-2">- Dr. Sarah Chen, Epilepsy Research Consortium</footer>
                   </blockquote>
+                  
+                  <div className="bg-warning/10 border border-warning/20 p-4 rounded-lg">
+                    <p className="text-sm font-medium text-warning-foreground mb-2">Menstrual Cycle Research Gap</p>
+                    <p className="text-xs text-muted-foreground">
+                      "Despite affecting millions, catamenial epilepsy remains understudied. Current treatment guidelines are based on limited data from small studies, 
+                      leaving women with few evidence-based options." - International League Against Epilepsy
+                    </p>
+                  </div>
                 </div>
               </Card>
 
@@ -697,7 +732,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                       { id: "symptoms", label: "Symptom patterns and triggers", description: "Help identify common patterns across patients" },
                       { id: "medications", label: "Medication effectiveness data", description: "Improve treatment protocols and dosing guidelines" },
                       { id: "seizures", label: "Seizure frequency and characteristics", description: "Advance seizure prediction and prevention research" },
-                      { id: "menstrual", label: "Menstrual cycle correlations", description: "Critical for understanding catamenial epilepsy" },
+                      { id: "menstrual", label: "Menstrual cycle correlations", description: "Critical for understanding catamenial epilepsy - severely understudied" },
                       { id: "demographics", label: "Age, gender, condition type", description: "Ensure research represents diverse populations" }
                     ].map((item) => (
                       <Card key={item.id} className="p-4">
@@ -804,9 +839,9 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
       case 3:
         return formData.selectedConditions.length > 0;
       case 4:
-        return true; // Optional menstrual step
-      case 5:
         return true; // Medications optional
+      case 5:
+        return true; // Optional menstrual step
       case 6:
         return formData.preferredTimes.length > 0;
       case 7:
@@ -873,60 +908,78 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm text-muted-foreground">
-              Step {currentStep} of {getMaxSteps()}
-            </span>
-            <span className="text-sm text-muted-foreground">
-              {Math.round((currentStep / getMaxSteps()) * 100)}% Complete
-            </span>
-          </div>
-          <div className="w-full bg-muted h-3 rounded-full overflow-hidden">
-            <div 
-              className="bg-gradient-primary h-full rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${(currentStep / getMaxSteps()) * 100}%` }}
-            />
-          </div>
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      {/* Progress Bar */}
+      <div className="space-y-4">
+        <div className="flex justify-between text-sm text-muted-foreground">
+          <span>Step {currentStep} of {getMaxSteps()}</span>
+          <span>{Math.round((currentStep / getMaxSteps()) * 100)}% Complete</span>
+        </div>
+        
+        <div className="w-full bg-secondary rounded-full h-2">
+          <div 
+            className="bg-gradient-primary h-2 rounded-full transition-all duration-300"
+            style={{ width: `${(currentStep / getMaxSteps()) * 100}%` }}
+          />
         </div>
 
-        {/* Step Content */}
-        <Card className="medical-card p-8">
-          {renderStepContent()}
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex justify-between mt-8">
-          <Button
-            variant="outline"
-            onClick={handleBack}
-            className="flex items-center px-6 py-3"
-          >
-            <ChevronLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-          
-          <Button
-            variant="hero"
-            onClick={handleNext}
-            disabled={!isStepValid()}
-            className="flex items-center px-6 py-3"
-          >
-            {currentStep === getMaxSteps() ? "Complete Setup" : "Continue"}
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
+        {/* Step Navigation */}
+        <div className="flex justify-between items-center">
+          {onboardingSteps
+            .filter((_, index) => formData.gender === "female" || index !== 4) // Skip menstrual step if not female
+            .map((step, index) => {
+            const actualStep = formData.gender === "female" ? step.id : (step.id > 4 ? step.id - 1 : step.id);
+            const StepIcon = step.icon;
+            const isActive = currentStep === actualStep;
+            const isCompleted = currentStep > actualStep;
+            
+            return (
+              <div key={step.id} className={`flex flex-col items-center space-y-2 ${
+                isActive ? 'text-primary' : isCompleted ? 'text-success' : 'text-muted-foreground'
+              }`}>
+                <div className={`p-2 rounded-full border-2 ${
+                  isActive ? 'border-primary bg-primary/10' : 
+                  isCompleted ? 'border-success bg-success/10' : 'border-muted'
+                }`}>
+                  <StepIcon className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-medium hidden md:block">{step.title}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
-      
-      <DailyTrackingModal
-        isOpen={showTrackingModal}
-        onClose={() => setShowTrackingModal(false)}
-        onComplete={handleTrackingComplete}
-        isFirstTracking={true}
-      />
+
+      {/* Step Content */}
+      <Card className="p-8">
+        {renderStepContent()}
+      </Card>
+
+      {/* Navigation */}
+      <div className="flex justify-between">
+        <Button variant="outline" onClick={handleBack}>
+          <ChevronLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+        
+        <Button 
+          onClick={handleNext} 
+          disabled={!isStepValid()}
+          className="min-w-[120px]"
+        >
+          {currentStep === getMaxSteps() ? 'Complete Setup' : 'Continue'}
+          {currentStep < getMaxSteps() && <ChevronRight className="h-4 w-4 ml-2" />}
+        </Button>
+      </div>
+
+      {/* Daily Tracking Modal */}
+      {showTrackingModal && (
+        <DailyTrackingModal
+          isOpen={showTrackingModal}
+          onClose={() => setShowTrackingModal(false)}
+          onComplete={handleTrackingComplete}
+        />
+      )}
     </div>
   );
 }
