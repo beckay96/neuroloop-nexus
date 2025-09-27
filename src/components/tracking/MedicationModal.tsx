@@ -36,9 +36,13 @@ export default function MedicationModal({ isOpen, onClose, onComplete }: Medicat
     dosage_taken: "",
     taken: true,
     effectiveness_rating: [7],
+    effectiveness_option: "rating", // "rating", "not_sure", "not_relevant"
     side_effects: [] as string[],
     notes: "",
-    missed_reason: ""
+    missed_reason: "",
+    other_medication: "",
+    other_side_effect: "",
+    other_missed_reason: ""
   });
 
   // Sample medications - in real app this would come from user's medication list
@@ -196,7 +200,8 @@ export default function MedicationModal({ isOpen, onClose, onComplete }: Medicat
               {medicationLog.medication_name === "other" && (
                 <Input
                   placeholder="Enter medication name"
-                  onChange={(e) => updateMedicationLog("medication_name", e.target.value)}
+                  value={medicationLog.other_medication}
+                  onChange={(e) => updateMedicationLog("other_medication", e.target.value)}
                 />
               )}
 
@@ -242,6 +247,14 @@ export default function MedicationModal({ isOpen, onClose, onComplete }: Medicat
                       ))}
                     </SelectContent>
                   </Select>
+                   {medicationLog.missed_reason === "Other" && (
+                    <Input
+                      placeholder="Please specify other reason"
+                      value={medicationLog.other_missed_reason}
+                      onChange={(e) => updateMedicationLog("other_missed_reason", e.target.value)}
+                      className="mt-2"
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -252,21 +265,37 @@ export default function MedicationModal({ isOpen, onClose, onComplete }: Medicat
             <Card className="p-4">
               <h3 className="font-semibold mb-3">How effective was this dose?</h3>
               <div className="space-y-4">
-                <div>
-                  <Label>Effectiveness (1-10): {medicationLog.effectiveness_rating[0]}</Label>
-                  <Slider
-                    value={medicationLog.effectiveness_rating}
-                    onValueChange={(value) => updateMedicationLog("effectiveness_rating", value)}
-                    max={10}
-                    min={1}
-                    step={1}
-                    className="mt-2"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>Not effective</span>
-                    <span>Very effective</span>
+                <Select 
+                  value={medicationLog.effectiveness_option} 
+                  onValueChange={(value) => updateMedicationLog("effectiveness_option", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose effectiveness option" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Rate effectiveness (1-10)</SelectItem>
+                    <SelectItem value="not_sure">Not sure yet</SelectItem>
+                    <SelectItem value="not_relevant">Not relevant</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {medicationLog.effectiveness_option === "rating" && (
+                  <div>
+                    <Label>Effectiveness (1-10): {medicationLog.effectiveness_rating[0]}</Label>
+                    <Slider
+                      value={medicationLog.effectiveness_rating}
+                      onValueChange={(value) => updateMedicationLog("effectiveness_rating", value)}
+                      max={10}
+                      min={1}
+                      step={1}
+                      className="mt-2"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                      <span>Not effective</span>
+                      <span>Very effective</span>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </Card>
           )}
@@ -288,6 +317,15 @@ export default function MedicationModal({ isOpen, onClose, onComplete }: Medicat
                 </div>
               ))}
             </div>
+            
+            {medicationLog.side_effects.includes("Other") && (
+              <Input
+                placeholder="Please specify other side effect"
+                value={medicationLog.other_side_effect}
+                onChange={(e) => updateMedicationLog("other_side_effect", e.target.value)}
+                className="mt-2"
+              />
+            )}
             
             {medicationLog.side_effects.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1">

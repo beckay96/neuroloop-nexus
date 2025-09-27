@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Navbar from "@/components/ui/navbar";
 import { 
   Users, 
   AlertTriangle, 
@@ -305,8 +306,11 @@ export default function ClinicianDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Navbar */}
+      <Navbar userName="Dr. Smith" userType="clinician" />
+      
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div>

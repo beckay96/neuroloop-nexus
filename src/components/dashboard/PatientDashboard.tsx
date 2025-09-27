@@ -9,6 +9,7 @@ import MedicationModal from "@/components/tracking/MedicationModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomsModal from "@/components/tracking/SymptomsModal";
+import Navbar from "@/components/ui/navbar";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Settings, Bell, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone } from "lucide-react";
 const quickActions = [{
   id: "daily-tracking",
@@ -210,23 +211,15 @@ export default function PatientDashboard({
     }} />
       
     <div className="min-h-screen bg-background">
+      {/* Navbar */}
+      <Navbar userName={userName} userType="patient" />
+      
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold">Welcome back, {userName}</h1>
-              <p className="text-muted-foreground">Let's track your health today</p>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <Button variant="outline" size="sm">
-                <Bell className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4" />
-              </Button>
-            </div>
+          <div>
+            <h1 className="text-2xl font-bold">Welcome back, {userName}</h1>
+            <p className="text-muted-foreground">Let's track your health today</p>
           </div>
         </div>
       </header>
