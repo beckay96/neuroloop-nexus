@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,8 @@ import {
   Zap,
   AlertTriangle,
   Plus,
-  X
+  X,
+  Search
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -105,6 +106,8 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   const [currentStep, setCurrentStep] = useState(1);
   const [showTrackingModal, setShowTrackingModal] = useState(false);
   const [customTime, setCustomTime] = useState("");
+  const [availableMedications, setAvailableMedications] = useState<any[]>([]);
+  const [medicationSearch, setMedicationSearch] = useState("");
   const [formData, setFormData] = useState({
     // Personal Info
     firstName: "",
@@ -123,14 +126,16 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     
     // Medications
     medications: [] as Array<{
+      id?: string;
       name: string;
       dosage: string;
       frequency: string;
-      times: string[];
+      times: Array<{ time: string; label: string }>;
     }>,
     
     // Menstrual (if applicable)
     trackMenstrual: false,
+    basalTempTime: "07:00",
     
     // Tracking
     preferredTimes: [] as string[],
@@ -139,6 +144,29 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     shareResearchData: false,
     researchDataTypes: [] as string[]
   });
+
+  // Load medications from database
+  useEffect(() => {
+    loadMedications();
+  }, []);
+
+  const loadMedications = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('medications')
+        .select('*')
+        .order('name');
+      
+      if (error) {
+        console.error('Error loading medications:', error);
+        return;
+      }
+      
+      setAvailableMedications(data || []);
+    } catch (error) {
+      console.error('Error loading medications:', error);
+    }
+  };
 
   const updateFormData = (updates: Partial<typeof formData>) => {
     setFormData(prev => ({ ...prev, ...updates }));
@@ -237,20 +265,64 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     });
   };
 
-  const addMedication = () => {
+  // Helper function to get default times based on frequency
+  const getDefaultTimesForFrequency = (frequency: string) => {
+    switch (frequency) {
+      case 'once_daily':
+        return [{ time: '08:00', label: 'Morning' }];
+      case 'twice_daily':
+        return [
+          { time: '08:00', label: 'Morning' },
+          { time: '20:00', label: 'Evening' }
+        ];
+      case 'three_times_daily':
+        return [
+          { time: '08:00', label: 'Morning' },
+          { time: '14:00', label: 'Afternoon' },
+          { time: '20:00', label: 'Evening' }
+        ];
+      case 'four_times_daily':
+        return [
+          { time: '08:00', label: 'Morning' },
+          { time: '12:00', label: 'Noon' },
+          { time: '17:00', label: 'Afternoon' },
+          { time: '21:00', label: 'Evening' }
+        ];
+      case 'as_needed':
+      default:
+        return [{ time: '08:00', label: 'As needed' }];
+    }
+  };
+
+  const addMedication = (medicationData?: any) => {
+    const newMedication = {
+      id: medicationData?.id || undefined,
+      name: medicationData?.name || "",
+      dosage: medicationData?.common_dosages ? JSON.parse(medicationData.common_dosages)[0] || "" : "",
+      frequency: "once_daily",
+      times: getDefaultTimesForFrequency("once_daily")
+    };
+    
     updateFormData({
-      medications: [...formData.medications, {
-        name: "",
-        dosage: "",
-        frequency: "",
-        times: []
-      }]
+      medications: [...formData.medications, newMedication]
     });
   };
 
   const updateMedication = (index: number, updates: Partial<typeof formData.medications[0]>) => {
     const updatedMedications = [...formData.medications];
+    
+    // If frequency changes, update times accordingly
+    if (updates.frequency && updates.frequency !== updatedMedications[index].frequency) {
+      updates.times = getDefaultTimesForFrequency(updates.frequency);
+    }
+    
     updatedMedications[index] = { ...updatedMedications[index], ...updates };
+    updateFormData({ medications: updatedMedications });
+  };
+
+  const updateMedicationTime = (medicationIndex: number, timeIndex: number, newTime: string) => {
+    const updatedMedications = [...formData.medications];
+    updatedMedications[medicationIndex].times[timeIndex].time = newTime;
     updateFormData({ medications: updatedMedications });
   };
 
@@ -258,6 +330,31 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     updateFormData({
       medications: formData.medications.filter((_, i) => i !== index)
     });
+  };
+
+  // Generate smart tracking times based on selections
+  const generateSmartTrackingTimes = () => {
+    const times = new Set<string>();
+    
+    // Add medication times
+    formData.medications.forEach(med => {
+      med.times.forEach(time => {
+        times.add(time.time);
+      });
+    });
+    
+    // Add basal temp time if tracking menstrual cycle
+    if (formData.trackMenstrual) {
+      times.add(formData.basalTempTime);
+    }
+    
+    // Add some standard times if nothing is set
+    if (times.size === 0) {
+      times.add("08:00");
+      times.add("20:00");
+    }
+    
+    return Array.from(times).sort();
   };
 
   const renderStepContent = () => {
@@ -452,76 +549,156 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             <div className="text-center mb-8">
               <Pill className="h-12 w-12 text-primary mx-auto mb-4" />
               <h2 className="text-2xl font-bold">Current Medications</h2>
-              <p className="text-muted-foreground">Help us track your medication schedule and effectiveness</p>
+              <p className="text-muted-foreground">Select from our database or add custom medications with precise timing</p>
             </div>
             
-            <div className="space-y-4">
-              {formData.medications.map((medication, index) => (
-                <Card key={index} className="p-4 border-2">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-semibold">Medication {index + 1}</h4>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeMedication(index)}
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Medication Name *</Label>
-                        <Input
-                          placeholder="e.g., Levetiracetam"
-                          value={medication.name}
-                          onChange={(e) => updateMedication(index, { name: e.target.value })}
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label>Dosage *</Label>
-                        <Input
-                          placeholder="e.g., 500mg"
-                          value={medication.dosage}
-                          onChange={(e) => updateMedication(index, { dosage: e.target.value })}
-                        />
-                      </div>
-                      
-                      <div className="space-y-2 md:col-span-2">
-                        <Label>Frequency *</Label>
-                        <Select onValueChange={(value) => updateMedication(index, { frequency: value })}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="How often do you take this?" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-popover border border-border z-50">
-                            <SelectItem value="once_daily">Once daily</SelectItem>
-                            <SelectItem value="twice_daily">Twice daily</SelectItem>
-                            <SelectItem value="three_times_daily">Three times daily</SelectItem>
-                            <SelectItem value="as_needed">As needed</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+            <div className="space-y-6">
+              {/* Medication Database Selection */}
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4 flex items-center">
+                  <Search className="h-5 w-5 mr-2" />
+                  Find Your Medications
+                </h3>
+                
+                <div className="space-y-4">
+                  <Input
+                    placeholder="Search medications..."
+                    value={medicationSearch}
+                    onChange={(e) => setMedicationSearch(e.target.value)}
+                    className="w-full"
+                  />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                    {availableMedications
+                      .filter(med => 
+                        med.name.toLowerCase().includes(medicationSearch.toLowerCase()) ||
+                        (med.generic_name && med.generic_name.toLowerCase().includes(medicationSearch.toLowerCase()))
+                      )
+                      .slice(0, 20)
+                      .map((medication) => (
+                        <Card 
+                          key={medication.id} 
+                          className="p-3 cursor-pointer hover:bg-accent transition-colors"
+                          onClick={() => addMedication(medication)}
+                        >
+                          <div className="space-y-1">
+                            <p className="font-medium text-sm">{medication.name}</p>
+                            {medication.generic_name && (
+                              <p className="text-xs text-muted-foreground">Generic: {medication.generic_name}</p>
+                            )}
+                            <p className="text-xs text-primary">{medication.category}</p>
+                          </div>
+                        </Card>
+                      ))}
+                  </div>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => addMedication()}
+                    className="w-full border-dashed border-2"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Custom Medication
+                  </Button>
+                </div>
+              </Card>
+
+              {/* Selected Medications */}
+              {formData.medications.length > 0 && (
+                <Card className="p-6">
+                  <h3 className="font-semibold mb-4">
+                    Your Medications ({formData.medications.length} selected)
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    {formData.medications.map((medication, index) => (
+                      <Card key={index} className="p-4 border-2 border-dashed">
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center">
+                            <h4 className="font-semibold">Medication {index + 1}</h4>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeMedication(index)}
+                              className="text-destructive hover:text-destructive"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label>Medication Name *</Label>
+                              <Input
+                                placeholder="e.g., Levetiracetam"
+                                value={medication.name}
+                                onChange={(e) => updateMedication(index, { name: e.target.value })}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Dosage *</Label>
+                              <Input
+                                placeholder="e.g., 500mg"
+                                value={medication.dosage}
+                                onChange={(e) => updateMedication(index, { dosage: e.target.value })}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2 md:col-span-2">
+                              <Label>Frequency *</Label>
+                              <Select 
+                                value={medication.frequency}
+                                onValueChange={(value) => updateMedication(index, { frequency: value })}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="How often do you take this?" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-popover border border-border z-50">
+                                  <SelectItem value="once_daily">Once daily</SelectItem>
+                                  <SelectItem value="twice_daily">Twice daily</SelectItem>
+                                  <SelectItem value="three_times_daily">Three times daily</SelectItem>
+                                  <SelectItem value="four_times_daily">Four times daily</SelectItem>
+                                  <SelectItem value="as_needed">As needed</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          
+                          {/* Medication Times */}
+                          <div className="space-y-3 p-4 bg-accent/50 rounded-lg">
+                            <Label className="font-medium">
+                              Medication Times ({medication.times.length} times per day)
+                            </Label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                              {medication.times.map((timeSlot, timeIndex) => (
+                                <div key={timeIndex} className="flex items-center space-x-2 p-2 bg-background rounded border">
+                                  <span className="text-sm font-medium min-w-[70px] text-muted-foreground">
+                                    {timeSlot.label}:
+                                  </span>
+                                  <Input
+                                    type="time"
+                                    value={timeSlot.time}
+                                    onChange={(e) => updateMedicationTime(index, timeIndex, e.target.value)}
+                                    className="flex-1 text-sm"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              💡 Times automatically adjust based on frequency. Customize as needed for your schedule.
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 </Card>
-              ))}
-              
-              <Button
-                variant="outline"
-                onClick={addMedication}
-                className="w-full border-dashed border-2 border-primary/30 hover:border-primary"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Medication
-              </Button>
+              )}
               
               <div className="bg-accent p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">
-                  💡 <strong>Note:</strong> This information helps us set up medication reminders and track adherence. 
-                  You can always add or modify medications later.
+                  💡 <strong>Smart Reminders:</strong> We'll use these exact times to send you medication reminders and track adherence patterns.
                 </p>
               </div>
             </div>
@@ -551,14 +728,31 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                   onCheckedChange={(checked) => updateFormData({ trackMenstrual: !!checked })}
                 />
                 <div className="flex-1 space-y-4">
-                  <div>
-                    <Label htmlFor="trackMenstrual" className="text-lg font-semibold cursor-pointer">
-                      Track menstrual cycle and basal temperature
-                    </Label>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      <strong>Research shows:</strong> Catamenial epilepsy affects up to 40% of women with epilepsy. 
-                      Hormonal fluctuations can significantly impact seizure frequency and other neurological symptoms.
-                    </p>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="trackMenstrual" className="text-lg font-semibold cursor-pointer">
+                        Track menstrual cycle and basal temperature
+                      </Label>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        <strong>Research shows:</strong> Catamenial epilepsy affects up to 40% of women with epilepsy. 
+                        Hormonal fluctuations can significantly impact seizure frequency and other neurological symptoms.
+                      </p>
+                    </div>
+                    
+                    {formData.trackMenstrual && (
+                      <div className="ml-4 p-4 bg-secondary/10 rounded-lg border">
+                        <Label className="text-sm font-medium">Daily Basal Temperature Time</Label>
+                        <p className="text-xs text-muted-foreground mb-2">
+                          For accuracy, take temperature at the same time each morning before getting up.
+                        </p>
+                        <Input
+                          type="time"
+                          value={formData.basalTempTime}
+                          onChange={(e) => updateFormData({ basalTempTime: e.target.value })}
+                          className="w-32"
+                        />
+                      </div>
+                    )}
                   </div>
                   
                   <div className="bg-accent p-4 rounded-lg">
@@ -585,50 +779,91 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         );
 
       case 6:
+        const smartTimes = generateSmartTrackingTimes();
+        
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
               <Clock className="h-12 w-12 text-primary mx-auto mb-4" />
               <h2 className="text-2xl font-bold">Daily Tracking Schedule</h2>
-              <p className="text-muted-foreground">Set up your personalized tracking times</p>
+              <p className="text-muted-foreground">Smart times based on your medication and tracking preferences</p>
             </div>
             
             <div className="space-y-6">
-              <Card className="p-6">
-                <h3 className="font-semibold mb-4">Your Tracking Schedule</h3>
+              {/* Smart Suggestions */}
+              <Card className="p-6 bg-gradient-subtle">
+                <h3 className="font-semibold mb-4 flex items-center">
+                  <span className="text-2xl mr-2">🧠</span>
+                  Smart Tracking Schedule
+                </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Based on your medication schedule and preferences, set times when you'd like to track symptoms, 
-                  {formData.trackMenstrual && " basal temperature,"}
-                  {" "}and general wellness.
+                  Based on your medication times{formData.trackMenstrual && " and basal temperature schedule"}, 
+                  we've created an optimal tracking schedule. You can customize any times.
                 </p>
                 
                 <div className="space-y-4">
-                  <p className="text-sm font-medium">Add your preferred tracking times:</p>
-                  <div className="flex gap-2">
-                    <Input
-                      type="time"
-                      value={customTime}
-                      onChange={(e) => setCustomTime(e.target.value)}
-                      placeholder="Select time"
-                      className="flex-1"
-                    />
-                    <Button onClick={addCustomTime} disabled={!customTime}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {smartTimes.map((time, index) => {
+                      const isSelected = formData.preferredTimes.includes(time);
+                      const isMedicationTime = formData.medications.some(med => 
+                        med.times.some(t => t.time === time)
+                      );
+                      const isBasalTime = formData.trackMenstrual && formData.basalTempTime === time;
+                      
+                      return (
+                        <Card 
+                          key={time}
+                          className={`p-3 cursor-pointer transition-all ${
+                            isSelected 
+                              ? 'bg-primary/10 border-primary' 
+                              : 'hover:bg-accent'
+                          }`}
+                          onClick={() => {
+                            if (isSelected) {
+                              updateFormData({
+                                preferredTimes: formData.preferredTimes.filter(t => t !== time)
+                              });
+                            } else {
+                              updateFormData({
+                                preferredTimes: [...formData.preferredTimes, time]
+                              });
+                            }
+                          }}
+                        >
+                          <div className="text-center">
+                            <div className="font-medium">{time}</div>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              {isMedicationTime && <div>💊 Medication</div>}
+                              {isBasalTime && <div>🌡️ Basal temp</div>}
+                              {!isMedicationTime && !isBasalTime && <div>📊 Symptoms</div>}
+                            </div>
+                          </div>
+                        </Card>
+                      );
+                    })}
                   </div>
                   
-                  {formData.trackMenstrual && (
-                    <div className="bg-secondary/10 p-3 rounded-lg border border-secondary/20">
-                      <p className="text-sm text-secondary-foreground">
-                        💡 <strong>Tip:</strong> Add a morning time (6-8 AM) to track basal temperature for menstrual cycle accuracy.
-                      </p>
+                  {/* Custom Time Addition */}
+                  <div className="border-t pt-4">
+                    <Label className="text-sm font-medium">Add Custom Time:</Label>
+                    <div className="flex gap-2 mt-2">
+                      <Input
+                        type="time"
+                        value={customTime}
+                        onChange={(e) => setCustomTime(e.target.value)}
+                        placeholder="Select time"
+                        className="flex-1"
+                      />
+                      <Button onClick={addCustomTime} disabled={!customTime || formData.preferredTimes.includes(customTime)}>
+                        <Plus className="h-4 w-4" />
+                      </Button>
                     </div>
-                  )}
+                  </div>
                   
                   <div className="space-y-2">
-                    <Label>Selected Times:</Label>
+                    <Label>Your Selected Times ({formData.preferredTimes.length}):</Label>
                     <div className="flex flex-wrap gap-2">
-                      {formData.preferredTimes.map((time) => (
+                      {formData.preferredTimes.sort().map((time) => (
                         <div key={time} className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
                           {time}
                           <button
@@ -641,21 +876,50 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                       ))}
                     </div>
                     {formData.preferredTimes.length === 0 && (
-                      <p className="text-sm text-muted-foreground">No times selected yet</p>
+                      <p className="text-sm text-muted-foreground">No times selected yet - select from suggestions above</p>
                     )}
                   </div>
                 </div>
               </Card>
               
+              {/* Tracking Preview */}
               <Card className="p-4 bg-gradient-subtle">
-                <h4 className="font-semibold text-sm mb-2">Tracking Preview</h4>
-                <div className="text-xs space-y-1">
-                  <div>📊 <strong>Daily Symptoms:</strong> {formData.preferredTimes.length} check-ins per day</div>
-                  <div>💊 <strong>Medications:</strong> {formData.medications.length} medications to track</div>
+                <h4 className="font-semibold text-sm mb-3">📋 Your Complete Tracking Schedule</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  <Card className="p-3 bg-background">
+                    <div className="font-medium mb-2">💊 Medications</div>
+                    <div className="space-y-1">
+                      {formData.medications.length === 0 ? (
+                        <div className="text-muted-foreground">No medications added</div>
+                      ) : (
+                        formData.medications.map((med, idx) => (
+                          <div key={idx} className="text-muted-foreground">
+                            {med.name}: {med.times.length} times/day
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </Card>
+                  
+                  <Card className="p-3 bg-background">
+                    <div className="font-medium mb-2">📊 Daily Tracking</div>
+                    <div className="space-y-1 text-muted-foreground">
+                      <div>Symptoms: {formData.preferredTimes.length} check-ins</div>
+                      <div>Mood & Energy tracking</div>
+                      <div>Sleep quality logs</div>
+                    </div>
+                  </Card>
+                  
                   {formData.trackMenstrual && (
-                    <div>🌡️ <strong>Basal Temperature:</strong> Morning temperature recording</div>
+                    <Card className="p-3 bg-background">
+                      <div className="font-medium mb-2">🌡️ Menstrual Tracking</div>
+                      <div className="space-y-1 text-muted-foreground">
+                        <div>Basal temp: {formData.basalTempTime}</div>
+                        <div>Cycle tracking</div>
+                        <div>Symptom correlation</div>
+                      </div>
+                    </Card>
                   )}
-                  <div>📈 <strong>Wellness:</strong> Mood, energy, sleep quality tracking</div>
                 </div>
               </Card>
             </div>
@@ -729,11 +993,13 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                   <div className="ml-6 space-y-4 border-l-2 border-primary pl-6">
                     <p className="font-semibold text-sm">Choose what to contribute:</p>
                     {[
-                      { id: "symptoms", label: "Symptom patterns and triggers", description: "Help identify common patterns across patients" },
-                      { id: "medications", label: "Medication effectiveness data", description: "Improve treatment protocols and dosing guidelines" },
-                      { id: "seizures", label: "Seizure frequency and characteristics", description: "Advance seizure prediction and prevention research" },
-                      { id: "menstrual", label: "Menstrual cycle correlations", description: "Critical for understanding catamenial epilepsy - severely understudied" },
-                      { id: "demographics", label: "Age, gender, condition type", description: "Ensure research represents diverse populations" }
+                      { id: "epilepsy_symptoms", label: "Epilepsy & seizure data", description: "Seizure patterns, triggers, frequency - critical for advancing epilepsy care" },
+                      { id: "parkinsons_symptoms", label: "Parkinson's symptom data", description: "Motor symptoms, on/off periods, dyskinesia tracking for movement disorder research" },
+                      { id: "medications", label: "Medication effectiveness data", description: "Dosing, adherence, side effects - improve treatment protocols worldwide" },
+                      { id: "menstrual", label: "Menstrual cycle correlations", description: "Critical for understanding catamenial epilepsy - severely understudied area" },
+                      { id: "daily_tracking", label: "Daily wellness tracking", description: "Mood, energy, sleep, triggers - provides comprehensive health picture" },
+                      { id: "movement_data", label: "Movement & activity patterns", description: "Gait, tremor, rigidity patterns for movement disorder research" },
+                      { id: "demographics", label: "Age, gender, condition type", description: "Ensure research represents diverse populations globally" }
                     ].map((item) => (
                       <Card key={item.id} className="p-4">
                         <div className="flex items-start space-x-3">
