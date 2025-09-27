@@ -16,6 +16,8 @@ import {
   Moon,
   Monitor
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 interface SettingsDropdownProps {
   isOpen: boolean;
@@ -25,6 +27,8 @@ interface SettingsDropdownProps {
 
 export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: SettingsDropdownProps) {
   const { theme, setTheme } = useTheme();
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
   
   if (!isOpen) return null;
 
@@ -34,6 +38,17 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
 
   const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
     setTheme(newTheme);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate("/auth", { replace: true });
+    } catch (e) {
+      console.error("Sign out error", e);
+    } finally {
+      onClose();
+    }
   };
 
   const settingsItems = [
@@ -181,10 +196,7 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
           <Button
             variant="ghost"
             className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
-            onClick={() => {
-              console.log("Sign out");
-              onClose();
-            }}
+            onClick={handleSignOut}
           >
             <LogOut className="h-4 w-4 mr-3" />
             Sign Out
