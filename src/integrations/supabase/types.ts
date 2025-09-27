@@ -914,6 +914,7 @@ export type Database = {
       }
       onboarding_progress: {
         Row: {
+          completed: boolean | null
           created_at: string | null
           current_step: number
           id: string
@@ -926,10 +927,13 @@ export type Database = {
           step_7_data: string | null
           step_8_data: string | null
           step_9_data: string | null
+          step_data: Json | null
           updated_at: string | null
           user_id: string
+          user_type: string
         }
         Insert: {
+          completed?: boolean | null
           created_at?: string | null
           current_step?: number
           id?: string
@@ -942,10 +946,13 @@ export type Database = {
           step_7_data?: string | null
           step_8_data?: string | null
           step_9_data?: string | null
+          step_data?: Json | null
           updated_at?: string | null
           user_id: string
+          user_type: string
         }
         Update: {
+          completed?: boolean | null
           created_at?: string | null
           current_step?: number
           id?: string
@@ -958,8 +965,10 @@ export type Database = {
           step_7_data?: string | null
           step_8_data?: string | null
           step_9_data?: string | null
+          step_data?: Json | null
           updated_at?: string | null
           user_id?: string
+          user_type?: string
         }
         Relationships: []
       }
