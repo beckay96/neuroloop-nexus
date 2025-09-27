@@ -18,7 +18,6 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Activity, 
   Heart, 
@@ -69,14 +68,13 @@ const trackingCategories = [
   },
   {
     id: "symptoms",
-    title: "Specific Symptoms",
+    title: "Symptom Severity",
     icon: Activity,
-    description: "Which symptoms are you experiencing?",
-    type: "symptoms",
-    symptoms: [
-      "Tremor", "Seizure activity", "Stiffness", "Balance issues", 
-      "Fatigue", "Memory problems", "Mood changes", "Sleep disturbances"
-    ]
+    description: "Overall symptom severity today",
+    type: "slider",
+    min: 0,
+    max: 10,
+    labels: ["None", "Very Mild", "Mild", "Moderate", "Severe"]
   }
 ];
 
@@ -90,8 +88,7 @@ export default function DailyTrackingModal({
     mood: [7],
     energy: [7],
     sleep: [7],
-    symptoms: [] as string[],
-    symptom_severities: {} as Record<string, number>,
+    symptoms: [2],
     notes: "",
     medications_taken: true
   });
@@ -168,85 +165,32 @@ export default function DailyTrackingModal({
             </div>
 
             <div className="space-y-4">
-              {currentTrackingItem.type === "symptoms" ? (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    {currentTrackingItem.symptoms?.map(symptom => (
-                      <div key={symptom} className="flex items-center space-x-2">
-                        <Checkbox
-                          checked={(trackingData.symptoms as string[]).includes(symptom)}
-                          onCheckedChange={(checked) => {
-                            const symptoms = trackingData.symptoms as string[];
-                            const updated = checked 
-                              ? [...symptoms, symptom]
-                              : symptoms.filter(s => s !== symptom);
-                            updateTrackingData("symptoms", updated);
-                          }}
-                        />
-                        <label className="text-sm">{symptom}</label>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Severity for selected symptoms */}
-                  {(trackingData.symptoms as string[]).length > 0 && (
-                    <div className="space-y-3 pt-4 border-t">
-                      <h4 className="text-sm font-medium">Rate severity for selected symptoms:</h4>
-                      {(trackingData.symptoms as string[]).map(symptom => (
-                        <div key={symptom} className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-sm">{symptom}</span>
-                            <span className="text-sm font-medium text-primary">
-                              {trackingData.symptom_severities[symptom] || 1}/10
-                            </span>
-                          </div>
-                          <Slider
-                            value={[trackingData.symptom_severities[symptom] || 1]}
-                            onValueChange={(value) => {
-                              const severities = { ...trackingData.symptom_severities };
-                              severities[symptom] = value[0];
-                              updateTrackingData("symptom_severities", severities);
-                            }}
-                            max={10}
-                            min={1}
-                            step={1}
-                            className="w-full"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
+              <div className="px-2">
+                <Slider
+                  value={currentValue}
+                  onValueChange={(value) => updateTrackingData(currentTrackingItem.id, value)}
+                  max={currentTrackingItem.max}
+                  min={currentTrackingItem.min}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="flex justify-between text-xs text-muted-foreground px-2">
+                <span>{currentTrackingItem.labels[0]}</span>
+                <span className="font-medium text-primary">
+                  {currentValue[0]} / {currentTrackingItem.max}
+                </span>
+                <span>{currentTrackingItem.labels[currentTrackingItem.labels.length - 1]}</span>
+              </div>
+              
+              {currentValue[0] !== undefined && (
+                <div className="text-center">
+                  <span className="text-sm font-medium">
+                    {currentTrackingItem.labels[Math.floor((currentValue[0] - currentTrackingItem.min) / 
+                      ((currentTrackingItem.max - currentTrackingItem.min) / (currentTrackingItem.labels.length - 1)))]}
+                  </span>
                 </div>
-              ) : (
-                <>
-                  <div className="px-2">
-                    <Slider
-                      value={currentValue}
-                      onValueChange={(value) => updateTrackingData(currentTrackingItem.id, value)}
-                      max={currentTrackingItem.max}
-                      min={currentTrackingItem.min}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                  
-                  <div className="flex justify-between text-xs text-muted-foreground px-2">
-                    <span>{currentTrackingItem.labels[0]}</span>
-                    <span className="font-medium text-primary">
-                      {currentValue[0]} / {currentTrackingItem.max}
-                    </span>
-                    <span>{currentTrackingItem.labels[currentTrackingItem.labels.length - 1]}</span>
-                  </div>
-                  
-                  {currentValue[0] !== undefined && (
-                    <div className="text-center">
-                      <span className="text-sm font-medium">
-                        {currentTrackingItem.labels[Math.floor((currentValue[0] - currentTrackingItem.min) / 
-                          ((currentTrackingItem.max - currentTrackingItem.min) / (currentTrackingItem.labels.length - 1)))]}
-                      </span>
-                    </div>
-                  )}
-                </>
               )}
             </div>
           </Card>
