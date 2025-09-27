@@ -137,8 +137,15 @@ export default function Landing() {
       } else {
         setShowOnboarding(false);
         setShowUserTypeSelector(false);
-        // Show first daily tracking instead of going straight to dashboard
-        setShowFirstTracking(true);
+        setUserType(selectedUserType); // Set the user type immediately
+        
+        // Only show first tracking for patients, not clinicians/carers/researchers
+        if (selectedUserType === 'patient') {
+          setShowFirstTracking(true);
+        } else {
+          // For non-patients, go straight to their dashboard
+          setHasCompletedOnboarding(true);
+        }
       }
     } catch (error) {
       console.error('Error completing onboarding:', error);
