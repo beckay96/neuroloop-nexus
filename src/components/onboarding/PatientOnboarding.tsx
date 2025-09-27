@@ -22,7 +22,13 @@ import {
   Shield,
   ChevronLeft,
   ChevronRight,
-  Activity
+  Activity,
+  Pill,
+  Brain,
+  Zap,
+  AlertTriangle,
+  Plus,
+  X
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -35,28 +41,60 @@ const onboardingSteps = [
   { id: 1, title: "Personal Information", icon: User },
   { id: 2, title: "Emergency Contact", icon: Phone },
   { id: 3, title: "Medical Conditions", icon: Heart },
-  { id: 4, title: "Daily Tracking", icon: Clock },
-  { id: 5, title: "Menstrual Cycle", icon: Calendar },
-  { id: 6, title: "Research Consent", icon: Shield },
-  { id: 7, title: "First Tracking", icon: Activity }
+  { id: 4, title: "Menstrual Cycle", icon: Calendar },
+  { id: 5, title: "Medications", icon: Pill },
+  { id: 6, title: "Daily Tracking", icon: Clock },
+  { id: 7, title: "Research Consent", icon: Shield },
+  { id: 8, title: "First Tracking", icon: Activity }
 ];
 
 const conditions = [
-  { id: "epilepsy", name: "Epilepsy", category: "seizure" },
-  { id: "seizure_other", name: "Other Seizure Disorders", category: "seizure" },
-  { id: "parkinsons", name: "Parkinson's Disease", category: "movement" },
-  { id: "movement_other", name: "Other Movement Disorders", category: "movement" },
-  { id: "multiple_sclerosis", name: "Multiple Sclerosis", category: "neurological" },
-  { id: "essential_tremor", name: "Essential Tremor", category: "movement" }
-];
-
-const trackingTimes = [
-  "8:00 AM", "12:00 PM", "4:00 PM", "8:00 PM", "10:00 PM"
+  { 
+    id: "epilepsy", 
+    name: "Epilepsy", 
+    category: "seizure",
+    description: "A neurological disorder characterized by recurring seizures caused by abnormal electrical activity in the brain.",
+    icon: Zap,
+    color: "text-red-500"
+  },
+  { 
+    id: "parkinsons", 
+    name: "Parkinson's Disease", 
+    category: "movement",
+    description: "A progressive nervous system disorder that affects movement, often causing tremor, stiffness, and difficulty with balance.",
+    icon: Brain,
+    color: "text-purple-500"
+  },
+  { 
+    id: "seizure_other", 
+    name: "Other Seizure Disorders", 
+    category: "seizure",
+    description: "Various types of seizure disorders including focal seizures, generalized seizures, and epileptic syndromes.",
+    icon: AlertTriangle,
+    color: "text-orange-500"
+  },
+  { 
+    id: "essential_tremor", 
+    name: "Essential Tremor", 
+    category: "movement",
+    description: "A nervous system disorder that causes rhythmic shaking, most commonly in hands and arms.",
+    icon: Activity,
+    color: "text-blue-500"
+  },
+  { 
+    id: "movement_other", 
+    name: "Other Movement Disorders", 
+    category: "movement",
+    description: "Various neurological conditions affecting movement including dystonia, chorea, and ataxia.",
+    icon: Heart,
+    color: "text-green-500"
+  }
 ];
 
 export default function PatientOnboarding({ onComplete, onBack }: PatientOnboardingProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [showTrackingModal, setShowTrackingModal] = useState(false);
+  const [customTime, setCustomTime] = useState("");
   const [formData, setFormData] = useState({
     // Personal Info
     firstName: "",
@@ -73,11 +111,19 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     // Conditions
     selectedConditions: [] as string[],
     
-    // Tracking
-    preferredTimes: [] as string[],
-    
     // Menstrual (if applicable)
     trackMenstrual: false,
+    
+    // Medications
+    medications: [] as Array<{
+      name: string;
+      dosage: string;
+      frequency: string;
+      times: string[];
+    }>,
+    
+    // Tracking
+    preferredTimes: [] as string[],
     
     // Research
     shareResearchData: false,
@@ -90,7 +136,12 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
 
   const handleNext = async () => {
     if (currentStep < getMaxSteps()) {
-      setCurrentStep(prev => prev + 1);
+      // Skip menstrual cycle step if not female
+      if (currentStep === 3 && formData.gender !== "female") {
+        setCurrentStep(5); // Skip to medications
+      } else {
+        setCurrentStep(prev => prev + 1);
+      }
     } else {
       try {
         // Save patient onboarding data to the database
@@ -145,15 +196,58 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+      // Skip menstrual cycle step if not female
+      if (currentStep === 5 && formData.gender !== "female") {
+        setCurrentStep(3); // Go back to conditions
+      } else {
+        setCurrentStep(prev => prev - 1);
+      }
     } else {
       onBack();
     }
   };
 
   const getMaxSteps = () => {
-    // Skip menstrual cycle step if not female, add tracking step
-    return formData.gender === "female" ? 7 : 6;
+    // Skip menstrual cycle step if not female
+    return formData.gender === "female" ? 8 : 7;
+  };
+
+  const addCustomTime = () => {
+    if (customTime && !formData.preferredTimes.includes(customTime)) {
+      updateFormData({
+        preferredTimes: [...formData.preferredTimes, customTime]
+      });
+      setCustomTime("");
+    }
+  };
+
+  const removeTime = (timeToRemove: string) => {
+    updateFormData({
+      preferredTimes: formData.preferredTimes.filter(time => time !== timeToRemove)
+    });
+  };
+
+  const addMedication = () => {
+    updateFormData({
+      medications: [...formData.medications, {
+        name: "",
+        dosage: "",
+        frequency: "",
+        times: []
+      }]
+    });
+  };
+
+  const updateMedication = (index: number, updates: Partial<typeof formData.medications[0]>) => {
+    const updatedMedications = [...formData.medications];
+    updatedMedications[index] = { ...updatedMedications[index], ...updates };
+    updateFormData({ medications: updatedMedications });
+  };
+
+  const removeMedication = (index: number) => {
+    updateFormData({
+      medications: formData.medications.filter((_, i) => i !== index)
+    });
   };
 
   const renderStepContent = () => {
@@ -283,84 +377,60 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
               <p className="text-muted-foreground">Select the conditions you'd like to track</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {conditions.map((condition) => (
-                <Card key={condition.id} className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <Checkbox
-                      id={condition.id}
-                      checked={formData.selectedConditions.includes(condition.id)}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          updateFormData({
-                            selectedConditions: [...formData.selectedConditions, condition.id]
-                          });
-                        } else {
-                          updateFormData({
-                            selectedConditions: formData.selectedConditions.filter(id => id !== condition.id)
-                          });
-                        }
-                      }}
-                    />
-                    <Label htmlFor={condition.id} className="font-medium">
-                      {condition.name}
-                    </Label>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <Clock className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h2 className="text-2xl font-bold">Daily Tracking Times</h2>
-              <p className="text-muted-foreground">When would you like to track your symptoms?</p>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {trackingTimes.map((time) => (
-                <Card key={time} className="p-4 cursor-pointer hover:shadow-glow-primary transition-all">
-                  <div className="flex items-center space-x-3">
-                    <Checkbox
-                      id={time}
-                      checked={formData.preferredTimes.includes(time)}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          updateFormData({
-                            preferredTimes: [...formData.preferredTimes, time]
-                          });
-                        } else {
-                          updateFormData({
-                            preferredTimes: formData.preferredTimes.filter(t => t !== time)
-                          });
-                        }
-                      }}
-                    />
-                    <Label htmlFor={time} className="font-medium">
-                      {time}
-                    </Label>
-                  </div>
-                </Card>
-              ))}
+            <div className="space-y-4">
+              {conditions.map((condition) => {
+                const IconComponent = condition.icon;
+                return (
+                  <Card key={condition.id} className={`p-6 transition-all cursor-pointer hover:shadow-glow-primary ${
+                    formData.selectedConditions.includes(condition.id) 
+                      ? 'border-primary bg-primary/5' 
+                      : 'hover:border-primary/50'
+                  }`}>
+                    <div className="flex items-start space-x-4">
+                      <Checkbox
+                        id={condition.id}
+                        checked={formData.selectedConditions.includes(condition.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            updateFormData({
+                              selectedConditions: [...formData.selectedConditions, condition.id]
+                            });
+                          } else {
+                            updateFormData({
+                              selectedConditions: formData.selectedConditions.filter(id => id !== condition.id)
+                            });
+                          }
+                        }}
+                      />
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center space-x-3">
+                          <IconComponent className={`h-6 w-6 ${condition.color}`} />
+                          <Label htmlFor={condition.id} className="text-lg font-semibold cursor-pointer">
+                            {condition.name}
+                          </Label>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {condition.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
             </div>
             
-            <div className="bg-accent p-4 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                💡 <strong>Tip:</strong> Choose times that work with your daily routine. 
-                You can always adjust these later in settings.
+            <div className="bg-gradient-subtle p-4 rounded-lg border border-border">
+              <p className="text-sm text-center text-muted-foreground">
+                💡 <strong>Tip:</strong> You can select multiple conditions. The app will customize tracking based on your selections.
               </p>
             </div>
           </div>
         );
 
-      case 5:
+      case 4:
         if (formData.gender !== "female") {
-          // Skip to next step for non-female users
-          setCurrentStep(6);
+          // Skip to medications for non-female users
+          setCurrentStep(5);
           return null;
         }
         
@@ -369,36 +439,130 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             <div className="text-center mb-8">
               <Calendar className="h-12 w-12 text-primary mx-auto mb-4" />
               <h2 className="text-2xl font-bold">Menstrual Cycle Tracking</h2>
-              <p className="text-muted-foreground">Optional - helps identify patterns with seizures</p>
+              <p className="text-muted-foreground">Optional - helps identify patterns with neurological symptoms</p>
             </div>
             
-            <Card className="p-6">
-              <div className="flex items-start space-x-3">
+            <Card className="p-6 border-2 border-dashed border-primary/30">
+              <div className="flex items-start space-x-4">
                 <Checkbox
                   id="trackMenstrual"
                   checked={formData.trackMenstrual}
                   onCheckedChange={(checked) => updateFormData({ trackMenstrual: !!checked })}
                 />
-                <div className="flex-1">
-                  <Label htmlFor="trackMenstrual" className="font-medium text-base">
-                    Track menstrual cycle and basal temperature
-                  </Label>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Catamenial epilepsy affects up to 40% of women with epilepsy. 
-                    Tracking your cycle can help identify seizure patterns related to hormonal changes.
-                  </p>
+                <div className="flex-1 space-y-4">
+                  <div>
+                    <Label htmlFor="trackMenstrual" className="text-lg font-semibold cursor-pointer">
+                      Track menstrual cycle and basal temperature
+                    </Label>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      <strong>Research shows:</strong> Catamenial epilepsy affects up to 40% of women with epilepsy. 
+                      Hormonal fluctuations can significantly impact seizure frequency and other neurological symptoms.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-accent p-4 rounded-lg">
+                    <h4 className="font-semibold text-sm mb-2">Why track your cycle?</h4>
+                    <ul className="text-xs space-y-1 text-muted-foreground">
+                      <li>• Identify seizure patterns related to hormonal changes</li>
+                      <li>• Better medication timing and dosage optimization</li>
+                      <li>• Improved quality of life through pattern recognition</li>
+                      <li>• Valuable data for your healthcare provider</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </Card>
             
             {formData.trackMenstrual && (
-              <Card className="p-4 bg-accent">
+              <Card className="p-4 bg-success/5 border-success/20">
                 <p className="text-sm">
                   <strong>What we'll track:</strong> Cycle start/end dates, flow intensity, 
-                  symptoms, and correlation with seizures or other neurological symptoms.
+                  symptoms, basal body temperature, and correlation with neurological symptoms.
                 </p>
               </Card>
             )}
+          </div>
+        );
+
+      case 5:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <Pill className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-2xl font-bold">Current Medications</h2>
+              <p className="text-muted-foreground">Help us track your medication schedule and effectiveness</p>
+            </div>
+            
+            <div className="space-y-4">
+              {formData.medications.map((medication, index) => (
+                <Card key={index} className="p-4 border-2">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-semibold">Medication {index + 1}</h4>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeMedication(index)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Medication Name *</Label>
+                        <Input
+                          placeholder="e.g., Levetiracetam"
+                          value={medication.name}
+                          onChange={(e) => updateMedication(index, { name: e.target.value })}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label>Dosage *</Label>
+                        <Input
+                          placeholder="e.g., 500mg"
+                          value={medication.dosage}
+                          onChange={(e) => updateMedication(index, { dosage: e.target.value })}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2 md:col-span-2">
+                        <Label>Frequency *</Label>
+                        <Select onValueChange={(value) => updateMedication(index, { frequency: value })}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="How often do you take this?" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-popover border border-border z-50">
+                            <SelectItem value="once_daily">Once daily</SelectItem>
+                            <SelectItem value="twice_daily">Twice daily</SelectItem>
+                            <SelectItem value="three_times_daily">Three times daily</SelectItem>
+                            <SelectItem value="as_needed">As needed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              
+              <Button
+                variant="outline"
+                onClick={addMedication}
+                className="w-full border-dashed border-2 border-primary/30 hover:border-primary"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Medication
+              </Button>
+              
+              <div className="bg-accent p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  💡 <strong>Note:</strong> This information helps us set up medication reminders and track adherence. 
+                  You can always add or modify medications later.
+                </p>
+              </div>
+            </div>
           </div>
         );
 
@@ -406,69 +570,67 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h2 className="text-2xl font-bold">Research Contribution</h2>
-              <p className="text-muted-foreground">Help advance neurological research (completely optional)</p>
+              <Clock className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-2xl font-bold">Daily Tracking Schedule</h2>
+              <p className="text-muted-foreground">Set up your personalized tracking times</p>
             </div>
             
-            <Card className="p-6">
-              <div className="flex items-start space-x-3 mb-4">
-                <Checkbox
-                  id="shareResearchData"
-                  checked={formData.shareResearchData}
-                  onCheckedChange={(checked) => updateFormData({ shareResearchData: !!checked })}
-                />
-                <div className="flex-1">
-                  <Label htmlFor="shareResearchData" className="font-medium text-base">
-                    Share anonymized data for research
-                  </Label>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Your anonymized data helps researchers develop better treatments. 
-                    You maintain complete control over what is shared.
-                  </p>
-                </div>
-              </div>
-              
-              {formData.shareResearchData && (
-                <div className="ml-6 space-y-3 border-l-2 border-primary pl-4">
-                  <p className="font-medium text-sm">Choose what to share:</p>
-                  {[
-                    { id: "symptoms", label: "Symptom tracking data" },
-                    { id: "medications", label: "Medication information" },
-                    { id: "seizures", label: "Seizure logs" },
-                    { id: "demographics", label: "Age, gender, condition type" },
-                    { id: "outcomes", label: "Treatment outcomes" }
-                  ].map((item) => (
-                    <div key={item.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={item.id}
-                        checked={formData.researchDataTypes.includes(item.id)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            updateFormData({
-                              researchDataTypes: [...formData.researchDataTypes, item.id]
-                            });
-                          } else {
-                            updateFormData({
-                              researchDataTypes: formData.researchDataTypes.filter(type => type !== item.id)
-                            });
-                          }
-                        }}
-                      />
-                      <Label htmlFor={item.id} className="text-sm">
-                        {item.label}
-                      </Label>
+            <div className="space-y-6">
+              <Card className="p-6">
+                <h3 className="font-semibold mb-4">Your Tracking Schedule</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Based on your medication schedule and preferences, set times when you'd like to track symptoms, 
+                  {formData.trackMenstrual && " basal temperature,"}
+                  {" "}and general wellness.
+                </p>
+                
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      type="time"
+                      value={customTime}
+                      onChange={(e) => setCustomTime(e.target.value)}
+                      placeholder="Select time"
+                      className="flex-1"
+                    />
+                    <Button onClick={addCustomTime} disabled={!customTime}>
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Selected Times:</Label>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.preferredTimes.map((time) => (
+                        <div key={time} className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
+                          {time}
+                          <button
+                            onClick={() => removeTime(time)}
+                            className="ml-2 hover:text-destructive"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                    {formData.preferredTimes.length === 0 && (
+                      <p className="text-sm text-muted-foreground">No times selected yet</p>
+                    )}
+                  </div>
                 </div>
-              )}
-            </Card>
-            
-            <div className="bg-success/10 border border-success/20 p-4 rounded-lg">
-              <p className="text-sm text-success-foreground">
-                🔒 <strong>Your privacy is protected:</strong> All data is anonymized, 
-                encrypted, and you can withdraw consent at any time.
-              </p>
+              </Card>
+              
+              <Card className="p-4 bg-gradient-subtle">
+                <h4 className="font-semibold text-sm mb-2">Tracking Preview</h4>
+                <div className="text-xs space-y-1">
+                  <div>📊 <strong>Daily Symptoms:</strong> {formData.preferredTimes.length} check-ins per day</div>
+                  <div>💊 <strong>Medications:</strong> {formData.medications.length} medications to track</div>
+                  {formData.trackMenstrual && (
+                    <div>🌡️ <strong>Basal Temperature:</strong> Morning temperature recording</div>
+                  )}
+                  <div>📈 <strong>Wellness:</strong> Mood, energy, sleep quality tracking</div>
+                </div>
+              </Card>
             </div>
           </div>
         );
@@ -477,36 +639,151 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
+              <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-2xl font-bold">Advance Epilepsy Research</h2>
+              <p className="text-muted-foreground">Help change the future of neurological care</p>
+            </div>
+            
+            <div className="space-y-6">
+              <Card className="p-6 border-2 border-primary/20 bg-gradient-subtle">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-center">The Research Crisis</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <Card className="p-4 bg-destructive/5 border-destructive/20">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-destructive mb-2">65%</div>
+                        <p className="text-muted-foreground">of women with epilepsy report menstrual seizure patterns, yet only 12% are properly studied</p>
+                      </div>
+                    </Card>
+                    
+                    <Card className="p-4 bg-warning/5 border-warning/20">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-warning mb-2">90%</div>
+                        <p className="text-muted-foreground">of neurological research lacks diverse, real-world patient data</p>
+                      </div>
+                    </Card>
+                  </div>
+                  
+                  <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground">
+                    "The lack of comprehensive patient data is the biggest barrier to developing better treatments for epilepsy and movement disorders. Every data point helps us understand these conditions better."
+                    <footer className="text-xs mt-2">- Dr. Sarah Chen, Epilepsy Research Consortium</footer>
+                  </blockquote>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-start space-x-3 mb-6">
+                  <Checkbox
+                    id="shareResearchData"
+                    checked={formData.shareResearchData}
+                    onCheckedChange={(checked) => updateFormData({ shareResearchData: !!checked })}
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="shareResearchData" className="text-lg font-semibold cursor-pointer">
+                      Share anonymized data for research
+                    </Label>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Your anonymized data could help researchers develop better treatments for millions of people worldwide.
+                      You maintain complete control over what is shared.
+                    </p>
+                  </div>
+                </div>
+                
+                {formData.shareResearchData && (
+                  <div className="ml-6 space-y-4 border-l-2 border-primary pl-6">
+                    <p className="font-semibold text-sm">Choose what to contribute:</p>
+                    {[
+                      { id: "symptoms", label: "Symptom patterns and triggers", description: "Help identify common patterns across patients" },
+                      { id: "medications", label: "Medication effectiveness data", description: "Improve treatment protocols and dosing guidelines" },
+                      { id: "seizures", label: "Seizure frequency and characteristics", description: "Advance seizure prediction and prevention research" },
+                      { id: "menstrual", label: "Menstrual cycle correlations", description: "Critical for understanding catamenial epilepsy" },
+                      { id: "demographics", label: "Age, gender, condition type", description: "Ensure research represents diverse populations" }
+                    ].map((item) => (
+                      <Card key={item.id} className="p-4">
+                        <div className="flex items-start space-x-3">
+                          <Checkbox
+                            id={item.id}
+                            checked={formData.researchDataTypes.includes(item.id)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                updateFormData({
+                                  researchDataTypes: [...formData.researchDataTypes, item.id]
+                                });
+                              } else {
+                                updateFormData({
+                                  researchDataTypes: formData.researchDataTypes.filter(type => type !== item.id)
+                                });
+                              }
+                            }}
+                          />
+                          <div className="flex-1">
+                            <Label htmlFor={item.id} className="font-medium cursor-pointer">
+                              {item.label}
+                            </Label>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </Card>
+              
+              <div className="bg-success/10 border border-success/20 p-4 rounded-lg">
+                <p className="text-sm text-success-foreground">
+                  🔒 <strong>Your privacy is protected:</strong> All data is anonymized, 
+                  encrypted, and you can withdraw consent at any time. No personal identifiers are ever shared.
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 8:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
               <Activity className="h-12 w-12 text-success mx-auto mb-4" />
               <h2 className="text-2xl font-bold">Ready for Your First Tracking!</h2>
-              <p className="text-muted-foreground">Let's log your first daily health check-in</p>
+              <p className="text-muted-foreground">Let's establish your baseline with your first health check-in</p>
             </div>
             
             <Card className="p-6 bg-gradient-subtle">
-              <div className="text-center space-y-4">
-                <h3 className="text-lg font-semibold">🌟 You're All Set!</h3>
-                <p className="text-muted-foreground">
-                  Your NeuroLoop profile is complete. Now let's track your first daily health data 
-                  to establish your baseline.
-                </p>
+              <div className="text-center space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">🌟 Your NeuroLoop Profile is Complete!</h3>
+                  <p className="text-muted-foreground">
+                    Now let's capture your first health data to establish your personal baseline.
+                  </p>
+                </div>
                 
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">✓</div>
-                    <div className="text-muted-foreground">Profile Complete</div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="text-center p-4 bg-card rounded-lg border">
+                    <div className="text-2xl font-bold text-primary mb-2">✓</div>
+                    <div className="font-medium">Profile Complete</div>
+                    <div className="text-muted-foreground text-xs">Personal & medical info</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-secondary">→</div>
-                    <div className="text-muted-foreground">First Tracking</div>
+                  <div className="text-center p-4 bg-card rounded-lg border">
+                    <div className="text-2xl font-bold text-secondary mb-2">{formData.preferredTimes.length}</div>
+                    <div className="font-medium">Daily Check-ins</div>
+                    <div className="text-muted-foreground text-xs">Scheduled tracking times</div>
+                  </div>
+                  <div className="text-center p-4 bg-card rounded-lg border">
+                    <div className="text-2xl font-bold text-success mb-2">→</div>
+                    <div className="font-medium">First Tracking</div>
+                    <div className="text-muted-foreground text-xs">Establish baseline</div>
                   </div>
                 </div>
                 
                 <Button 
                   variant="hero" 
                   onClick={() => setShowTrackingModal(true)}
-                  className="w-full"
+                  className="w-full text-lg py-6"
                 >
-                  Start My First Tracking
+                  🚀 Start My Health Journey
                 </Button>
               </div>
             </Card>
@@ -527,12 +804,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
       case 3:
         return formData.selectedConditions.length > 0;
       case 4:
-        return formData.preferredTimes.length > 0;
+        return true; // Optional menstrual step
       case 5:
-        return true; // Optional step
+        return true; // Medications optional
       case 6:
-        return true; // Optional step
+        return formData.preferredTimes.length > 0;
       case 7:
+        return true; // Optional research step
+      case 8:
         return true; // Tracking step
       default:
         return false;
@@ -595,7 +874,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
@@ -606,9 +885,9 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
               {Math.round((currentStep / getMaxSteps()) * 100)}% Complete
             </span>
           </div>
-          <div className="w-full bg-muted h-2 rounded-full">
+          <div className="w-full bg-muted h-3 rounded-full overflow-hidden">
             <div 
-              className="bg-gradient-primary h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-primary h-full rounded-full transition-all duration-500 ease-out"
               style={{ width: `${(currentStep / getMaxSteps()) * 100}%` }}
             />
           </div>
@@ -624,7 +903,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
           <Button
             variant="outline"
             onClick={handleBack}
-            className="flex items-center"
+            className="flex items-center px-6 py-3"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
             Back
@@ -634,7 +913,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             variant="hero"
             onClick={handleNext}
             disabled={!isStepValid()}
-            className="flex items-center"
+            className="flex items-center px-6 py-3"
           >
             {currentStep === getMaxSteps() ? "Complete Setup" : "Continue"}
             <ChevronRight className="h-4 w-4 ml-2" />

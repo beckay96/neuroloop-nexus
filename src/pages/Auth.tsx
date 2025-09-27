@@ -12,9 +12,7 @@ import { z } from 'zod';
 
 const signupSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required')
+  password: z.string().min(6, 'Password must be at least 6 characters long')
 });
 
 const loginSchema = z.object({
@@ -28,9 +26,7 @@ export default function Auth() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [signupData, setSignupData] = useState({
     email: '',
-    password: '',
-    firstName: '',
-    lastName: ''
+    password: ''
   });
   const [loginData, setLoginData] = useState({
     email: '',
@@ -63,11 +59,7 @@ export default function Auth() {
         email: validatedData.email,
         password: validatedData.password,
         options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            first_name: validatedData.firstName,
-            last_name: validatedData.lastName
-          }
+          emailRedirectTo: redirectUrl
         }
       });
 
@@ -78,12 +70,8 @@ export default function Auth() {
           setMessage({ type: 'error', text: error.message });
         }
       } else {
-        setMessage({ 
-          type: 'success', 
-          text: 'Account created successfully! Please check your email to verify your account, then log in.' 
-        });
-        // Clear form
-        setSignupData({ email: '', password: '', firstName: '', lastName: '' });
+        // Since email confirmation is disabled, user is automatically signed in
+        navigate('/');
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -225,36 +213,6 @@ export default function Auth() {
               </div>
               
               <form onSubmit={handleSignup} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-firstName">First Name</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-firstName"
-                        type="text"
-                        placeholder="First name"
-                        value={signupData.firstName}
-                        onChange={(e) => setSignupData(prev => ({ ...prev, firstName: e.target.value }))}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-lastName">Last Name</Label>
-                    <Input
-                      id="signup-lastName"
-                      type="text"
-                      placeholder="Last name"
-                      value={signupData.lastName}
-                      onChange={(e) => setSignupData(prev => ({ ...prev, lastName: e.target.value }))}
-                      required
-                    />
-                  </div>
-                </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
