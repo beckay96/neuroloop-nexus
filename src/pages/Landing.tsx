@@ -86,9 +86,13 @@ export default function Landing() {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [userType, setUserType] = useState<string>("");
 
+  console.log('Landing - user:', !!user, 'showUserTypeSelector:', showUserTypeSelector, 'hasCompletedOnboarding:', hasCompletedOnboarding);
+
   useEffect(() => {
     const checkOnboardingStatus = async () => {
       if (!user) return;
+      
+      console.log('Landing - checking onboarding status for user:', user.id);
       
       // Check if user has completed onboarding
       const { data: profile } = await supabase
@@ -97,11 +101,15 @@ export default function Landing() {
         .eq('id', user.id)
         .maybeSingle();
         
+      console.log('Landing - profile data:', profile);
+        
       if (profile?.onboarding_completed) {
+        console.log('Landing - onboarding completed, userType:', profile.user_type);
         setHasCompletedOnboarding(true);
         setUserType(profile.user_type || 'patient');
       } else {
         // If no profile or onboarding not completed, show user type selector
+        console.log('Landing - onboarding not completed, showing user type selector');
         setShowUserTypeSelector(true);
       }
     };
@@ -157,6 +165,7 @@ export default function Landing() {
 
   // Show first daily tracking modal
   if (showFirstTracking) {
+    console.log('Landing - showing first tracking modal');
     return (
       <>
         <DailyTrackingModal 
@@ -171,6 +180,7 @@ export default function Landing() {
 
   // Show dashboard if onboarding is completed
   if (hasCompletedOnboarding) {
+    console.log('Landing - showing dashboard, userType:', userType);
     if (userType === 'clinician') {
       return <ClinicianDashboard />;
     }
@@ -179,6 +189,7 @@ export default function Landing() {
 
   // Show onboarding flow
   if (showOnboarding && selectedUserType) {
+    console.log('Landing - showing onboarding for userType:', selectedUserType);
     if (selectedUserType === "patient") {
       return <PatientOnboarding onComplete={handleOnboardingComplete} onBack={handleBackToTypeSelection} />;
     } else if (selectedUserType === "clinician") {
@@ -191,6 +202,7 @@ export default function Landing() {
   }
 
   if (showUserTypeSelector) {
+    console.log('Landing - showing user type selector');
     return (
       <div className="min-h-screen bg-background">
         <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
@@ -218,6 +230,7 @@ export default function Landing() {
     );
   }
 
+  console.log('Landing - showing landing page (no user authenticated)');
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
