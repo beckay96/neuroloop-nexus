@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
+import SeizureLogModal from "@/components/tracking/SeizureLogModal";
+import MedicationModal from "@/components/tracking/MedicationModal";
+import VideoLogModal from "@/components/tracking/VideoLogModal";
+import TemperatureModal from "@/components/tracking/TemperatureModal";
+import SymptomsModal from "@/components/tracking/SymptomsModal";
 import { 
   Activity, 
   Heart, 
@@ -187,12 +192,41 @@ interface PatientDashboardProps {
 
 export default function PatientDashboard({ userName = "Patient" }: PatientDashboardProps) {
   const [showDailyTracking, setShowDailyTracking] = useState(false);
+  const [showSeizureLog, setShowSeizureLog] = useState(false);
+  const [showMedicationLog, setShowMedicationLog] = useState(false);
+  const [showVideoLog, setShowVideoLog] = useState(false);
+  const [showTemperatureLog, setShowTemperatureLog] = useState(false);
+  const [showSymptomsLog, setShowSymptomsLog] = useState(false);
 
   const handleQuickAction = (actionId: string) => {
-    if (actionId === "daily-tracking") {
-      setShowDailyTracking(true);
+    switch (actionId) {
+      case "daily-tracking":
+        setShowDailyTracking(true);
+        break;
+      case "log-seizure":
+        setShowSeizureLog(true);
+        break;
+      case "medication":
+        setShowMedicationLog(true);
+        break;
+      case "video-log":
+        setShowVideoLog(true);
+        break;
+      case "basal-temp":
+        setShowTemperatureLog(true);
+        break;
+      case "symptom-log":
+        setShowSymptomsLog(true);
+        break;
+      default:
+        console.log("Action not implemented:", actionId);
     }
-    // Handle other actions...
+  };
+
+  const handleModalComplete = (data: any, type: string) => {
+    console.log(`${type} data:`, data);
+    // Here you would save the data to your database
+    // For now, just close the modal
   };
 
   return (
@@ -200,7 +234,55 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
       <DailyTrackingModal 
         isOpen={showDailyTracking}
         onClose={() => setShowDailyTracking(false)}
-        onComplete={() => setShowDailyTracking(false)}
+        onComplete={(data) => {
+          handleModalComplete(data, "daily-tracking");
+          setShowDailyTracking(false);
+        }}
+      />
+      
+      <SeizureLogModal 
+        isOpen={showSeizureLog}
+        onClose={() => setShowSeizureLog(false)}
+        onComplete={(data) => {
+          handleModalComplete(data, "seizure-log");
+          setShowSeizureLog(false);
+        }}
+      />
+      
+      <MedicationModal 
+        isOpen={showMedicationLog}
+        onClose={() => setShowMedicationLog(false)}
+        onComplete={(data) => {
+          handleModalComplete(data, "medication-log");
+          setShowMedicationLog(false);
+        }}
+      />
+      
+      <VideoLogModal 
+        isOpen={showVideoLog}
+        onClose={() => setShowVideoLog(false)}
+        onComplete={(data) => {
+          handleModalComplete(data, "video-log");
+          setShowVideoLog(false);
+        }}
+      />
+      
+      <TemperatureModal 
+        isOpen={showTemperatureLog}
+        onClose={() => setShowTemperatureLog(false)}
+        onComplete={(data) => {
+          handleModalComplete(data, "temperature-log");
+          setShowTemperatureLog(false);
+        }}
+      />
+      
+      <SymptomsModal 
+        isOpen={showSymptomsLog}
+        onClose={() => setShowSymptomsLog(false)}
+        onComplete={(data) => {
+          handleModalComplete(data, "symptoms-log");
+          setShowSymptomsLog(false);
+        }}
       />
       
     <div className="min-h-screen bg-background">
