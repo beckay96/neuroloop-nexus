@@ -9,195 +9,146 @@ import MedicationModal from "@/components/tracking/MedicationModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomsModal from "@/components/tracking/SymptomsModal";
-import { 
-  Activity, 
-  Heart, 
-  Pill, 
-  Calendar,
-  TrendingUp,
-  AlertCircle,
-  Plus,
-  Settings,
-  Bell,
-  Brain,
-  Zap,
-  Award,
-  Target,
-  Clock,
-  FileText,
-  Users,
-  BarChart3,
-  Shield,
-  Camera,
-  Thermometer,
-  MessageSquare,
-  Phone
-} from "lucide-react";
-
-const quickActions = [
-  { 
-    id: "daily-tracking",
-    title: "Daily Check-in", 
-    icon: Heart, 
-    color: "text-primary",
-    bg: "bg-primary/10",
-    description: "Log mood, energy & symptoms"
-  },
-  { 
-    id: "log-seizure",
-    title: "Log Seizure", 
-    icon: Zap, 
-    color: "text-status-critical",
-    bg: "bg-status-critical/10",
-    description: "Record seizure details"
-  },
-  { 
-    id: "medication",
-    title: "Medications", 
-    icon: Pill, 
-    color: "text-secondary",
-    bg: "bg-secondary/10",
-    description: "Track & manage meds"
-  },
-  { 
-    id: "video-log",
-    title: "Video Log", 
-    icon: Camera, 
-    color: "text-warning",
-    bg: "bg-warning/10",
-    description: "Record symptoms visually"
-  },
-  { 
-    id: "basal-temp",
-    title: "Temperature", 
-    icon: Thermometer, 
-    color: "text-status-monitoring",
-    bg: "bg-status-monitoring/10",
-    description: "Basal body temperature"
-  },
-  { 
-    id: "symptom-log",
-    title: "Symptoms", 
-    icon: Activity, 
-    color: "text-accent",
-    bg: "bg-accent/30",
-    description: "Detailed symptom tracking"
-  }
-];
-
-const healthStats = [
-  { 
-    label: "Days Seizure Free", 
-    value: "12", 
-    target: "30", 
-    trend: "up", 
-    color: "text-status-stable",
-    progress: 40,
-    icon: Shield
-  },
-  { 
-    label: "Medication Adherence", 
-    value: "94%", 
-    target: "95%", 
-    trend: "up", 
-    color: "text-status-stable",
-    progress: 94,
-    icon: Pill
-  },
-  { 
-    label: "Energy Level (Avg)", 
-    value: "7.2", 
-    target: "8.0", 
-    trend: "up", 
-    color: "text-primary",
-    progress: 72,
-    icon: Zap
-  },
-  { 
-    label: "Sleep Quality", 
-    value: "6.8", 
-    target: "8.0", 
-    trend: "down", 
-    color: "text-warning",
-    progress: 68,
-    icon: Heart
-  }
-];
-
-const achievements = [
-  {
-    id: 1,
-    title: "7-Day Streak",
-    description: "Completed daily tracking for 7 days",
-    icon: Award,
-    earned: true,
-    points: 50
-  },
-  {
-    id: 2,
-    title: "Medication Master",
-    description: "100% adherence for 2 weeks",
-    icon: Target,
-    earned: true,
-    points: 75
-  },
-  {
-    id: 3,
-    title: "Data Contributor",
-    description: "Shared data for research",
-    icon: Brain,
-    earned: false,
-    points: 100
-  }
-];
-
-const upcomingReminders = [
-  {
-    id: 1,
-    type: "medication",
-    title: "Evening Levetiracetam",
-    subtitle: "500mg dose due in 30 minutes",
-    time: "8:00 PM",
-    urgent: true
-  },
-  {
-    id: 2,
-    type: "tracking",
-    title: "Daily Mood Check",
-    subtitle: "Rate your energy and mood today",
-    time: "Before bed",
-    urgent: false
-  },
-  {
-    id: 3,
-    type: "appointment",
-    title: "Dr. Smith Follow-up",
-    subtitle: "Neurology appointment",
-    time: "Tomorrow 2:00 PM",
-    urgent: false
-  },
-  {
-    id: 4,
-    type: "temperature",
-    title: "Basal Body Temperature",
-    subtitle: "Morning temperature reading",
-    time: "Tomorrow 7:00 AM",
-    urgent: false
-  }
-];
-
+import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Settings, Bell, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone } from "lucide-react";
+const quickActions = [{
+  id: "daily-tracking",
+  title: "Daily Check-in",
+  icon: Heart,
+  color: "text-primary",
+  bg: "bg-primary/10",
+  description: "Log mood, energy & symptoms"
+}, {
+  id: "log-seizure",
+  title: "Log Seizure",
+  icon: Zap,
+  color: "text-status-critical",
+  bg: "bg-status-critical/10",
+  description: "Record seizure details"
+}, {
+  id: "medication",
+  title: "Medications",
+  icon: Pill,
+  color: "text-secondary",
+  bg: "bg-secondary/10",
+  description: "Track & manage meds"
+}, {
+  id: "video-log",
+  title: "Video Log",
+  icon: Camera,
+  color: "text-warning",
+  bg: "bg-warning/10",
+  description: "Record symptoms visually"
+}, {
+  id: "basal-temp",
+  title: "Temperature",
+  icon: Thermometer,
+  color: "text-status-monitoring",
+  bg: "bg-status-monitoring/10",
+  description: "Basal body temperature"
+}, {
+  id: "symptom-log",
+  title: "Symptoms",
+  icon: Activity,
+  color: "text-accent",
+  bg: "bg-accent/30",
+  description: "Detailed symptom tracking"
+}];
+const healthStats = [{
+  label: "Days Seizure Free",
+  value: "12",
+  target: "30",
+  trend: "up",
+  color: "text-status-stable",
+  progress: 40,
+  icon: Shield
+}, {
+  label: "Medication Adherence",
+  value: "94%",
+  target: "95%",
+  trend: "up",
+  color: "text-status-stable",
+  progress: 94,
+  icon: Pill
+}, {
+  label: "Energy Level (Avg)",
+  value: "7.2",
+  target: "8.0",
+  trend: "up",
+  color: "text-primary",
+  progress: 72,
+  icon: Zap
+}, {
+  label: "Sleep Quality",
+  value: "6.8",
+  target: "8.0",
+  trend: "down",
+  color: "text-warning",
+  progress: 68,
+  icon: Heart
+}];
+const achievements = [{
+  id: 1,
+  title: "7-Day Streak",
+  description: "Completed daily tracking for 7 days",
+  icon: Award,
+  earned: true,
+  points: 50
+}, {
+  id: 2,
+  title: "Medication Master",
+  description: "100% adherence for 2 weeks",
+  icon: Target,
+  earned: true,
+  points: 75
+}, {
+  id: 3,
+  title: "Data Contributor",
+  description: "Shared data for research",
+  icon: Brain,
+  earned: false,
+  points: 100
+}];
+const upcomingReminders = [{
+  id: 1,
+  type: "medication",
+  title: "Evening Levetiracetam",
+  subtitle: "500mg dose due in 30 minutes",
+  time: "8:00 PM",
+  urgent: true
+}, {
+  id: 2,
+  type: "tracking",
+  title: "Daily Mood Check",
+  subtitle: "Rate your energy and mood today",
+  time: "Before bed",
+  urgent: false
+}, {
+  id: 3,
+  type: "appointment",
+  title: "Dr. Smith Follow-up",
+  subtitle: "Neurology appointment",
+  time: "Tomorrow 2:00 PM",
+  urgent: false
+}, {
+  id: 4,
+  type: "temperature",
+  title: "Basal Body Temperature",
+  subtitle: "Morning temperature reading",
+  time: "Tomorrow 7:00 AM",
+  urgent: false
+}];
 interface PatientDashboardProps {
   userName?: string;
 }
-
-export default function PatientDashboard({ userName = "Patient" }: PatientDashboardProps) {
+export default function PatientDashboard({
+  userName = "Patient"
+}: PatientDashboardProps) {
   const [showDailyTracking, setShowDailyTracking] = useState(false);
   const [showSeizureLog, setShowSeizureLog] = useState(false);
   const [showMedicationLog, setShowMedicationLog] = useState(false);
   const [showVideoLog, setShowVideoLog] = useState(false);
   const [showTemperatureLog, setShowTemperatureLog] = useState(false);
   const [showSymptomsLog, setShowSymptomsLog] = useState(false);
-
   const handleQuickAction = (actionId: string) => {
     switch (actionId) {
       case "daily-tracking":
@@ -222,68 +173,41 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
         console.log("Action not implemented:", actionId);
     }
   };
-
   const handleModalComplete = (data: any, type: string) => {
     console.log(`${type} data:`, data);
     // Here you would save the data to your database
     // For now, just close the modal
   };
-
-  return (
-    <>
-      <DailyTrackingModal 
-        isOpen={showDailyTracking}
-        onClose={() => setShowDailyTracking(false)}
-        onComplete={(data) => {
-          handleModalComplete(data, "daily-tracking");
-          setShowDailyTracking(false);
-        }}
-      />
+  return <>
+      <DailyTrackingModal isOpen={showDailyTracking} onClose={() => setShowDailyTracking(false)} onComplete={data => {
+      handleModalComplete(data, "daily-tracking");
+      setShowDailyTracking(false);
+    }} />
       
-      <SeizureLogModal 
-        isOpen={showSeizureLog}
-        onClose={() => setShowSeizureLog(false)}
-        onComplete={(data) => {
-          handleModalComplete(data, "seizure-log");
-          setShowSeizureLog(false);
-        }}
-      />
+      <SeizureLogModal isOpen={showSeizureLog} onClose={() => setShowSeizureLog(false)} onComplete={data => {
+      handleModalComplete(data, "seizure-log");
+      setShowSeizureLog(false);
+    }} />
       
-      <MedicationModal 
-        isOpen={showMedicationLog}
-        onClose={() => setShowMedicationLog(false)}
-        onComplete={(data) => {
-          handleModalComplete(data, "medication-log");
-          setShowMedicationLog(false);
-        }}
-      />
+      <MedicationModal isOpen={showMedicationLog} onClose={() => setShowMedicationLog(false)} onComplete={data => {
+      handleModalComplete(data, "medication-log");
+      setShowMedicationLog(false);
+    }} />
       
-      <VideoLogModal 
-        isOpen={showVideoLog}
-        onClose={() => setShowVideoLog(false)}
-        onComplete={(data) => {
-          handleModalComplete(data, "video-log");
-          setShowVideoLog(false);
-        }}
-      />
+      <VideoLogModal isOpen={showVideoLog} onClose={() => setShowVideoLog(false)} onComplete={data => {
+      handleModalComplete(data, "video-log");
+      setShowVideoLog(false);
+    }} />
       
-      <TemperatureModal 
-        isOpen={showTemperatureLog}
-        onClose={() => setShowTemperatureLog(false)}
-        onComplete={(data) => {
-          handleModalComplete(data, "temperature-log");
-          setShowTemperatureLog(false);
-        }}
-      />
+      <TemperatureModal isOpen={showTemperatureLog} onClose={() => setShowTemperatureLog(false)} onComplete={data => {
+      handleModalComplete(data, "temperature-log");
+      setShowTemperatureLog(false);
+    }} />
       
-      <SymptomsModal 
-        isOpen={showSymptomsLog}
-        onClose={() => setShowSymptomsLog(false)}
-        onComplete={(data) => {
-          handleModalComplete(data, "symptoms-log");
-          setShowSymptomsLog(false);
-        }}
-      />
+      <SymptomsModal isOpen={showSymptomsLog} onClose={() => setShowSymptomsLog(false)} onComplete={data => {
+      handleModalComplete(data, "symptoms-log");
+      setShowSymptomsLog(false);
+    }} />
       
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -335,21 +259,15 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {quickActions.map((action) => {
+            {quickActions.map(action => {
               const IconComponent = action.icon;
-              return (
-                <Card 
-                  key={action.id} 
-                  className="medical-card p-4 cursor-pointer group hover:shadow-glow-primary transition-all"
-                  onClick={() => handleQuickAction(action.id)}
-                >
+              return <Card key={action.id} className="medical-card p-4 cursor-pointer group hover:shadow-glow-primary transition-all" onClick={() => handleQuickAction(action.id)}>
                   <div className={`w-12 h-12 ${action.bg} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
                     <IconComponent className={`h-6 w-6 ${action.color}`} />
                   </div>
                   <h3 className="font-medium text-sm text-center mb-1">{action.title}</h3>
                   <p className="text-xs text-muted-foreground text-center">{action.description}</p>
-                </Card>
-              );
+                </Card>;
             })}
           </div>
         </section>
@@ -363,17 +281,10 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {healthStats.map((stat, index) => {
               const IconComponent = stat.icon;
-              return (
-                <Card key={index} className="medical-card p-6">
+              return <Card key={index} className="medical-card p-6">
                   <div className="flex items-center justify-between mb-4">
                     <IconComponent className={`h-5 w-5 ${stat.color}`} />
-                    {stat.trend !== "neutral" && (
-                      <TrendingUp 
-                        className={`h-4 w-4 ${
-                          stat.trend === "up" ? "text-status-stable" : "text-status-critical"
-                        } ${stat.trend === "down" ? "rotate-180" : ""}`} 
-                      />
-                    )}
+                    {stat.trend !== "neutral" && <TrendingUp className={`h-4 w-4 ${stat.trend === "up" ? "text-status-stable" : "text-status-critical"} ${stat.trend === "down" ? "rotate-180" : ""}`} />}
                   </div>
                   <div className="mb-3">
                     <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
@@ -383,8 +294,7 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
                     </div>
                   </div>
                   <Progress value={stat.progress} className="h-2" />
-                </Card>
-              );
+                </Card>;
             })}
           </div>
         </section>
@@ -399,10 +309,9 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
             <Button variant="ghost" size="sm">View All</Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {achievements.map((achievement) => {
+            {achievements.map(achievement => {
               const IconComponent = achievement.icon;
-              return (
-                <Card key={achievement.id} className={`medical-card p-4 ${achievement.earned ? 'bg-gradient-to-br from-warning/5 to-primary/5 border-warning/20' : 'opacity-60'}`}>
+              return <Card key={achievement.id} className={`medical-card p-4 ${achievement.earned ? 'bg-gradient-to-br from-warning/5 to-primary/5 border-warning/20' : 'opacity-60'}`}>
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 ${achievement.earned ? 'bg-warning/20' : 'bg-muted'} rounded-lg flex items-center justify-center`}>
                       <IconComponent className={`h-5 w-5 ${achievement.earned ? 'text-warning' : 'text-muted-foreground'}`} />
@@ -415,8 +324,7 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
                       +{achievement.points}
                     </Badge>
                   </div>
-                </Card>
-              );
+                </Card>;
             })}
           </div>
         </section>
@@ -525,12 +433,9 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
               </div>
               
               <div className="space-y-3">
-                {upcomingReminders.map((reminder) => (
-                  <Card key={reminder.id} className={`medical-card p-4 ${reminder.urgent ? 'border-warning/40 bg-warning/5' : ''}`}>
+                {upcomingReminders.map(reminder => <Card key={reminder.id} className={`medical-card p-4 ${reminder.urgent ? 'border-warning/40 bg-warning/5' : ''}`}>
                     <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        reminder.urgent ? 'bg-warning/20' : 'bg-muted'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${reminder.urgent ? 'bg-warning/20' : 'bg-muted'}`}>
                         {reminder.type === 'medication' && <Pill className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
                         {reminder.type === 'tracking' && <Heart className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
                         {reminder.type === 'appointment' && <Calendar className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
@@ -541,14 +446,11 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
                         <p className="text-xs text-muted-foreground">{reminder.subtitle}</p>
                         <p className="text-xs text-primary mt-1">{reminder.time}</p>
                       </div>
-                      {reminder.urgent && (
-                        <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
+                      {reminder.urgent && <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
                           Due soon
-                        </Badge>
-                      )}
+                        </Badge>}
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </section>
 
@@ -608,7 +510,7 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex-col gap-2">
                 <Button variant="outline" size="sm">
                   <FileText className="h-4 w-4 mr-2" />
                   View Impact
@@ -622,6 +524,5 @@ export default function PatientDashboard({ userName = "Patient" }: PatientDashbo
         </section>
       </main>
     </div>
-    </>
-  );
+    </>;
 }
