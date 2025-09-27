@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import UserTypeSelector from "@/components/UserTypeSelector";
+import PatientOnboarding from "@/components/onboarding/PatientOnboarding";
+import ClinicianOnboarding from "@/components/onboarding/ClinicianOnboarding";
+import CarerOnboarding from "@/components/onboarding/CarerOnboarding";
+import ResearcherOnboarding from "@/components/onboarding/ResearcherOnboarding";
 import { 
   Brain, 
   Shield, 
@@ -69,6 +73,35 @@ function ThemeToggle() {
 export default function Landing() {
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<string>("");
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  const handleUserTypeSelection = (userType: string) => {
+    setSelectedUserType(userType);
+    setShowOnboarding(true);
+  };
+
+  const handleOnboardingComplete = (data: any) => {
+    console.log("Onboarding completed:", data);
+    // Here you would save the data to the database and redirect to appropriate dashboard
+  };
+
+  const handleBackToTypeSelection = () => {
+    setShowOnboarding(false);
+    setSelectedUserType("");
+  };
+
+  // Show onboarding flow
+  if (showOnboarding && selectedUserType) {
+    if (selectedUserType === "patient") {
+      return <PatientOnboarding onComplete={handleOnboardingComplete} onBack={handleBackToTypeSelection} />;
+    } else if (selectedUserType === "clinician") {
+      return <ClinicianOnboarding onComplete={handleOnboardingComplete} onBack={handleBackToTypeSelection} />;
+    } else if (selectedUserType === "carer") {
+      return <CarerOnboarding onComplete={handleOnboardingComplete} onBack={handleBackToTypeSelection} />;
+    } else if (selectedUserType === "researcher") {
+      return <ResearcherOnboarding onComplete={handleOnboardingComplete} onBack={handleBackToTypeSelection} />;
+    }
+  }
 
   if (showUserTypeSelector) {
     return (
@@ -86,7 +119,7 @@ export default function Landing() {
         </header>
         
         <main className="py-12">
-          <UserTypeSelector onSelectUserType={setSelectedUserType} />
+          <UserTypeSelector onSelectUserType={handleUserTypeSelection} />
         </main>
       </div>
     );

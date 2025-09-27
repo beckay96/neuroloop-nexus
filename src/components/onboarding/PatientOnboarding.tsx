@@ -12,6 +12,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
 import { 
   Heart,
   User,
@@ -20,7 +21,8 @@ import {
   Clock,
   Shield,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Activity
 } from "lucide-react";
 
 interface PatientOnboardingProps {
@@ -34,7 +36,8 @@ const onboardingSteps = [
   { id: 3, title: "Medical Conditions", icon: Heart },
   { id: 4, title: "Daily Tracking", icon: Clock },
   { id: 5, title: "Menstrual Cycle", icon: Calendar },
-  { id: 6, title: "Research Consent", icon: Shield }
+  { id: 6, title: "Research Consent", icon: Shield },
+  { id: 7, title: "First Tracking", icon: Activity }
 ];
 
 const conditions = [
@@ -52,6 +55,7 @@ const trackingTimes = [
 
 export default function PatientOnboarding({ onComplete, onBack }: PatientOnboardingProps) {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showTrackingModal, setShowTrackingModal] = useState(false);
   const [formData, setFormData] = useState({
     // Personal Info
     firstName: "",
@@ -100,8 +104,8 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   };
 
   const getMaxSteps = () => {
-    // Skip menstrual cycle step if not female
-    return formData.gender === "female" ? 6 : 5;
+    // Skip menstrual cycle step if not female, add tracking step
+    return formData.gender === "female" ? 7 : 6;
   };
 
   const renderStepContent = () => {
@@ -152,7 +156,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                   <SelectTrigger>
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-popover border border-border z-50">
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
@@ -421,6 +425,46 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
           </div>
         );
 
+      case 7:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <Activity className="h-12 w-12 text-success mx-auto mb-4" />
+              <h2 className="text-2xl font-bold">Ready for Your First Tracking!</h2>
+              <p className="text-muted-foreground">Let's log your first daily health check-in</p>
+            </div>
+            
+            <Card className="p-6 bg-gradient-subtle">
+              <div className="text-center space-y-4">
+                <h3 className="text-lg font-semibold">🌟 You're All Set!</h3>
+                <p className="text-muted-foreground">
+                  Your NeuroLoop profile is complete. Now let's track your first daily health data 
+                  to establish your baseline.
+                </p>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">✓</div>
+                    <div className="text-muted-foreground">Profile Complete</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-secondary">→</div>
+                    <div className="text-muted-foreground">First Tracking</div>
+                  </div>
+                </div>
+                
+                <Button 
+                  variant="hero" 
+                  onClick={() => setShowTrackingModal(true)}
+                  className="w-full"
+                >
+                  Start My First Tracking
+                </Button>
+              </div>
+            </Card>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -440,9 +484,17 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         return true; // Optional step
       case 6:
         return true; // Optional step
+      case 7:
+        return true; // Tracking step
       default:
         return false;
     }
+  };
+
+  const handleTrackingComplete = (trackingData: any) => {
+    console.log("First tracking completed:", trackingData);
+    setShowTrackingModal(false);
+    onComplete({ ...formData, firstTracking: trackingData });
   };
 
   return (
@@ -493,6 +545,13 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
           </Button>
         </div>
       </div>
+      
+      <DailyTrackingModal
+        isOpen={showTrackingModal}
+        onClose={() => setShowTrackingModal(false)}
+        onComplete={handleTrackingComplete}
+        isFirstTracking={true}
+      />
     </div>
   );
 }

@@ -134,6 +134,48 @@ export type Database = {
         }
         Relationships: []
       }
+      carer_onboarding_data: {
+        Row: {
+          created_at: string | null
+          date_of_birth: string | null
+          first_name: string
+          id: string
+          last_name: string
+          middle_name: string | null
+          patient_date_of_birth: string | null
+          phone_number: string | null
+          relationship_to_patient: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          date_of_birth?: string | null
+          first_name: string
+          id?: string
+          last_name: string
+          middle_name?: string | null
+          patient_date_of_birth?: string | null
+          phone_number?: string | null
+          relationship_to_patient?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          date_of_birth?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          middle_name?: string | null
+          patient_date_of_birth?: string | null
+          phone_number?: string | null
+          relationship_to_patient?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       carer_profiles: {
         Row: {
           access_expires_date: string | null
@@ -439,6 +481,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      clinician_onboarding_data: {
+        Row: {
+          clinician_title: string | null
+          created_at: string | null
+          first_name: string
+          id: string
+          institution: string | null
+          last_name: string
+          license_number: string | null
+          middle_name: string | null
+          patient_invite_emails: string[] | null
+          specialty: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          clinician_title?: string | null
+          created_at?: string | null
+          first_name: string
+          id?: string
+          institution?: string | null
+          last_name: string
+          license_number?: string | null
+          middle_name?: string | null
+          patient_invite_emails?: string[] | null
+          specialty?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          clinician_title?: string | null
+          created_at?: string | null
+          first_name?: string
+          id?: string
+          institution?: string | null
+          last_name?: string
+          license_number?: string | null
+          middle_name?: string | null
+          patient_invite_emails?: string[] | null
+          specialty?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       cohort_analytics: {
         Row: {
@@ -948,6 +1035,66 @@ export type Database = {
           },
         ]
       }
+      patient_onboarding_data: {
+        Row: {
+          carer_email: string | null
+          carer_name: string | null
+          carer_phone: string | null
+          created_at: string | null
+          date_of_birth: string | null
+          first_name: string
+          gender: string | null
+          id: string
+          last_name: string
+          middle_name: string | null
+          preferred_tracking_times: string[] | null
+          research_data_types: string[] | null
+          selected_conditions: string[] | null
+          share_research_data: boolean | null
+          track_menstrual_cycle: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          carer_email?: string | null
+          carer_name?: string | null
+          carer_phone?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          first_name: string
+          gender?: string | null
+          id?: string
+          last_name: string
+          middle_name?: string | null
+          preferred_tracking_times?: string[] | null
+          research_data_types?: string[] | null
+          selected_conditions?: string[] | null
+          share_research_data?: boolean | null
+          track_menstrual_cycle?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          carer_email?: string | null
+          carer_name?: string | null
+          carer_phone?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          first_name?: string
+          gender?: string | null
+          id?: string
+          last_name?: string
+          middle_name?: string | null
+          preferred_tracking_times?: string[] | null
+          research_data_types?: string[] | null
+          selected_conditions?: string[] | null
+          share_research_data?: boolean | null
+          track_menstrual_cycle?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       patient_profiles: {
         Row: {
           created_at: string | null
@@ -1316,6 +1463,48 @@ export type Database = {
           symptom_date?: string | null
           symptom_type?: string | null
           triggers?: Json | null
+        }
+        Relationships: []
+      }
+      researcher_access_requests: {
+        Row: {
+          created_at: string | null
+          email: string
+          first_name: string | null
+          id: string
+          institution: string | null
+          last_name: string | null
+          request_reason: string | null
+          research_area: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          first_name?: string | null
+          id?: string
+          institution?: string | null
+          last_name?: string | null
+          request_reason?: string | null
+          research_area?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          first_name?: string | null
+          id?: string
+          institution?: string | null
+          last_name?: string | null
+          request_reason?: string | null
+          research_area?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
