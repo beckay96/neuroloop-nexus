@@ -6,6 +6,9 @@ import PatientOnboarding from "@/components/onboarding/PatientOnboarding";
 import ClinicianOnboarding from "@/components/onboarding/ClinicianOnboarding";
 import CarerOnboarding from "@/components/onboarding/CarerOnboarding";
 import ResearcherOnboarding from "@/components/onboarding/ResearcherOnboarding";
+import PatientDashboard from "@/components/dashboard/PatientDashboard";
+import ClinicianDashboard from "@/components/dashboard/ClinicianDashboard";
+import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
 import { 
   Brain, 
   Shield, 
@@ -81,6 +84,7 @@ export default function Landing() {
   const [selectedUserType, setSelectedUserType] = useState<string>("");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [userType, setUserType] = useState<string>("");
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
@@ -89,12 +93,13 @@ export default function Landing() {
       // Check if user has completed onboarding
       const { data: profile } = await supabase
         .from('profiles')
-        .select('onboarding_completed')
+        .select('onboarding_completed, user_type')
         .eq('id', user.id)
         .maybeSingle();
         
       if (profile?.onboarding_completed) {
         setHasCompletedOnboarding(true);
+        setUserType(profile.user_type || 'patient');
       } else {
         // If no profile or onboarding not completed, show user type selector
         setShowUserTypeSelector(true);
@@ -108,6 +113,8 @@ export default function Landing() {
     setSelectedUserType(userType);
     setShowOnboarding(true);
   };
+
+  const [showFirstTracking, setShowFirstTracking] = useState(false);
 
   const handleOnboardingComplete = async (data: any) => {
     console.log("Onboarding completed:", data);
@@ -128,13 +135,19 @@ export default function Landing() {
       if (error) {
         console.error('Error updating profile:', error);
       } else {
-        setHasCompletedOnboarding(true);
         setShowOnboarding(false);
         setShowUserTypeSelector(false);
+        // Show first daily tracking instead of going straight to dashboard
+        setShowFirstTracking(true);
       }
     } catch (error) {
       console.error('Error completing onboarding:', error);
     }
+  };
+
+  const handleFirstTrackingComplete = () => {
+    setShowFirstTracking(false);
+    setHasCompletedOnboarding(true);
   };
 
   const handleBackToTypeSelection = () => {
@@ -142,47 +155,26 @@ export default function Landing() {
     setSelectedUserType("");
   };
 
+  // Show first daily tracking modal
+  if (showFirstTracking) {
+    return (
+      <>
+        <DailyTrackingModal 
+          isOpen={true}
+          onClose={handleFirstTrackingComplete}
+          onComplete={handleFirstTrackingComplete}
+          isFirstTracking={true}
+        />
+      </>
+    );
+  }
+
   // Show dashboard if onboarding is completed
   if (hasCompletedOnboarding) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-primary">Welcome back, {user?.user_metadata?.first_name}!</h1>
-              <p className="text-muted-foreground">Your NeuroLoop dashboard</p>
-            </div>
-            <Button variant="outline" onClick={signOut} className="flex items-center gap-2">
-              <LogOut className="h-4 w-4" />
-              Sign Out
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="medical-card p-6">
-              <Activity className="h-8 w-8 text-primary mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Daily Tracking</h3>
-              <p className="text-muted-foreground mb-4">Log your symptoms, medications, and daily health data</p>
-              <Button variant="hero" className="w-full">Start Tracking</Button>
-            </Card>
-            
-            <Card className="medical-card p-6">
-              <BarChart3 className="h-8 w-8 text-primary mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Health Insights</h3>
-              <p className="text-muted-foreground mb-4">View trends and patterns in your health data</p>
-              <Button variant="outline" className="w-full">View Insights</Button>
-            </Card>
-            
-            <Card className="medical-card p-6">
-              <Users className="h-8 w-8 text-primary mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Care Team</h3>
-              <p className="text-muted-foreground mb-4">Connect with your healthcare providers</p>
-              <Button variant="outline" className="w-full">Manage Team</Button>
-            </Card>
-          </div>
-        </div>
-      </div>
-    );
+    if (userType === 'clinician') {
+      return <ClinicianDashboard />;
+    }
+    return <PatientDashboard userName={user?.user_metadata?.first_name} />;
   }
 
   // Show onboarding flow
