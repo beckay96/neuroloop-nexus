@@ -283,7 +283,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
               )}
               
               <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg">
-                <p className="text-sm text-primary-foreground">
+                <p className="text-sm text-foreground">
                   💡 <strong>Tip:</strong> Patients will receive an email invitation to join NeuroLoop 
                   and connect with your clinical dashboard. You can add more patients later.
                 </p>
