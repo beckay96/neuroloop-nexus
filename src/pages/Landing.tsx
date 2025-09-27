@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import UserTypeSelector from "@/components/UserTypeSelector";
@@ -14,9 +14,14 @@ import {
   ChevronRight,
   Moon,
   Sun,
-  Monitor
+  Monitor,
+  LogOut,
+  Activity,
+  BarChart3
 } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-neural.jpg";
 
 const features = [
@@ -71,24 +76,114 @@ function ThemeToggle() {
 }
 
 export default function Landing() {
+  const { user, signOut } = useAuth();
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<string>("");
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      if (!user) return;
+      
+      // Check if user has completed onboarding
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_completed')
+        .eq('id', user.id)
+        .maybeSingle();
+        
+      if (profile?.onboarding_completed) {
+        setHasCompletedOnboarding(true);
+      } else {
+        // If no profile or onboarding not completed, show user type selector
+        setShowUserTypeSelector(true);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [user]);
 
   const handleUserTypeSelection = (userType: string) => {
     setSelectedUserType(userType);
     setShowOnboarding(true);
   };
 
-  const handleOnboardingComplete = (data: any) => {
+  const handleOnboardingComplete = async (data: any) => {
     console.log("Onboarding completed:", data);
-    // Here you would save the data to the database and redirect to appropriate dashboard
+    
+    try {
+      // Update profile to mark onboarding as completed
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user?.id,
+          email: user?.email,
+          first_name: user?.user_metadata?.first_name,
+          last_name: user?.user_metadata?.last_name,
+          onboarding_completed: true,
+          user_type: selectedUserType
+        });
+
+      if (error) {
+        console.error('Error updating profile:', error);
+      } else {
+        setHasCompletedOnboarding(true);
+        setShowOnboarding(false);
+        setShowUserTypeSelector(false);
+      }
+    } catch (error) {
+      console.error('Error completing onboarding:', error);
+    }
   };
 
   const handleBackToTypeSelection = () => {
     setShowOnboarding(false);
     setSelectedUserType("");
   };
+
+  // Show dashboard if onboarding is completed
+  if (hasCompletedOnboarding) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-primary">Welcome back, {user?.user_metadata?.first_name}!</h1>
+              <p className="text-muted-foreground">Your NeuroLoop dashboard</p>
+            </div>
+            <Button variant="outline" onClick={signOut} className="flex items-center gap-2">
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="medical-card p-6">
+              <Activity className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Daily Tracking</h3>
+              <p className="text-muted-foreground mb-4">Log your symptoms, medications, and daily health data</p>
+              <Button variant="hero" className="w-full">Start Tracking</Button>
+            </Card>
+            
+            <Card className="medical-card p-6">
+              <BarChart3 className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Health Insights</h3>
+              <p className="text-muted-foreground mb-4">View trends and patterns in your health data</p>
+              <Button variant="outline" className="w-full">View Insights</Button>
+            </Card>
+            
+            <Card className="medical-card p-6">
+              <Users className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Care Team</h3>
+              <p className="text-muted-foreground mb-4">Connect with your healthcare providers</p>
+              <Button variant="outline" className="w-full">Manage Team</Button>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Show onboarding flow
   if (showOnboarding && selectedUserType) {
@@ -114,7 +209,13 @@ export default function Landing() {
               </div>
               <span className="text-xl font-bold">NeuroLoop</span>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <Button variant="outline" onClick={signOut} className="flex items-center gap-2">
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </div>
           </div>
         </header>
         

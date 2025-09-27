@@ -24,6 +24,7 @@ import {
   ChevronRight,
   Activity
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PatientOnboardingProps {
   onComplete: (data: any) => void;
@@ -87,11 +88,58 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < getMaxSteps()) {
       setCurrentStep(prev => prev + 1);
     } else {
-      onComplete(formData);
+      try {
+        // Save patient onboarding data to the database
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { error: patientError } = await supabase
+          .from('patient_onboarding_data')
+          .insert({
+            user_id: user.id,
+            first_name: formData.firstName,
+            middle_name: formData.middleName,
+            last_name: formData.lastName,
+            gender: formData.gender,
+            date_of_birth: formData.dateOfBirth,
+            carer_name: formData.carerName,
+            carer_phone: formData.carerPhone,
+            carer_email: formData.carerEmail,
+            selected_conditions: formData.selectedConditions,
+            preferred_tracking_times: formData.preferredTimes,
+            track_menstrual_cycle: formData.trackMenstrual,
+            share_research_data: formData.shareResearchData,
+            research_data_types: formData.researchDataTypes
+          });
+
+        if (patientError) {
+          console.error('Error saving patient data:', patientError);
+          return;
+        }
+
+        // Update onboarding progress
+        const { error: progressError } = await supabase
+          .from('onboarding_progress')
+          .upsert({
+            user_id: user.id,
+            user_type: 'patient',
+            current_step: getMaxSteps(),
+            completed: true,
+            step_data: formData
+          });
+
+        if (progressError) {
+          console.error('Error updating progress:', progressError);
+        }
+
+        onComplete(formData);
+      } catch (error) {
+        console.error('Error during patient onboarding:', error);
+      }
     }
   };
 
@@ -491,10 +539,58 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     }
   };
 
-  const handleTrackingComplete = (trackingData: any) => {
+  const handleTrackingComplete = async (trackingData: any) => {
     console.log("First tracking completed:", trackingData);
     setShowTrackingModal(false);
-    onComplete({ ...formData, firstTracking: trackingData });
+    
+    try {
+      // Save patient onboarding data with first tracking
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error: patientError } = await supabase
+        .from('patient_onboarding_data')
+        .insert({
+          user_id: user.id,
+          first_name: formData.firstName,
+          middle_name: formData.middleName,
+          last_name: formData.lastName,
+          gender: formData.gender,
+          date_of_birth: formData.dateOfBirth,
+          carer_name: formData.carerName,
+          carer_phone: formData.carerPhone,
+          carer_email: formData.carerEmail,
+          selected_conditions: formData.selectedConditions,
+          preferred_tracking_times: formData.preferredTimes,
+          track_menstrual_cycle: formData.trackMenstrual,
+          share_research_data: formData.shareResearchData,
+          research_data_types: formData.researchDataTypes
+        });
+
+      if (patientError) {
+        console.error('Error saving patient data:', patientError);
+        return;
+      }
+
+      // Update onboarding progress
+      const { error: progressError } = await supabase
+        .from('onboarding_progress')
+        .upsert({
+          user_id: user.id,
+          user_type: 'patient',
+          current_step: getMaxSteps(),
+          completed: true,
+          step_data: { ...formData, firstTracking: trackingData }
+        });
+
+      if (progressError) {
+        console.error('Error updating progress:', progressError);
+      }
+
+      onComplete({ ...formData, firstTracking: trackingData });
+    } catch (error) {
+      console.error('Error during tracking completion:', error);
+    }
   };
 
   return (

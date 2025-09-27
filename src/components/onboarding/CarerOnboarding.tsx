@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CarerOnboardingProps {
   onComplete: (data: any) => void;
@@ -50,11 +51,52 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < 3) {
       setCurrentStep(prev => prev + 1);
     } else {
-      onComplete(formData);
+      try {
+        // Save carer onboarding data
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { error: carerError } = await supabase
+          .from('carer_onboarding_data')
+          .insert({
+            user_id: user.id,
+            first_name: formData.firstName,
+            middle_name: formData.middleName,
+            last_name: formData.lastName,
+            date_of_birth: formData.dateOfBirth,
+            phone_number: formData.phoneNumber,
+            patient_date_of_birth: formData.patientDateOfBirth,
+            relationship_to_patient: formData.relationshipToPatient
+          });
+
+        if (carerError) {
+          console.error('Error saving carer data:', carerError);
+          return;
+        }
+
+        // Update onboarding progress
+        const { error: progressError } = await supabase
+          .from('onboarding_progress')
+          .upsert({
+            user_id: user.id,
+            user_type: 'carer',
+            current_step: 3,
+            completed: true,
+            step_data: formData
+          });
+
+        if (progressError) {
+          console.error('Error updating progress:', progressError);
+        }
+
+        onComplete(formData);
+      } catch (error) {
+        console.error('Error during onboarding:', error);
+      }
     }
   };
 

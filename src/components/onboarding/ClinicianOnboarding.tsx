@@ -20,6 +20,7 @@ import {
   Plus,
   X
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ClinicianOnboardingProps {
   onComplete: (data: any) => void;
@@ -71,11 +72,53 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < 3) {
       setCurrentStep(prev => prev + 1);
     } else {
-      onComplete(formData);
+      try {
+        // Save clinician onboarding data
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { error: clinicianError } = await supabase
+          .from('clinician_onboarding_data')
+          .insert({
+            user_id: user.id,
+            first_name: formData.firstName,
+            middle_name: formData.middleName,
+            last_name: formData.lastName,
+            clinician_title: formData.clinicianTitle,
+            specialty: formData.specialty,
+            institution: formData.institution,
+            license_number: formData.licenseNumber,
+            patient_invite_emails: formData.patientInviteEmails
+          });
+
+        if (clinicianError) {
+          console.error('Error saving clinician data:', clinicianError);
+          return;
+        }
+
+        // Update onboarding progress
+        const { error: progressError } = await supabase
+          .from('onboarding_progress')
+          .upsert({
+            user_id: user.id,
+            user_type: 'clinician',
+            current_step: 3,
+            completed: true,
+            step_data: formData
+          });
+
+        if (progressError) {
+          console.error('Error updating progress:', progressError);
+        }
+
+        onComplete(formData);
+      } catch (error) {
+        console.error('Error during onboarding:', error);
+      }
     }
   };
 
