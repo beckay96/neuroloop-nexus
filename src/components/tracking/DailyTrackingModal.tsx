@@ -4,19 +4,13 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { 
   Activity, 
@@ -68,13 +62,25 @@ const trackingCategories = [
   },
   {
     id: "symptoms",
-    title: "Symptom Severity",
+    title: "Symptom Selection",
     icon: Activity,
-    description: "Overall symptom severity today",
-    type: "slider",
-    min: 0,
-    max: 10,
-    labels: ["None", "Very Mild", "Mild", "Moderate", "Severe"]
+    description: "Select symptoms you experienced today",
+    type: "symptom_selection",
+    symptoms: [
+      "Tremor",
+      "Seizure activity", 
+      "Fatigue",
+      "Dizziness",
+      "Headache",
+      "Nausea",
+      "Sleep problems",
+      "Anxiety",
+      "Depression",
+      "Memory issues",
+      "Confusion",
+      "Mood changes",
+      "Other"
+    ]
   }
 ];
 
@@ -88,7 +94,9 @@ export default function DailyTrackingModal({
     mood: [7],
     energy: [7],
     sleep: [7],
-    symptoms: [2],
+    symptoms: [] as string[],
+    symptom_severities: {} as Record<string, number>,
+    other_symptom: "",
     notes: "",
     medications_taken: true
   });
@@ -116,6 +124,11 @@ export default function DailyTrackingModal({
   const handleComplete = () => {
     const finalData = {
       ...trackingData,
+      // Process symptoms and their severities
+      symptoms: trackingData.symptoms.includes("Other") && trackingData.other_symptom
+        ? [...trackingData.symptoms.filter(s => s !== "Other"), trackingData.other_symptom]
+        : trackingData.symptoms,
+      symptom_severities: trackingData.symptom_severities,
       date: new Date().toISOString().split('T')[0],
       completed_at: new Date().toISOString()
     };
@@ -126,11 +139,13 @@ export default function DailyTrackingModal({
 
   const currentTrackingItem = trackingCategories[currentCategory];
   const IconComponent = currentTrackingItem.icon;
-  const currentValue = trackingData[currentTrackingItem.id as keyof typeof trackingData] as number[];
+  const currentValue = currentTrackingItem.type === "slider" 
+    ? trackingData[currentTrackingItem.id as keyof typeof trackingData] as number[]
+    : null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border border-border z-50 max-w-lg">
+      <DialogContent className="bg-card border border-border z-50 max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-center">
             {isFirstTracking ? "🎉 Your First Daily Tracking!" : "Daily Health Check-in"}
@@ -165,31 +180,122 @@ export default function DailyTrackingModal({
             </div>
 
             <div className="space-y-4">
-              <div className="px-2">
-                <Slider
-                  value={currentValue}
-                  onValueChange={(value) => updateTrackingData(currentTrackingItem.id, value)}
-                  max={currentTrackingItem.max}
-                  min={currentTrackingItem.min}
-                  step={1}
-                  className="w-full"
-                />
-              </div>
-              
-              <div className="flex justify-between text-xs text-muted-foreground px-2">
-                <span>{currentTrackingItem.labels[0]}</span>
-                <span className="font-medium text-primary">
-                  {currentValue[0]} / {currentTrackingItem.max}
-                </span>
-                <span>{currentTrackingItem.labels[currentTrackingItem.labels.length - 1]}</span>
-              </div>
-              
-              {currentValue[0] !== undefined && (
-                <div className="text-center">
-                  <span className="text-sm font-medium">
-                    {currentTrackingItem.labels[Math.floor((currentValue[0] - currentTrackingItem.min) / 
-                      ((currentTrackingItem.max - currentTrackingItem.min) / (currentTrackingItem.labels.length - 1)))]}
-                  </span>
+              {currentTrackingItem.type === "slider" && currentValue && (
+                <>
+                  <div className="px-2">
+                    <Slider
+                      value={currentValue}
+                      onValueChange={(value) => updateTrackingData(currentTrackingItem.id, value)}
+                      max={currentTrackingItem.max}
+                      min={currentTrackingItem.min}
+                      step={1}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex justify-between text-xs text-muted-foreground px-2">
+                    <span>{currentTrackingItem.labels[0]}</span>
+                    <span className="font-medium text-primary">
+                      {currentValue[0]} / {currentTrackingItem.max}
+                    </span>
+                    <span>{currentTrackingItem.labels[currentTrackingItem.labels.length - 1]}</span>
+                  </div>
+                  
+                  {currentValue[0] !== undefined && (
+                    <div className="text-center">
+                      <span className="text-sm font-medium">
+                        {currentTrackingItem.labels[Math.floor((currentValue[0] - currentTrackingItem.min) / 
+                          ((currentTrackingItem.max - currentTrackingItem.min) / (currentTrackingItem.labels.length - 1)))]}
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {currentTrackingItem.type === "symptom_selection" && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    {currentTrackingItem.symptoms?.map(symptom => (
+                      <div key={symptom} className="flex items-center space-x-2">
+                        <Checkbox
+                          checked={trackingData.symptoms.includes(symptom)}
+                          onCheckedChange={(checked) => {
+                            const updatedSymptoms = checked
+                              ? [...trackingData.symptoms, symptom]
+                              : trackingData.symptoms.filter(s => s !== symptom);
+                            updateTrackingData("symptoms", updatedSymptoms);
+                          }}
+                        />
+                        <label className="text-sm">{symptom}</label>
+                      </div>
+                    ))}
+                  </div>
+
+                  {trackingData.symptoms.includes("Other") && (
+                    <Input
+                      placeholder="Please specify other symptom"
+                      value={trackingData.other_symptom}
+                      onChange={(e) => updateTrackingData("other_symptom", e.target.value)}
+                    />
+                  )}
+
+                  {/* Severity rating for selected symptoms */}
+                  {trackingData.symptoms.length > 0 && (
+                    <div className="space-y-4 pt-4 border-t">
+                      <h4 className="font-medium text-sm">Rate severity of selected symptoms:</h4>
+                      {trackingData.symptoms
+                        .filter(symptom => symptom !== "Other")
+                        .map(symptom => (
+                          <div key={symptom} className="space-y-2">
+                            <Label className="text-sm">
+                              {symptom}: {trackingData.symptom_severities[symptom] || 1}/10
+                            </Label>
+                            <Slider
+                              value={[trackingData.symptom_severities[symptom] || 1]}
+                              onValueChange={(value) => {
+                                updateTrackingData("symptom_severities", {
+                                  ...trackingData.symptom_severities,
+                                  [symptom]: value[0]
+                                });
+                              }}
+                              max={10}
+                              min={1}
+                              step={1}
+                              className="w-full"
+                            />
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                              <span>Very Mild</span>
+                              <span>Very Severe</span>
+                            </div>
+                          </div>
+                        ))}
+                      
+                      {trackingData.symptoms.includes("Other") && trackingData.other_symptom && (
+                        <div className="space-y-2">
+                          <Label className="text-sm">
+                            {trackingData.other_symptom}: {trackingData.symptom_severities["Other"] || 1}/10
+                          </Label>
+                          <Slider
+                            value={[trackingData.symptom_severities["Other"] || 1]}
+                            onValueChange={(value) => {
+                              updateTrackingData("symptom_severities", {
+                                ...trackingData.symptom_severities,
+                                "Other": value[0]
+                              });
+                            }}
+                            max={10}
+                            min={1}
+                            step={1}
+                            className="w-full"
+                          />
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>Very Mild</span>
+                            <span>Very Severe</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
