@@ -311,7 +311,7 @@ export default function ClinicianDashboard() {
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <TabsList className="grid w-full sm:w-auto grid-cols-2 sm:grid-cols-5 max-w-2xl">
+            <TabsList className="flex w-full max-w-2xl">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
               <TabsTrigger value="patterns" className="text-xs sm:text-sm">Patterns</TabsTrigger>
               <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
