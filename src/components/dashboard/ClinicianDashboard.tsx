@@ -28,6 +28,8 @@ import {
   FileText,
   BarChart3
 } from "lucide-react";
+import ClinicianHeader from "@/components/navigation/ClinicianHeader";
+import PatternsIdentified from "@/components/patterns/PatternsIdentified";
 
 // Comprehensive mock data for demonstration
 const patientAlerts = [
@@ -305,47 +307,41 @@ export default function ClinicianDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold flex items-center gap-2">
-                <Brain className="h-6 w-6 text-primary" />
-                Clinical Dashboard
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Monitor patient progress and manage neurological care
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export Data
+      <ClinicianHeader 
+        userName="Dr. Smith" 
+        currentSection="Dashboard"
+      />
+
+      <div className="container mx-auto p-4 lg:p-6">
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <TabsList className="grid w-full sm:w-auto grid-cols-2 sm:grid-cols-5 max-w-2xl">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="patterns" className="text-xs sm:text-sm">Patterns</TabsTrigger>
+              <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
+              <TabsTrigger value="analytics" className="text-xs sm:text-sm">Analytics</TabsTrigger>
+              <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
+            </TabsList>
+            
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                <Download className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Export Data</span>
+                <span className="sm:hidden">Export</span>
               </Button>
-              <Button variant="hero" size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Patient
+              <Button variant="hero" size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Patient</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </div>
           </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto p-6">
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="patients">Patients</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="research">Research</TabsTrigger>
-          </TabsList>
 
           <TabsContent value="overview" className="space-y-8">
             {/* Key Metrics */}
             <section>
               <h2 className="text-lg font-semibold mb-4">Key Metrics</h2>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {cohortStats.map((stat, index) => {
                   const IconComponent = stat.icon;
                   return (
@@ -411,29 +407,29 @@ export default function ClinicianDashboard() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {recentPatients.slice(0, 4).map((patient) => (
                   <Card key={patient.id} className="medical-card p-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                      <Avatar className="shrink-0">
                         <AvatarFallback>{patient.avatar}</AvatarFallback>
                       </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold">{patient.name}</h4>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                          <h4 className="font-semibold truncate">{patient.name}</h4>
                           <Badge 
                             variant="outline" 
-                            className={getStatusColor(patient.status)}
+                            className={`${getStatusColor(patient.status)} shrink-0`}
                           >
                             {patient.status}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">{patient.condition}</p>
-                        <div className="grid grid-cols-2 gap-4 mt-2">
-                          <div className="text-sm">
+                        <p className="text-sm text-muted-foreground mb-2 truncate">{patient.condition}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                          <div>
                             <p><strong>Adherence:</strong> {patient.adherence}%</p>
                             {patient.recentVitals?.seizureFreq && (
-                              <p><strong>Seizure Frequency:</strong> {patient.recentVitals.seizureFreq}</p>
+                              <p><strong>Seizures:</strong> {patient.recentVitals.seizureFreq}</p>
                             )}
                             {patient.recentVitals?.lastSeizure && (
-                              <p><strong>Last Seizure:</strong> {patient.recentVitals.lastSeizure}</p>
+                              <p><strong>Last:</strong> {patient.recentVitals.lastSeizure}</p>
                             )}
                             {patient.recentVitals?.tremor && (
                               <p><strong>Tremor:</strong> {patient.recentVitals.tremor}</p>
@@ -442,8 +438,9 @@ export default function ClinicianDashboard() {
                               <p><strong>Mood:</strong> {patient.recentVitals.mood}</p>
                             )}
                           </div>
-                          <div className="text-sm">
-                            <p><strong>Next Appointment:</strong> {patient.nextAppt}</p>
+                          <div>
+                            <p><strong>Next Appt:</strong></p>
+                            <p className="truncate">{patient.nextAppt}</p>
                           </div>
                         </div>
                       </div>
@@ -454,9 +451,13 @@ export default function ClinicianDashboard() {
             </section>
           </TabsContent>
 
+          <TabsContent value="patterns" className="space-y-6">
+            <PatternsIdentified />
+          </TabsContent>
+
           <TabsContent value="patients" className="space-y-6">
             {/* Search and Filter */}
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -466,7 +467,7 @@ export default function ClinicianDashboard() {
                   className="pl-9"
                 />
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="shrink-0">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
               </Button>
@@ -475,59 +476,64 @@ export default function ClinicianDashboard() {
             {/* Patient List */}
             <div className="grid gap-4">
               {filteredPatients.map((patient) => (
-                <Card key={patient.id} className="medical-card p-6">
-                  <div className="flex items-start justify-between">
+                <Card key={patient.id} className="medical-card p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <Avatar className="h-12 w-12">
+                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
                         <AvatarFallback>{patient.avatar}</AvatarFallback>
                       </Avatar>
-                      <div>
-                        <h3 className="font-semibold text-lg">{patient.name}</h3>
-                        <p className="text-muted-foreground">{patient.condition}</p>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-base sm:text-lg truncate">{patient.name}</h3>
+                        <p className="text-muted-foreground text-sm truncate">{patient.condition}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">
                           Age: {patient.age} • Diagnosed: {new Date(patient.diagnosisDate).getFullYear()}
                         </p>
                       </div>
                     </div>
                     <Badge 
                       variant="outline" 
-                      className={getStatusColor(patient.status)}
+                      className={`${getStatusColor(patient.status)} shrink-0`}
                     >
                       {patient.status}
                     </Badge>
                   </div>
                   
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Primary Medication</p>
-                      <p className="font-medium">{patient.primaryMedication}</p>
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+                    <div className="min-w-0">
+                      <p className="text-muted-foreground text-xs">Primary Medication</p>
+                      <p className="font-medium text-xs sm:text-sm truncate" title={patient.primaryMedication}>
+                        {patient.primaryMedication}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Adherence</p>
-                      <p className="font-medium">{patient.adherence}%</p>
+                      <p className="text-muted-foreground text-xs">Adherence</p>
+                      <p className="font-medium text-xs sm:text-sm">{patient.adherence}%</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Last Activity</p>
-                      <p className="font-medium">{patient.lastActivity}</p>
+                      <p className="text-muted-foreground text-xs">Last Activity</p>
+                      <p className="font-medium text-xs sm:text-sm">{patient.lastActivity}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Next Appointment</p>
-                      <p className="font-medium">{patient.nextAppt}</p>
+                      <p className="text-muted-foreground text-xs">Next Appointment</p>
+                      <p className="font-medium text-xs sm:text-sm">{patient.nextAppt}</p>
                     </div>
                   </div>
                   
-                  <div className="mt-4 flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <FileText className="h-4 w-4 mr-2" />
-                      View Records
+                  <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                    <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                      <FileText className="h-4 w-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">View Records</span>
+                      <span className="sm:hidden">Records</span>
                     </Button>
-                    <Button variant="outline" size="sm">
-                      <Stethoscope className="h-4 w-4 mr-2" />
-                      Schedule Visit
+                    <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                      <Stethoscope className="h-4 w-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">Schedule Visit</span>
+                      <span className="sm:hidden">Schedule</span>
                     </Button>
-                    <Button variant="outline" size="sm">
-                      <BarChart3 className="h-4 w-4 mr-2" />
-                      Analytics
+                    <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                      <BarChart3 className="h-4 w-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">Analytics</span>
+                      <span className="sm:hidden">Charts</span>
                     </Button>
                   </div>
                 </Card>
@@ -547,21 +553,21 @@ export default function ClinicianDashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Card className="p-4">
-                    <h4 className="font-semibold mb-2">Treatment Effectiveness</h4>
-                    <p className="text-2xl font-bold text-status-stable">88.7%</p>
-                    <p className="text-sm text-muted-foreground">+5.2% from last quarter</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  <Card className="p-3 sm:p-4">
+                    <h4 className="font-semibold mb-2 text-sm sm:text-base">Treatment Effectiveness</h4>
+                    <p className="text-xl sm:text-2xl font-bold text-status-stable">88.7%</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">+5.2% from last quarter</p>
                   </Card>
-                  <Card className="p-4">
-                    <h4 className="font-semibold mb-2">Patient Satisfaction</h4>
-                    <p className="text-2xl font-bold text-primary">94.2%</p>
-                    <p className="text-sm text-muted-foreground">+2.1% from last quarter</p>
+                  <Card className="p-3 sm:p-4">
+                    <h4 className="font-semibold mb-2 text-sm sm:text-base">Patient Satisfaction</h4>
+                    <p className="text-xl sm:text-2xl font-bold text-primary">94.2%</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">+2.1% from last quarter</p>
                   </Card>
-                  <Card className="p-4">
-                    <h4 className="font-semibold mb-2">Emergency Visits</h4>
-                    <p className="text-2xl font-bold text-status-critical">-34.2%</p>
-                    <p className="text-sm text-muted-foreground">Reduction from baseline</p>
+                  <Card className="p-3 sm:p-4">
+                    <h4 className="font-semibold mb-2 text-sm sm:text-base">Emergency Visits</h4>
+                    <p className="text-xl sm:text-2xl font-bold text-status-critical">-34.2%</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Reduction from baseline</p>
                   </Card>
                 </div>
                 <div className="mt-6">
@@ -586,13 +592,13 @@ export default function ClinicianDashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
                     <h4 className="font-semibold mb-2">Active Studies</h4>
                     <p className="text-sm text-muted-foreground mb-4">
                       Participate in groundbreaking research to improve treatment outcomes
                     </p>
-                    <Button variant="outline">
+                    <Button variant="outline" className="w-full sm:w-auto">
                       <Plus className="h-4 w-4 mr-2" />
                       Join Research Portal
                     </Button>
@@ -602,7 +608,7 @@ export default function ClinicianDashboard() {
                     <p className="text-sm text-muted-foreground mb-4">
                       Export anonymized data for research purposes
                     </p>
-                    <Button variant="outline">
+                    <Button variant="outline" className="w-full sm:w-auto">
                       <Download className="h-4 w-4 mr-2" />
                       Export Research Data
                     </Button>
