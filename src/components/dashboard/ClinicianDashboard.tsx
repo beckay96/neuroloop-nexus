@@ -5,12 +5,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown } from "lucide-react";
 import ClinicianHeader from "@/components/navigation/ClinicianHeader";
 import PatternsIdentified from "@/components/patterns/PatternsIdentified";
+import PatientAlertDialog from "./PatientAlertDialog";
 
 // Comprehensive mock data for demonstration
-const patientAlerts = [{
+const patientAlerts: Array<{
+  id: string;
+  patientName: string;
+  patientId: string;
+  age: number;
+  condition: string;
+  severity: 'critical' | 'moderate' | 'low';
+  message: string;
+  timestamp: string;
+  action: string;
+  lastSeizure?: string;
+  lastMedication?: string;
+  lastActivity?: string;
+  medicationAdherence: number;
+  recentEvents: string[];
+}> = [{
   id: '1',
   patientName: 'Sarah Johnson',
   patientId: 'P001',
@@ -364,7 +381,8 @@ export default function ClinicianDashboard() {
                 Critical Patient Alerts
               </h2>
               <div className="space-y-3">
-                {patientAlerts.slice(0, 3).map(alert => <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning">
+                {patientAlerts.slice(0, 3).map(alert => (
+                  <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -376,11 +394,14 @@ export default function ClinicianDashboard() {
                         <p className="text-sm text-muted-foreground">{alert.message}</p>
                         <p className="text-xs text-muted-foreground mt-1">{alert.timestamp}</p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Review
-                      </Button>
+                      <PatientAlertDialog alert={alert}>
+                        <Button variant="outline" size="sm">
+                          Review
+                        </Button>
+                      </PatientAlertDialog>
                     </div>
-                  </Card>)}
+                  </Card>
+                ))}
               </div>
             </section>
 
@@ -391,35 +412,98 @@ export default function ClinicianDashboard() {
                 Recent Patient Activity
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {recentPatients.slice(0, 4).map(patient => <Card key={patient.id} className="medical-card p-4">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                      <Avatar className="shrink-0">
-                        <AvatarFallback>{patient.avatar}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                          <h4 className="font-semibold truncate">{patient.name}</h4>
-                          <Badge variant="outline" className={`${getStatusColor(patient.status)} shrink-0`}>
-                            {patient.status}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2 truncate">{patient.condition}</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                          <div>
-                            <p><strong>Adherence:</strong> {patient.adherence}%</p>
-                            {patient.recentVitals?.seizureFreq && <p><strong>Seizures:</strong> {patient.recentVitals.seizureFreq}</p>}
-                            {patient.recentVitals?.lastSeizure && <p><strong>Last:</strong> {patient.recentVitals.lastSeizure}</p>}
-                            {patient.recentVitals?.tremor && <p><strong>Tremor:</strong> {patient.recentVitals.tremor}</p>}
-                            {patient.recentVitals?.mood && <p><strong>Mood:</strong> {patient.recentVitals.mood}</p>}
+                {recentPatients.slice(0, 4).map(patient => (
+                  <Card key={patient.id} className="medical-card border border-border/50 shadow-sm hover:shadow-md transition-all duration-200">
+                    <Collapsible>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <Avatar className="shrink-0 h-10 w-10">
+                              <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                                {patient.avatar}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold text-sm sm:text-base truncate">{patient.name}</h4>
+                                <Badge variant="outline" className={`${getStatusColor(patient.status)} text-xs shrink-0`}>
+                                  {patient.status}
+                                </Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground truncate">{patient.condition}</p>
+                              <p className="text-xs text-muted-foreground">Last active: {patient.lastActivity}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p><strong>Next Appt:</strong></p>
-                            <p className="truncate">{patient.nextAppt}</p>
-                          </div>
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 shrink-0">
+                              <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                            </Button>
+                          </CollapsibleTrigger>
                         </div>
                       </div>
-                    </div>
-                  </Card>)}
+                      
+                      <CollapsibleContent>
+                        <div className="px-4 pb-4 border-t bg-muted/20">
+                          <div className="pt-3 space-y-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                              <div className="space-y-2">
+                                <div>
+                                  <p className="font-medium text-muted-foreground">Medication Adherence</p>
+                                  <p className="font-semibold">{patient.adherence}%</p>
+                                </div>
+                                {patient.recentVitals?.seizureFreq && (
+                                  <div>
+                                    <p className="font-medium text-muted-foreground">Seizure Frequency</p>
+                                    <p className="font-semibold">{patient.recentVitals.seizureFreq}</p>
+                                  </div>
+                                )}
+                                {patient.recentVitals?.tremor && (
+                                  <div>
+                                    <p className="font-medium text-muted-foreground">Tremor Level</p>
+                                    <p className="font-semibold">{patient.recentVitals.tremor}</p>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="space-y-2">
+                                <div>
+                                  <p className="font-medium text-muted-foreground">Next Appointment</p>
+                                  <p className="font-semibold">{patient.nextAppt}</p>
+                                </div>
+                                <div>
+                                  <p className="font-medium text-muted-foreground">Primary Medication</p>
+                                  <p className="font-semibold text-xs truncate" title={patient.primaryMedication}>
+                                    {patient.primaryMedication}
+                                  </p>
+                                </div>
+                                {patient.recentVitals?.mood && (
+                                  <div>
+                                    <p className="font-medium text-muted-foreground">Mood Status</p>
+                                    <p className="font-semibold">{patient.recentVitals.mood}</p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-wrap gap-2 mt-4">
+                              <Button variant="outline" size="sm" className="text-xs flex-1 sm:flex-none">
+                                <FileText className="h-3 w-3 mr-1" />
+                                Records
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex-1 sm:flex-none">
+                                <Stethoscope className="h-3 w-3 mr-1" />
+                                Schedule
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-xs flex-1 sm:flex-none">
+                                <BarChart3 className="h-3 w-3 mr-1" />
+                                Analytics
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </Card>
+                ))}
               </div>
             </section>
           </TabsContent>
