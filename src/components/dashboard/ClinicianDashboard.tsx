@@ -311,7 +311,7 @@ export default function ClinicianDashboard() {
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <TabsList className="flex w-full max-w-2xl">
+            <TabsList className="flex w-full max-w-2xl items-center ">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
               <TabsTrigger value="patterns" className="text-xs sm:text-sm">Patterns</TabsTrigger>
               <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
@@ -319,7 +319,7 @@ export default function ClinicianDashboard() {
               <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
             </TabsList>
             
-            <div className="flex items-center gap-2 mt-16">
+            <div className="flex items-center gap-2 mt-16 justify-center ">
               <Button variant="outline" size="sm" className="text-xs sm:text-sm">
                 <Download className="h-4 w-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">Export Data</span>
