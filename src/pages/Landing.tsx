@@ -181,7 +181,7 @@ export default function Landing() {
     if (userType === 'clinician') {
       return <ClinicianDashboard />;
     }
-    return <PatientDashboard userName={user?.user_metadata?.first_name} />;
+    return <PatientDashboard />;
   }
 
   // Show onboarding flow

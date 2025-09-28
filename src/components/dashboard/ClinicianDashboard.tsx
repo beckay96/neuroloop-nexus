@@ -10,6 +10,7 @@ import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Fi
 import ClinicianHeader from "@/components/navigation/ClinicianHeader";
 import PatternsIdentified from "@/components/patterns/PatternsIdentified";
 import PatientAlertDialog from "./PatientAlertDialog";
+import { useAuth } from "@/hooks/useAuth";
 
 // Comprehensive mock data for demonstration
 const patientAlerts: Array<{
@@ -319,11 +320,28 @@ const getStatusColor = (status: string) => {
   }
 };
 export default function ClinicianDashboard() {
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("overview");
+  
+  // Extract user name from profile data or fallback to email
+  const getUserDisplayName = () => {
+    if (user?.user_metadata?.first_name && user?.user_metadata?.last_name) {
+      return `Dr. ${user.user_metadata.first_name} ${user.user_metadata.last_name}`;
+    }
+    if (user?.user_metadata?.first_name) {
+      return `Dr. ${user.user_metadata.first_name}`;
+    }
+    if (user?.email) {
+      return `Dr. ${user.email.split('@')[0]}`;
+    }
+    return "Dr. Clinician";
+  };
+  
   const filteredPatients = recentPatients.filter(patient => patient.name.toLowerCase().includes(searchTerm.toLowerCase()) || patient.condition.toLowerCase().includes(searchTerm.toLowerCase()));
+  
   return <div className="min-h-screen bg-background">
-      <ClinicianHeader userName="Dr. Smith" currentSection="Dashboard" />
+      <ClinicianHeader userName={getUserDisplayName()} currentSection="Dashboard" />
 
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">

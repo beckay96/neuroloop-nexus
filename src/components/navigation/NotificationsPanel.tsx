@@ -16,9 +16,10 @@ interface NotificationsPanelProps {
   isOpen: boolean;
   onClose: () => void;
   isMobile?: boolean;
+  userType?: 'patient' | 'clinician';
 }
 
-const notifications = [
+const patientNotifications = [
   {
     id: 1,
     type: "medication",
@@ -71,8 +72,63 @@ const notifications = [
   }
 ];
 
-export default function NotificationsPanel({ isOpen, onClose, isMobile = false }: NotificationsPanelProps) {
+const clinicianNotifications = [
+  {
+    id: 1,
+    type: "critical",
+    title: "Critical Patient Alert",
+    message: "Sarah Johnson - Seizure cluster detected (3 in 24hrs)",
+    time: "2 hours ago",
+    urgent: true,
+    icon: AlertTriangle,
+    color: "text-status-critical"
+  },
+  {
+    id: 2,
+    type: "medication",
+    title: "Medication Review Required",
+    message: "Michael Chen - Missed doses for 2 consecutive days",
+    time: "4 hours ago",
+    urgent: true,
+    icon: Pill,
+    color: "text-warning"
+  },
+  {
+    id: 3,
+    type: "appointment",
+    title: "Appointment Reminder",
+    message: "5 patients scheduled for tomorrow",
+    time: "1 hour ago",
+    urgent: false,
+    icon: Calendar,
+    color: "text-secondary"
+  },
+  {
+    id: 4,
+    type: "research",
+    title: "Research Data Update",
+    message: "Weekly cohort analysis report available",
+    time: "This morning",
+    urgent: false,
+    icon: CheckCircle,
+    color: "text-primary"
+  },
+  {
+    id: 5,
+    type: "system",
+    title: "System Update",
+    message: "New pattern recognition algorithms deployed",
+    time: "Yesterday",
+    urgent: false,
+    icon: Bell,
+    color: "text-status-stable"
+  }
+];
+
+export default function NotificationsPanel({ isOpen, onClose, isMobile = false, userType = 'patient' }: NotificationsPanelProps) {
   if (!isOpen) return null;
+
+  const notifications = userType === 'clinician' ? clinicianNotifications : patientNotifications;
 
   const panelClasses = isMobile 
     ? "fixed inset-x-0 top-16 mx-4 mt-2 z-50" 

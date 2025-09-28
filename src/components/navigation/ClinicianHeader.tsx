@@ -97,6 +97,7 @@ export default function ClinicianHeader({
               <NotificationsPanel 
                 isOpen={showNotifications} 
                 onClose={() => setShowNotifications(false)} 
+                userType="clinician"
               />
             </div>
 
@@ -196,6 +197,7 @@ export default function ClinicianHeader({
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
         isMobile={true}
+        userType="clinician"
       />
     </header>
   );

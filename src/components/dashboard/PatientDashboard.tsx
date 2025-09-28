@@ -11,6 +11,7 @@ import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomsModal from "@/components/tracking/SymptomsModal";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 const quickActions = [{
   id: "daily-tracking",
   title: "Daily Check-in",
@@ -138,12 +139,21 @@ const upcomingReminders = [{
   time: "Tomorrow 7:00 AM",
   urgent: false
 }];
-interface PatientDashboardProps {
-  userName?: string;
-}
-export default function PatientDashboard({
-  userName = "Patient"
-}: PatientDashboardProps) {
+export default function PatientDashboard() {
+  const { user } = useAuth();
+  
+  // Extract user name from profile data or fallback to email
+  const getUserDisplayName = () => {
+    if (user?.user_metadata?.first_name) {
+      return user.user_metadata.first_name;
+    }
+    if (user?.email) {
+      return user.email.split('@')[0];
+    }
+    return "Patient";
+  };
+  
+  const userName = getUserDisplayName();
   const [showDailyTracking, setShowDailyTracking] = useState(false);
   const [showSeizureLog, setShowSeizureLog] = useState(false);
   const [showMedicationLog, setShowMedicationLog] = useState(false);
