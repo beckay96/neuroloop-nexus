@@ -12,6 +12,9 @@ import PatternsIdentified from "@/components/patterns/PatternsIdentified";
 import PatientAlertDialog from "./PatientAlertDialog";
 import PatientInviteStatus from "./PatientInviteStatus";
 import ConnectionRequests from "./ConnectionRequests";
+import ClinicalScales from "./ClinicalScales";
+import RiskStratification from "./RiskStratification";
+import MedicationManagement from "./MedicationManagement";
 import { useAuth } from "@/hooks/useAuth";
 
 // Comprehensive mock data for demonstration
@@ -348,16 +351,16 @@ export default function ClinicianDashboard() {
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-6">
-            <TabsList className="flex w-full max-w-3xl items-center ">
+            <TabsList className="flex w-full max-w-4xl items-center overflow-x-auto">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
-              <TabsTrigger value="patterns" className="text-xs sm:text-sm">Patterns</TabsTrigger>
+              <TabsTrigger value="clinical" className="text-xs sm:text-sm">Clinical</TabsTrigger>
+              <TabsTrigger value="medications" className="text-xs sm:text-sm">Medications</TabsTrigger>
               <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
               <TabsTrigger value="invites" className="text-xs sm:text-sm">
                 <UserPlus className="h-3 w-3 mr-1 sm:mr-2" />
                 Invites
               </TabsTrigger>
               <TabsTrigger value="analytics" className="text-xs sm:text-sm">Analytics</TabsTrigger>
-              <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
             </TabsList>
             
             <div className="flex items-center gap-2 justify-center ">
@@ -531,10 +534,26 @@ export default function ClinicianDashboard() {
               </div>
             </section>
 
+            {/* Risk Stratification */}
+            <section>
+              <RiskStratification maxItems={3} />
+            </section>
+
             {/* Connection Requests */}
             <section>
               <ConnectionRequests maxItems={3} />
             </section>
+          </TabsContent>
+
+          <TabsContent value="clinical" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ClinicalScales maxItems={4} />
+              <RiskStratification showAll={true} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="medications" className="space-y-6">
+            <MedicationManagement showAll={true} />
           </TabsContent>
 
           <TabsContent value="patterns" className="space-y-6">
@@ -622,80 +641,81 @@ export default function ClinicianDashboard() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
-            <Card className="medical-card p-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
-                  Advanced Analytics
-                </CardTitle>
-                <CardDescription>
-                  Comprehensive insights into patient outcomes and treatment effectiveness
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                  <Card className="p-3 sm:p-4">
-                    <h4 className="font-semibold mb-2 text-sm sm:text-base">Treatment Effectiveness</h4>
-                    <p className="text-xl sm:text-2xl font-bold text-status-stable">88.7%</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">+5.2% from last quarter</p>
-                  </Card>
-                  <Card className="p-3 sm:p-4">
-                    <h4 className="font-semibold mb-2 text-sm sm:text-base">Patient Satisfaction</h4>
-                    <p className="text-xl sm:text-2xl font-bold text-primary">94.2%</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">+2.1% from last quarter</p>
-                  </Card>
-                  <Card className="p-3 sm:p-4">
-                    <h4 className="font-semibold mb-2 text-sm sm:text-base">Emergency Visits</h4>
-                    <p className="text-xl sm:text-2xl font-bold text-status-critical">-34.2%</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">Reduction from baseline</p>
-                  </Card>
-                </div>
-                <div className="mt-6">
-                  <Button>
-                    <BarChart3 className="h-4 w-4 mr-2" />
-                    View Detailed Analytics
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="medical-card p-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-primary" />
+                    Neurological Outcomes
+                  </CardTitle>
+                  <CardDescription>
+                    Key metrics for neurological patient management
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Card className="p-4">
+                      <h4 className="font-semibold mb-2 text-sm">Seizure Freedom Rate</h4>
+                      <p className="text-2xl font-bold text-status-stable">67.3%</p>
+                      <p className="text-xs text-muted-foreground">+8.1% from last quarter</p>
+                    </Card>
+                    <Card className="p-4">
+                      <h4 className="font-semibold mb-2 text-sm">Medication Adherence</h4>
+                      <p className="text-2xl font-bold text-primary">84.7%</p>
+                      <p className="text-xs text-muted-foreground">+3.2% improvement</p>
+                    </Card>
+                    <Card className="p-4">
+                      <h4 className="font-semibold mb-2 text-sm">Fall Prevention</h4>
+                      <p className="text-2xl font-bold text-status-stable">-42.1%</p>
+                      <p className="text-xs text-muted-foreground">Reduction in falls</p>
+                    </Card>
+                    <Card className="p-4">
+                      <h4 className="font-semibold mb-2 text-sm">Quality of Life</h4>
+                      <p className="text-2xl font-bold text-primary">7.8/10</p>
+                      <p className="text-xs text-muted-foreground">Average patient score</p>
+                    </Card>
+                  </div>
+                </CardContent>
+              </Card>
 
-          <TabsContent value="research" className="space-y-6">
-            <Card className="medical-card p-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-primary" />
-                  Research Collaboration
-                </CardTitle>
-                <CardDescription>
-                  Contribute to advancing neurological research and patient care
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold mb-2">Active Studies</h4>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Participate in groundbreaking research to improve treatment outcomes
-                    </p>
-                    <Button variant="outline" className="w-full sm:w-auto">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Join Research Portal
+              <Card className="medical-card p-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-primary" />
+                    Population Health Insights
+                  </CardTitle>
+                  <CardDescription>
+                    Trends across your patient cohort
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">High-Risk Patients</span>
+                      <Badge variant="destructive">12 patients</Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Medication Reviews Due</span>
+                      <Badge variant="outline">8 patients</Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Clinical Scales Overdue</span>
+                      <Badge variant="secondary">5 patients</Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Pending Test Results</span>
+                      <Badge variant="outline">3 patients</Badge>
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <Button className="w-full">
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      View Detailed Analytics
                     </Button>
                   </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Data Contribution</h4>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Export anonymized data for research purposes
-                    </p>
-                    <Button variant="outline" className="w-full sm:w-auto">
-                      <Download className="h-4 w-4 mr-2" />
-                      Export Research Data
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
