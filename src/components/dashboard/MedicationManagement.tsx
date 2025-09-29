@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -68,6 +69,7 @@ interface MedicationManagementProps {
 }
 
 export default function MedicationManagement({ showAll = false, maxItems = 3 }: MedicationManagementProps) {
+  const navigate = useNavigate();
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
 
   // Mock data for medication management
@@ -286,7 +288,12 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                      <h4 className="font-semibold text-base text-foreground">{patient.patientName}</h4>
+                      <button 
+                        onClick={() => navigate(`/patient/${patient.patientId}`)}
+                        className="font-semibold text-base text-primary hover:text-primary/80 hover:underline transition-colors text-left"
+                      >
+                        {patient.patientName}
+                      </button>
                       <Badge variant="outline" className={`${getAdherenceColor(patient.overallAdherence)} font-medium`}>
                         {patient.overallAdherence}% adherence
                       </Badge>

@@ -17,6 +17,7 @@ import ClinicalScales from "./ClinicalScales";
 import RiskStratification from "./RiskStratification";
 import MedicationManagement from "./MedicationManagement";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 // Comprehensive mock data for demonstration
 const patientAlerts: Array<{
@@ -329,6 +330,7 @@ export default function ClinicianDashboard() {
   const {
     user
   } = useAuth();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("overview");
 
@@ -436,7 +438,12 @@ export default function ClinicianDashboard() {
                           <Badge variant={getSeverityColor(alert.severity)}>
                             {alert.severity.toUpperCase()}
                           </Badge>
-                          <h4 className="font-semibold">{alert.patientName}</h4>
+                          <button 
+                            onClick={() => navigate(`/patient/${alert.patientId}`)}
+                            className="font-semibold text-primary hover:text-primary/80 hover:underline transition-colors"
+                          >
+                            {alert.patientName}
+                          </button>
                         </div>
                         <p className="text-sm text-muted-foreground">{alert.message}</p>
                         <p className="text-xs text-muted-foreground mt-1">{alert.timestamp}</p>
@@ -470,7 +477,12 @@ export default function ClinicianDashboard() {
                             </Avatar>
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-semibold text-sm sm:text-base truncate">{patient.name}</h4>
+                                <button 
+                                  onClick={() => navigate(`/patient/${patient.id}`)}
+                                  className="font-semibold text-sm sm:text-base truncate text-primary hover:text-primary/80 hover:underline transition-colors text-left"
+                                >
+                                  {patient.name}
+                                </button>
                                 <Badge variant="outline" className={`${getStatusColor(patient.status)} text-xs shrink-0`}>
                                   {patient.status}
                                 </Badge>

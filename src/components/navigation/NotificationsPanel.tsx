@@ -129,19 +129,17 @@ export default function NotificationsPanel({ isOpen, onClose, isMobile = false, 
   if (!isOpen) return null;
 
   const notifications = userType === 'clinician' ? clinicianNotifications : patientNotifications;
-
   const panelClasses = isMobile 
     ? "fixed inset-x-0 top-16 mx-4 mt-2 z-50" 
     : "absolute right-0 top-12 w-80 z-50";
 
   const handleMarkAsRead = (id: number) => {
-    console.log("Marking notification as read:", id);
+    // TODO: Implement mark as read functionality
     // In real app, update notification status
   };
 
   const handleMarkAllAsRead = () => {
-    console.log("Marking all notifications as read");
-    // In real app, update all notification statuses
+    // TODO: Implement mark all as read functionality
   };
 
   return (

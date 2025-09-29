@@ -56,25 +56,33 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
       icon: User,
       label: "Profile Settings",
       description: "Manage your account",
-      action: () => console.log("Profile settings")
+      action: () => {
+        // TODO: Navigate to profile settings
+      }
     },
     {
       icon: Shield,
       label: "Privacy & Security",
       description: "Data and privacy controls",
-      action: () => console.log("Privacy settings")
+      action: () => {
+        // TODO: Navigate to privacy settings
+      }
     },
     {
       icon: Bell,
       label: "Notification Settings",
       description: "Manage alerts and reminders",
-      action: () => console.log("Notification settings")
+      action: () => {
+        // TODO: Navigate to notification settings
+      }
     },
     {
       icon: HelpCircle,
       label: "Help & Support",
       description: "Get help and contact support",
-      action: () => console.log("Help & support")
+      action: () => {
+        // TODO: Open help modal or navigate to support
+      }
     }
   ];
 

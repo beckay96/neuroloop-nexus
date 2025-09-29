@@ -8,6 +8,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
+import PatientView from "./pages/PatientView";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
@@ -27,6 +28,11 @@ const App = () => (
                 <Route path="/" element={
                   <ProtectedRoute>
                     <Landing />
+                  </ProtectedRoute>
+                } />
+                <Route path="/patient/:patientId" element={
+                  <ProtectedRoute>
+                    <PatientView />
                   </ProtectedRoute>
                 } />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

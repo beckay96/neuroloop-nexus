@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -41,6 +42,7 @@ interface ClinicalScalesProps {
 }
 
 export default function ClinicalScales({ showAll = false, maxItems = 4 }: ClinicalScalesProps) {
+  const navigate = useNavigate();
   const [selectedScale, setSelectedScale] = useState<string | null>(null);
 
   // Mock data for clinical scales
@@ -199,7 +201,12 @@ export default function ClinicalScales({ showAll = false, maxItems = 4 }: Clinic
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                      <h4 className="font-semibold text-base text-foreground">{scale.patientName}</h4>
+                      <button 
+                        onClick={() => navigate(`/patient/${scale.patientId}`)}
+                        className="font-semibold text-base text-primary hover:text-primary/80 hover:underline transition-colors text-left"
+                      >
+                        {scale.patientName}
+                      </button>
                       <Badge variant="outline" className={`${getScaleColor(scale.scaleType)} font-medium`}>
                         {scale.scaleType}
                       </Badge>
