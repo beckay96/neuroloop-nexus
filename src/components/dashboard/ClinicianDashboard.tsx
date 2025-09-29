@@ -325,10 +325,12 @@ const getStatusColor = (status: string) => {
   }
 };
 export default function ClinicianDashboard() {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("overview");
-  
+
   // Extract user name from profile data or fallback to email
   const getUserDisplayName = () => {
     if (user?.user_metadata?.first_name && user?.user_metadata?.last_name) {
@@ -342,16 +344,14 @@ export default function ClinicianDashboard() {
     }
     return "Dr. Clinician";
   };
-  
   const filteredPatients = recentPatients.filter(patient => patient.name.toLowerCase().includes(searchTerm.toLowerCase()) || patient.condition.toLowerCase().includes(searchTerm.toLowerCase()));
-  
   return <div className="min-h-screen bg-background">
       <ClinicianHeader userName={getUserDisplayName()} currentSection="Dashboard" />
 
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-6">
-            <TabsList className="flex w-full max-w-4xl items-center overflow-x-auto">
+            <TabsList className="flex-auto w-full max-w-4xl items-center overflow-x-hidden ">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
               <TabsTrigger value="clinical" className="text-xs sm:text-sm">Clinical</TabsTrigger>
               <TabsTrigger value="medications" className="text-xs sm:text-sm">Medications</TabsTrigger>
@@ -408,8 +408,7 @@ export default function ClinicianDashboard() {
                 Critical Patient Alerts
               </h2>
               <div className="space-y-3">
-                {patientAlerts.slice(0, 3).map(alert => (
-                  <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning">
+                {patientAlerts.slice(0, 3).map(alert => <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -427,8 +426,7 @@ export default function ClinicianDashboard() {
                         </Button>
                       </PatientAlertDialog>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </section>
 
@@ -439,8 +437,7 @@ export default function ClinicianDashboard() {
                 Recent Patient Activity
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {recentPatients.slice(0, 4).map(patient => (
-                  <Card key={patient.id} className="medical-card border border-border/50 shadow-sm hover:shadow-md transition-all duration-200">
+                {recentPatients.slice(0, 4).map(patient => <Card key={patient.id} className="medical-card border border-border/50 shadow-sm hover:shadow-md transition-all duration-200">
                     <Collapsible>
                       <div className="p-4">
                         <div className="flex items-center justify-between">
@@ -478,18 +475,14 @@ export default function ClinicianDashboard() {
                                   <p className="font-medium text-muted-foreground">Medication Adherence</p>
                                   <p className="font-semibold">{patient.adherence}%</p>
                                 </div>
-                                {patient.recentVitals?.seizureFreq && (
-                                  <div>
+                                {patient.recentVitals?.seizureFreq && <div>
                                     <p className="font-medium text-muted-foreground">Seizure Frequency</p>
                                     <p className="font-semibold">{patient.recentVitals.seizureFreq}</p>
-                                  </div>
-                                )}
-                                {patient.recentVitals?.tremor && (
-                                  <div>
+                                  </div>}
+                                {patient.recentVitals?.tremor && <div>
                                     <p className="font-medium text-muted-foreground">Tremor Level</p>
                                     <p className="font-semibold">{patient.recentVitals.tremor}</p>
-                                  </div>
-                                )}
+                                  </div>}
                               </div>
                               <div className="space-y-2">
                                 <div>
@@ -502,12 +495,10 @@ export default function ClinicianDashboard() {
                                     {patient.primaryMedication}
                                   </p>
                                 </div>
-                                {patient.recentVitals?.mood && (
-                                  <div>
+                                {patient.recentVitals?.mood && <div>
                                     <p className="font-medium text-muted-foreground">Mood Status</p>
                                     <p className="font-semibold">{patient.recentVitals.mood}</p>
-                                  </div>
-                                )}
+                                  </div>}
                               </div>
                             </div>
                             
@@ -529,8 +520,7 @@ export default function ClinicianDashboard() {
                         </div>
                       </CollapsibleContent>
                     </Collapsible>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </section>
 
