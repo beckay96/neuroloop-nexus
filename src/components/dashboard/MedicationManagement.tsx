@@ -226,28 +226,28 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
   ];
 
   const getAdherenceColor = (rate: number) => {
-    if (rate >= 90) return 'text-green-600';
-    if (rate >= 75) return 'text-yellow-600';
-    if (rate >= 60) return 'text-orange-600';
-    return 'text-red-600';
+    if (rate >= 90) return 'text-green-600 dark:text-green-400';
+    if (rate >= 75) return 'text-yellow-600 dark:text-yellow-400';
+    if (rate >= 60) return 'text-orange-600 dark:text-orange-400';
+    return 'text-red-600 dark:text-red-400';
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'none': return 'bg-green-100 text-green-800';
-      case 'mild': return 'bg-yellow-100 text-yellow-800';
-      case 'moderate': return 'bg-orange-100 text-orange-800';
-      case 'severe': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'none': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800';
+      case 'mild': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800';
+      case 'moderate': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 border-orange-200 dark:border-orange-800';
+      case 'severe': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border-red-200 dark:border-red-800';
+      default: return 'bg-muted text-muted-foreground border-border';
     }
   };
 
   const getAlertColor = (severity: string) => {
     switch (severity) {
-      case 'low': return 'border-l-blue-500 bg-blue-50';
-      case 'medium': return 'border-l-yellow-500 bg-yellow-50';
-      case 'high': return 'border-l-red-500 bg-red-50';
-      default: return 'border-l-gray-500 bg-gray-50';
+      case 'low': return 'border-l-blue-500 bg-blue-50 dark:bg-blue-950/30 dark:border-l-blue-400';
+      case 'medium': return 'border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950/30 dark:border-l-yellow-400';
+      case 'high': return 'border-l-red-500 bg-red-50 dark:bg-red-950/30 dark:border-l-red-400';
+      default: return 'border-l-muted-foreground bg-muted/30';
     }
   };
 
@@ -281,26 +281,26 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
       <CardContent>
         <div className="space-y-4">
           {displayPatients.map((patient) => (
-            <Card key={patient.id} className="border border-border/50 hover:shadow-md transition-all duration-200">
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-sm">{patient.patientName}</h4>
-                      <Badge variant="outline" className={getAdherenceColor(patient.overallAdherence)}>
+            <Card key={patient.id} className="border border-border/50 hover:shadow-md hover:border-border transition-all duration-200 bg-card">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                      <h4 className="font-semibold text-base text-foreground">{patient.patientName}</h4>
+                      <Badge variant="outline" className={`${getAdherenceColor(patient.overallAdherence)} font-medium`}>
                         {patient.overallAdherence}% adherence
                       </Badge>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {patient.condition} • {patient.medications.length} medications
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">{patient.condition}</span> • {patient.medications.length} medications
                     </div>
                   </div>
                   
-                  <div className="text-right">
-                    <div className="text-lg font-bold">
+                  <div className="text-right sm:text-center shrink-0">
+                    <div className="text-2xl font-bold text-foreground">
                       {patient.alerts.length}
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-sm text-muted-foreground font-medium">
                       Active Alerts
                     </div>
                   </div>
@@ -315,15 +315,17 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
 
                 {/* Alerts */}
                 {patient.alerts.length > 0 && (
-                  <div className="mb-4">
-                    <h5 className="font-medium text-xs mb-2">Active Alerts:</h5>
-                    <div className="space-y-2">
+                  <div className="mb-6">
+                    <h5 className="font-semibold text-sm text-foreground mb-3">Active Alerts</h5>
+                    <div className="space-y-3">
                       {patient.alerts.map((alert, index) => (
-                        <div key={index} className={`p-2 border-l-4 rounded ${getAlertColor(alert.severity)}`}>
-                          <div className="flex items-start gap-2">
-                            {getAlertIcon(alert.type)}
-                            <div className="flex-1">
-                              <p className="text-xs font-medium">{alert.message}</p>
+                        <div key={index} className={`p-3 border-l-4 rounded-lg ${getAlertColor(alert.severity)}`}>
+                          <div className="flex items-start gap-3">
+                            <div className="shrink-0 mt-0.5">
+                              {getAlertIcon(alert.type)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground mb-1">{alert.message}</p>
                               <p className="text-xs text-muted-foreground">{alert.timestamp}</p>
                             </div>
                           </div>
@@ -334,100 +336,104 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
                 )}
 
                 {selectedPatient === patient.id ? (
-                  <div className="space-y-3 mt-3 pt-3 border-t">
-                    <h5 className="font-medium text-sm mb-2">Medication Details:</h5>
-                    {patient.medications.map((med) => (
-                      <div key={med.id} className="border rounded p-3 space-y-2">
-                        <div className="flex items-start justify-between">
+                  <div className="space-y-4 mt-4 pt-4 border-t border-border">
+                    <h5 className="font-semibold text-sm text-foreground mb-3">Medication Details</h5>
+                    <div className="space-y-4">
+                      {patient.medications.map((med) => (
+                        <div key={med.id} className="bg-muted/30 rounded-lg p-4 space-y-3">
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <h6 className="font-semibold text-base text-foreground mb-1">{med.name}</h6>
+                              <p className="text-sm text-muted-foreground">
+                                <span className="font-medium">{med.dosage}</span> • {med.frequency} • {med.indication}
+                              </p>
+                            </div>
+                            <Badge variant="outline" className={`${getSeverityColor(med.sideEffectSeverity)} text-xs shrink-0`}>
+                              {med.sideEffectSeverity} side effects
+                            </Badge>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <p className="font-medium text-sm text-foreground mb-1">Adherence: {med.adherenceRate}%</p>
+                              <Progress value={med.adherenceRate} className="h-2" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm text-foreground mb-1">Effectiveness: {med.effectivenessScore}%</p>
+                              <Progress value={med.effectivenessScore} className="h-2" />
+                            </div>
+                          </div>
+
+                          {med.bloodLevels && (
+                            <div className="bg-muted/50 rounded p-3">
+                              <p className="font-medium text-sm text-foreground mb-1">
+                                Blood Level: {med.bloodLevels.current} {med.bloodLevels.unit}
+                              </p>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                Target: {med.bloodLevels.target} {med.bloodLevels.unit} • 
+                                Last checked: {med.bloodLevels.lastChecked}
+                              </p>
+                              <Progress 
+                                value={(med.bloodLevels.current / med.bloodLevels.target) * 100} 
+                                className="h-2" 
+                              />
+                            </div>
+                          )}
+
                           <div>
-                            <h6 className="font-semibold text-sm">{med.name}</h6>
-                            <p className="text-xs text-muted-foreground">
-                              {med.dosage} • {med.frequency} • {med.indication}
-                            </p>
-                          </div>
-                          <Badge variant="outline" className={getSeverityColor(med.sideEffectSeverity)}>
-                            {med.sideEffectSeverity} side effects
-                          </Badge>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 text-xs">
-                          <div>
-                            <p className="font-medium">Adherence: {med.adherenceRate}%</p>
-                            <Progress value={med.adherenceRate} className="h-1 mt-1" />
-                          </div>
-                          <div>
-                            <p className="font-medium">Effectiveness: {med.effectivenessScore}%</p>
-                            <Progress value={med.effectivenessScore} className="h-1 mt-1" />
-                          </div>
-                        </div>
-
-                        {med.bloodLevels && (
-                          <div className="text-xs">
-                            <p className="font-medium">Blood Level: {med.bloodLevels.current} {med.bloodLevels.unit}</p>
-                            <p className="text-muted-foreground">
-                              Target: {med.bloodLevels.target} {med.bloodLevels.unit} • 
-                              Last checked: {med.bloodLevels.lastChecked}
-                            </p>
-                            <Progress 
-                              value={(med.bloodLevels.current / med.bloodLevels.target) * 100} 
-                              className="h-1 mt-1" 
-                            />
-                          </div>
-                        )}
-
-                        <div className="text-xs">
-                          <p className="font-medium">Recent Doses:</p>
-                          <div className="flex gap-2 mt-1">
-                            {med.recentDoses.map((dose, idx) => (
-                              <div key={idx} className="flex items-center gap-1">
-                                <span>{dose.time}</span>
-                                {dose.taken ? (
-                                  <CheckCircle className="h-3 w-3 text-green-600" />
-                                ) : dose.skipped ? (
-                                  <AlertTriangle className="h-3 w-3 text-red-600" />
-                                ) : (
-                                  <Clock className="h-3 w-3 text-yellow-600" />
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {med.interactions.length > 0 && (
-                          <div className="text-xs">
-                            <p className="font-medium">Interactions/Notes:</p>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {med.interactions.map((interaction, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
-                                  {interaction}
-                                </Badge>
+                            <p className="font-medium text-sm text-foreground mb-2">Recent Doses</p>
+                            <div className="flex flex-wrap gap-2">
+                              {med.recentDoses.map((dose, idx) => (
+                                <div key={idx} className="flex items-center gap-2 bg-muted/50 rounded px-2 py-1">
+                                  <span className="text-sm font-medium">{dose.time}</span>
+                                  {dose.taken ? (
+                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                  ) : dose.skipped ? (
+                                    <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                                  ) : (
+                                    <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                                  )}
+                                </div>
                               ))}
                             </div>
                           </div>
-                        )}
-                      </div>
-                    ))}
 
-                    <div className="flex gap-2 mt-3">
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <Target className="h-3 w-3 mr-1" />
+                          {med.interactions.length > 0 && (
+                            <div>
+                              <p className="font-medium text-sm text-foreground mb-2">Interactions & Notes</p>
+                              <div className="flex flex-wrap gap-2">
+                                {med.interactions.map((interaction, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-sm">
+                                    {interaction}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                      <Button variant="outline" size="sm" className="text-sm">
+                        <Target className="h-4 w-4 mr-2" />
                         Adjust Regimen
                       </Button>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <Calendar className="h-3 w-3 mr-1" />
+                      <Button variant="outline" size="sm" className="text-sm">
+                        <Calendar className="h-4 w-4 mr-2" />
                         Schedule Review
                       </Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex justify-between items-center mt-2">
-                    <div className="text-xs text-muted-foreground">
-                      Recent changes: {patient.recentChanges.join(', ')}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">Recent changes:</span> {patient.recentChanges.join(', ')}
                     </div>
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-xs"
+                      className="text-sm hover:bg-muted"
                       onClick={() => setSelectedPatient(patient.id)}
                     >
                       View Details
@@ -439,7 +445,7 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="text-xs mt-2"
+                    className="text-sm mt-2 hover:bg-muted"
                     onClick={() => setSelectedPatient(null)}
                   >
                     Hide Details

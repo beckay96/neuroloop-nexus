@@ -126,38 +126,38 @@ export default function ClinicalScales({ showAll = false, maxItems = 4 }: Clinic
 
   const getScaleColor = (scaleType: string) => {
     switch (scaleType) {
-      case 'MDS-UPDRS': return 'text-blue-600';
-      case 'NINDS-CSC': return 'text-red-600';
-      case 'Tremor-Rating': return 'text-green-600';
-      case 'PDSS': return 'text-purple-600';
-      default: return 'text-gray-600';
+      case 'MDS-UPDRS': return 'text-blue-600 dark:text-blue-400';
+      case 'NINDS-CSC': return 'text-red-600 dark:text-red-400';
+      case 'Tremor-Rating': return 'text-green-600 dark:text-green-400';
+      case 'PDSS': return 'text-purple-600 dark:text-purple-400';
+      default: return 'text-muted-foreground';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'normal': return 'bg-green-100 text-green-800';
-      case 'mild': return 'bg-yellow-100 text-yellow-800';
-      case 'moderate': return 'bg-orange-100 text-orange-800';
-      case 'severe': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'normal': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800';
+      case 'mild': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800';
+      case 'moderate': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 border-orange-200 dark:border-orange-800';
+      case 'severe': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border-red-200 dark:border-red-800';
+      default: return 'bg-muted text-muted-foreground border-border';
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case 'worsening': return <TrendingDown className="h-4 w-4 text-red-600" />;
-      case 'stable': return <Activity className="h-4 w-4 text-blue-600" />;
+      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />;
+      case 'worsening': return <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400" />;
+      case 'stable': return <Activity className="h-4 w-4 text-blue-600 dark:text-blue-400" />;
       default: return null;
     }
   };
 
   const getSignificanceIcon = (significance: string) => {
     switch (significance) {
-      case 'significant': return <AlertTriangle className="h-4 w-4 text-orange-600" />;
-      case 'minimal': return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'none': return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case 'significant': return <AlertTriangle className="h-4 w-4 text-orange-600 dark:text-orange-400" />;
+      case 'minimal': return <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />;
+      case 'none': return <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />;
       default: return null;
     }
   };
@@ -194,38 +194,38 @@ export default function ClinicalScales({ showAll = false, maxItems = 4 }: Clinic
       <CardContent>
         <div className="space-y-4">
           {displayScales.map((scale) => (
-            <Card key={scale.id} className="border border-border/50 hover:shadow-md transition-all duration-200">
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-sm">{scale.patientName}</h4>
-                      <Badge variant="outline" className={getScaleColor(scale.scaleType)}>
+            <Card key={scale.id} className="border border-border/50 hover:shadow-md hover:border-border transition-all duration-200 bg-card">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                      <h4 className="font-semibold text-base text-foreground">{scale.patientName}</h4>
+                      <Badge variant="outline" className={`${getScaleColor(scale.scaleType)} font-medium`}>
                         {scale.scaleType}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        {formatDate(scale.assessmentDate)}
+                        <Calendar className="h-3 w-3 shrink-0" />
+                        <span className="font-medium">Assessed:</span> {formatDate(scale.assessmentDate)}
                       </span>
                       <span className="flex items-center gap-1">
                         {getTrendIcon(scale.trend)}
-                        {scale.trend} ({scale.changeFromLast > 0 ? '+' : ''}{scale.changeFromLast})
+                        <span className="font-medium">Trend:</span> {scale.trend} ({scale.changeFromLast > 0 ? '+' : ''}{scale.changeFromLast})
                       </span>
                       <span className="flex items-center gap-1">
                         {getSignificanceIcon(scale.clinicalSignificance)}
-                        {scale.clinicalSignificance} change
+                        <span className="font-medium">Change:</span> {scale.clinicalSignificance}
                       </span>
                     </div>
                   </div>
                   
-                  <div className="text-right">
-                    <div className="text-lg font-bold">
-                      {scale.totalScore}/{scale.maxScore}
+                  <div className="text-right sm:text-center shrink-0">
+                    <div className="text-2xl font-bold text-foreground">
+                      {scale.totalScore}<span className="text-muted-foreground">/{scale.maxScore}</span>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {calculatePercentage(scale.totalScore, scale.maxScore)}%
+                    <div className="text-sm text-muted-foreground font-medium">
+                      {calculatePercentage(scale.totalScore, scale.maxScore)}% Score
                     </div>
                   </div>
                 </div>
@@ -238,47 +238,54 @@ export default function ClinicalScales({ showAll = false, maxItems = 4 }: Clinic
                 </div>
 
                 {selectedScale === scale.id ? (
-                  <div className="space-y-2 mt-3 pt-3 border-t">
-                    <h5 className="font-medium text-sm mb-2">Subscale Breakdown:</h5>
-                    {scale.subscores.map((subscore, index) => (
-                      <div key={index} className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{subscore.category}</span>
-                          <Badge variant="outline" className={getSeverityColor(subscore.severity)}>
-                            {subscore.severity}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center gap-2">
+                  <div className="space-y-4 mt-4 pt-4 border-t border-border">
+                    <h5 className="font-semibold text-sm text-foreground mb-3">Subscale Breakdown</h5>
+                    <div className="space-y-3">
+                      {scale.subscores.map((subscore, index) => (
+                        <div key={index} className="bg-muted/30 rounded-lg p-3">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-sm text-foreground">{subscore.category}</span>
+                              <Badge variant="outline" className={`${getSeverityColor(subscore.severity)} text-xs`}>
+                                {subscore.severity}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-sm font-medium text-foreground">
+                                {subscore.score}/{subscore.maxScore}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                ({calculatePercentage(subscore.score, subscore.maxScore)}%)
+                              </span>
+                            </div>
+                          </div>
                           <Progress 
                             value={calculatePercentage(subscore.score, subscore.maxScore)} 
-                            className="h-1 w-16"
+                            className="h-2"
                           />
-                          <span className="font-mono">
-                            {subscore.score}/{subscore.maxScore}
-                          </span>
                         </div>
-                      </div>
-                    ))}
-                    <div className="flex gap-2 mt-3">
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <FileText className="h-3 w-3 mr-1" />
+                      ))}
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                      <Button variant="outline" size="sm" className="text-sm">
+                        <FileText className="h-4 w-4 mr-2" />
                         View Full Report
                       </Button>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <Calendar className="h-3 w-3 mr-1" />
+                      <Button variant="outline" size="sm" className="text-sm">
+                        <Calendar className="h-4 w-4 mr-2" />
                         Schedule Follow-up
                       </Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex justify-between items-center mt-2">
-                    <div className="text-xs text-muted-foreground">
-                      Next due: {formatDate(scale.nextDue)}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">Next due:</span> {formatDate(scale.nextDue)}
                     </div>
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-xs"
+                      className="text-sm hover:bg-muted"
                       onClick={() => setSelectedScale(scale.id)}
                     >
                       View Details

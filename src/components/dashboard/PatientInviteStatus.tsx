@@ -130,11 +130,11 @@ export default function PatientInviteStatus() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'sent':
-        return <Badge variant="outline" className="text-blue-600"><Clock className="h-3 w-3 mr-1" />Pending</Badge>;
+        return <Badge variant="outline" className="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800"><Clock className="h-3 w-3 mr-1" />Pending</Badge>;
       case 'accepted':
-        return <Badge variant="default" className="bg-green-600"><CheckCircle className="h-3 w-3 mr-1" />Accepted</Badge>;
+        return <Badge variant="default" className="bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-600"><CheckCircle className="h-3 w-3 mr-1" />Accepted</Badge>;
       case 'expired':
-        return <Badge variant="secondary"><XCircle className="h-3 w-3 mr-1" />Expired</Badge>;
+        return <Badge variant="secondary" className="bg-muted text-muted-foreground"><XCircle className="h-3 w-3 mr-1" />Expired</Badge>;
       case 'cancelled':
         return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Cancelled</Badge>;
       default:
@@ -240,52 +240,59 @@ export default function PatientInviteStatus() {
           </Button>
         </div>
 
-        {/* Invites List */}
-        <div className="space-y-3">
-          {isLoading ? (
-            <div className="text-center py-4 text-muted-foreground">
-              Loading invitations...
-            </div>
-          ) : invites.length === 0 ? (
-            <div className="text-center py-4 text-muted-foreground">
-              <Mail className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              No patient invitations sent yet
-            </div>
-          ) : (
-            invites.map((invite) => (
-              <div key={invite.id} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium">{invite.email}</span>
-                    {getStatusBadge(invite.status)}
+        {/* Invite List */}
+        {isLoading ? (
+          <div className="text-center py-8">
+            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-3 text-primary" />
+            <p className="text-sm text-muted-foreground">Loading invitations...</p>
+          </div>
+        ) : invites.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <Mail className="h-16 w-16 mx-auto mb-4 opacity-50" />
+            <p className="text-lg font-semibold mb-2 text-foreground">No invitations sent yet</p>
+            <p className="text-sm">Send your first patient invitation above to get started.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {invites.map((invite) => (
+              <div key={invite.id} className="bg-card border border-border/50 rounded-lg p-4 hover:shadow-md hover:border-border transition-all duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-3">
+                      <p className="font-semibold text-base text-foreground truncate">{invite.email}</p>
+                      {getStatusBadge(invite.status)}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-muted-foreground">
+                      <div>
+                        <span className="font-medium">Sent:</span> {formatDate(invite.invited_at)}
+                      </div>
+                      {invite.accepted_at && (
+                        <div>
+                          <span className="font-medium">Accepted:</span> {formatDate(invite.accepted_at)}
+                        </div>
+                      )}
+                      <div>
+                        <span className="font-medium">Expires:</span> {formatDate(invite.expires_at)}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    Sent: {formatDate(invite.invited_at)}
-                    {invite.accepted_at && (
-                      <span className="ml-2">
-                        • Accepted: {formatDate(invite.accepted_at)}
-                      </span>
-                    )}
-                    {invite.status === 'sent' && (
-                      <span className="ml-2">
-                        • Expires: {formatDate(invite.expires_at)}
-                      </span>
-                    )}
-                  </div>
+                  
+                  {invite.status === 'sent' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleCancelInvite(invite.id)}
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
+                    >
+                      <XCircle className="h-4 w-4 mr-1" />
+                      Cancel
+                    </Button>
+                  )}
                 </div>
-                {invite.status === 'sent' && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleCancelInvite(invite.id)}
-                  >
-                    Cancel
-                  </Button>
-                )}
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

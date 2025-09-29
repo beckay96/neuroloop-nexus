@@ -194,69 +194,71 @@ export default function ConnectionRequests({ showAll = false, maxItems = 3 }: Co
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {displayRequests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className="text-xs">
-                      {getInitials(request.patient_name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  
-                  <div>
-                    <div className="flex items-center space-x-2 mb-1">
-                      <h4 className="font-medium text-sm">{request.patient_name}</h4>
-                      {request.status === 'pending' && (
-                        <Badge variant="outline" className="text-xs">
-                          <Clock className="h-3 w-3 mr-1" />
-                          Pending
-                        </Badge>
+              <div key={request.id} className="bg-card border border-border/50 rounded-lg p-4 hover:shadow-md hover:border-border transition-all duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-start space-x-3 flex-1 min-w-0">
+                    <Avatar className="h-10 w-10 shrink-0">
+                      <AvatarFallback className="text-sm font-medium bg-primary/10 text-primary">
+                        {getInitials(request.patient_name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                        <h4 className="font-semibold text-base text-foreground">{request.patient_name}</h4>
+                        {request.status === 'pending' && (
+                          <Badge variant="outline" className="text-sm bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Pending Review
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-2">
+                        <span className="flex items-center">
+                          <Mail className="h-3 w-3 mr-1 shrink-0" />
+                          <span className="truncate">{request.patient_email}</span>
+                        </span>
+                        <span className="flex items-center">
+                          <span className="font-medium">Requested:</span> {formatDate(request.created_at)}
+                        </span>
+                      </div>
+                      
+                      {request.invited_by && (
+                        <div className="text-sm text-muted-foreground">
+                          <User className="h-3 w-3 inline mr-1" />
+                          <span className="font-medium">Originally invited by you</span>
+                        </div>
                       )}
                     </div>
-                    
-                    <div className="flex items-center space-x-3 text-xs text-muted-foreground">
-                      <span className="flex items-center">
-                        <Mail className="h-3 w-3 mr-1" />
-                        {request.patient_email}
-                      </span>
-                      <span>
-                        {formatDate(request.created_at)}
-                      </span>
+                  </div>
+                  
+                  {request.status === 'pending' && (
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleRejectRequest(request.id)}
+                        disabled={processingIds.has(request.id)}
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10 text-sm"
+                      >
+                        <X className="h-4 w-4 mr-1" />
+                        Reject
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => handleApproveRequest(request.id)}
+                        disabled={processingIds.has(request.id)}
+                        className="text-sm bg-primary hover:bg-primary/90"
+                      >
+                        <Check className="h-4 w-4 mr-1" />
+                        Approve
+                      </Button>
                     </div>
-                    
-                    {request.invited_by && (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        <User className="h-3 w-3 inline mr-1" />
-                        Originally invited by you
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
-                
-                {request.status === 'pending' && (
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleRejectRequest(request.id)}
-                      disabled={processingIds.has(request.id)}
-                      className="text-destructive hover:text-destructive text-xs"
-                    >
-                      <X className="h-3 w-3 mr-1" />
-                      Reject
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => handleApproveRequest(request.id)}
-                      disabled={processingIds.has(request.id)}
-                      className="text-xs"
-                    >
-                      <Check className="h-3 w-3 mr-1" />
-                      Approve
-                    </Button>
-                  </div>
-                )}
               </div>
             ))}
           </div>
