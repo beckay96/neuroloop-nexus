@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown, UserPlus } from "lucide-react";
+import { MobileTabDropdown } from "@/components/ui/mobile-tab-dropdown";
 import ClinicianHeader from "@/components/navigation/ClinicianHeader";
 import PatternsIdentified from "@/components/patterns/PatternsIdentified";
 import PatientAlertDialog from "./PatientAlertDialog";
@@ -345,13 +346,33 @@ export default function ClinicianDashboard() {
     return "Dr. Clinician";
   };
   const filteredPatients = recentPatients.filter(patient => patient.name.toLowerCase().includes(searchTerm.toLowerCase()) || patient.condition.toLowerCase().includes(searchTerm.toLowerCase()));
+  
+  const tabOptions = [
+    { value: "overview", label: "Overview", icon: <Activity className="h-4 w-4" /> },
+    { value: "clinical", label: "Clinical", icon: <Stethoscope className="h-4 w-4" /> },
+    { value: "medications", label: "Medications", icon: <Brain className="h-4 w-4" /> },
+    { value: "patients", label: "Patients", icon: <Users className="h-4 w-4" /> },
+    { value: "invites", label: "Invites", icon: <UserPlus className="h-4 w-4" /> },
+    { value: "analytics", label: "Analytics", icon: <BarChart3 className="h-4 w-4" /> },
+  ];
+
   return <div className="min-h-screen bg-background">
       <ClinicianHeader userName={getUserDisplayName()} currentSection="Dashboard" />
 
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-6">
-            <TabsList className="flex-auto w-full max-w-4xl items-center overflow-x-hidden ">
+            {/* Mobile Dropdown */}
+            <div className="block sm:hidden w-full">
+              <MobileTabDropdown 
+                tabs={tabOptions}
+                selectedTab={selectedTab}
+                onTabChange={setSelectedTab}
+              />
+            </div>
+            
+            {/* Desktop Tabs */}
+            <TabsList className="hidden sm:flex flex-auto w-full max-w-4xl items-center">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
               <TabsTrigger value="clinical" className="text-xs sm:text-sm">Clinical</TabsTrigger>
               <TabsTrigger value="medications" className="text-xs sm:text-sm">Medications</TabsTrigger>
