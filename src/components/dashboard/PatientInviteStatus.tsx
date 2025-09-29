@@ -40,9 +40,19 @@ export default function PatientInviteStatus() {
     setIsLoading(true);
     try {
       const data = await getPatientInvites();
-      setInvites(data);
+      // Ensure data matches our interface
+      const validInvites: PatientInvite[] = (data || []).map((item: any) => ({
+        id: item.id || '',
+        email: item.email || '',
+        status: item.status || 'sent',
+        invited_at: item.invited_at || new Date().toISOString(),
+        accepted_at: item.accepted_at,
+        expires_at: item.expires_at || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      }));
+      setInvites(validInvites);
     } catch (error) {
       console.error('Error loading invites:', error);
+      setInvites([]);
     } finally {
       setIsLoading(false);
     }
