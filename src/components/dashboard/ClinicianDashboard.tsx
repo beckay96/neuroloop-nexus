@@ -6,10 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown } from "lucide-react";
+import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown, UserPlus } from "lucide-react";
 import ClinicianHeader from "@/components/navigation/ClinicianHeader";
 import PatternsIdentified from "@/components/patterns/PatternsIdentified";
 import PatientAlertDialog from "./PatientAlertDialog";
+import PatientInviteStatus from "./PatientInviteStatus";
+import ConnectionRequests from "./ConnectionRequests";
 import { useAuth } from "@/hooks/useAuth";
 
 // Comprehensive mock data for demonstration
@@ -346,10 +348,14 @@ export default function ClinicianDashboard() {
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-6">
-            <TabsList className="flex w-full max-w-2xl items-center ">
+            <TabsList className="flex w-full max-w-3xl items-center ">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
               <TabsTrigger value="patterns" className="text-xs sm:text-sm">Patterns</TabsTrigger>
               <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
+              <TabsTrigger value="invites" className="text-xs sm:text-sm">
+                <UserPlus className="h-3 w-3 mr-1 sm:mr-2" />
+                Invites
+              </TabsTrigger>
               <TabsTrigger value="analytics" className="text-xs sm:text-sm">Analytics</TabsTrigger>
               <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
             </TabsList>
@@ -524,6 +530,11 @@ export default function ClinicianDashboard() {
                 ))}
               </div>
             </section>
+
+            {/* Connection Requests */}
+            <section>
+              <ConnectionRequests maxItems={3} />
+            </section>
           </TabsContent>
 
           <TabsContent value="patterns" className="space-y-6">
@@ -604,6 +615,10 @@ export default function ClinicianDashboard() {
                   </div>
                 </Card>)}
             </div>
+          </TabsContent>
+
+          <TabsContent value="invites" className="space-y-6">
+            <PatientInviteStatus />
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">

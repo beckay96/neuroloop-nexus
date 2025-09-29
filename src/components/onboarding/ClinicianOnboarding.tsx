@@ -18,9 +18,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  X
+  X,
+  Loader2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { usePatientInvites } from "@/hooks/usePatientInvites";
+import { useToast } from "@/hooks/use-toast";
 
 interface ClinicianOnboardingProps {
   onComplete: (data: any) => void;
@@ -52,6 +55,9 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
   });
 
   const [newEmail, setNewEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { sendMultipleInvites } = usePatientInvites();
+  const { toast } = useToast();
 
   const updateFormData = (updates: Partial<typeof formData>) => {
     setFormData(prev => ({ ...prev, ...updates }));
@@ -76,6 +82,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
     if (currentStep < 3) {
       setCurrentStep(prev => prev + 1);
     } else {
+      setIsSubmitting(true);
       try {
         // Save clinician onboarding data
         const { data: { user } } = await supabase.auth.getUser();
@@ -97,7 +104,24 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
 
         if (clinicianError) {
           console.error('Error saving clinician data:', clinicianError);
+          toast({
+            title: "Error saving data",
+            description: "Failed to save your information. Please try again.",
+            variant: "destructive",
+          });
           return;
+        }
+
+        // Send patient invites if any emails were provided
+        if (formData.patientInviteEmails.length > 0) {
+          const clinicianName = `${formData.clinicianTitle} ${formData.firstName} ${formData.lastName}`.trim();
+          const inviteMessage = `You've been invited to join NeuroLoop by ${clinicianName} from ${formData.institution}. This secure platform will help track your neurological health and connect you with your care team.`;
+          
+          await sendMultipleInvites(
+            formData.patientInviteEmails,
+            clinicianName,
+            inviteMessage
+          );
         }
 
         // Update onboarding progress
@@ -118,6 +142,13 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
         onComplete(formData);
       } catch (error) {
         console.error('Error during onboarding:', error);
+        toast({
+          title: "Setup failed",
+          description: "There was an error completing your setup. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -350,11 +381,20 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
           <Button
             variant="secondary"
             onClick={handleNext}
-            disabled={!isStepValid()}
+            disabled={!isStepValid() || isSubmitting}
             className="flex items-center"
           >
-            {currentStep === 3 ? "Complete Setup" : "Continue"}
-            <ChevronRight className="h-4 w-4 ml-2" />
+            {isSubmitting ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                {formData.patientInviteEmails.length > 0 ? "Sending Invites..." : "Completing Setup..."}
+              </>
+            ) : (
+              <>
+                {currentStep === 3 ? "Complete Setup" : "Continue"}
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </>
+            )}
           </Button>
         </div>
       </div>

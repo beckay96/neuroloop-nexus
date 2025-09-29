@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/fc90b8bf-f018-48e5-b14d-1d5b532c5809
+neuroloop.app
 
 ## How can I edit this code?
 
