@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown, UserPlus } from "lucide-react";
+import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown, UserPlus, MessageSquare } from "lucide-react";
 import { MobileTabDropdown } from "@/components/ui/mobile-tab-dropdown";
 import ClinicianHeader from "@/components/navigation/ClinicianHeader";
 import PatternsIdentified from "@/components/patterns/PatternsIdentified";
@@ -18,6 +18,8 @@ import RiskStratification from "./RiskStratification";
 import MedicationManagement from "./MedicationManagement";
 import LivePatientRadar from "./LivePatientRadar";
 import SmartSnapshotSummaries from "./SmartSnapshotSummaries";
+import MessagingHub from "../messaging/MessagingHub";
+import SchedulingHub from "../scheduling/SchedulingHub";
 import { 
   ClinicalScalesWidget, 
   NeuroimagingViewer, 
@@ -366,6 +368,8 @@ export default function ClinicianDashboard() {
   
   const tabOptions = [
     { value: "overview", label: "Overview", icon: <Activity className="h-4 w-4" /> },
+    { value: "messages", label: "Messages", icon: <MessageSquare className="h-4 w-4" /> },
+    { value: "scheduling", label: "Scheduling", icon: <Calendar className="h-4 w-4" /> },
     { value: "clinical", label: "Clinical", icon: <Stethoscope className="h-4 w-4" /> },
     { value: "medications", label: "Medications", icon: <Brain className="h-4 w-4" /> },
     { value: "patients", label: "Patients", icon: <Users className="h-4 w-4" /> },
@@ -391,6 +395,14 @@ export default function ClinicianDashboard() {
             {/* Desktop Tabs */}
             <TabsList className="hidden sm:flex flex-auto w-full max-w-4xl items-center">
               <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="messages" className="text-xs sm:text-sm">
+                <MessageSquare className="h-3 w-3 mr-1 sm:mr-2" />
+                Messages
+              </TabsTrigger>
+              <TabsTrigger value="scheduling" className="text-xs sm:text-sm">
+                <Calendar className="h-3 w-3 mr-1 sm:mr-2" />
+                Schedule
+              </TabsTrigger>
               <TabsTrigger value="clinical" className="text-xs sm:text-sm">Clinical</TabsTrigger>
               <TabsTrigger value="medications" className="text-xs sm:text-sm">Medications</TabsTrigger>
               <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
@@ -650,6 +662,14 @@ export default function ClinicianDashboard() {
             <section>
               <ConnectionRequests maxItems={3} />
             </section>
+          </TabsContent>
+
+          <TabsContent value="messages" className="h-[calc(100vh-200px)]">
+            <MessagingHub />
+          </TabsContent>
+
+          <TabsContent value="scheduling" className="h-[calc(100vh-200px)]">
+            <SchedulingHub />
           </TabsContent>
 
           <TabsContent value="clinical" className="space-y-6">

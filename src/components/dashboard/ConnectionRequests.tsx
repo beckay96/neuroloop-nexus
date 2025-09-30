@@ -159,7 +159,7 @@ export default function ConnectionRequests({ showAll = false, maxItems = 3 }: Co
         </CardHeader>
         <CardContent>
           <div className="text-center py-4">
-            <div className="animate-pulse text-muted-foreground">Loading requests...</div>
+            <div className="text-muted-foreground">Loading requests...</div>
           </div>
         </CardContent>
       </Card>

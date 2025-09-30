@@ -306,7 +306,7 @@ export default function PatientView() {
         <div className="container mx-auto p-6">
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <Activity className="h-8 w-8 animate-pulse mx-auto mb-4 text-primary" />
+              <Activity className="h-8 w-8 mx-auto mb-4 text-primary" />
               <p className="text-muted-foreground">Loading patient information...</p>
             </div>
           </div>

@@ -157,7 +157,7 @@ export default function LivePatientRadar({ maxVisible = 8 }: LivePatientRadarPro
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+              <div className="w-3 h-3 bg-red-500 rounded-full" />
               Live Patient Radar
             </CardTitle>
             <Badge variant="destructive" className="text-xs">
@@ -190,7 +190,7 @@ export default function LivePatientRadar({ maxVisible = 8 }: LivePatientRadarPro
                   className={`absolute w-6 h-6 -ml-3 -mt-3 rounded-full ${getRiskColor(alert.alert_level)} 
                     shadow-lg cursor-pointer hover:scale-125 transition-all duration-200 
                     flex items-center justify-center text-xs
-                    ${alert.status === 'unread' ? 'animate-pulse ring-2 ring-white' : ''}`}
+                    ${alert.status === 'unread' ? 'ring-2 ring-white' : ''}`}
                   style={{ left: `${x}%`, top: `${y}%` }}
                   title={`${alert.patient_name} - ${alert.risk_type}`}
                 >
@@ -215,7 +215,7 @@ export default function LivePatientRadar({ maxVisible = 8 }: LivePatientRadarPro
               <span>Low</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-gray-500 rounded-full animate-pulse" />
+              <div className="w-3 h-3 bg-gray-500 rounded-full ring-2 ring-gray-300" />
               <span>Unread</span>
             </div>
           </div>
