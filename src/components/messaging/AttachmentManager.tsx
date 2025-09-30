@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { 
   ArrowLeft, Upload, TestTube, Image as ImageIcon, FileText, 
-  Check, X, Brain, Activity
+  Check, X, Brain, Activity, File, Paperclip
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -22,7 +22,7 @@ interface TestResult {
 interface AttachmentManagerProps {
   conversationId: string;
   patientId: string;
-  attachmentType: 'photo' | 'test_result' | null;
+  attachmentType: 'photo' | 'file' | 'test_result' | null;
   onClose: () => void;
   onAttached: () => void;
 }
@@ -110,14 +110,20 @@ export default function AttachmentManager({
       return;
     }
 
-    if (attachmentType === 'photo' && !uploadedFile) {
+    if ((attachmentType === 'photo' || attachmentType === 'file') && !uploadedFile) {
       toast({
         title: "No File Uploaded",
-        description: "Please upload a photo to share.",
+        description: `Please upload a ${attachmentType === 'photo' ? 'photo' : 'file'} to share.`,
         variant: "destructive"
       });
       return;
     }
+
+    // In production, upload file to Supabase Storage here
+    toast({
+      title: "File Attached",
+      description: `${uploadedFile?.name} will be sent with your message.`,
+    });
 
     onAttached();
   };
@@ -140,11 +146,13 @@ export default function AttachmentManager({
           </Button>
           <div>
             <CardTitle>
-              {attachmentType === 'photo' ? 'Attach Photo' : 'Share Test Results'}
+              {attachmentType === 'photo' ? 'Attach Photo' : attachmentType === 'file' ? 'Attach File' : 'Share Test Results'}
             </CardTitle>
             <CardDescription>
               {attachmentType === 'photo' 
                 ? 'Upload and share images with your patient'
+                : attachmentType === 'file'
+                ? 'Upload and share any file type with your patient'
                 : 'Select recent test results to share with your patient'
               }
             </CardDescription>
@@ -153,24 +161,28 @@ export default function AttachmentManager({
       </CardHeader>
 
       <CardContent className="flex-1 overflow-y-auto p-6">
-        {attachmentType === 'photo' ? (
+        {(attachmentType === 'photo' || attachmentType === 'file') ? (
           <div className="space-y-6">
             {/* File Upload */}
-            <div className="border-2 border-dashed rounded-lg p-12 text-center">
+            <div className="border-2 border-dashed rounded-lg p-12 text-center hover:border-primary/50 transition-colors">
               <input
                 type="file"
-                id="photo-upload"
-                accept="image/*"
+                id="file-upload"
+                accept={attachmentType === 'photo' ? 'image/*' : '*'}
                 onChange={handleFileUpload}
                 className="hidden"
               />
               {uploadedFile ? (
                 <div className="space-y-4">
-                  <ImageIcon className="h-12 w-12 mx-auto text-green-600" />
+                  {attachmentType === 'photo' ? (
+                    <ImageIcon className="h-12 w-12 mx-auto text-green-600" />
+                  ) : (
+                    <File className="h-12 w-12 mx-auto text-green-600" />
+                  )}
                   <div>
                     <p className="font-semibold">{uploadedFile.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
+                      {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB • {uploadedFile.type || 'Unknown type'}
                     </p>
                   </div>
                   <Button
@@ -182,13 +194,26 @@ export default function AttachmentManager({
                   </Button>
                 </div>
               ) : (
-                <label htmlFor="photo-upload" className="cursor-pointer">
-                  <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-lg font-semibold mb-2">Upload Photo</p>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Click to browse or drag and drop
-                  </p>
-                  <Badge variant="outline">JPG, PNG, GIF up to 10MB</Badge>
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  {attachmentType === 'photo' ? (
+                    <>
+                      <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                      <p className="text-lg font-semibold mb-2">Upload Photo</p>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Click to browse or drag and drop
+                      </p>
+                      <Badge variant="outline">JPG, PNG, GIF up to 10MB</Badge>
+                    </>
+                  ) : (
+                    <>
+                      <Paperclip className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                      <p className="text-lg font-semibold mb-2">Upload File</p>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Click to browse or drag and drop any file
+                      </p>
+                      <Badge variant="outline">All file types • PDFs, Documents, Scripts, etc.</Badge>
+                    </>
+                  )}
                 </label>
               )}
             </div>
@@ -210,7 +235,8 @@ export default function AttachmentManager({
               onClick={handleSend}
               disabled={!uploadedFile}
             >
-              Send Photo
+              <Paperclip className="h-4 w-4 mr-2" />
+              Send {attachmentType === 'photo' ? 'Photo' : 'File'}
             </Button>
           </div>
         ) : (

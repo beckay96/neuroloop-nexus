@@ -392,26 +392,28 @@ export default function ClinicianDashboard() {
               />
             </div>
             
-            {/* Desktop Tabs */}
-            <TabsList className="hidden sm:flex flex-auto w-full max-w-4xl items-center">
-              <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
-              <TabsTrigger value="messages" className="text-xs sm:text-sm">
-                <MessageSquare className="h-3 w-3 mr-1 sm:mr-2" />
-                Messages
-              </TabsTrigger>
-              <TabsTrigger value="scheduling" className="text-xs sm:text-sm">
-                <Calendar className="h-3 w-3 mr-1 sm:mr-2" />
-                Schedule
-              </TabsTrigger>
-              <TabsTrigger value="clinical" className="text-xs sm:text-sm">Clinical</TabsTrigger>
-              <TabsTrigger value="medications" className="text-xs sm:text-sm">Medications</TabsTrigger>
-              <TabsTrigger value="patients" className="text-xs sm:text-sm">Patients</TabsTrigger>
-              <TabsTrigger value="invites" className="text-xs sm:text-sm">
-                <UserPlus className="h-3 w-3 mr-1 sm:mr-2" />
-                Invites
-              </TabsTrigger>
-              <TabsTrigger value="analytics" className="text-xs sm:text-sm">Analytics</TabsTrigger>
-            </TabsList>
+            {/* Desktop Tabs - Scrollable Container */}
+            <div className="hidden sm:block flex-auto w-full max-w-4xl overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+              <TabsList className="flex w-max min-w-full items-center">
+                <TabsTrigger value="overview" className="text-xs sm:text-sm whitespace-nowrap">Overview</TabsTrigger>
+                <TabsTrigger value="messages" className="text-xs sm:text-sm whitespace-nowrap">
+                  <MessageSquare className="h-3 w-3 mr-1 sm:mr-2" />
+                  Messages
+                </TabsTrigger>
+                <TabsTrigger value="scheduling" className="text-xs sm:text-sm whitespace-nowrap">
+                  <Calendar className="h-3 w-3 mr-1 sm:mr-2" />
+                  Schedule
+                </TabsTrigger>
+                <TabsTrigger value="clinical" className="text-xs sm:text-sm whitespace-nowrap">Clinical</TabsTrigger>
+                <TabsTrigger value="medications" className="text-xs sm:text-sm whitespace-nowrap">Medications</TabsTrigger>
+                <TabsTrigger value="patients" className="text-xs sm:text-sm whitespace-nowrap">Patients</TabsTrigger>
+                <TabsTrigger value="invites" className="text-xs sm:text-sm whitespace-nowrap">
+                  <UserPlus className="h-3 w-3 mr-1 sm:mr-2" />
+                  Invites
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="text-xs sm:text-sm whitespace-nowrap">Analytics</TabsTrigger>
+              </TabsList>
+            </div>
             
             <div className="flex items-center gap-2 justify-center ">
               <Button 

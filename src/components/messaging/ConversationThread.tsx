@@ -53,7 +53,7 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
   const [messageText, setMessageText] = useState("");
   const [showFormBuilder, setShowFormBuilder] = useState(false);
   const [showAttachmentManager, setShowAttachmentManager] = useState(false);
-  const [attachmentType, setAttachmentType] = useState<'photo' | 'test_result' | null>(null);
+  const [attachmentType, setAttachmentType] = useState<'photo' | 'file' | 'test_result' | null>(null);
 
   // Mock messages - replace with real API
   const mockMessages: Message[] = [
@@ -143,6 +143,11 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
 
   const handleAttachPhoto = () => {
     setAttachmentType('photo');
+    setShowAttachmentManager(true);
+  };
+
+  const handleAttachFile = () => {
+    setAttachmentType('file');
     setShowAttachmentManager(true);
   };
 
@@ -332,7 +337,7 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
 
         {/* Message Composer */}
         <div className="border-t p-4">
-          <div className="flex gap-2 mb-3">
+          <div className="flex flex-wrap gap-2 mb-3">
             <Button variant="outline" size="sm" onClick={handleSendForm}>
               <FileText className="h-4 w-4 mr-2" />
               Send Form
@@ -343,7 +348,11 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
             </Button>
             <Button variant="outline" size="sm" onClick={handleAttachPhoto}>
               <ImageIcon className="h-4 w-4 mr-2" />
-              Attach Photo
+              Photo
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleAttachFile}>
+              <Paperclip className="h-4 w-4 mr-2" />
+              Attach File
             </Button>
           </div>
 
