@@ -16,8 +16,21 @@ import ConnectionRequests from "./ConnectionRequests";
 import ClinicalScales from "./ClinicalScales";
 import RiskStratification from "./RiskStratification";
 import MedicationManagement from "./MedicationManagement";
+import LivePatientRadar from "./LivePatientRadar";
+import SmartSnapshotSummaries from "./SmartSnapshotSummaries";
+import { 
+  ClinicalScalesWidget, 
+  NeuroimagingViewer, 
+  ClinicalNoteGenerator,
+  SecureConsultChat,
+  PROTimeline,
+  TodayView,
+  AIInsightsCards,
+  CaseDataPanels
+} from "./PremiumClinicalFeatures";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 // Comprehensive mock data for demonstration
 const patientAlerts: Array<{
@@ -331,8 +344,10 @@ export default function ClinicianDashboard() {
     user
   } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("overview");
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
 
   // Extract user name from profile data or fallback to email
   const getUserDisplayName = () => {
@@ -387,12 +402,27 @@ export default function ClinicianDashboard() {
             </TabsList>
             
             <div className="flex items-center gap-2 justify-center ">
-              <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-xs sm:text-sm"
+                onClick={() => {
+                  toast({
+                    title: "Export Initiated",
+                    description: "Preparing patient data export. This may take a few moments.",
+                  });
+                }}
+              >
                 <Download className="h-4 w-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">Export Data</span>
                 <span className="sm:hidden">Export</span>
               </Button>
-              <Button variant="hero" size="sm" className="text-xs sm:text-sm">
+              <Button 
+                variant="hero" 
+                size="sm" 
+                className="text-xs sm:text-sm"
+                onClick={() => setSelectedTab("invites")}
+              >
                 <Plus className="h-4 w-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">Add Patient</span>
                 <span className="sm:hidden">Add</span>
@@ -401,6 +431,29 @@ export default function ClinicianDashboard() {
           </div>
 
           <TabsContent value="overview" className="space-y-8">
+            {/* Today View - Personalized Dashboard */}
+            <section>
+              <h2 className="text-lg font-semibold mb-4">Today's Overview</h2>
+              <TodayView />
+            </section>
+
+            {/* AI Insights */}
+            <section>
+              <h2 className="text-lg font-semibold mb-4">AI-Powered Insights</h2>
+              <AIInsightsCards />
+            </section>
+
+            {/* Live Patient Radar */}
+            <section>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <LivePatientRadar maxVisible={6} />
+                <div className="space-y-4">
+                  <h3 className="text-md font-semibold">Smart Patient Snapshots</h3>
+                  <SmartSnapshotSummaries maxVisible={4} />
+                </div>
+              </div>
+            </section>
+
             {/* Key Metrics */}
             <section>
               <h2 className="text-lg font-semibold mb-4">Key Metrics</h2>
@@ -456,6 +509,12 @@ export default function ClinicianDashboard() {
                     </div>
                   </Card>)}
               </div>
+            </section>
+
+            {/* Case-Driven Data Panels for High Priority */}
+            <section>
+              <h2 className="text-lg font-semibold mb-4">Patient Case Analysis</h2>
+              <CaseDataPanels patientId="P001" />
             </section>
 
             {/* Recent Patient Activity */}
@@ -536,15 +595,40 @@ export default function ClinicianDashboard() {
                             </div>
                             
                             <div className="flex flex-wrap gap-2 mt-4">
-                              <Button variant="outline" size="sm" className="text-xs flex-1 sm:flex-none">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="text-xs flex-1 sm:flex-none"
+                                onClick={() => navigate(`/patient/${patient.id}`)}
+                              >
                                 <FileText className="h-3 w-3 mr-1" />
                                 Records
                               </Button>
-                              <Button variant="outline" size="sm" className="text-xs flex-1 sm:flex-none">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="text-xs flex-1 sm:flex-none"
+                                onClick={() => {
+                                  toast({
+                                    title: "Schedule Appointment",
+                                    description: `Opening scheduling for ${patient.name}...`,
+                                  });
+                                }}
+                              >
                                 <Stethoscope className="h-3 w-3 mr-1" />
                                 Schedule
                               </Button>
-                              <Button variant="outline" size="sm" className="text-xs flex-1 sm:flex-none">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="text-xs flex-1 sm:flex-none"
+                                onClick={() => {
+                                  toast({
+                                    title: "Patient Analytics",
+                                    description: `Loading analytics for ${patient.name}...`,
+                                  });
+                                }}
+                              >
                                 <BarChart3 className="h-3 w-3 mr-1" />
                                 Analytics
                               </Button>
@@ -570,8 +654,18 @@ export default function ClinicianDashboard() {
 
           <TabsContent value="clinical" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ClinicalScales maxItems={4} />
+              <ClinicalScalesWidget />
               <RiskStratification showAll={true} />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+              <NeuroimagingViewer />
+              <div className="space-y-6">
+                <ClinicalNoteGenerator patientId="P001" />
+                <SecureConsultChat patientId="P001" />
+              </div>
+            </div>
+            <div className="mt-6">
+              <PROTimeline patientId="P001" />
             </div>
           </TabsContent>
 
@@ -590,7 +684,18 @@ export default function ClinicianDashboard() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input placeholder="Search patients..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-9" />
               </div>
-              <Button variant="outline" size="sm" className="shrink-0">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="shrink-0"
+                onClick={() => {
+                  setShowFilterMenu(!showFilterMenu);
+                  toast({
+                    title: showFilterMenu ? "Filters Hidden" : "Filters Shown",
+                    description: showFilterMenu ? "Filter options hidden." : "Filter by condition, status, or date range.",
+                  });
+                }}
+              >
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
               </Button>
@@ -639,17 +744,42 @@ export default function ClinicianDashboard() {
                   </div>
                   
                   <div className="mt-4 flex flex-col sm:flex-row gap-2">
-                    <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs sm:text-sm"
+                      onClick={() => navigate(`/patient/${patient.id}`)}
+                    >
                       <FileText className="h-4 w-4 mr-1 sm:mr-2" />
                       <span className="hidden sm:inline">View Records</span>
                       <span className="sm:hidden">Records</span>
                     </Button>
-                    <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs sm:text-sm"
+                      onClick={() => {
+                        toast({
+                          title: "Schedule Appointment",
+                          description: `Opening scheduling for ${patient.name}...`,
+                        });
+                      }}
+                    >
                       <Stethoscope className="h-4 w-4 mr-1 sm:mr-2" />
                       <span className="hidden sm:inline">Schedule Visit</span>
                       <span className="sm:hidden">Schedule</span>
                     </Button>
-                    <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-xs sm:text-sm"
+                      onClick={() => {
+                        toast({
+                          title: "Patient Analytics",
+                          description: `Loading detailed analytics for ${patient.name}...`,
+                        });
+                      }}
+                    >
                       <BarChart3 className="h-4 w-4 mr-1 sm:mr-2" />
                       <span className="hidden sm:inline">Analytics</span>
                       <span className="sm:hidden">Charts</span>
@@ -731,7 +861,15 @@ export default function ClinicianDashboard() {
                     </div>
                   </div>
                   <div className="mt-6">
-                    <Button className="w-full">
+                    <Button 
+                      className="w-full"
+                      onClick={() => {
+                        toast({
+                          title: "Advanced Analytics",
+                          description: "Loading comprehensive population health analytics dashboard...",
+                        });
+                      }}
+                    >
                       <BarChart3 className="h-4 w-4 mr-2" />
                       View Detailed Analytics
                     </Button>
