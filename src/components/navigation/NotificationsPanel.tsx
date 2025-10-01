@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import { 
   Bell, 
   Pill, 
@@ -9,7 +12,8 @@ import {
   AlertTriangle, 
   CheckCircle,
   X,
-  MoreHorizontal
+  MoreHorizontal,
+  Check
 } from "lucide-react";
 
 interface NotificationsPanelProps {
@@ -126,20 +130,33 @@ const clinicianNotifications = [
 ];
 
 export default function NotificationsPanel({ isOpen, onClose, isMobile = false, userType = 'patient' }: NotificationsPanelProps) {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [readNotifications, setReadNotifications] = useState<number[]>([]);
+  
   if (!isOpen) return null;
 
   const notifications = userType === 'clinician' ? clinicianNotifications : patientNotifications;
+  const unreadNotifications = notifications.filter(n => !readNotifications.includes(n.id));
+  
   const panelClasses = isMobile 
     ? "fixed inset-x-0 top-16 mx-4 mt-2 z-50" 
     : "absolute right-0 top-12 w-80 z-50";
 
   const handleMarkAsRead = (id: number) => {
-    // TODO: Implement mark as read functionality
-    // In real app, update notification status
+    setReadNotifications(prev => [...prev, id]);
+    toast({
+      title: "Marked as Read",
+      description: "Notification marked as read",
+    });
   };
 
   const handleMarkAllAsRead = () => {
-    // TODO: Implement mark all as read functionality
+    setReadNotifications(notifications.map(n => n.id));
+    toast({
+      title: "All Marked as Read",
+      description: `${unreadNotifications.length} notifications marked as read`,
+    });
   };
 
   return (
@@ -159,7 +176,7 @@ export default function NotificationsPanel({ isOpen, onClose, isMobile = false, 
             <Bell className="h-4 w-4 text-primary" />
             <h3 className="font-semibold">Notifications</h3>
             <Badge variant="secondary" className="text-xs">
-              {notifications.filter(n => n.urgent).length}
+              {unreadNotifications.length}
             </Badge>
           </div>
           
@@ -198,6 +215,8 @@ export default function NotificationsPanel({ isOpen, onClose, isMobile = false, 
                     key={notification.id}
                     className={`p-4 hover:bg-accent/50 transition-colors ${
                       notification.urgent ? 'bg-status-critical/5 border-l-2 border-l-status-critical' : ''
+                    } ${
+                      readNotifications.includes(notification.id) ? 'opacity-50' : ''
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -221,14 +240,17 @@ export default function NotificationsPanel({ isOpen, onClose, isMobile = false, 
                         </p>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-muted-foreground">{notification.time}</span>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleMarkAsRead(notification.id)}
-                            className="h-6 w-6 p-0"
-                          >
-                            <MoreHorizontal className="h-3 w-3" />
-                          </Button>
+                          {!readNotifications.includes(notification.id) && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleMarkAsRead(notification.id)}
+                              className="h-6 px-2 text-xs"
+                            >
+                              <Check className="h-3 w-3 mr-1" />
+                              Read
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -246,8 +268,12 @@ export default function NotificationsPanel({ isOpen, onClose, isMobile = false, 
             size="sm" 
             className="w-full text-xs"
             onClick={() => {
+              navigate('/notifications');
               onClose();
-              console.log("View all notifications");
+              toast({
+                title: "All Notifications",
+                description: "Viewing complete notification history",
+              });
             }}
           >
             View All Notifications

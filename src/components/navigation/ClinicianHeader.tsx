@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/components/ThemeProvider";
+import { useNavigate } from "react-router-dom";
 import { 
   Brain, 
   ArrowLeft, 
@@ -37,6 +38,7 @@ export default function ClinicianHeader({
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const { signOut } = useAuth();
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOut();
@@ -109,7 +111,7 @@ export default function ClinicianHeader({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/settings/profile")}>
                   <User className="mr-2 h-4 w-4" />
                   Profile Settings
                 </DropdownMenuItem>

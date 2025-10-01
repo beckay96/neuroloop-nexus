@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface SettingsDropdownProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
   const { theme, setTheme } = useTheme();
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   if (!isOpen) return null;
 
@@ -57,7 +59,11 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
       label: "Profile Settings",
       description: "Manage your account",
       action: () => {
-        // TODO: Navigate to profile settings
+        navigate("/settings/profile");
+        toast({
+          title: "Opening Profile Settings",
+          description: "Loading your profile information",
+        });
       }
     },
     {
@@ -65,7 +71,11 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
       label: "Privacy & Security",
       description: "Data and privacy controls",
       action: () => {
-        // TODO: Navigate to privacy settings
+        navigate("/settings/privacy");
+        toast({
+          title: "Privacy Settings",
+          description: "Manage your data and privacy preferences",
+        });
       }
     },
     {
@@ -73,7 +83,11 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
       label: "Notification Settings",
       description: "Manage alerts and reminders",
       action: () => {
-        // TODO: Navigate to notification settings
+        navigate("/settings/notifications");
+        toast({
+          title: "Notification Settings",
+          description: "Configure your notification preferences",
+        });
       }
     },
     {
@@ -81,7 +95,11 @@ export default function SettingsDropdown({ isOpen, onClose, isMobile = false }: 
       label: "Help & Support",
       description: "Get help and contact support",
       action: () => {
-        // TODO: Open help modal or navigate to support
+        window.open("https://support.neuroloop.com", "_blank");
+        toast({
+          title: "Help Center",
+          description: "Opening support documentation",
+        });
       }
     }
   ];
