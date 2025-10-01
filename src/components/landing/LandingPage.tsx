@@ -36,68 +36,68 @@ export default function LandingPage() {
       icon: Brain,
       title: "Comprehensive Seizure Tracking",
       description: "ILAE-compliant seizure logging with timer integration, video recording, and consciousness timeline tracking",
-      color: "text-purple-600"
+      color: "text-purple-500 dark:text-purple-400"
     },
     {
       icon: Activity,
       title: "Daily Health Monitoring",
       description: "Track symptoms, medications, temperature, and vital signs with intuitive interfaces",
-      color: "text-blue-600"
+      color: "text-blue-500 dark:text-blue-400"
     },
     {
       icon: Users,
       title: "Care Team Collaboration",
       description: "Connect patients with carers, share health data securely, and coordinate care seamlessly",
-      color: "text-green-600"
+      color: "text-green-500 dark:text-green-400"
     },
     {
       icon: MessageSquare,
       title: "HIPAA-Ready Messaging",
       description: "Secure encrypted messaging between patients and care team members",
-      color: "text-indigo-600"
+      color: "text-indigo-500 dark:text-indigo-400"
     },
     {
       icon: Video,
       title: "Video Symptom Logs",
       description: "Record and upload videos to document seizures, tremors, and other neurological symptoms",
-      color: "text-red-600"
+      color: "text-red-500 dark:text-red-400"
     },
     {
       icon: Calendar,
       title: "Appointment Management",
       description: "Schedule and track medical appointments, with reminders and care team coordination",
-      color: "text-orange-600"
+      color: "text-orange-500 dark:text-orange-400"
     },
     {
       icon: FileText,
       title: "Comprehensive Records",
       description: "Maintain detailed health records, medication logs, and historical data for better care",
-      color: "text-cyan-600"
+      color: "text-cyan-500 dark:text-cyan-400"
     },
     {
       icon: Stethoscope,
       title: "Clinical-Grade Data",
       description: "Research-ready data capture following medical best practices and standards",
-      color: "text-pink-600"
+      color: "text-pink-500 dark:text-pink-400"
     }
   ];
 
   const benefits = [
-    { icon: Clock, text: "Save time with automated tracking" },
-    { icon: Shield, text: "Secure, encrypted data storage" },
-    { icon: Heart, text: "Better health outcomes" },
-    { icon: Zap, text: "Real-time care coordination" }
+    { icon: Clock, text: "Save time with automated tracking", color: "text-blue-600 dark:text-blue-400" },
+    { icon: Shield, text: "Secure, encrypted data storage", color: "text-purple-600 dark:text-purple-400" },
+    { icon: Heart, text: "Better health outcomes", color: "text-pink-600 dark:text-pink-400" },
+    { icon: Zap, text: "Real-time care coordination", color: "text-teal-600 dark:text-teal-400" }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:bg-black">
       {/* Theme Toggle - Top Right */}
       <div className="fixed top-4 right-4 z-50">
         <Button
           variant="outline"
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="bg-background/80 backdrop-blur-sm border-2"
+          className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-2 hover:shadow-lg hover:scale-105 transition-all duration-300"
           aria-label="Toggle theme"
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -105,12 +105,12 @@ export default function LandingPage() {
       </div>
 
       {/* Demo Warning Banner - Always Visible */}
-      <div className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white">
+      <div className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            <AlertTriangle className="h-6 w-6" />
+            <AlertTriangle className="h-6 w-6 animate-bounce" />
             <p className="font-bold text-lg">⚠️ DEMO MODE - NOT FOR REAL HEALTH DATA</p>
-            <AlertTriangle className="h-6 w-6" />
+            <AlertTriangle className="h-6 w-6 animate-bounce" />
           </div>
           <p className="text-center text-sm mt-2 font-medium">
             This is a demonstration environment. Data will be deleted regularly. Not compliant for private health information.
@@ -130,16 +130,16 @@ export default function LandingPage() {
 
       {/* Expanded Warning */}
       {showFullWarning && (
-        <div className="bg-orange-100 dark:bg-orange-950 border-b border-orange-300 dark:border-orange-800">
+        <div className="bg-orange-100 dark:bg-orange-950/80 border-b-4 border-orange-400 dark:border-orange-700">
           <div className="max-w-4xl mx-auto px-4 py-6">
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <Lock className="h-5 w-5 text-orange-600 shrink-0 mt-1" />
+                <Lock className="h-5 w-5 text-orange-600 dark:text-orange-400 shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-orange-900 dark:text-orange-100 mb-2">
                     Important Privacy & Security Notice
                   </h3>
-                  <ul className="space-y-2 text-sm text-orange-800 dark:text-orange-200">
+                  <ul className="space-y-2 text-sm text-orange-900 dark:text-orange-100">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 shrink-0 mt-0.5" />
                       <span><strong>Demo Environment:</strong> This is a testing platform for exploring features and functionality</span>
@@ -175,39 +175,39 @@ export default function LandingPage() {
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 py-16 sm:py-24">
         <div className="text-center space-y-6">
-          <Badge variant="secondary" className="text-lg px-4 py-2">
+          <Badge variant="secondary" className="text-lg px-6 py-3 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Brain className="h-5 w-5 mr-2 inline" />
             Neurological Health Management Platform
           </Badge>
           
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-fade-in">
             NeuroLoop
           </h1>
           
-          <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
             Comprehensive health tracking and care coordination for patients with neurological conditions and their care teams
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
             <Button
               size="lg"
-              className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
               onClick={() => navigate("/signup")}
             >
-              Try Demo (Test Data Only)
+              Create Demo Account
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="text-lg px-8 py-6"
+              className="text-lg px-8 py-6 border-2 hover:bg-gray-100 dark:hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
               onClick={() => navigate("/login")}
             >
               Sign In to Demo
             </Button>
           </div>
 
-          <p className="text-sm text-muted-foreground italic">
+          <p className="text-sm text-gray-600 dark:text-gray-400 italic">
             No credit card required • Demo data only • Explore all features
           </p>
         </div>
@@ -217,10 +217,10 @@ export default function LandingPage() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {benefits.map((benefit, index) => (
-            <Card key={index} className="border-2 hover:border-primary transition-colors">
+            <Card key={index} className="border-2 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 bg-white dark:bg-gray-900">
               <CardContent className="pt-6 text-center">
-                <benefit.icon className="h-8 w-8 mx-auto mb-3 text-primary" />
-                <p className="font-medium text-sm">{benefit.text}</p>
+                <benefit.icon className={`h-8 w-8 mx-auto mb-3 ${benefit.color}`} />
+                <p className="font-medium text-sm text-gray-900 dark:text-gray-100">{benefit.text}</p>
               </CardContent>
             </Card>
           ))}
@@ -230,23 +230,26 @@ export default function LandingPage() {
       {/* Features Grid */}
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4">Powerful Features</h2>
-          <p className="text-xl text-muted-foreground">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Powerful Features</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             Everything you need for comprehensive neurological health management
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow border-2 hover:border-primary">
+            <Card 
+              key={index} 
+              className="hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 border-2 hover:border-primary/50 hover:-translate-y-1 bg-white dark:bg-gray-900 group"
+            >
               <CardContent className="pt-6">
                 <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-lg bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border`}>
+                  <div className="p-3 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-200 dark:border-gray-700 group-hover:border-primary/50 transition-all duration-300 group-hover:shadow-lg">
                     <feature.icon className={`h-6 w-6 ${feature.color}`} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
-                    <p className="text-sm text-muted-foreground">{feature.description}</p>
+                    <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{feature.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">{feature.description}</p>
                   </div>
                 </div>
               </CardContent>
@@ -256,128 +259,128 @@ export default function LandingPage() {
       </div>
 
       {/* Research Statistics */}
-      <div className="bg-white dark:bg-gray-950 py-16 border-y border-gray-200 dark:border-gray-800">
+      <div className="bg-white dark:bg-gray-950 py-16 border-y-4 border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">The Global Impact</h2>
-            <p className="text-xl text-muted-foreground">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">The Global Impact</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
               Why better neurological health tracking matters
             </p>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <Card className="text-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-2 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-blue-600 mb-2">3.4B+</p>
-                <p className="text-sm text-muted-foreground">People with Neurological Conditions</p>
+                <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">3.4B+</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">People with Neurological Conditions</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border-2 hover:border-purple-500 dark:hover:border-purple-400 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-purple-600 mb-2">65M+</p>
-                <p className="text-sm text-muted-foreground">People with Epilepsy Worldwide</p>
+                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">65M+</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">People with Epilepsy Worldwide</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-pink-50 to-red-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-pink-50 to-red-50 dark:from-pink-950/30 dark:to-red-950/30 border-2 hover:border-pink-500 dark:hover:border-pink-400 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-pink-600 mb-2">11M+</p>
-                <p className="text-sm text-muted-foreground">People with Parkinson's Disease</p>
+                <p className="text-4xl font-bold text-pink-600 dark:text-pink-400 mb-2">11M+</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">People with Parkinson's Disease</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border-2 hover:border-red-500 dark:hover:border-red-400 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-red-600 mb-2">$1.7T</p>
-                <p className="text-sm text-muted-foreground">Global Annual Spending on Brain Disorders</p>
+                <p className="text-4xl font-bold text-red-600 dark:text-red-400 mb-2">$1.7T</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Global Annual Spending on Brain Disorders</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/30 dark:to-yellow-950/30 border-2 hover:border-orange-500 dark:hover:border-orange-400 hover:shadow-xl hover:shadow-orange-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-orange-600 mb-2">50%+</p>
-                <p className="text-sm text-muted-foreground">Epilepsy Cases with No Clear Cause</p>
+                <p className="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2">50%+</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Epilepsy Cases with No Clear Cause</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-yellow-50 to-green-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-yellow-50 to-green-50 dark:from-yellow-950/30 dark:to-green-950/30 border-2 hover:border-yellow-500 dark:hover:border-yellow-400 hover:shadow-xl hover:shadow-yellow-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-yellow-600 mb-2">30%</p>
-                <p className="text-sm text-muted-foreground">Don't Respond to First Medication</p>
+                <p className="text-4xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">30%</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Don't Respond to First Medication</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-950/30 dark:to-teal-950/30 border-2 hover:border-green-500 dark:hover:border-green-400 hover:shadow-xl hover:shadow-green-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-green-600 mb-2">1 in 4</p>
-                <p className="text-sm text-muted-foreground">Parkinson's Patients Misdiagnosed</p>
+                <p className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">1 in 4</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Parkinson's Patients Misdiagnosed</p>
               </CardContent>
             </Card>
             
-            <Card className="text-center bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+            <Card className="text-center bg-gradient-to-br from-teal-50 to-blue-50 dark:from-teal-950/30 dark:to-blue-950/30 border-2 hover:border-teal-500 dark:hover:border-teal-400 hover:shadow-xl hover:shadow-teal-500/20 transition-all duration-300 hover:-translate-y-1">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-teal-600 mb-2">#1</p>
-                <p className="text-sm text-muted-foreground">Leading Cause of Disability Worldwide</p>
+                <p className="text-4xl font-bold text-teal-600 dark:text-teal-400 mb-2">#1</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Leading Cause of Disability Worldwide</p>
               </CardContent>
             </Card>
           </div>
 
           <div className="mt-12 grid md:grid-cols-3 gap-6">
-            <Card className="bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900">
+            <Card className="bg-red-50 dark:bg-red-950/40 border-2 border-red-300 dark:border-red-800 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300">
               <CardContent className="pt-6">
                 <h3 className="font-bold text-lg mb-4 text-red-900 dark:text-red-100">Epilepsy Deaths (Yearly)</h3>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Globally:</span>
+                  <div className="flex justify-between text-red-900 dark:text-red-100">
+                    <span>Globally:</span>
                     <span className="font-bold">~140,000</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">India:</span>
+                  <div className="flex justify-between text-red-900 dark:text-red-100">
+                    <span>India:</span>
                     <span className="font-bold">~31,176</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Australia:</span>
+                  <div className="flex justify-between text-red-900 dark:text-red-100">
+                    <span>Australia:</span>
                     <span className="font-bold">~285</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900">
+            <Card className="bg-purple-50 dark:bg-purple-950/40 border-2 border-purple-300 dark:border-purple-800 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300">
               <CardContent className="pt-6">
                 <h3 className="font-bold text-lg mb-4 text-purple-900 dark:text-purple-100">Parkinson's Deaths (Yearly)</h3>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Globally:</span>
+                  <div className="flex justify-between text-purple-900 dark:text-purple-100">
+                    <span>Globally:</span>
                     <span className="font-bold">~420,000</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">India:</span>
+                  <div className="flex justify-between text-purple-900 dark:text-purple-100">
+                    <span>India:</span>
                     <span className="font-bold">~43,400</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Australia:</span>
+                  <div className="flex justify-between text-purple-900 dark:text-purple-100">
+                    <span>Australia:</span>
                     <span className="font-bold">~1,392</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-gray-100 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+            <Card className="bg-gray-100 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 hover:shadow-xl hover:shadow-gray-500/20 transition-all duration-300">
               <CardContent className="pt-6">
-                <h3 className="font-bold text-lg mb-4">All Neurological Deaths (Yearly)</h3>
+                <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-gray-100">All Neurological Deaths (Yearly)</h3>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Globally:</span>
+                  <div className="flex justify-between text-gray-900 dark:text-gray-100">
+                    <span>Globally:</span>
                     <span className="font-bold">~9 Million</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">India:</span>
+                  <div className="flex justify-between text-gray-900 dark:text-gray-100">
+                    <span>India:</span>
                     <span className="font-bold">~1 Million</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Australia:</span>
+                  <div className="flex justify-between text-gray-900 dark:text-gray-100">
+                    <span>Australia:</span>
                     <span className="font-bold">~5,400</span>
                   </div>
                 </div>
@@ -388,44 +391,44 @@ export default function LandingPage() {
       </div>
 
       {/* Who It's For */}
-      <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-950/20 dark:to-purple-950/20 py-16">
+      <div className="bg-gradient-to-r from-blue-100/50 to-purple-100/50 dark:from-blue-950/20 dark:to-purple-950/20 py-16 border-y border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Built For Everyone in the Care Journey</h2>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Built For Everyone in the Care Journey</h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center">
+            <Card className="text-center hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2 border-2 hover:border-blue-500 dark:hover:border-blue-400 bg-white dark:bg-gray-900">
               <CardContent className="pt-8">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-600 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/50">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Patients</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Patients</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   Track your health, manage medications, record seizures, and communicate with your care team
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-2 border-2 hover:border-purple-500 dark:hover:border-purple-400 bg-white dark:bg-gray-900">
               <CardContent className="pt-8">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-600 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-600 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/50">
                   <Heart className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Carers</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Carers</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   Monitor loved ones, log observations, coordinate care, and stay connected with the care team
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300 hover:-translate-y-2 border-2 hover:border-pink-500 dark:hover:border-pink-400 bg-white dark:bg-gray-900">
               <CardContent className="pt-8">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-pink-600 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-600 to-pink-500 flex items-center justify-center shadow-lg shadow-pink-500/50">
                   <Stethoscope className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Healthcare Providers</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Healthcare Providers</h3>
+                <p className="text-gray-600 dark:text-gray-300">
                   Access comprehensive patient data, track outcomes, and provide better coordinated care
                 </p>
               </CardContent>
@@ -436,16 +439,16 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <Card className="border-4 border-primary bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900">
+        <Card className="border-4 border-primary bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 shadow-2xl hover:shadow-3xl transition-shadow duration-300">
           <CardContent className="pt-12 pb-12">
-            <h2 className="text-3xl font-bold mb-4">Ready to Explore?</h2>
-            <p className="text-xl text-muted-foreground mb-8">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Ready to Explore?</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               Try out all features with demo data. No commitment required.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                 onClick={() => navigate("/signup")}
               >
                 Create Demo Account
@@ -454,13 +457,13 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6"
+                className="text-lg px-8 py-6 border-2 hover:bg-gray-100 dark:hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                 onClick={() => navigate("/login")}
               >
                 Sign In
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground mt-6 italic">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-6 italic">
               Remember: Demo mode only • Use sample data • Data deleted regularly
             </p>
           </CardContent>
@@ -468,15 +471,15 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-200 dark:border-gray-800 mt-16">
+      <div className="border-t-4 border-gray-200 dark:border-gray-800 mt-16 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <Brain className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">NeuroLoop</span>
+              <span className="font-bold text-lg text-gray-900 dark:text-white">NeuroLoop</span>
               <Badge variant="destructive" className="ml-2">DEMO</Badge>
             </div>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
               Demo Environment • Not for Real Health Data • HIPAA-Compliant Version Coming Soon
             </p>
           </div>
