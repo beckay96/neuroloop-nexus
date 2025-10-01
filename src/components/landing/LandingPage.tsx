@@ -4,102 +4,76 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
-import {
-  Brain,
-  Shield,
-  Users,
-  Activity,
-  Calendar,
-  MessageSquare,
-  Video,
-  AlertTriangle,
-  Clock,
-  FileText,
-  Heart,
-  Zap,
-  CheckCircle,
-  ArrowRight,
-  Lock,
-  Stethoscope,
-  Database,
-  Moon,
-  Sun
-} from "lucide-react";
-
+import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun } from "lucide-react";
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
+  const {
+    theme,
+    setTheme
+  } = useTheme();
   const [showFullWarning, setShowFullWarning] = useState(false);
-
-  const features = [
-    {
-      icon: Brain,
-      title: "Comprehensive Seizure Tracking",
-      description: "ILAE-compliant seizure logging with timer integration, video recording, and consciousness timeline tracking",
-      color: "text-purple-500 dark:text-purple-400"
-    },
-    {
-      icon: Activity,
-      title: "Daily Health Monitoring",
-      description: "Track symptoms, medications, temperature, and vital signs with intuitive interfaces",
-      color: "text-blue-500 dark:text-blue-400"
-    },
-    {
-      icon: Users,
-      title: "Care Team Collaboration",
-      description: "Connect patients with carers, share health data securely, and coordinate care seamlessly",
-      color: "text-green-500 dark:text-green-400"
-    },
-    {
-      icon: MessageSquare,
-      title: "HIPAA-Ready Messaging",
-      description: "Secure encrypted messaging between patients and care team members",
-      color: "text-indigo-500 dark:text-indigo-400"
-    },
-    {
-      icon: Video,
-      title: "Video Symptom Logs",
-      description: "Record and upload videos to document seizures, tremors, and other neurological symptoms",
-      color: "text-red-500 dark:text-red-400"
-    },
-    {
-      icon: Calendar,
-      title: "Appointment Management",
-      description: "Schedule and track medical appointments, with reminders and care team coordination",
-      color: "text-orange-500 dark:text-orange-400"
-    },
-    {
-      icon: FileText,
-      title: "Comprehensive Records",
-      description: "Maintain detailed health records, medication logs, and historical data for better care",
-      color: "text-cyan-500 dark:text-cyan-400"
-    },
-    {
-      icon: Stethoscope,
-      title: "Clinical-Grade Data",
-      description: "Research-ready data capture following medical best practices and standards",
-      color: "text-pink-500 dark:text-pink-400"
-    }
-  ];
-
-  const benefits = [
-    { icon: Clock, text: "Save time with automated tracking", color: "text-blue-600 dark:text-blue-400" },
-    { icon: Shield, text: "Secure, encrypted data storage", color: "text-purple-600 dark:text-purple-400" },
-    { icon: Heart, text: "Better health outcomes", color: "text-pink-600 dark:text-pink-400" },
-    { icon: Zap, text: "Real-time care coordination", color: "text-teal-600 dark:text-teal-400" }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+  const features = [{
+    icon: Brain,
+    title: "Comprehensive Seizure Tracking",
+    description: "ILAE-compliant seizure logging with timer integration, video recording, and consciousness timeline tracking",
+    color: "text-purple-500 dark:text-purple-400"
+  }, {
+    icon: Activity,
+    title: "Daily Health Monitoring",
+    description: "Track symptoms, medications, temperature, and vital signs with intuitive interfaces",
+    color: "text-blue-500 dark:text-blue-400"
+  }, {
+    icon: Users,
+    title: "Care Team Collaboration",
+    description: "Connect patients with carers, share health data securely, and coordinate care seamlessly",
+    color: "text-green-500 dark:text-green-400"
+  }, {
+    icon: MessageSquare,
+    title: "HIPAA-Ready Messaging",
+    description: "Secure encrypted messaging between patients and care team members",
+    color: "text-indigo-500 dark:text-indigo-400"
+  }, {
+    icon: Video,
+    title: "Video Symptom Logs",
+    description: "Record and upload videos to document seizures, tremors, and other neurological symptoms",
+    color: "text-red-500 dark:text-red-400"
+  }, {
+    icon: Calendar,
+    title: "Appointment Management",
+    description: "Schedule and track medical appointments, with reminders and care team coordination",
+    color: "text-orange-500 dark:text-orange-400"
+  }, {
+    icon: FileText,
+    title: "Comprehensive Records",
+    description: "Maintain detailed health records, medication logs, and historical data for better care",
+    color: "text-cyan-500 dark:text-cyan-400"
+  }, {
+    icon: Stethoscope,
+    title: "Clinical-Grade Data",
+    description: "Research-ready data capture following medical best practices and standards",
+    color: "text-pink-500 dark:text-pink-400"
+  }];
+  const benefits = [{
+    icon: Clock,
+    text: "Save time with automated tracking",
+    color: "text-blue-600 dark:text-blue-400"
+  }, {
+    icon: Shield,
+    text: "Secure, encrypted data storage",
+    color: "text-purple-600 dark:text-purple-400"
+  }, {
+    icon: Heart,
+    text: "Better health outcomes",
+    color: "text-pink-600 dark:text-pink-400"
+  }, {
+    icon: Zap,
+    text: "Real-time care coordination",
+    color: "text-teal-600 dark:text-teal-400"
+  }];
+  return <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       {/* Theme Toggle - Top Right */}
       <div className="fixed top-4 right-4 z-50">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-2 hover:shadow-lg hover:scale-105 transition-all duration-300"
-          aria-label="Toggle theme"
-        >
+        <Button variant="outline" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-2 hover:shadow-lg hover:scale-105 transition-all duration-300" aria-label="Toggle theme">
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
       </div>
@@ -109,19 +83,14 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <AlertTriangle className="h-6 w-6 animate-bounce" />
-            <p className="font-bold text-lg">⚠️ DEMO MODE - NOT FOR REAL HEALTH DATA</p>
+            <p className="font-bold text-lg text-center">⚠️ DEMO MODE - NOT FOR REAL HEALTH DATA</p>
             <AlertTriangle className="h-6 w-6 animate-bounce" />
           </div>
           <p className="text-center text-sm mt-2 font-medium">
             This is a demonstration environment. Data will be deleted regularly. Not compliant for private health information.
           </p>
           <div className="flex justify-center mt-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowFullWarning(!showFullWarning)}
-              className="text-white hover:bg-white/20"
-            >
+            <Button variant="ghost" size="sm" onClick={() => setShowFullWarning(!showFullWarning)} className="text-white hover:bg-white/20">
               {showFullWarning ? "Hide Details" : "Read Full Warning"}
             </Button>
           </div>
@@ -129,8 +98,7 @@ export default function LandingPage() {
       </div>
 
       {/* Expanded Warning */}
-      {showFullWarning && (
-        <div className="bg-orange-100 dark:bg-orange-950/80 border-b-4 border-orange-400 dark:border-orange-700">
+      {showFullWarning && <div className="bg-orange-100 dark:bg-orange-950/80 border-b-4 border-orange-400 dark:border-orange-700">
           <div className="max-w-4xl mx-auto px-4 py-6">
             <div className="space-y-4">
               <div className="flex items-start gap-3">
@@ -169,8 +137,7 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 py-16 sm:py-24">
@@ -189,20 +156,11 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
-            <Button
-              size="lg"
-              className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-              onClick={() => navigate("/signup")}
-            >
+            <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" onClick={() => navigate("/signup")}>
               Create Demo Account
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-lg px-8 py-6 border-2 hover:bg-gray-100 dark:hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-              onClick={() => navigate("/login")}
-            >
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 hover:bg-gray-100 dark:hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300" onClick={() => navigate("/login")}>
               Sign In to Demo
             </Button>
           </div>
@@ -216,14 +174,12 @@ export default function LandingPage() {
       {/* Key Benefits */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {benefits.map((benefit, index) => (
-            <Card key={index} className="border-2 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 bg-white dark:bg-gray-900">
+          {benefits.map((benefit, index) => <Card key={index} className="border-2 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 bg-white dark:bg-gray-900">
               <CardContent className="pt-6 text-center">
                 <benefit.icon className={`h-8 w-8 mx-auto mb-3 ${benefit.color}`} />
                 <p className="font-medium text-sm text-gray-900 dark:text-gray-100">{benefit.text}</p>
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
       </div>
 
@@ -237,11 +193,7 @@ export default function LandingPage() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <Card 
-              key={index} 
-              className="hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 border-2 hover:border-primary/50 hover:-translate-y-1 bg-white dark:bg-gray-900 group"
-            >
+          {features.map((feature, index) => <Card key={index} className="hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 border-2 hover:border-primary/50 hover:-translate-y-1 bg-white dark:bg-gray-900 group">
               <CardContent className="pt-6">
                 <div className="flex items-start gap-4">
                   <div className="p-3 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-200 dark:border-gray-700 group-hover:border-primary/50 transition-all duration-300 group-hover:shadow-lg">
@@ -253,8 +205,7 @@ export default function LandingPage() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
       </div>
 
@@ -446,20 +397,11 @@ export default function LandingPage() {
               Try out all features with demo data. No commitment required.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                onClick={() => navigate("/signup")}
-              >
+              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" onClick={() => navigate("/signup")}>
                 Create Demo Account
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 border-2 hover:bg-gray-100 dark:hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                onClick={() => navigate("/login")}
-              >
+              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 hover:bg-gray-100 dark:hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300" onClick={() => navigate("/login")}>
                 Sign In
               </Button>
             </div>
@@ -485,6 +427,5 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
