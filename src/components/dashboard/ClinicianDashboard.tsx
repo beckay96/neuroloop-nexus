@@ -377,7 +377,7 @@ export default function ClinicianDashboard() {
     { value: "analytics", label: "Analytics", icon: <BarChart3 className="h-4 w-4" /> },
   ];
 
-  return <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       <ClinicianHeader userName={getUserDisplayName()} currentSection="Dashboard" />
 
       <div className="container mx-auto p-4 lg:p-6">
@@ -470,11 +470,11 @@ export default function ClinicianDashboard() {
 
             {/* Key Metrics */}
             <section>
-              <h2 className="text-lg font-semibold mb-4">Key Metrics</h2>
+              <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Key Metrics</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {cohortStats.map((stat, index) => {
                 const IconComponent = stat.icon;
-                return <Card key={index} className="medical-card p-6">
+                return <Card key={index} className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                       <div className="flex items-center justify-between mb-3">
                         <IconComponent className={`h-5 w-5 ${stat.color}`} />
                         {stat.trend !== "neutral" && <div className="flex items-center">
@@ -482,9 +482,9 @@ export default function ClinicianDashboard() {
                           </div>}
                       </div>
                       <div className="space-y-1">
-                        <p className="text-2xl font-bold">{stat.value}</p>
-                        <p className="text-xs text-muted-foreground">{stat.label}</p>
-                        <p className="text-xs text-muted-foreground">{stat.change}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{stat.label}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{stat.change}</p>
                       </div>
                     </Card>;
               })}
@@ -493,12 +493,12 @@ export default function ClinicianDashboard() {
 
             {/* Critical Patient Alerts */}
             <section>
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                 <AlertTriangle className="h-5 w-5 text-warning" />
                 Critical Patient Alerts
               </h2>
               <div className="space-y-3">
-                {patientAlerts.slice(0, 3).map(alert => <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning">
+                {patientAlerts.slice(0, 3).map(alert => <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -512,8 +512,8 @@ export default function ClinicianDashboard() {
                             {alert.patientName}
                           </button>
                         </div>
-                        <p className="text-sm text-muted-foreground">{alert.message}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{alert.timestamp}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{alert.message}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{alert.timestamp}</p>
                       </div>
                       <PatientAlertDialog alert={alert}>
                         <Button variant="outline" size="sm">
@@ -527,18 +527,18 @@ export default function ClinicianDashboard() {
 
             {/* Case-Driven Data Panels for High Priority */}
             <section>
-              <h2 className="text-lg font-semibold mb-4">Patient Case Analysis</h2>
+              <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Patient Case Analysis</h2>
               <CaseDataPanels patientId="P001" />
             </section>
 
             {/* Recent Patient Activity */}
             <section>
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                 <Activity className="h-5 w-5 text-primary" />
                 Recent Patient Activity
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {recentPatients.slice(0, 4).map(patient => <Card key={patient.id} className="medical-card border border-border/50 shadow-sm hover:shadow-md transition-all duration-200">
+                {recentPatients.slice(0, 4).map(patient => <Card key={patient.id} className="medical-card border-2 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-900">
                     <Collapsible>
                       <div className="p-4">
                         <div className="flex items-center justify-between">
@@ -560,8 +560,8 @@ export default function ClinicianDashboard() {
                                   {patient.status}
                                 </Badge>
                               </div>
-                              <p className="text-xs text-muted-foreground truncate">{patient.condition}</p>
-                              <p className="text-xs text-muted-foreground">Last active: {patient.lastActivity}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{patient.condition}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400">Last active: {patient.lastActivity}</p>
                             </div>
                           </div>
                           <CollapsibleTrigger asChild>
@@ -573,37 +573,37 @@ export default function ClinicianDashboard() {
                       </div>
                       
                       <CollapsibleContent>
-                        <div className="px-4 pb-4 border-t bg-muted/20">
+                        <div className="px-4 pb-4 border-t bg-gray-50 dark:bg-gray-800/50">
                           <div className="pt-3 space-y-3">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                               <div className="space-y-2">
                                 <div>
-                                  <p className="font-medium text-muted-foreground">Medication Adherence</p>
-                                  <p className="font-semibold">{patient.adherence}%</p>
+                                  <p className="font-medium text-gray-600 dark:text-gray-400">Medication Adherence</p>
+                                  <p className="font-semibold text-gray-900 dark:text-white">{patient.adherence}%</p>
                                 </div>
                                 {patient.recentVitals?.seizureFreq && <div>
-                                    <p className="font-medium text-muted-foreground">Seizure Frequency</p>
-                                    <p className="font-semibold">{patient.recentVitals.seizureFreq}</p>
+                                    <p className="font-medium text-gray-600 dark:text-gray-400">Seizure Frequency</p>
+                                    <p className="font-semibold text-gray-900 dark:text-white">{patient.recentVitals.seizureFreq}</p>
                                   </div>}
                                 {patient.recentVitals?.tremor && <div>
-                                    <p className="font-medium text-muted-foreground">Tremor Level</p>
-                                    <p className="font-semibold">{patient.recentVitals.tremor}</p>
+                                    <p className="font-medium text-gray-600 dark:text-gray-400">Tremor Level</p>
+                                    <p className="font-semibold text-gray-900 dark:text-white">{patient.recentVitals.tremor}</p>
                                   </div>}
                               </div>
                               <div className="space-y-2">
                                 <div>
-                                  <p className="font-medium text-muted-foreground">Next Appointment</p>
-                                  <p className="font-semibold">{patient.nextAppt}</p>
+                                  <p className="font-medium text-gray-600 dark:text-gray-400">Next Appointment</p>
+                                  <p className="font-semibold text-gray-900 dark:text-white">{patient.nextAppt}</p>
                                 </div>
                                 <div>
-                                  <p className="font-medium text-muted-foreground">Primary Medication</p>
-                                  <p className="font-semibold text-xs truncate" title={patient.primaryMedication}>
+                                  <p className="font-medium text-gray-600 dark:text-gray-400">Primary Medication</p>
+                                  <p className="font-semibold text-xs truncate text-gray-900 dark:text-white" title={patient.primaryMedication}>
                                     {patient.primaryMedication}
                                   </p>
                                 </div>
                                 {patient.recentVitals?.mood && <div>
-                                    <p className="font-medium text-muted-foreground">Mood Status</p>
-                                    <p className="font-semibold">{patient.recentVitals.mood}</p>
+                                    <p className="font-medium text-gray-600 dark:text-gray-400">Mood Status</p>
+                                    <p className="font-semibold text-gray-900 dark:text-white">{patient.recentVitals.mood}</p>
                                   </div>}
                               </div>
                             </div>
@@ -727,16 +727,16 @@ export default function ClinicianDashboard() {
 
             {/* Patient List */}
             <div className="grid gap-4">
-              {filteredPatients.map(patient => <Card key={patient.id} className="medical-card p-4 sm:p-6">
+              {filteredPatients.map(patient => <Card key={patient.id} className="medical-card p-4 sm:p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
                         <AvatarFallback>{patient.avatar}</AvatarFallback>
                       </Avatar>
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-base sm:text-lg truncate">{patient.name}</h3>
-                        <p className="text-muted-foreground text-sm truncate">{patient.condition}</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">
+                        <h3 className="font-semibold text-base sm:text-lg truncate text-gray-900 dark:text-white">{patient.name}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm truncate">{patient.condition}</p>
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                           Age: {patient.age} • Diagnosed: {new Date(patient.diagnosisDate).getFullYear()}
                         </p>
                       </div>
@@ -748,22 +748,22 @@ export default function ClinicianDashboard() {
                   
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
                     <div className="min-w-0">
-                      <p className="text-muted-foreground text-xs">Primary Medication</p>
-                      <p className="font-medium text-xs sm:text-sm truncate" title={patient.primaryMedication}>
+                      <p className="text-gray-600 dark:text-gray-400 text-xs">Primary Medication</p>
+                      <p className="font-medium text-xs sm:text-sm truncate text-gray-900 dark:text-white" title={patient.primaryMedication}>
                         {patient.primaryMedication}
                       </p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">Adherence</p>
-                      <p className="font-medium text-xs sm:text-sm">{patient.adherence}%</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-xs">Adherence</p>
+                      <p className="font-medium text-xs sm:text-sm text-gray-900 dark:text-white">{patient.adherence}%</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">Last Activity</p>
-                      <p className="font-medium text-xs sm:text-sm">{patient.lastActivity}</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-xs">Last Activity</p>
+                      <p className="font-medium text-xs sm:text-sm text-gray-900 dark:text-white">{patient.lastActivity}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">Next Appointment</p>
-                      <p className="font-medium text-xs sm:text-sm">{patient.nextAppt}</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-xs">Next Appointment</p>
+                      <p className="font-medium text-xs sm:text-sm text-gray-900 dark:text-white">{patient.nextAppt}</p>
                     </div>
                   </div>
                   
@@ -821,7 +821,7 @@ export default function ClinicianDashboard() {
 
           <TabsContent value="analytics" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="medical-card p-6">
+              <Card className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BarChart3 className="h-5 w-5 text-primary" />
@@ -833,31 +833,31 @@ export default function ClinicianDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Card className="p-4">
-                      <h4 className="font-semibold mb-2 text-sm">Seizure Freedom Rate</h4>
+                    <Card className="p-4 bg-gray-50 dark:bg-gray-800 border dark:border-gray-700">
+                      <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Seizure Freedom Rate</h4>
                       <p className="text-2xl font-bold text-status-stable">67.3%</p>
-                      <p className="text-xs text-muted-foreground">+8.1% from last quarter</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">+8.1% from last quarter</p>
                     </Card>
                     <Card className="p-4">
-                      <h4 className="font-semibold mb-2 text-sm">Medication Adherence</h4>
+                      <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Medication Adherence</h4>
                       <p className="text-2xl font-bold text-primary">84.7%</p>
-                      <p className="text-xs text-muted-foreground">+3.2% improvement</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">+3.2% improvement</p>
                     </Card>
                     <Card className="p-4">
-                      <h4 className="font-semibold mb-2 text-sm">Fall Prevention</h4>
+                      <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Fall Prevention</h4>
                       <p className="text-2xl font-bold text-status-stable">-42.1%</p>
-                      <p className="text-xs text-muted-foreground">Reduction in falls</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Reduction in falls</p>
                     </Card>
                     <Card className="p-4">
-                      <h4 className="font-semibold mb-2 text-sm">Quality of Life</h4>
+                      <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Quality of Life</h4>
                       <p className="text-2xl font-bold text-primary">7.8/10</p>
-                      <p className="text-xs text-muted-foreground">Average patient score</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Average patient score</p>
                     </Card>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="medical-card p-6">
+              <Card className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Brain className="h-5 w-5 text-primary" />

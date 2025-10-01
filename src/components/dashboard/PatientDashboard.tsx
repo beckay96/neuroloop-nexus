@@ -222,7 +222,7 @@ export default function PatientDashboard() {
       setShowSymptomsLog(false);
     }} />
       
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       {/* App Navigation */}
       <AppNavbar 
         userName={userName} 
@@ -232,15 +232,15 @@ export default function PatientDashboard() {
       <main className="container mx-auto px-4 py-8">
         {/* Health Status Alert */}
         <section className="mb-8">
-          <Card className="medical-card p-6 bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
+          <Card className="medical-card p-6 bg-gradient-to-r from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 border border-primary/20 dark:border-primary/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold">Great job, {userName}! 🎉</h3>
-                  <p className="text-muted-foreground">You're maintaining excellent tracking consistency</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Great job, {userName}! 🎉</h3>
+                  <p className="text-gray-600 dark:text-gray-300">You're maintaining excellent tracking consistency</p>
                 </div>
               </div>
               <Badge variant="secondary" className="bg-status-stable/20 text-status-stable">
@@ -259,12 +259,12 @@ export default function PatientDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {quickActions.map(action => {
               const IconComponent = action.icon;
-              return <Card key={action.id} className="medical-card p-4 cursor-pointer group hover:shadow-glow-primary transition-all" onClick={() => handleQuickAction(action.id)}>
+              return <Card key={action.id} className="medical-card p-4 cursor-pointer group hover:shadow-glow-primary transition-all bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border-2 hover:border-primary/50 dark:border-gray-700" onClick={() => handleQuickAction(action.id)}>
                   <div className={`w-12 h-12 ${action.bg} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
                     <IconComponent className={`h-6 w-6 ${action.color}`} />
                   </div>
-                  <h3 className="font-medium text-sm text-center mb-1">{action.title}</h3>
-                  <p className="text-xs text-muted-foreground text-center">{action.description}</p>
+                  <h3 className="font-medium text-sm text-center mb-1 text-gray-900 dark:text-white">{action.title}</h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 text-center">{action.description}</p>
                 </Card>;
             })}
           </div>
@@ -279,16 +279,16 @@ export default function PatientDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {healthStats.map((stat, index) => {
               const IconComponent = stat.icon;
-              return <Card key={index} className="medical-card p-6">
+              return <Card key={index} className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                   <div className="flex items-center justify-between mb-4">
                     <IconComponent className={`h-5 w-5 ${stat.color}`} />
                     {stat.trend !== "neutral" && <TrendingUp className={`h-4 w-4 ${stat.trend === "up" ? "text-status-stable" : "text-status-critical"} ${stat.trend === "down" ? "rotate-180" : ""}`} />}
                   </div>
                   <div className="mb-3">
-                    <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{stat.label}</p>
                     <div className="flex items-baseline gap-2">
                       <span className={`text-2xl font-bold ${stat.color}`}>{stat.value}</span>
-                      <span className="text-sm text-muted-foreground">/ {stat.target}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">/ {stat.target}</span>
                     </div>
                   </div>
                   <Progress value={stat.progress} className="h-2" />
@@ -309,14 +309,14 @@ export default function PatientDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {achievements.map(achievement => {
               const IconComponent = achievement.icon;
-              return <Card key={achievement.id} className={`medical-card p-4 ${achievement.earned ? 'bg-gradient-to-br from-warning/5 to-primary/5 border-warning/20' : 'opacity-60'}`}>
+              return <Card key={achievement.id} className={`medical-card p-4 ${achievement.earned ? 'bg-gradient-to-br from-warning/5 to-primary/5 dark:from-warning/10 dark:to-primary/10 border-warning/20 dark:border-warning/30' : 'opacity-60'} bg-white dark:bg-gray-900 border-2 dark:border-gray-700`}>
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 ${achievement.earned ? 'bg-warning/20' : 'bg-muted'} rounded-lg flex items-center justify-center`}>
-                      <IconComponent className={`h-5 w-5 ${achievement.earned ? 'text-warning' : 'text-muted-foreground'}`} />
+                    <div className={`w-10 h-10 ${achievement.earned ? 'bg-warning/20 dark:bg-warning/30' : 'bg-gray-200 dark:bg-gray-800'} rounded-lg flex items-center justify-center`}>
+                      <IconComponent className={`h-5 w-5 ${achievement.earned ? 'text-warning' : 'text-gray-500 dark:text-gray-600'}`} />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-sm">{achievement.title}</h4>
-                      <p className="text-xs text-muted-foreground">{achievement.description}</p>
+                      <h4 className="font-semibold text-sm text-gray-900 dark:text-white">{achievement.title}</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{achievement.description}</p>
                     </div>
                     <Badge variant={achievement.earned ? "default" : "outline"} className="text-xs">
                       +{achievement.points}
@@ -341,41 +341,41 @@ export default function PatientDashboard() {
                 <Button variant="ghost" size="sm" onClick={() => toast({ title: "Activity History", description: "Viewing complete activity log" })}>View All</Button>
               </div>
               
-              <Card className="medical-card p-6">
+              <Card className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-4 bg-status-stable/10 rounded-lg border border-status-stable/20">
-                    <div className="w-10 h-10 bg-status-stable/20 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-4 p-4 bg-status-stable/10 dark:bg-status-stable/20 rounded-lg border border-status-stable/20 dark:border-status-stable/30">
+                    <div className="w-10 h-10 bg-status-stable/20 dark:bg-status-stable/30 rounded-lg flex items-center justify-center">
                       <Pill className="h-5 w-5 text-status-stable" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium">Medication taken successfully</p>
-                      <p className="text-sm text-muted-foreground">Levetiracetam 500mg • 2 hours ago</p>
+                      <p className="font-medium text-gray-900 dark:text-white">Medication taken successfully</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Levetiracetam 500mg • 2 hours ago</p>
                     </div>
                     <Badge variant="outline" className="bg-status-stable/10 text-status-stable border-status-stable/30">
                       On time
                     </Badge>
                   </div>
                   
-                  <div className="flex items-center gap-4 p-4 bg-primary/10 rounded-lg border border-primary/20">
-                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-4 p-4 bg-primary/10 dark:bg-primary/20 rounded-lg border border-primary/20 dark:border-primary/30">
+                    <div className="w-10 h-10 bg-primary/20 dark:bg-primary/30 rounded-lg flex items-center justify-center">
                       <Heart className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium">Daily check-in completed</p>
-                      <p className="text-sm text-muted-foreground">Mood: Good, Energy: 8/10 • This morning</p>
+                      <p className="font-medium text-gray-900 dark:text-white">Daily check-in completed</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Mood: Good, Energy: 8/10 • This morning</p>
                     </div>
                     <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
                       +25 pts
                     </Badge>
                   </div>
 
-                  <div className="flex items-center gap-4 p-4 bg-secondary/10 rounded-lg border border-secondary/20">
-                    <div className="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-4 p-4 bg-secondary/10 dark:bg-secondary/20 rounded-lg border border-secondary/20 dark:border-secondary/30">
+                    <div className="w-10 h-10 bg-secondary/20 dark:bg-secondary/30 rounded-lg flex items-center justify-center">
                       <Activity className="h-5 w-5 text-secondary" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium">Symptom logged</p>
-                      <p className="text-sm text-muted-foreground">Mild fatigue • Yesterday, 3:30 PM</p>
+                      <p className="font-medium text-gray-900 dark:text-white">Symptom logged</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Mild fatigue • Yesterday, 3:30 PM</p>
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => toast({ title: "Activity Details", description: "Opening detailed activity view" })}>
                       <FileText className="h-4 w-4" />
@@ -395,18 +395,18 @@ export default function PatientDashboard() {
                 <Button variant="outline" size="sm" onClick={() => toast({ title: "Health Insights", description: "Opening comprehensive insights dashboard" })}>View Details</Button>
               </div>
               
-              <Card className="medical-card p-6 bg-gradient-subtle">
+              <Card className="medical-card p-6 bg-gradient-subtle bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold mb-2">💡 Pattern Detected</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
+                    <h4 className="font-semibold mb-2 text-gray-900 dark:text-white">💡 Pattern Detected</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                       Your seizure-free days have increased by 40% since optimizing your sleep schedule.
                     </p>
                     <Button variant="medical" size="sm" onClick={() => toast({ title: "Sleep Optimization", description: "Learn about sleep's impact on neurological health" })}>Learn More</Button>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2">📊 Weekly Summary</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
+                    <h4 className="font-semibold mb-2 text-gray-900 dark:text-white">📊 Weekly Summary</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                       Excellent medication adherence and consistent mood tracking this week.
                     </p>
                     <Button variant="outline" size="sm" onClick={() => toast({ title: "Weekly Report", description: "Opening detailed weekly health summary" })}>View Report</Button>
@@ -431,17 +431,17 @@ export default function PatientDashboard() {
               </div>
               
               <div className="space-y-3">
-                {upcomingReminders.map(reminder => <Card key={reminder.id} className={`medical-card p-4 ${reminder.urgent ? 'border-warning/40 bg-warning/5' : ''}`}>
+                {upcomingReminders.map(reminder => <Card key={reminder.id} className={`medical-card p-4 ${reminder.urgent ? 'border-warning/40 dark:border-warning/50 bg-warning/5 dark:bg-warning/10' : 'bg-white dark:bg-gray-900 border-2 dark:border-gray-700'}`}>
                     <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${reminder.urgent ? 'bg-warning/20' : 'bg-muted'}`}>
-                        {reminder.type === 'medication' && <Pill className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
-                        {reminder.type === 'tracking' && <Heart className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
-                        {reminder.type === 'appointment' && <Calendar className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
-                        {reminder.type === 'temperature' && <Thermometer className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-muted-foreground'}`} />}
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${reminder.urgent ? 'bg-warning/20 dark:bg-warning/30' : 'bg-gray-200 dark:bg-gray-800'}`}>
+                        {reminder.type === 'medication' && <Pill className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-gray-500 dark:text-gray-400'}`} />}
+                        {reminder.type === 'tracking' && <Heart className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-gray-500 dark:text-gray-400'}`} />}
+                        {reminder.type === 'appointment' && <Calendar className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-gray-500 dark:text-gray-400'}`} />}
+                        {reminder.type === 'temperature' && <Thermometer className={`h-4 w-4 ${reminder.urgent ? 'text-warning' : 'text-gray-500 dark:text-gray-400'}`} />}
                       </div>
                       <div className="flex-1">
-                        <p className="font-medium text-sm">{reminder.title}</p>
-                        <p className="text-xs text-muted-foreground">{reminder.subtitle}</p>
+                        <p className="font-medium text-sm text-gray-900 dark:text-white">{reminder.title}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{reminder.subtitle}</p>
                         <p className="text-xs text-primary mt-1">{reminder.time}</p>
                       </div>
                       {reminder.urgent && <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
@@ -461,27 +461,27 @@ export default function PatientDashboard() {
                 </h2>
               </div>
               
-              <Card className="medical-card p-4">
+              <Card className="medical-card p-4 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-secondary/20 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-secondary/20 dark:bg-secondary/30 rounded-lg flex items-center justify-center">
                       <Brain className="h-4 w-4 text-secondary" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-sm">Dr. Sarah Smith</p>
-                      <p className="text-xs text-muted-foreground">Neurologist</p>
+                      <p className="font-medium text-sm text-gray-900 dark:text-white">Dr. Sarah Smith</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Neurologist</p>
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => toast({ title: "Message Dr. Smith", description: "Opening secure messaging" })}>
                       <MessageSquare className="h-4 w-4" />
                     </Button>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-primary/20 dark:bg-primary/30 rounded-lg flex items-center justify-center">
                       <Heart className="h-4 w-4 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-sm">Mom (Emergency)</p>
-                      <p className="text-xs text-muted-foreground">Primary caregiver</p>
+                      <p className="font-medium text-sm text-gray-900 dark:text-white">Mom (Emergency)</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Primary caregiver</p>
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => toast({ title: "Call Emergency Contact", description: "Initiating call to primary caregiver" })}>
                       <Phone className="h-4 w-4" />
@@ -495,15 +495,15 @@ export default function PatientDashboard() {
 
         {/* Research Contribution */}
         <section className="mt-8">
-          <Card className="medical-card p-6 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 border border-primary/20">
+          <Card className="medical-card p-6 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 dark:from-primary/10 dark:via-secondary/10 dark:to-accent/10 border border-primary/20 dark:border-primary/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Contributing to Research 🧬</h3>
-                  <p className="text-muted-foreground text-sm">
+                  <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-white">Contributing to Research 🧬</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
                     Your anonymized data is helping advance epilepsy research. Thank you for making a difference!
                   </p>
                 </div>
