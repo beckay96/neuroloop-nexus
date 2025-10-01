@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Landing from "./pages/Landing";
+import LandingPage from "@/components/landing/LandingPage";
+import DashboardLanding from "./pages/Landing";
 import Auth from "./pages/Auth";
 import PatientView from "./pages/PatientView";
 import NotFound from "./pages/NotFound";
@@ -28,10 +29,13 @@ const App = () => (
           <ErrorBoundary>
             <BrowserRouter>
               <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<Auth />} />
+                <Route path="/signup" element={<Auth />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={
+                <Route path="/dashboard" element={
                   <ProtectedRoute>
-                    <Landing />
+                    <DashboardLanding />
                   </ProtectedRoute>
                 } />
                 <Route path="/patient/:patientId" element={

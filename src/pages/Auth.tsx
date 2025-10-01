@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -22,6 +22,7 @@ const loginSchema = z.object({
 
 export default function Auth() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [signupData, setSignupData] = useState({
@@ -32,13 +33,16 @@ export default function Auth() {
     email: '',
     password: ''
   });
+  
+  // Determine default tab based on route
+  const defaultTab = location.pathname === '/signup' ? 'signup' : 'login';
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate('/');
+        navigate('/dashboard');
       }
     };
     checkUser();
@@ -71,7 +75,7 @@ export default function Auth() {
         }
       } else {
         // Since email confirmation is disabled, user is automatically signed in
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -107,7 +111,7 @@ export default function Auth() {
           setMessage({ type: 'error', text: error.message });
         }
       } else {
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -150,7 +154,7 @@ export default function Auth() {
 
         {/* Auth Tabs */}
         <Card className="medical-card p-6">
-          <Tabs defaultValue="login" className="w-full">
+          <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -260,6 +264,13 @@ export default function Auth() {
         
         <div className="text-center mt-6 text-sm text-muted-foreground">
           <p>By continuing, you agree to our Terms of Service and Privacy Policy</p>
+          <Button
+            variant="link"
+            onClick={() => navigate('/')}
+            className="mt-2"
+          >
+            ← Back to Home
+          </Button>
         </div>
       </div>
     </div>

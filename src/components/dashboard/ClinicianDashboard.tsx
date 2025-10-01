@@ -27,7 +27,7 @@ import {
   SecureConsultChat,
   PROTimeline,
   TodayView,
-  AIInsightsCards,
+  AIInsightsFeed,
   CaseDataPanels
 } from "./PremiumClinicalFeatures";
 import { useAuth } from "@/hooks/useAuth";
@@ -454,7 +454,7 @@ export default function ClinicianDashboard() {
             {/* AI Insights */}
             <section>
               <h2 className="text-lg font-semibold mb-4">AI-Powered Insights</h2>
-              <AIInsightsCards />
+              <AIInsightsFeed />
             </section>
 
             {/* Live Patient Radar */}
@@ -694,7 +694,7 @@ export default function ClinicianDashboard() {
           </TabsContent>
 
           <TabsContent value="medications" className="space-y-6">
-            <MedicationManagement showAll={true} />
+            <MedicationManagement />
           </TabsContent>
 
           <TabsContent value="patterns" className="space-y-6">
