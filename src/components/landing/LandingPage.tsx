@@ -90,7 +90,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:bg-black">
       {/* Theme Toggle - Top Right */}
       <div className="fixed top-4 right-4 z-50">
         <Button
@@ -181,7 +181,7 @@ export default function LandingPage() {
           </Badge>
           
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            NeuroLoop Nexus
+            NeuroLoop
           </h1>
           
           <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
@@ -255,8 +255,140 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* Research Statistics */}
+      <div className="bg-white dark:bg-gray-950 py-16 border-y border-gray-200 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">The Global Impact</h2>
+            <p className="text-xl text-muted-foreground">
+              Why better neurological health tracking matters
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <Card className="text-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-blue-600 mb-2">3.4B+</p>
+                <p className="text-sm text-muted-foreground">People with Neurological Conditions</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-purple-600 mb-2">65M+</p>
+                <p className="text-sm text-muted-foreground">People with Epilepsy Worldwide</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-pink-50 to-red-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-pink-600 mb-2">11M+</p>
+                <p className="text-sm text-muted-foreground">People with Parkinson's Disease</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-red-600 mb-2">$1.7T</p>
+                <p className="text-sm text-muted-foreground">Global Annual Spending on Brain Disorders</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-orange-600 mb-2">50%+</p>
+                <p className="text-sm text-muted-foreground">Epilepsy Cases with No Clear Cause</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-yellow-50 to-green-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-yellow-600 mb-2">30%</p>
+                <p className="text-sm text-muted-foreground">Don't Respond to First Medication</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-green-600 mb-2">1 in 4</p>
+                <p className="text-sm text-muted-foreground">Parkinson's Patients Misdiagnosed</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="text-center bg-gradient-to-br from-teal-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+              <CardContent className="pt-6">
+                <p className="text-4xl font-bold text-teal-600 mb-2">#1</p>
+                <p className="text-sm text-muted-foreground">Leading Cause of Disability Worldwide</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <Card className="bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900">
+              <CardContent className="pt-6">
+                <h3 className="font-bold text-lg mb-4 text-red-900 dark:text-red-100">Epilepsy Deaths (Yearly)</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Globally:</span>
+                    <span className="font-bold">~140,000</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">India:</span>
+                    <span className="font-bold">~31,176</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Australia:</span>
+                    <span className="font-bold">~285</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900">
+              <CardContent className="pt-6">
+                <h3 className="font-bold text-lg mb-4 text-purple-900 dark:text-purple-100">Parkinson's Deaths (Yearly)</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Globally:</span>
+                    <span className="font-bold">~420,000</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">India:</span>
+                    <span className="font-bold">~43,400</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Australia:</span>
+                    <span className="font-bold">~1,392</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gray-100 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+              <CardContent className="pt-6">
+                <h3 className="font-bold text-lg mb-4">All Neurological Deaths (Yearly)</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Globally:</span>
+                    <span className="font-bold">~9 Million</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">India:</span>
+                    <span className="font-bold">~1 Million</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Australia:</span>
+                    <span className="font-bold">~5,400</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
       {/* Who It's For */}
-      <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-950 dark:to-purple-950 py-16">
+      <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-950/20 dark:to-purple-950/20 py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Built For Everyone in the Care Journey</h2>
@@ -341,7 +473,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <Brain className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">NeuroLoop Nexus</span>
+              <span className="font-bold text-lg">NeuroLoop</span>
               <Badge variant="destructive" className="ml-2">DEMO</Badge>
             </div>
             <p className="text-sm text-muted-foreground text-center">
