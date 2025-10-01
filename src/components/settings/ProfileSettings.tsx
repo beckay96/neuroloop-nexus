@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import { 
   User, Mail, Phone, MapPin, Briefcase, Calendar, 
   Save, X, Upload, ArrowLeft
@@ -21,6 +22,7 @@ interface ProfileSettingsProps {
 export default function ProfileSettings({ onClose }: ProfileSettingsProps) {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   // Form state
   const [isEditing, setIsEditing] = useState(false);
@@ -72,11 +74,9 @@ export default function ProfileSettings({ onClose }: ProfileSettingsProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {onClose && (
-                <Button variant="ghost" size="icon" onClick={onClose}>
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-              )}
+              <Button variant="ghost" size="icon" onClick={() => onClose ? onClose() : navigate(-1)}>
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />

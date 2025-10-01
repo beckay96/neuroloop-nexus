@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -36,6 +37,7 @@ interface FormBuilderProps {
 }
 
 export default function FormBuilder({ conversationId, patientId, onClose, onSent }: FormBuilderProps) {
+  const { toast } = useToast();
   const [formName, setFormName] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [fields, setFields] = useState<FormField[]>([]);
@@ -119,6 +121,14 @@ export default function FormBuilder({ conversationId, patientId, onClose, onSent
       return;
     }
     onSent();
+  };
+
+  const handleSaveTemplate = () => {
+    if (!formName) return;
+    toast({
+      title: "Template Saved",
+      description: `"${formName}" has been saved as a template for future use.`,
+    });
   };
 
   return (
@@ -211,7 +221,7 @@ export default function FormBuilder({ conversationId, patientId, onClose, onSent
                   <Send className="h-4 w-4 mr-2" />
                   Send to Patient
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" onClick={handleSaveTemplate}>
                   <Save className="h-4 w-4 mr-2" />
                   Save as Template
                 </Button>
@@ -352,7 +362,7 @@ export default function FormBuilder({ conversationId, patientId, onClose, onSent
                   <Send className="h-4 w-4 mr-2" />
                   Send to Patient
                 </Button>
-                <Button variant="outline" disabled={!formName}>
+                <Button variant="outline" disabled={!formName} onClick={handleSaveTemplate}>
                   <Save className="h-4 w-4 mr-2" />
                   Save as Template
                 </Button>

@@ -1120,7 +1120,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   };
 
   const handleTrackingComplete = async (trackingData: any) => {
-    console.log("First tracking completed:", trackingData);
+    // First tracking completed - save to database in production
     setShowTrackingModal(false);
     
     try {

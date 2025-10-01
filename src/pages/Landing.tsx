@@ -117,7 +117,7 @@ export default function Landing() {
   const [showFirstTracking, setShowFirstTracking] = useState(false);
 
   const handleOnboardingComplete = async (data: any) => {
-    console.log("Onboarding completed:", data);
+    // Onboarding completed, save to database in production
     
     try {
       // Update profile to mark onboarding as completed

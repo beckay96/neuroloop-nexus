@@ -1,25 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { 
-  Check, 
-  X, 
-  Clock, 
-  Mail, 
-  User,
-  AlertCircle
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { AlertCircle, UserPlus, UserMinus, Clock, CheckCircle, Mail, User, X, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ConnectionRequest {
   id: string;
-  patient_id: string;
+  patient_id?: string;
   patient_email: string;
-  patient_name: string;
-  status: 'pending' | 'active' | 'rejected';
+  patient_name?: string;
+  status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   invited_by?: string;
 }
@@ -29,11 +22,12 @@ interface ConnectionRequestsProps {
   maxItems?: number;
 }
 
-export default function ConnectionRequests({ showAll = false, maxItems = 3 }: ConnectionRequestsProps) {
+export default function ConnectionRequests({ showAll = false, maxItems = 5 }: ConnectionRequestsProps) {
+  const { toast } = useToast();
   const [requests, setRequests] = useState<ConnectionRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
-  const { toast } = useToast();
+  const [showAllState, setShowAllState] = useState(showAll);
 
   useEffect(() => {
     loadConnectionRequests();
@@ -179,7 +173,13 @@ export default function ConnectionRequests({ showAll = false, maxItems = 3 }: Co
             )}
           </span>
           {!showAll && requests.length > maxItems && (
-            <Button variant="outline" size="sm" className="text-xs">
+            <Button variant="outline" size="sm" className="text-xs" onClick={() => {
+              setShowAllState(true);
+              toast({
+                title: "Showing All Requests",
+                description: `Viewing all ${requests.length} connection requests`,
+              });
+            }}>
               View All
             </Button>
           )}

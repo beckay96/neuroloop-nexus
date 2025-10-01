@@ -524,14 +524,24 @@ export function TodayView() {
   );
 }
 
-// ============= 10. AI Insights Cards =============
-export function AIInsightsCards() {
+// ============= 10. AI Insights Feed =============
+export function AIInsightsFeed() {
+  const { toast } = useToast();
+  const [dismissedInsights, setDismissedInsights] = useState<string[]>([]);
+
+  const handleDismissInsight = (insightId: string) => {
+    setDismissedInsights(prev => [...prev, insightId]);
+    toast({
+      title: "Insight Dismissed",
+      description: "This insight has been removed from your feed",
+    });
+  };
+
   const insights = [
     {
       insight_id: '1',
       type: 'did_you_know',
       content: 'Patients with >90% adherence have 45% fewer breakthrough seizures in your cohort',
-      impact: '+23 seizure-free days per patient'
     },
     {
       insight_id: '2',
@@ -547,9 +557,11 @@ export function AIInsightsCards() {
     }
   ];
 
+  const visibleInsights = insights.filter(i => !dismissedInsights.includes(i.insight_id));
+
   return (
     <div className="space-y-3">
-      {insights.map((insight) => (
+      {visibleInsights.map((insight) => (
         <Card key={insight.insight_id} className="medical-card border-l-4 border-l-blue-500 bg-blue-500/5">
           <CardContent className="pt-4">
             <div className="flex items-start gap-3">
@@ -558,7 +570,7 @@ export function AIInsightsCards() {
                 <p className="text-sm font-medium mb-1">{insight.content}</p>
                 <p className="text-xs text-muted-foreground">{insight.impact}</p>
               </div>
-              <Button variant="ghost" size="sm">✕</Button>
+              <Button variant="ghost" size="sm" onClick={() => handleDismissInsight(insight.insight_id)}>✕</Button>
             </div>
           </CardContent>
         </Card>

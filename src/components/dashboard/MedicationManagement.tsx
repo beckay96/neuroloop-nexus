@@ -1,22 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Pill, 
-  Clock, 
-  AlertTriangle, 
-  CheckCircle, 
-  TrendingUp, 
-  TrendingDown,
-  Calendar,
-  Activity,
-  Target,
-  Zap,
-  Heart
-} from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Pill, Target, Calendar, AlertTriangle, CheckCircle, Clock, TrendingUp, TrendingDown, Activity, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface MedicationDose {
   time: string;
@@ -68,9 +57,12 @@ interface MedicationManagementProps {
   maxItems?: number;
 }
 
-export default function MedicationManagement({ showAll = false, maxItems = 3 }: MedicationManagementProps) {
+export default function MedicationManagement() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const maxItems = 3;
 
   // Mock data for medication management
   const patientMedications: PatientMedication[] = [
@@ -274,7 +266,13 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
             Medication Management
           </span>
           {!showAll && patientMedications.length > maxItems && (
-            <Button variant="outline" size="sm" className="text-xs">
+            <Button variant="outline" size="sm" className="text-xs" onClick={() => {
+              setShowAll(true);
+              toast({
+                title: "Showing All Patients",
+                description: `Viewing all ${patientMedications.length} patients`,
+              });
+            }}>
               View All ({patientMedications.length})
             </Button>
           )}
@@ -422,11 +420,21 @@ export default function MedicationManagement({ showAll = false, maxItems = 3 }: 
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                      <Button variant="outline" size="sm" className="text-sm">
+                      <Button variant="outline" size="sm" className="text-sm" onClick={() => {
+                        toast({
+                          title: "Adjust Medication Regimen",
+                          description: `Opening regimen adjustment for ${patient.patientName}`,
+                        });
+                      }}>
                         <Target className="h-4 w-4 mr-2" />
                         Adjust Regimen
                       </Button>
-                      <Button variant="outline" size="sm" className="text-sm">
+                      <Button variant="outline" size="sm" className="text-sm" onClick={() => {
+                        toast({
+                          title: "Schedule Medication Review",
+                          description: `Scheduling review appointment for ${patient.patientName}`,
+                        });
+                      }}>
                         <Calendar className="h-4 w-4 mr-2" />
                         Schedule Review
                       </Button>

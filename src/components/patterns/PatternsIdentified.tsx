@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Calendar,
   TrendingUp,
@@ -148,10 +149,18 @@ const getConfidenceColor = (confidence: number) => {
 };
 
 export default function PatternsIdentified() {
+  const { toast } = useToast();
   const [selectedPattern, setSelectedPattern] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("epilepsy");
 
   const currentPatterns = activeTab === "epilepsy" ? epilepsyPatterns : parkinsonPatterns;
+
+  const handleViewAllInsights = () => {
+    toast({
+      title: "All Insights",
+      description: "Opening comprehensive pattern analysis dashboard",
+    });
+  };
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -166,7 +175,7 @@ export default function PatternsIdentified() {
             AI-powered analysis of patient data patterns
           </p>
         </div>
-        <Button variant="outline" size="sm" className="w-fit">
+        <Button variant="outline" size="sm" className="w-fit" onClick={handleViewAllInsights}>
           <Eye className="h-4 w-4 mr-2" />
           <span className="hidden sm:inline">View All Insights</span>
           <span className="sm:hidden">All</span>

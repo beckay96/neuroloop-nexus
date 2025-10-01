@@ -1,10 +1,19 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { ReactNode, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, Calendar, Phone, MessageSquare, Heart, Activity, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, Clock, Activity, Phone, Calendar, MessageSquare, Heart } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface PatientAlert {
   id: string;
@@ -41,7 +50,10 @@ const getSeverityColor = (severity: string) => {
   }
 };
 
-export default function PatientAlertDialog({ alert, children }: PatientAlertDialogProps) {
+export default function PatientAlertDialog({ children, alert }: PatientAlertDialogProps) {
+  const { toast } = useToast();
+  const [clinicalNotes, setClinicalNotes] = useState("");
+  const [open, setOpen] = useState(false);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -129,11 +141,21 @@ export default function PatientAlertDialog({ alert, children }: PatientAlertDial
             <CardContent>
               <p className="text-sm mb-3">{alert.action}</p>
               <div className="flex flex-col sm:flex-row gap-2">
-                <Button size="sm" className="flex-1">
+                <Button size="sm" className="flex-1" onClick={() => {
+                  toast({
+                    title: "Contacting Patient",
+                    description: `Initiating secure communication with ${alert.patientName}`,
+                  });
+                }}>
                   <Phone className="h-4 w-4 mr-2" />
                   Contact Patient
                 </Button>
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => {
+                  toast({
+                    title: "Schedule Visit",
+                    description: `Opening scheduler for ${alert.patientName}`,
+                  });
+                }}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule Visit
                 </Button>
@@ -149,13 +171,28 @@ export default function PatientAlertDialog({ alert, children }: PatientAlertDial
             <Textarea
               placeholder="Add your clinical notes and action taken..."
               className="min-h-[80px]"
+              value={clinicalNotes}
+              onChange={(e) => setClinicalNotes(e.target.value)}
             />
             <div className="flex flex-col sm:flex-row gap-2">
-              <Button className="flex-1">
+              <Button className="flex-1" onClick={() => {
+                toast({
+                  title: "Alert Acknowledged",
+                  description: "Clinical notes saved and alert marked as reviewed",
+                });
+                setClinicalNotes("");
+                setOpen(false);
+              }}>
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Save & Acknowledge
               </Button>
-              <Button variant="outline" className="flex-1">
+              <Button variant="outline" className="flex-1" onClick={() => {
+                toast({
+                  title: "Alert Resolved",
+                  description: `Alert for ${alert.patientName} marked as resolved`,
+                });
+                setOpen(false);
+              }}>
                 Mark as Resolved
               </Button>
             </div>

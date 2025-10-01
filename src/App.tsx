@@ -11,6 +11,10 @@ import Auth from "./pages/Auth";
 import PatientView from "./pages/PatientView";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import ProfileSettings from "@/components/settings/ProfileSettings";
+import PrivacySettings from "@/pages/settings/PrivacySettings";
+import NotificationSettings from "@/pages/settings/NotificationSettings";
+import AllNotifications from "@/pages/AllNotifications";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +37,26 @@ const App = () => (
                 <Route path="/patient/:patientId" element={
                   <ProtectedRoute>
                     <PatientView />
+                  </ProtectedRoute>
+                } />
+                <Route path="/settings/profile" element={
+                  <ProtectedRoute>
+                    <ProfileSettings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/settings/privacy" element={
+                  <ProtectedRoute>
+                    <PrivacySettings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/settings/notifications" element={
+                  <ProtectedRoute>
+                    <NotificationSettings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/notifications" element={
+                  <ProtectedRoute>
+                    <AllNotifications />
                   </ProtectedRoute>
                 } />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

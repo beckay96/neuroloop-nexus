@@ -1,20 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Brain, 
-  Activity, 
-  TrendingUp, 
-  TrendingDown, 
-  Clock, 
-  FileText,
-  AlertTriangle,
-  CheckCircle,
-  Calendar
-} from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Brain, Calendar, TrendingUp, TrendingDown, Minus, AlertCircle, CheckCircle, FileText, Activity, AlertTriangle, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface ClinicalScale {
   id: string;
@@ -41,11 +32,12 @@ interface ClinicalScalesProps {
   maxItems?: number;
 }
 
-export default function ClinicalScales({ showAll = false, maxItems = 4 }: ClinicalScalesProps) {
+export default function ClinicalScales() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedScale, setSelectedScale] = useState<string | null>(null);
-
-  // Mock data for clinical scales
+  const [showAll, setShowAll] = useState(false);
+  const maxItems = 3;
   const clinicalScales: ClinicalScale[] = [
     {
       id: '1',
@@ -187,7 +179,13 @@ export default function ClinicalScales({ showAll = false, maxItems = 4 }: Clinic
             Clinical Scales & Assessments
           </span>
           {!showAll && clinicalScales.length > maxItems && (
-            <Button variant="outline" size="sm" className="text-xs">
+            <Button variant="outline" size="sm" className="text-xs" onClick={() => {
+              setShowAll(true);
+              toast({
+                title: "Showing All Assessments",
+                description: `Viewing all ${clinicalScales.length} clinical assessments`,
+              });
+            }}>
               View All ({clinicalScales.length})
             </Button>
           )}
@@ -274,11 +272,21 @@ export default function ClinicalScales({ showAll = false, maxItems = 4 }: Clinic
                       ))}
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                      <Button variant="outline" size="sm" className="text-sm">
+                      <Button variant="outline" size="sm" className="text-sm" onClick={() => {
+                        toast({
+                          title: "Full Assessment Report",
+                          description: `Opening detailed report for ${scale.patientName}`,
+                        });
+                      }}>
                         <FileText className="h-4 w-4 mr-2" />
                         View Full Report
                       </Button>
-                      <Button variant="outline" size="sm" className="text-sm">
+                      <Button variant="outline" size="sm" className="text-sm" onClick={() => {
+                        toast({
+                          title: "Schedule Follow-up",
+                          description: `Scheduling follow-up assessment for ${scale.patientName}`,
+                        });
+                      }}>
                         <Calendar className="h-4 w-4 mr-2" />
                         Schedule Follow-up
                       </Button>

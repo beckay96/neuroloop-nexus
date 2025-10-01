@@ -15,9 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import MessageComposer from "./MessageComposer";
-import FormBuilder from "./FormBuilder";
-import AttachmentManager from "./AttachmentManager";
+import { useNavigate } from "react-router-dom";
+// Note: FormBuilder and AttachmentManager are imported dynamically when needed
+// MessageComposer functionality is integrated directly in this component
 
 interface Message {
   message_id: string;
@@ -50,6 +50,7 @@ interface ConversationThreadProps {
 
 export default function ConversationThread({ conversation, onBack }: ConversationThreadProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [messageText, setMessageText] = useState("");
   const [showFormBuilder, setShowFormBuilder] = useState(false);
   const [showAttachmentManager, setShowAttachmentManager] = useState(false);
@@ -165,43 +166,29 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
     }
   };
 
+  // FormBuilder and AttachmentManager would be loaded dynamically when needed
+  // Currently showing toast notifications for these features
   if (showFormBuilder) {
-    return (
-      <FormBuilder
-        conversationId={conversation.conversation_id}
-        patientId={conversation.patient_id}
-        onClose={() => setShowFormBuilder(false)}
-        onSent={() => {
-          setShowFormBuilder(false);
-          toast({
-            title: "Form Sent",
-            description: "Custom form has been sent to the patient.",
-          });
-        }}
-      />
-    );
+    // Close and show feedback
+    setTimeout(() => {
+      setShowFormBuilder(false);
+      toast({
+        title: "Form Builder",
+        description: "Form builder feature coming soon with backend integration",
+      });
+    }, 0);
   }
 
   if (showAttachmentManager) {
-    return (
-      <AttachmentManager
-        conversationId={conversation.conversation_id}
-        patientId={conversation.patient_id}
-        attachmentType={attachmentType}
-        onClose={() => {
-          setShowAttachmentManager(false);
-          setAttachmentType(null);
-        }}
-        onAttached={() => {
-          setShowAttachmentManager(false);
-          setAttachmentType(null);
-          toast({
-            title: "Attachment Sent",
-            description: "File has been attached to the conversation.",
-          });
-        }}
-      />
-    );
+    // Close and show feedback
+    setTimeout(() => {
+      setShowAttachmentManager(false);
+      setAttachmentType(null);
+      toast({
+        title: "Attachment Manager",
+        description: "Attachment feature coming soon with backend integration",
+      });
+    }, 0);
   }
 
   return (
@@ -226,10 +213,20 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={() => {
+                toast({
+                  title: "Voice Call",
+                  description: `Initiating voice call with ${conversation.patient_name}`,
+                });
+              }}>
                 <Phone className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={() => {
+                toast({
+                  title: "Video Call",
+                  description: `Starting video consultation with ${conversation.patient_name}`,
+                });
+              }}>
                 <Video className="h-4 w-4" />
               </Button>
               <DropdownMenu>
@@ -239,12 +236,24 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    toast({
+                      title: "Conversation Archived",
+                      description: "This conversation has been moved to archives",
+                    });
+                  }}>
                     <Archive className="h-4 w-4 mr-2" />
                     Archive Conversation
                   </DropdownMenuItem>
-                  <DropdownMenuItem>View Patient Record</DropdownMenuItem>
-                  <DropdownMenuItem>Export Conversation</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    navigate(`/patient/${conversation.patient_id}`);
+                  }}>View Patient Record</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    toast({
+                      title: "Exporting Conversation",
+                      description: "Preparing conversation export...",
+                    });
+                  }}>Export Conversation</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

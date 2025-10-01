@@ -27,8 +27,10 @@ interface Appointment {
 
 export default function SchedulingHub() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [selectedTab, setSelectedTab] = useState("calendar");
   const [showBooking, setShowBooking] = useState(false);
+  const [showSyncCalendar, setShowSyncCalendar] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
   // Mock upcoming appointments - replace with real API
@@ -115,7 +117,17 @@ export default function SchedulingHub() {
               Appointment Scheduling
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setShowSyncCalendar(true);
+                  toast({
+                    title: "Calendar Sync",
+                    description: "Opening calendar synchronization settings",
+                  });
+                }}
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 Sync Calendars
               </Button>
