@@ -47,6 +47,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_insights_cards: {
+        Row: {
+          clinician_id: string
+          content: string
+          dismissed: boolean | null
+          generated_at: string | null
+          impact_metric: Json | null
+          insight_id: string
+          insight_type: string
+          is_read: boolean | null
+          related_patient_id: string | null
+        }
+        Insert: {
+          clinician_id: string
+          content: string
+          dismissed?: boolean | null
+          generated_at?: string | null
+          impact_metric?: Json | null
+          insight_id?: string
+          insight_type: string
+          is_read?: boolean | null
+          related_patient_id?: string | null
+        }
+        Update: {
+          clinician_id?: string
+          content?: string
+          dismissed?: boolean | null
+          generated_at?: string | null
+          impact_metric?: Json | null
+          insight_id?: string
+          insight_type?: string
+          is_read?: boolean | null
+          related_patient_id?: string | null
+        }
+        Relationships: []
+      }
       audit_log: {
         Row: {
           action: string
@@ -289,6 +325,36 @@ export type Database = {
           },
         ]
       }
+      case_data_panels: {
+        Row: {
+          added_at: string | null
+          content: Json
+          is_active: boolean | null
+          panel_id: string
+          panel_type: string
+          patient_id: string
+          priority: number | null
+        }
+        Insert: {
+          added_at?: string | null
+          content: Json
+          is_active?: boolean | null
+          panel_id?: string
+          panel_type: string
+          patient_id: string
+          priority?: number | null
+        }
+        Update: {
+          added_at?: string | null
+          content?: Json
+          is_active?: boolean | null
+          panel_id?: string
+          panel_type?: string
+          patient_id?: string
+          priority?: number | null
+        }
+        Relationships: []
+      }
       clinical_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -423,6 +489,45 @@ export type Database = {
           },
         ]
       }
+      clinical_notes_exports: {
+        Row: {
+          author_id: string
+          content: string
+          file_path: string | null
+          format: string
+          generated_at: string | null
+          note_id: string
+          patient_id: string
+          shared_with: Json | null
+          status: string | null
+          template_used: string | null
+        }
+        Insert: {
+          author_id: string
+          content: string
+          file_path?: string | null
+          format: string
+          generated_at?: string | null
+          note_id?: string
+          patient_id: string
+          shared_with?: Json | null
+          status?: string | null
+          template_used?: string | null
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          file_path?: string | null
+          format?: string
+          generated_at?: string | null
+          note_id?: string
+          patient_id?: string
+          shared_with?: Json | null
+          status?: string | null
+          template_used?: string | null
+        }
+        Relationships: []
+      }
       clinical_reports: {
         Row: {
           clinician_id: string
@@ -482,6 +587,51 @@ export type Database = {
           },
         ]
       }
+      clinical_scale_results: {
+        Row: {
+          assessed_at: string
+          change_alert: boolean | null
+          created_at: string | null
+          due_at: string | null
+          entered_by: string
+          notes: string | null
+          patient_id: string
+          scale_id: string
+          scale_type: string
+          score: number
+          subscores: Json | null
+          trend: Json | null
+        }
+        Insert: {
+          assessed_at: string
+          change_alert?: boolean | null
+          created_at?: string | null
+          due_at?: string | null
+          entered_by: string
+          notes?: string | null
+          patient_id: string
+          scale_id?: string
+          scale_type: string
+          score: number
+          subscores?: Json | null
+          trend?: Json | null
+        }
+        Update: {
+          assessed_at?: string
+          change_alert?: boolean | null
+          created_at?: string | null
+          due_at?: string | null
+          entered_by?: string
+          notes?: string | null
+          patient_id?: string
+          scale_id?: string
+          scale_type?: string
+          score?: number
+          subscores?: Json | null
+          trend?: Json | null
+        }
+        Relationships: []
+      }
       clinician_onboarding_data: {
         Row: {
           clinician_title: string | null
@@ -524,6 +674,42 @@ export type Database = {
           specialty?: string | null
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      clinician_today_view: {
+        Row: {
+          alerts: Json | null
+          appointments: Json | null
+          clinician_id: string
+          created_at: string | null
+          date: string | null
+          high_priority_patients: Json | null
+          pending_tasks: Json | null
+          updated_at: string | null
+          view_id: string
+        }
+        Insert: {
+          alerts?: Json | null
+          appointments?: Json | null
+          clinician_id: string
+          created_at?: string | null
+          date?: string | null
+          high_priority_patients?: Json | null
+          pending_tasks?: Json | null
+          updated_at?: string | null
+          view_id?: string
+        }
+        Update: {
+          alerts?: Json | null
+          appointments?: Json | null
+          clinician_id?: string
+          created_at?: string | null
+          date?: string | null
+          high_priority_patients?: Json | null
+          pending_tasks?: Json | null
+          updated_at?: string | null
+          view_id?: string
         }
         Relationships: []
       }
@@ -912,6 +1098,48 @@ export type Database = {
           },
         ]
       }
+      neuro_imaging_results: {
+        Row: {
+          annotations: Json | null
+          dicom_uid: string | null
+          findings_summary: string | null
+          image_id: string
+          image_path: string | null
+          patient_id: string
+          radiologist_id: string | null
+          status: string | null
+          study_date: string | null
+          study_type: string
+          uploaded_at: string | null
+        }
+        Insert: {
+          annotations?: Json | null
+          dicom_uid?: string | null
+          findings_summary?: string | null
+          image_id?: string
+          image_path?: string | null
+          patient_id: string
+          radiologist_id?: string | null
+          status?: string | null
+          study_date?: string | null
+          study_type: string
+          uploaded_at?: string | null
+        }
+        Update: {
+          annotations?: Json | null
+          dicom_uid?: string | null
+          findings_summary?: string | null
+          image_id?: string
+          image_path?: string | null
+          patient_id?: string
+          radiologist_id?: string | null
+          status?: string | null
+          study_date?: string | null
+          study_type?: string
+          uploaded_at?: string | null
+        }
+        Relationships: []
+      }
       onboarding_progress: {
         Row: {
           completed: boolean | null
@@ -1044,6 +1272,120 @@ export type Database = {
           },
         ]
       }
+      patient_clinician_connections: {
+        Row: {
+          clinician_id: string
+          connected_at: string | null
+          created_at: string | null
+          id: string
+          invited_by: string | null
+          patient_id: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          clinician_id: string
+          connected_at?: string | null
+          created_at?: string | null
+          id?: string
+          invited_by?: string | null
+          patient_id: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          clinician_id?: string
+          connected_at?: string | null
+          created_at?: string | null
+          id?: string
+          invited_by?: string | null
+          patient_id?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      patient_collab_chat: {
+        Row: {
+          attachments: Json | null
+          is_read: boolean | null
+          is_urgent: boolean | null
+          mentioned_users: string[] | null
+          message: string
+          message_id: string
+          patient_id: string
+          read_at: string | null
+          sender_id: string
+          sent_at: string | null
+          thread_id: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          is_read?: boolean | null
+          is_urgent?: boolean | null
+          mentioned_users?: string[] | null
+          message: string
+          message_id?: string
+          patient_id: string
+          read_at?: string | null
+          sender_id: string
+          sent_at?: string | null
+          thread_id?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          is_read?: boolean | null
+          is_urgent?: boolean | null
+          mentioned_users?: string[] | null
+          message?: string
+          message_id?: string
+          patient_id?: string
+          read_at?: string | null
+          sender_id?: string
+          sent_at?: string | null
+          thread_id?: string | null
+        }
+        Relationships: []
+      }
+      patient_invites: {
+        Row: {
+          accepted_at: string | null
+          clinician_id: string
+          created_at: string | null
+          email: string
+          expires_at: string | null
+          id: string
+          invite_id: string | null
+          invited_at: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          clinician_id: string
+          created_at?: string | null
+          email: string
+          expires_at?: string | null
+          id?: string
+          invite_id?: string | null
+          invited_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          clinician_id?: string
+          created_at?: string | null
+          email?: string
+          expires_at?: string | null
+          id?: string
+          invite_id?: string | null
+          invited_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       patient_onboarding_data: {
         Row: {
           carer_email: string | null
@@ -1104,6 +1446,39 @@ export type Database = {
         }
         Relationships: []
       }
+      patient_pro_timeline: {
+        Row: {
+          linked_intervention: string | null
+          notes: string | null
+          patient_id: string
+          pro_id: string
+          pro_type: string
+          reported_at: string | null
+          severity: number | null
+          value: Json
+        }
+        Insert: {
+          linked_intervention?: string | null
+          notes?: string | null
+          patient_id: string
+          pro_id?: string
+          pro_type: string
+          reported_at?: string | null
+          severity?: number | null
+          value: Json
+        }
+        Update: {
+          linked_intervention?: string | null
+          notes?: string | null
+          patient_id?: string
+          pro_id?: string
+          pro_type?: string
+          reported_at?: string | null
+          severity?: number | null
+          value?: Json
+        }
+        Relationships: []
+      }
       patient_profiles: {
         Row: {
           created_at: string | null
@@ -1147,6 +1522,72 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      patient_risk_alerts: {
+        Row: {
+          alert_id: string
+          alert_level: string
+          created_at: string | null
+          patient_id: string
+          reason: string
+          resolved_at: string | null
+          resolved_by: string | null
+          risk_type: string
+          score: number
+          status: string | null
+        }
+        Insert: {
+          alert_id?: string
+          alert_level: string
+          created_at?: string | null
+          patient_id: string
+          reason: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          risk_type: string
+          score: number
+          status?: string | null
+        }
+        Update: {
+          alert_id?: string
+          alert_level?: string
+          created_at?: string | null
+          patient_id?: string
+          reason?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          risk_type?: string
+          score?: number
+          status?: string | null
+        }
+        Relationships: []
+      }
+      patient_snapshots: {
+        Row: {
+          author: string | null
+          generated_at: string | null
+          highlight_events: Json | null
+          patient_id: string
+          snapshot_id: string
+          summary: string
+        }
+        Insert: {
+          author?: string | null
+          generated_at?: string | null
+          highlight_events?: Json | null
+          patient_id: string
+          snapshot_id?: string
+          summary: string
+        }
+        Update: {
+          author?: string | null
+          generated_at?: string | null
+          highlight_events?: Json | null
+          patient_id?: string
+          snapshot_id?: string
+          summary?: string
+        }
+        Relationships: []
       }
       patient_timeline: {
         Row: {
