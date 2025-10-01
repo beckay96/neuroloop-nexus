@@ -623,9 +623,10 @@ export default function ClinicianDashboard() {
                                 size="sm" 
                                 className="text-xs flex-1 sm:flex-none"
                                 onClick={() => {
+                                  setSelectedTab('scheduling');
                                   toast({
-                                    title: "Schedule Appointment",
-                                    description: `Opening scheduling for ${patient.name}...`,
+                                    title: "Opening Scheduling",
+                                    description: `Switched to scheduling tab for ${patient.name}`,
                                   });
                                 }}
                               >
@@ -637,9 +638,10 @@ export default function ClinicianDashboard() {
                                 size="sm" 
                                 className="text-xs flex-1 sm:flex-none"
                                 onClick={() => {
+                                  setSelectedTab('analytics');
                                   toast({
                                     title: "Patient Analytics",
-                                    description: `Loading analytics for ${patient.name}...`,
+                                    description: `Viewing analytics for ${patient.name}`,
                                   });
                                 }}
                               >
@@ -781,9 +783,10 @@ export default function ClinicianDashboard() {
                       size="sm" 
                       className="text-xs sm:text-sm"
                       onClick={() => {
+                        setSelectedTab('scheduling');
                         toast({
-                          title: "Schedule Appointment",
-                          description: `Opening scheduling for ${patient.name}...`,
+                          title: "Opening Scheduling",
+                          description: `Switched to scheduling tab for ${patient.name}`,
                         });
                       }}
                     >
@@ -796,9 +799,10 @@ export default function ClinicianDashboard() {
                       size="sm" 
                       className="text-xs sm:text-sm"
                       onClick={() => {
+                        setSelectedTab('analytics');
                         toast({
                           title: "Patient Analytics",
-                          description: `Loading detailed analytics for ${patient.name}...`,
+                          description: `Viewing analytics for ${patient.name}`,
                         });
                       }}
                     >
@@ -886,9 +890,11 @@ export default function ClinicianDashboard() {
                     <Button 
                       className="w-full"
                       onClick={() => {
+                        // Scroll to top of analytics section
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                         toast({
                           title: "Advanced Analytics",
-                          description: "Loading comprehensive population health analytics dashboard...",
+                          description: "Viewing comprehensive population health analytics",
                         });
                       }}
                     >

@@ -411,13 +411,19 @@ export function PROTimeline({ patientId }: { patientId: string }) {
 
 // ============= 9. Personalized Today View =============
 export function TodayView() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   const todayData = {
     appointments: [
-      { time: '09:00 AM', patient: 'Sarah Johnson', type: 'Follow-up' },
-      { time: '10:30 AM', patient: 'Michael Chen', type: 'New Patient' },
-      { time: '02:00 PM', patient: 'Emily Rodriguez', type: 'Medication Review' }
+      { time: '09:00 AM', patient: 'Sarah Johnson', type: 'Follow-up', patientId: 'P001' },
+      { time: '10:30 AM', patient: 'Michael Chen', type: 'New Patient', patientId: 'P002' },
+      { time: '02:00 PM', patient: 'Emily Rodriguez', type: 'Medication Review', patientId: 'P003' }
     ],
-    high_priority: ['Sarah Johnson (Seizure cluster)', 'Robert Kim (Fall risk)'],
+    high_priority: [
+      { text: 'Sarah Johnson (Seizure cluster)', patientId: 'P001' },
+      { text: 'Robert Kim (Fall risk)', patientId: 'P005' }
+    ],
     pending_tasks: [
       'Review MRI for Lisa Parker',
       'Sign off on 3 clinical notes',
@@ -437,7 +443,17 @@ export function TodayView() {
         <CardContent>
           <div className="space-y-2">
             {todayData.appointments.map((apt, idx) => (
-              <div key={idx} className="p-2 bg-muted rounded text-sm">
+              <div 
+                key={idx} 
+                className="p-2 bg-muted rounded text-sm cursor-pointer hover:bg-muted/80 transition-colors"
+                onClick={() => {
+                  navigate(`/patient/${apt.patientId}`);
+                  toast({
+                    title: "Opening Patient Record",
+                    description: `Viewing details for ${apt.patient}`,
+                  });
+                }}
+              >
                 <div className="font-semibold">{apt.time}</div>
                 <div>{apt.patient}</div>
                 <Badge variant="outline" className="text-xs mt-1">{apt.type}</Badge>
@@ -457,8 +473,18 @@ export function TodayView() {
         <CardContent>
           <div className="space-y-2">
             {todayData.high_priority.map((item, idx) => (
-              <div key={idx} className="p-2 bg-red-500/10 rounded text-sm border border-red-500/20">
-                {item}
+              <div 
+                key={idx} 
+                className="p-2 bg-red-500/10 rounded text-sm border border-red-500/20 cursor-pointer hover:bg-red-500/20 transition-colors"
+                onClick={() => {
+                  navigate(`/patient/${item.patientId}`);
+                  toast({
+                    title: "High Priority Patient",
+                    description: "Opening patient record",
+                  });
+                }}
+              >
+                {item.text}
               </div>
             ))}
           </div>
@@ -475,8 +501,19 @@ export function TodayView() {
         <CardContent>
           <div className="space-y-2">
             {todayData.pending_tasks.map((task, idx) => (
-              <div key={idx} className="p-2 bg-muted rounded text-sm flex items-start gap-2">
-                <input type="checkbox" className="mt-1" />
+              <div key={idx} className="p-2 bg-muted rounded text-sm flex items-start gap-2 hover:bg-muted/80 transition-colors">
+                <input 
+                  type="checkbox" 
+                  className="mt-1 cursor-pointer" 
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      toast({
+                        title: "Task Completed",
+                        description: task,
+                      });
+                    }
+                  }}
+                />
                 <span>{task}</span>
               </div>
             ))}
