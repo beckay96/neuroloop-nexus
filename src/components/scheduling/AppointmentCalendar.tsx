@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Video, MapPin, Clock } from "lucide-react";
 
 interface Appointment {
   appointment_id: string;
+  patient_id: string;
   patient_name: string;
   title: string;
   scheduled_start: string;
@@ -13,6 +14,7 @@ interface Appointment {
   status: string;
   location_type: 'in_person' | 'video' | 'phone';
   appointment_type: string;
+  video_call_link?: string;
 }
 
 interface AppointmentCalendarProps {
