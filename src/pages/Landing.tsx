@@ -199,14 +199,14 @@ export default function Landing() {
 
   if (showUserTypeSelector) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        <header className="border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center">
                 <Brain className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold">NeuroLoop</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">NeuroLoop</span>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
@@ -226,15 +226,15 @@ export default function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center">
               <Brain className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold">NeuroLoop</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">NeuroLoop</span>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -249,7 +249,7 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-24 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden bg-white/50 dark:bg-gray-900/50">
         <div className="absolute inset-0 bg-gradient-subtle opacity-50" />
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10">
           <img 
@@ -261,7 +261,7 @@ export default function Landing() {
         
         <div className="container mx-auto relative z-10">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-gray-900 dark:text-white">
               Advanced{" "}
               <span className="bg-gradient-hero bg-clip-text text-transparent">
                 Neurological
@@ -269,7 +269,7 @@ export default function Landing() {
               Condition Tracking
             </h1>
             
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
               Designed specifically for epilepsy, Parkinson's, and other neurological conditions. 
               Track symptoms, manage medications, and contribute to life-saving research.
             </p>
@@ -289,15 +289,15 @@ export default function Landing() {
             </div>
             
             <div className="flex flex-wrap gap-2">
-              <div className="flex items-center text-sm text-muted-foreground">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Shield className="h-4 w-4 mr-2 text-success" />
                 HIPAA Compliant
               </div>
-              <div className="flex items-center text-sm text-muted-foreground">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Users className="h-4 w-4 mr-2 text-primary" />
                 Trusted by Healthcare Professionals
               </div>
-              <div className="flex items-center text-sm text-muted-foreground">
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Brain className="h-4 w-4 mr-2 text-secondary" />
                 Research Grade
               </div>
@@ -307,13 +307,13 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 px-4 bg-muted/30">
+      <section className="py-24 px-4 bg-gray-100/50 dark:bg-gray-800/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
               Built for Better Outcomes
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Every feature is designed with neurological conditions in mind, 
               combining clinical expertise with cutting-edge technology.
             </p>
@@ -323,12 +323,12 @@ export default function Landing() {
             {features.map((feature, index) => {
               const IconComponent = feature.icon;
               return (
-                <Card key={index} className="medical-card p-6 text-center">
+                <Card key={index} className="medical-card p-6 text-center bg-white dark:bg-gray-900 border-2 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mx-auto mb-4">
                     <IconComponent className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground text-sm">{feature.description}</p>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{feature.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">{feature.description}</p>
                 </Card>
               );
             })}
@@ -341,10 +341,10 @@ export default function Landing() {
         <div className="container mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
                 Specialized for Your Condition
               </h2>
-              <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
                 NeuroLoop is specifically designed for neurological conditions, 
                 with specialized tracking features for each diagnosis.
               </p>
@@ -353,7 +353,7 @@ export default function Landing() {
                 {conditions.map((condition, index) => (
                   <div key={index} className="flex items-center">
                     <div className="w-2 h-2 rounded-full bg-primary mr-3" />
-                    <span className="text-muted-foreground">{condition}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{condition}</span>
                   </div>
                 ))}
               </div>
@@ -364,24 +364,24 @@ export default function Landing() {
               </Button>
             </div>
             
-            <div className="bg-gradient-subtle rounded-2xl p-8 medical-card">
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 rounded-2xl p-8 medical-card border-2 dark:border-gray-700">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Brain className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Research Impact</h3>
-                <p className="text-muted-foreground mb-6">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Research Impact</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
                   Your anonymized data contributes to groundbreaking research 
                   that helps develop better treatments for neurological conditions.
                 </p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-primary">10K+</div>
-                    <div className="text-muted-foreground">Patients Helped</div>
+                    <div className="text-gray-600 dark:text-gray-400">Patients Helped</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-secondary">50+</div>
-                    <div className="text-muted-foreground">Research Studies</div>
+                    <div className="text-gray-600 dark:text-gray-400">Research Studies</div>
                   </div>
                 </div>
               </div>
@@ -414,17 +414,17 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-card border-t py-12 px-4">
+      <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-12 px-4">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
               <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center">
                 <Brain className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold">NeuroLoop</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">NeuroLoop</span>
             </div>
             
-            <div className="flex items-center space-x-8 text-sm text-muted-foreground">
+            <div className="flex items-center space-x-8 text-sm text-gray-600 dark:text-gray-400">
               <span>Privacy Policy</span>
               <span>Terms of Service</span>
               <span>HIPAA Compliance</span>
@@ -432,7 +432,7 @@ export default function Landing() {
             </div>
           </div>
           
-          <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
+          <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 text-center text-sm text-gray-600 dark:text-gray-400">
             <p>© 2024 NeuroLoop. All rights reserved. Made for better neurological care.</p>
           </div>
         </div>
