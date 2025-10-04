@@ -221,9 +221,9 @@ export default function PatientDashboard() {
           const wellnessData = {
             user_id: user.id,
             log_date: data.log_date,
-            mood: numericToMoodEnum(data.mood_numeric),
-            energy_level: numericToEnergyEnum(data.energy_numeric),
-            sleep_quality: numericToSleepEnum(data.sleep_numeric),
+            mood: numericToMoodEnum(data.mood_numeric) as any,
+            energy_level: numericToEnergyEnum(data.energy_numeric) as any,
+            sleep_quality: numericToSleepEnum(data.sleep_numeric) as any,
             sleep_hours: data.sleep_hours,
             sleep_interruptions: data.sleep_interruptions,
             exercise_minutes: data.exercise_minutes,
@@ -234,7 +234,7 @@ export default function PatientDashboard() {
           
           const { error: wellnessError } = await supabase
             .from('daily_wellness_logs')
-            .upsert(wellnessData, { onConflict: 'user_id,log_date' });
+            .upsert([wellnessData], { onConflict: 'user_id,log_date' });
           if (wellnessError) throw wellnessError;
           toast({ title: "✅ Daily tracking saved" });
           break;
@@ -266,8 +266,7 @@ export default function PatientDashboard() {
             .from('menstrual_cycle_logs')
             .insert({
               user_id: user.id,
-              basal_body_temperature: data.temperature,
-              log_date: data.date,
+              cycle_start_date: data.date,
               notes: data.notes
             });
           if (tempError) throw tempError;
