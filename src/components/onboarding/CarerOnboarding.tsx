@@ -61,33 +61,27 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
         if (!user) return;
 
         const { error: carerError } = await supabase
-          .from('carer_onboarding_data')
-          .insert({
+          .from('carer_profiles')
+          .upsert([{
             user_id: user.id,
             first_name: formData.firstName,
-            middle_name: formData.middleName,
             last_name: formData.lastName,
-            date_of_birth: formData.dateOfBirth,
-            phone_number: formData.phoneNumber,
-            patient_date_of_birth: formData.patientDateOfBirth,
-            relationship_to_patient: formData.relationshipToPatient
-          });
+            relationship: formData.relationshipToPatient as any
+          }], { onConflict: 'user_id' });
 
         if (carerError) {
           console.error('Error saving carer data:', carerError);
           return;
         }
 
-        // Update onboarding progress
+        // Mark onboarding complete
         const { error: progressError } = await supabase
-          .from('onboarding_progress')
-          .upsert({
-            user_id: user.id,
-            user_type: 'carer',
-            current_step: 3,
-            completed: true,
-            step_data: formData
-          });
+          .from('profiles')
+          .upsert([{
+            id: user.id,
+            user_type: 'carer' as const,
+            onboarding_completed: true
+          }]);
 
         if (progressError) {
           console.error('Error updating progress:', progressError);

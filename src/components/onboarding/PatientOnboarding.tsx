@@ -188,13 +188,13 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         // 1. Create patient profile
         const { error: profileError } = await supabase
           .from('patient_profiles')
-          .upsert({
+          .upsert([{
             user_id: user.id,
             first_name: formData.firstName,
             last_name: formData.lastName,
             date_of_birth: formData.dateOfBirth || null,
-            gender: formData.gender || null
-          });
+            gender: (formData.gender as any) || null
+          }], { onConflict: 'user_id' });
 
         if (profileError) {
           console.error('Error saving patient profile:', profileError);
@@ -204,11 +204,11 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         // 2. Create profiles record with user type
         const { error: userProfileError } = await supabase
           .from('profiles')
-          .upsert({
+          .upsert([{
             id: user.id,
-            user_type: 'patient',
+            user_type: 'patient' as const,
             onboarding_completed: true
-          });
+          }]);
 
         if (userProfileError) {
           console.error('Error saving profiles:', userProfileError);
@@ -230,14 +230,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         // 4. Save onboarding data
         const { error: onboardingError } = await supabase
           .from('patient_onboarding_data')
-          .upsert({
+          .upsert([{
             user_id: user.id,
             selected_conditions: conditionUUIDs,
             track_menstrual_cycle: formData.trackMenstrual,
             share_research_data: formData.shareResearchData,
-            research_data_types: formData.researchDataTypes.length > 0 ? formData.researchDataTypes : null,
+            research_data_types: formData.researchDataTypes.length > 0 ? formData.researchDataTypes as any[] : null,
             completed_at: new Date().toISOString()
-          });
+          }], { onConflict: 'user_id' });
 
         if (onboardingError) {
           console.error('Error saving onboarding data:', onboardingError);
@@ -268,7 +268,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             medication_id: med.id || null,
             dosage_amount: parseFloat(med.dosage) || null,
             dosage_unit: med.dosage.replace(/[0-9.]/g, '').trim() || 'mg',
-            frequency: med.frequency,
+            frequency: med.frequency as any,
             start_date: new Date().toISOString().split('T')[0]
           }));
 
@@ -285,8 +285,8 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         if (formData.shareResearchData && formData.researchDataTypes.length > 0) {
           const consentRecords = formData.researchDataTypes.map(dataType => ({
             user_id: user.id,
-            data_type: dataType,
-            consent_status: 'active',
+            data_type: dataType as any,
+            consent_status: 'active' as const,
             consent_given_at: new Date().toISOString()
           }));
 
@@ -315,11 +315,11 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
 
         const { error: prefError } = await supabase
           .from('daily_tracking_preferences')
-          .upsert({
+          .upsert([{
             user_id: user.id,
-            tracking_types: allTrackingFeatures,
+            tracking_types: allTrackingFeatures as any[],
             notification_enabled: true
-          });
+          }], { onConflict: 'user_id' });
 
         if (prefError) {
           console.error('Error saving tracking preferences:', prefError);
@@ -1231,38 +1231,28 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
 
       const { error: patientError } = await supabase
         .from('patient_onboarding_data')
-        .insert({
+        .upsert([{
           user_id: user.id,
-          first_name: formData.firstName,
-          middle_name: formData.middleName,
-          last_name: formData.lastName,
-          gender: formData.gender,
-          date_of_birth: formData.dateOfBirth,
-          carer_name: formData.carerName,
-          carer_phone: formData.carerPhone,
-          carer_email: formData.carerEmail,
           selected_conditions: formData.selectedConditions,
-          preferred_tracking_times: formData.preferredTimes,
           track_menstrual_cycle: formData.trackMenstrual,
           share_research_data: formData.shareResearchData,
-          research_data_types: formData.researchDataTypes
-        });
+          research_data_types: formData.researchDataTypes as any[],
+          completed_at: new Date().toISOString()
+        }], { onConflict: 'user_id' });
 
       if (patientError) {
         console.error('Error saving patient data:', patientError);
         return;
       }
 
-      // Update onboarding progress
+      // Mark onboarding as completed in profiles
       const { error: progressError } = await supabase
-        .from('onboarding_progress')
-        .upsert({
-          user_id: user.id,
-          user_type: 'patient',
-          current_step: getMaxSteps(),
-          completed: true,
-          step_data: { ...formData, firstTracking: trackingData }
-        });
+        .from('profiles')
+        .upsert([{
+          id: user.id,
+          user_type: 'patient' as const,
+          onboarding_completed: true
+        }]);
 
       if (progressError) {
         console.error('Error updating progress:', progressError);

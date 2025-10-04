@@ -123,14 +123,11 @@ export default function Landing() {
       // Update profile to mark onboarding as completed
       const { error } = await supabase
         .from('profiles')
-        .upsert({
+        .upsert([{
           id: user?.id,
-          email: user?.email,
-          first_name: user?.user_metadata?.first_name,
-          last_name: user?.user_metadata?.last_name,
-          onboarding_completed: true,
-          user_type: selectedUserType
-        });
+          user_type: selectedUserType as any,
+          onboarding_completed: true
+        }]);
 
       if (error) {
         console.error('Error updating profile:', error);
