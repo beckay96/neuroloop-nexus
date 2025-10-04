@@ -14,794 +14,138 @@ export type Database = {
   }
   public: {
     Tables: {
-      achievements: {
-        Row: {
-          achievement_type: string
-          description: string | null
-          id: string
-          metadata: string | null
-          points: number | null
-          title: string
-          unlocked_at: string | null
-          user_id: string
-        }
-        Insert: {
-          achievement_type: string
-          description?: string | null
-          id?: string
-          metadata?: string | null
-          points?: number | null
-          title: string
-          unlocked_at?: string | null
-          user_id: string
-        }
-        Update: {
-          achievement_type?: string
-          description?: string | null
-          id?: string
-          metadata?: string | null
-          points?: number | null
-          title?: string
-          unlocked_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      ai_insights_cards: {
-        Row: {
-          clinician_id: string
-          content: string
-          dismissed: boolean | null
-          generated_at: string | null
-          impact_metric: Json | null
-          insight_id: string
-          insight_type: string
-          is_read: boolean | null
-          related_patient_id: string | null
-        }
-        Insert: {
-          clinician_id: string
-          content: string
-          dismissed?: boolean | null
-          generated_at?: string | null
-          impact_metric?: Json | null
-          insight_id?: string
-          insight_type: string
-          is_read?: boolean | null
-          related_patient_id?: string | null
-        }
-        Update: {
-          clinician_id?: string
-          content?: string
-          dismissed?: boolean | null
-          generated_at?: string | null
-          impact_metric?: Json | null
-          insight_id?: string
-          insight_type?: string
-          is_read?: boolean | null
-          related_patient_id?: string | null
-        }
-        Relationships: []
-      }
       audit_log: {
         Row: {
           action: string
-          changes: string[] | null
-          changes_description: string | null
           created_at: string | null
           id: string
           ip_address: unknown | null
           record_id: string | null
-          session_id: string | null
           table_name: string
           user_agent: string | null
           user_id: string | null
         }
         Insert: {
           action: string
-          changes?: string[] | null
-          changes_description?: string | null
           created_at?: string | null
           id?: string
           ip_address?: unknown | null
           record_id?: string | null
-          session_id?: string | null
           table_name: string
           user_agent?: string | null
           user_id?: string | null
         }
         Update: {
           action?: string
-          changes?: string[] | null
-          changes_description?: string | null
           created_at?: string | null
           id?: string
           ip_address?: unknown | null
           record_id?: string | null
-          session_id?: string | null
           table_name?: string
           user_agent?: string | null
           user_id?: string | null
         }
         Relationships: []
       }
-      auth_users: {
-        Row: {
-          account_status: string | null
-          created_at: string | null
-          email: string
-          email_verified: boolean | null
-          failed_login_attempts: number | null
-          id: string
-          last_login_at: string | null
-          locked_until: string | null
-          password_hash: string
-          password_reset_expires: string | null
-          password_reset_token: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          account_status?: string | null
-          created_at?: string | null
-          email: string
-          email_verified?: boolean | null
-          failed_login_attempts?: number | null
-          id?: string
-          last_login_at?: string | null
-          locked_until?: string | null
-          password_hash: string
-          password_reset_expires?: string | null
-          password_reset_token?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          account_status?: string | null
-          created_at?: string | null
-          email?: string
-          email_verified?: boolean | null
-          failed_login_attempts?: number | null
-          id?: string
-          last_login_at?: string | null
-          locked_until?: string | null
-          password_hash?: string
-          password_reset_expires?: string | null
-          password_reset_token?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      carer_onboarding_data: {
-        Row: {
-          created_at: string | null
-          date_of_birth: string | null
-          first_name: string
-          id: string
-          last_name: string
-          middle_name: string | null
-          patient_date_of_birth: string | null
-          phone_number: string | null
-          relationship_to_patient: string | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          date_of_birth?: string | null
-          first_name: string
-          id?: string
-          last_name: string
-          middle_name?: string | null
-          patient_date_of_birth?: string | null
-          phone_number?: string | null
-          relationship_to_patient?: string | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          date_of_birth?: string | null
-          first_name?: string
-          id?: string
-          last_name?: string
-          middle_name?: string | null
-          patient_date_of_birth?: string | null
-          phone_number?: string | null
-          relationship_to_patient?: string | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       carer_profiles: {
         Row: {
-          access_expires_date: string | null
-          access_granted_date: string | null
-          can_view_medications: boolean | null
-          can_view_seizures: boolean | null
-          can_view_symptoms: boolean | null
           created_at: string | null
-          email: string | null
-          emergency_contact: boolean | null
-          first_name: string
+          first_name: string | null
           id: string
-          last_name: string
-          phone_number: string | null
-          relationship: string | null
+          last_name: string | null
+          relationship: Database["public"]["Enums"]["relationship_enum"] | null
           user_id: string
         }
         Insert: {
-          access_expires_date?: string | null
-          access_granted_date?: string | null
-          can_view_medications?: boolean | null
-          can_view_seizures?: boolean | null
-          can_view_symptoms?: boolean | null
           created_at?: string | null
-          email?: string | null
-          emergency_contact?: boolean | null
-          first_name: string
+          first_name?: string | null
           id?: string
-          last_name: string
-          phone_number?: string | null
-          relationship?: string | null
+          last_name?: string | null
+          relationship?: Database["public"]["Enums"]["relationship_enum"] | null
           user_id: string
         }
         Update: {
-          access_expires_date?: string | null
-          access_granted_date?: string | null
-          can_view_medications?: boolean | null
-          can_view_seizures?: boolean | null
-          can_view_symptoms?: boolean | null
           created_at?: string | null
-          email?: string | null
-          emergency_contact?: boolean | null
-          first_name?: string
+          first_name?: string | null
           id?: string
-          last_name?: string
-          phone_number?: string | null
-          relationship?: string | null
+          last_name?: string | null
+          relationship?: Database["public"]["Enums"]["relationship_enum"] | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "carer_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       carer_relationships: {
         Row: {
-          approved_by: string | null
-          approved_date: string | null
+          approved_at: string | null
           carer_user_id: string
           id: string
-          notes: string | null
           patient_user_id: string
-          permissions: Json | null
-          relationship_type: string
-          requested_date: string | null
-          status: string | null
+          relationship_type:
+            | Database["public"]["Enums"]["relationship_enum"]
+            | null
+          requested_at: string | null
+          status: Database["public"]["Enums"]["connection_status_enum"] | null
         }
         Insert: {
-          approved_by?: string | null
-          approved_date?: string | null
+          approved_at?: string | null
           carer_user_id: string
           id?: string
-          notes?: string | null
           patient_user_id: string
-          permissions?: Json | null
-          relationship_type: string
-          requested_date?: string | null
-          status?: string | null
+          relationship_type?:
+            | Database["public"]["Enums"]["relationship_enum"]
+            | null
+          requested_at?: string | null
+          status?: Database["public"]["Enums"]["connection_status_enum"] | null
         }
         Update: {
-          approved_by?: string | null
-          approved_date?: string | null
+          approved_at?: string | null
           carer_user_id?: string
           id?: string
-          notes?: string | null
           patient_user_id?: string
-          permissions?: Json | null
-          relationship_type?: string
-          requested_date?: string | null
-          status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "carer_relationships_carer_user_id_fkey"
-            columns: ["carer_user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "carer_relationships_patient_user_id_fkey"
-            columns: ["patient_user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      case_data_panels: {
-        Row: {
-          added_at: string | null
-          content: Json
-          is_active: boolean | null
-          panel_id: string
-          panel_type: string
-          patient_id: string
-          priority: number | null
-        }
-        Insert: {
-          added_at?: string | null
-          content: Json
-          is_active?: boolean | null
-          panel_id?: string
-          panel_type: string
-          patient_id: string
-          priority?: number | null
-        }
-        Update: {
-          added_at?: string | null
-          content?: Json
-          is_active?: boolean | null
-          panel_id?: string
-          panel_type?: string
-          patient_id?: string
-          priority?: number | null
+          relationship_type?:
+            | Database["public"]["Enums"]["relationship_enum"]
+            | null
+          requested_at?: string | null
+          status?: Database["public"]["Enums"]["connection_status_enum"] | null
         }
         Relationships: []
-      }
-      clinical_alerts: {
-        Row: {
-          acknowledged_at: string | null
-          alert_type: string
-          auto_generated: boolean | null
-          clinician_id: string
-          created_at: string | null
-          description: string
-          id: string
-          patient_id: string
-          related_entry_id: string | null
-          resolved_at: string | null
-          severity: string
-          status: string | null
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          acknowledged_at?: string | null
-          alert_type: string
-          auto_generated?: boolean | null
-          clinician_id: string
-          created_at?: string | null
-          description: string
-          id?: string
-          patient_id: string
-          related_entry_id?: string | null
-          resolved_at?: string | null
-          severity: string
-          status?: string | null
-          title: string
-          updated_at?: string | null
-        }
-        Update: {
-          acknowledged_at?: string | null
-          alert_type?: string
-          auto_generated?: boolean | null
-          clinician_id?: string
-          created_at?: string | null
-          description?: string
-          id?: string
-          patient_id?: string
-          related_entry_id?: string | null
-          resolved_at?: string | null
-          severity?: string
-          status?: string | null
-          title?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "clinical_alerts_clinician_id_fkey"
-            columns: ["clinician_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "clinical_alerts_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      clinical_metrics: {
-        Row: {
-          created_at: string | null
-          days_active: number | null
-          entries_logged: number | null
-          gait_score: number | null
-          id: string
-          medication_adherence: number | null
-          metric_date: string
-          mood_avg: number | null
-          patient_id: string
-          period_type: string
-          seizure_count: number | null
-          seizure_duration_avg: number | null
-          seizure_severity_avg: number | null
-          sleep_quality_avg: number | null
-          symptom_count: number | null
-          tremor_severity_avg: number | null
-          updrs_score: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          days_active?: number | null
-          entries_logged?: number | null
-          gait_score?: number | null
-          id?: string
-          medication_adherence?: number | null
-          metric_date: string
-          mood_avg?: number | null
-          patient_id: string
-          period_type: string
-          seizure_count?: number | null
-          seizure_duration_avg?: number | null
-          seizure_severity_avg?: number | null
-          sleep_quality_avg?: number | null
-          symptom_count?: number | null
-          tremor_severity_avg?: number | null
-          updrs_score?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          days_active?: number | null
-          entries_logged?: number | null
-          gait_score?: number | null
-          id?: string
-          medication_adherence?: number | null
-          metric_date?: string
-          mood_avg?: number | null
-          patient_id?: string
-          period_type?: string
-          seizure_count?: number | null
-          seizure_duration_avg?: number | null
-          seizure_severity_avg?: number | null
-          sleep_quality_avg?: number | null
-          symptom_count?: number | null
-          tremor_severity_avg?: number | null
-          updrs_score?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "clinical_metrics_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      clinical_notes_exports: {
-        Row: {
-          author_id: string
-          content: string
-          file_path: string | null
-          format: string
-          generated_at: string | null
-          note_id: string
-          patient_id: string
-          shared_with: Json | null
-          status: string | null
-          template_used: string | null
-        }
-        Insert: {
-          author_id: string
-          content: string
-          file_path?: string | null
-          format: string
-          generated_at?: string | null
-          note_id?: string
-          patient_id: string
-          shared_with?: Json | null
-          status?: string | null
-          template_used?: string | null
-        }
-        Update: {
-          author_id?: string
-          content?: string
-          file_path?: string | null
-          format?: string
-          generated_at?: string | null
-          note_id?: string
-          patient_id?: string
-          shared_with?: Json | null
-          status?: string | null
-          template_used?: string | null
-        }
-        Relationships: []
-      }
-      clinical_reports: {
-        Row: {
-          clinician_id: string
-          created_at: string | null
-          date_range_end: string | null
-          date_range_start: string | null
-          expires_at: string | null
-          file_format: string | null
-          file_path: string | null
-          filters_applied: string | null
-          generated_at: string | null
-          id: string
-          patient_ids: string | null
-          report_name: string
-          report_type: string
-          status: string | null
-        }
-        Insert: {
-          clinician_id: string
-          created_at?: string | null
-          date_range_end?: string | null
-          date_range_start?: string | null
-          expires_at?: string | null
-          file_format?: string | null
-          file_path?: string | null
-          filters_applied?: string | null
-          generated_at?: string | null
-          id?: string
-          patient_ids?: string | null
-          report_name: string
-          report_type: string
-          status?: string | null
-        }
-        Update: {
-          clinician_id?: string
-          created_at?: string | null
-          date_range_end?: string | null
-          date_range_start?: string | null
-          expires_at?: string | null
-          file_format?: string | null
-          file_path?: string | null
-          filters_applied?: string | null
-          generated_at?: string | null
-          id?: string
-          patient_ids?: string | null
-          report_name?: string
-          report_type?: string
-          status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "clinical_reports_clinician_id_fkey"
-            columns: ["clinician_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      clinical_scale_results: {
-        Row: {
-          assessed_at: string
-          change_alert: boolean | null
-          created_at: string | null
-          due_at: string | null
-          entered_by: string
-          notes: string | null
-          patient_id: string
-          scale_id: string
-          scale_type: string
-          score: number
-          subscores: Json | null
-          trend: Json | null
-        }
-        Insert: {
-          assessed_at: string
-          change_alert?: boolean | null
-          created_at?: string | null
-          due_at?: string | null
-          entered_by: string
-          notes?: string | null
-          patient_id: string
-          scale_id?: string
-          scale_type: string
-          score: number
-          subscores?: Json | null
-          trend?: Json | null
-        }
-        Update: {
-          assessed_at?: string
-          change_alert?: boolean | null
-          created_at?: string | null
-          due_at?: string | null
-          entered_by?: string
-          notes?: string | null
-          patient_id?: string
-          scale_id?: string
-          scale_type?: string
-          score?: number
-          subscores?: Json | null
-          trend?: Json | null
-        }
-        Relationships: []
-      }
-      clinician_onboarding_data: {
-        Row: {
-          clinician_title: string | null
-          created_at: string | null
-          first_name: string
-          id: string
-          institution: string | null
-          last_name: string
-          license_number: string | null
-          middle_name: string | null
-          patient_invite_emails: string[] | null
-          specialty: string | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          clinician_title?: string | null
-          created_at?: string | null
-          first_name: string
-          id?: string
-          institution?: string | null
-          last_name: string
-          license_number?: string | null
-          middle_name?: string | null
-          patient_invite_emails?: string[] | null
-          specialty?: string | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          clinician_title?: string | null
-          created_at?: string | null
-          first_name?: string
-          id?: string
-          institution?: string | null
-          last_name?: string
-          license_number?: string | null
-          middle_name?: string | null
-          patient_invite_emails?: string[] | null
-          specialty?: string | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      clinician_today_view: {
-        Row: {
-          alerts: Json | null
-          appointments: Json | null
-          clinician_id: string
-          created_at: string | null
-          date: string | null
-          high_priority_patients: Json | null
-          pending_tasks: Json | null
-          updated_at: string | null
-          view_id: string
-        }
-        Insert: {
-          alerts?: Json | null
-          appointments?: Json | null
-          clinician_id: string
-          created_at?: string | null
-          date?: string | null
-          high_priority_patients?: Json | null
-          pending_tasks?: Json | null
-          updated_at?: string | null
-          view_id?: string
-        }
-        Update: {
-          alerts?: Json | null
-          appointments?: Json | null
-          clinician_id?: string
-          created_at?: string | null
-          date?: string | null
-          high_priority_patients?: Json | null
-          pending_tasks?: Json | null
-          updated_at?: string | null
-          view_id?: string
-        }
-        Relationships: []
-      }
-      cohort_analytics: {
-        Row: {
-          active_patients: number | null
-          adherence_trend_data: string | null
-          avg_adherence_rate: number | null
-          avg_seizure_frequency: number | null
-          calculated_at: string | null
-          clinician_id: string
-          cohort_name: string
-          date_range_end: string | null
-          date_range_start: string | null
-          diagnosis_filter: string | null
-          high_risk_patients: number | null
-          id: string
-          seizure_trend_data: string | null
-          total_patients: number | null
-          trial_arm_filter: string | null
-        }
-        Insert: {
-          active_patients?: number | null
-          adherence_trend_data?: string | null
-          avg_adherence_rate?: number | null
-          avg_seizure_frequency?: number | null
-          calculated_at?: string | null
-          clinician_id: string
-          cohort_name: string
-          date_range_end?: string | null
-          date_range_start?: string | null
-          diagnosis_filter?: string | null
-          high_risk_patients?: number | null
-          id?: string
-          seizure_trend_data?: string | null
-          total_patients?: number | null
-          trial_arm_filter?: string | null
-        }
-        Update: {
-          active_patients?: number | null
-          adherence_trend_data?: string | null
-          avg_adherence_rate?: number | null
-          avg_seizure_frequency?: number | null
-          calculated_at?: string | null
-          clinician_id?: string
-          cohort_name?: string
-          date_range_end?: string | null
-          date_range_start?: string | null
-          diagnosis_filter?: string | null
-          high_risk_patients?: number | null
-          id?: string
-          seizure_trend_data?: string | null
-          total_patients?: number | null
-          trial_arm_filter?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "cohort_analytics_clinician_id_fkey"
-            columns: ["clinician_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       conditions: {
         Row: {
-          category: string
+          category: string | null
           created_at: string | null
           description: string | null
+          icd10_code: string | null
           id: string
           name: string
-          symptoms: string | null
-          tracking_features: Json | null
+          snomed_code: string | null
+          tracking_features_array:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
         }
         Insert: {
-          category: string
+          category?: string | null
           created_at?: string | null
           description?: string | null
+          icd10_code?: string | null
           id?: string
           name: string
-          symptoms?: string | null
-          tracking_features?: Json | null
+          snomed_code?: string | null
+          tracking_features_array?:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
         }
         Update: {
-          category?: string
+          category?: string | null
           created_at?: string | null
           description?: string | null
+          icd10_code?: string | null
           id?: string
           name?: string
-          symptoms?: string | null
-          tracking_features?: Json | null
+          snomed_code?: string | null
+          tracking_features_array?:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
         }
         Relationships: []
       }
@@ -810,205 +154,165 @@ export type Database = {
           created_at: string | null
           id: string
           notification_enabled: boolean | null
-          reminder_times: Json | null
-          streak_notifications: boolean | null
-          tracking_types: Json | null
+          tracking_types:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
           updated_at: string | null
           user_id: string
-          weekly_reports: boolean | null
         }
         Insert: {
           created_at?: string | null
           id?: string
           notification_enabled?: boolean | null
-          reminder_times?: Json | null
-          streak_notifications?: boolean | null
-          tracking_types?: Json | null
+          tracking_types?:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
           updated_at?: string | null
           user_id: string
-          weekly_reports?: boolean | null
         }
         Update: {
           created_at?: string | null
           id?: string
           notification_enabled?: boolean | null
-          reminder_times?: Json | null
-          streak_notifications?: boolean | null
-          tracking_types?: Json | null
+          tracking_types?:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
           updated_at?: string | null
           user_id?: string
-          weekly_reports?: boolean | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "daily_tracking_preferences_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      dashboard_preferences: {
+      daily_wellness_logs: {
         Row: {
-          clinician_id: string
           created_at: string | null
-          critical_alerts_only: boolean | null
-          dashboard_layout: string | null
-          default_alert_level: string | null
-          default_diagnosis_filter: string | null
-          default_time_range: string | null
-          default_view: string | null
-          email_alerts: boolean | null
+          energy_level: Database["public"]["Enums"]["energy_level_enum"] | null
+          exercise_minutes: number | null
+          exercise_type: string | null
           id: string
-          patients_per_page: number | null
-          show_inactive_patients: boolean | null
-          updated_at: string | null
+          log_date: string
+          mood: Database["public"]["Enums"]["mood_type_enum"] | null
+          mood_notes: string | null
+          notes: string | null
+          sleep_hours: number | null
+          sleep_interruptions: number | null
+          sleep_quality:
+            | Database["public"]["Enums"]["sleep_quality_enum"]
+            | null
+          stress_level: number | null
+          user_id: string
         }
         Insert: {
-          clinician_id: string
           created_at?: string | null
-          critical_alerts_only?: boolean | null
-          dashboard_layout?: string | null
-          default_alert_level?: string | null
-          default_diagnosis_filter?: string | null
-          default_time_range?: string | null
-          default_view?: string | null
-          email_alerts?: boolean | null
+          energy_level?: Database["public"]["Enums"]["energy_level_enum"] | null
+          exercise_minutes?: number | null
+          exercise_type?: string | null
           id?: string
-          patients_per_page?: number | null
-          show_inactive_patients?: boolean | null
-          updated_at?: string | null
+          log_date: string
+          mood?: Database["public"]["Enums"]["mood_type_enum"] | null
+          mood_notes?: string | null
+          notes?: string | null
+          sleep_hours?: number | null
+          sleep_interruptions?: number | null
+          sleep_quality?:
+            | Database["public"]["Enums"]["sleep_quality_enum"]
+            | null
+          stress_level?: number | null
+          user_id: string
         }
         Update: {
-          clinician_id?: string
           created_at?: string | null
-          critical_alerts_only?: boolean | null
-          dashboard_layout?: string | null
-          default_alert_level?: string | null
-          default_diagnosis_filter?: string | null
-          default_time_range?: string | null
-          default_view?: string | null
-          email_alerts?: boolean | null
+          energy_level?: Database["public"]["Enums"]["energy_level_enum"] | null
+          exercise_minutes?: number | null
+          exercise_type?: string | null
           id?: string
-          patients_per_page?: number | null
-          show_inactive_patients?: boolean | null
-          updated_at?: string | null
+          log_date?: string
+          mood?: Database["public"]["Enums"]["mood_type_enum"] | null
+          mood_notes?: string | null
+          notes?: string | null
+          sleep_hours?: number | null
+          sleep_interruptions?: number | null
+          sleep_quality?:
+            | Database["public"]["Enums"]["sleep_quality_enum"]
+            | null
+          stress_level?: number | null
+          user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "dashboard_preferences_clinician_id_fkey"
-            columns: ["clinician_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      device_test_results: {
-        Row: {
-          clinical_significance: string | null
-          created_at: string | null
-          detailed_results: string | null
-          device_id: string | null
-          device_type: string | null
-          id: string
-          patient_id: string
-          primary_score: number | null
-          requires_review: boolean | null
-          secondary_score: number | null
-          test_date: string
-          test_duration: number | null
-          test_type: string
-        }
-        Insert: {
-          clinical_significance?: string | null
-          created_at?: string | null
-          detailed_results?: string | null
-          device_id?: string | null
-          device_type?: string | null
-          id?: string
-          patient_id: string
-          primary_score?: number | null
-          requires_review?: boolean | null
-          secondary_score?: number | null
-          test_date: string
-          test_duration?: number | null
-          test_type: string
-        }
-        Update: {
-          clinical_significance?: string | null
-          created_at?: string | null
-          detailed_results?: string | null
-          device_id?: string | null
-          device_type?: string | null
-          id?: string
-          patient_id?: string
-          primary_score?: number | null
-          requires_review?: boolean | null
-          secondary_score?: number | null
-          test_date?: string
-          test_duration?: number | null
-          test_type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "device_test_results_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       medication_logs: {
         Row: {
+          actual_time: string | null
+          adherence_status: Database["public"]["Enums"]["medication_adherence_enum"]
           created_at: string | null
-          dosage_taken: string | null
-          effectiveness_rating: number | null
+          dosage_amount: number | null
+          dosage_unit: string | null
           id: string
           log_date: string
           log_time: string | null
+          missed_reason: string | null
           notes: string | null
-          side_effects: Json | null
-          taken: boolean | null
+          planned_time: string | null
+          plasma_level: number | null
+          plasma_level_unit: string | null
+          side_effect_severity:
+            | Database["public"]["Enums"]["side_effect_severity_enum"]
+            | null
+          side_effect_types:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          side_effects_present: boolean | null
           user_id: string
-          user_medication_id: string
+          user_medication_id: string | null
         }
         Insert: {
+          actual_time?: string | null
+          adherence_status: Database["public"]["Enums"]["medication_adherence_enum"]
           created_at?: string | null
-          dosage_taken?: string | null
-          effectiveness_rating?: number | null
+          dosage_amount?: number | null
+          dosage_unit?: string | null
           id?: string
           log_date: string
           log_time?: string | null
+          missed_reason?: string | null
           notes?: string | null
-          side_effects?: Json | null
-          taken?: boolean | null
+          planned_time?: string | null
+          plasma_level?: number | null
+          plasma_level_unit?: string | null
+          side_effect_severity?:
+            | Database["public"]["Enums"]["side_effect_severity_enum"]
+            | null
+          side_effect_types?:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          side_effects_present?: boolean | null
           user_id: string
-          user_medication_id: string
+          user_medication_id?: string | null
         }
         Update: {
+          actual_time?: string | null
+          adherence_status?: Database["public"]["Enums"]["medication_adherence_enum"]
           created_at?: string | null
-          dosage_taken?: string | null
-          effectiveness_rating?: number | null
+          dosage_amount?: number | null
+          dosage_unit?: string | null
           id?: string
           log_date?: string
           log_time?: string | null
+          missed_reason?: string | null
           notes?: string | null
-          side_effects?: Json | null
-          taken?: boolean | null
+          planned_time?: string | null
+          plasma_level?: number | null
+          plasma_level_unit?: string | null
+          side_effect_severity?:
+            | Database["public"]["Enums"]["side_effect_severity_enum"]
+            | null
+          side_effect_types?:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          side_effects_present?: boolean | null
           user_id?: string
-          user_medication_id?: string
+          user_medication_id?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "medication_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "medication_logs_user_medication_id_fkey"
             columns: ["user_medication_id"]
@@ -1020,462 +324,163 @@ export type Database = {
       }
       medications: {
         Row: {
+          atc_code: string | null
           category: string | null
           common_dosages: string | null
-          common_side_effects: Json | null
+          contraindications: string[] | null
           created_at: string | null
           generic_name: string | null
           id: string
           name: string
-          side_effects: string | null
-          typical_dosages: Json | null
+          rxnorm_code: string | null
         }
         Insert: {
+          atc_code?: string | null
           category?: string | null
           common_dosages?: string | null
-          common_side_effects?: Json | null
+          contraindications?: string[] | null
           created_at?: string | null
           generic_name?: string | null
           id?: string
           name: string
-          side_effects?: string | null
-          typical_dosages?: Json | null
+          rxnorm_code?: string | null
         }
         Update: {
+          atc_code?: string | null
           category?: string | null
           common_dosages?: string | null
-          common_side_effects?: Json | null
+          contraindications?: string[] | null
           created_at?: string | null
           generic_name?: string | null
           id?: string
           name?: string
-          side_effects?: string | null
-          typical_dosages?: Json | null
+          rxnorm_code?: string | null
         }
         Relationships: []
       }
       menstrual_cycle_logs: {
         Row: {
+          catamenial_pattern_suspected: boolean | null
           created_at: string | null
           cycle_end_date: string | null
+          cycle_length_days: number | null
+          cycle_phase:
+            | Database["public"]["Enums"]["menstrual_phase_enum"]
+            | null
           cycle_start_date: string
-          flow_intensity: Json | null
+          flow_intensity:
+            | Database["public"]["Enums"]["menstrual_flow_enum"]
+            | null
           id: string
           notes: string | null
-          seizure_correlation: Json | null
-          symptoms: Json | null
+          seizure_clustered_around_menstruation: boolean | null
+          seizure_count_during_cycle: number | null
+          symptom_severity: number | null
+          symptoms: Database["public"]["Enums"]["symptom_type_enum"][] | null
           user_id: string
         }
         Insert: {
+          catamenial_pattern_suspected?: boolean | null
           created_at?: string | null
           cycle_end_date?: string | null
+          cycle_length_days?: number | null
+          cycle_phase?:
+            | Database["public"]["Enums"]["menstrual_phase_enum"]
+            | null
           cycle_start_date: string
-          flow_intensity?: Json | null
+          flow_intensity?:
+            | Database["public"]["Enums"]["menstrual_flow_enum"]
+            | null
           id?: string
           notes?: string | null
-          seizure_correlation?: Json | null
-          symptoms?: Json | null
+          seizure_clustered_around_menstruation?: boolean | null
+          seizure_count_during_cycle?: number | null
+          symptom_severity?: number | null
+          symptoms?: Database["public"]["Enums"]["symptom_type_enum"][] | null
           user_id: string
         }
         Update: {
+          catamenial_pattern_suspected?: boolean | null
           created_at?: string | null
           cycle_end_date?: string | null
+          cycle_length_days?: number | null
+          cycle_phase?:
+            | Database["public"]["Enums"]["menstrual_phase_enum"]
+            | null
           cycle_start_date?: string
-          flow_intensity?: Json | null
+          flow_intensity?:
+            | Database["public"]["Enums"]["menstrual_flow_enum"]
+            | null
           id?: string
           notes?: string | null
-          seizure_correlation?: Json | null
-          symptoms?: Json | null
+          seizure_clustered_around_menstruation?: boolean | null
+          seizure_count_during_cycle?: number | null
+          symptom_severity?: number | null
+          symptoms?: Database["public"]["Enums"]["symptom_type_enum"][] | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "menstrual_cycle_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      neuro_imaging_results: {
-        Row: {
-          annotations: Json | null
-          dicom_uid: string | null
-          findings_summary: string | null
-          image_id: string
-          image_path: string | null
-          patient_id: string
-          radiologist_id: string | null
-          status: string | null
-          study_date: string | null
-          study_type: string
-          uploaded_at: string | null
-        }
-        Insert: {
-          annotations?: Json | null
-          dicom_uid?: string | null
-          findings_summary?: string | null
-          image_id?: string
-          image_path?: string | null
-          patient_id: string
-          radiologist_id?: string | null
-          status?: string | null
-          study_date?: string | null
-          study_type: string
-          uploaded_at?: string | null
-        }
-        Update: {
-          annotations?: Json | null
-          dicom_uid?: string | null
-          findings_summary?: string | null
-          image_id?: string
-          image_path?: string | null
-          patient_id?: string
-          radiologist_id?: string | null
-          status?: string | null
-          study_date?: string | null
-          study_type?: string
-          uploaded_at?: string | null
-        }
         Relationships: []
-      }
-      onboarding_progress: {
-        Row: {
-          completed: boolean | null
-          created_at: string | null
-          current_step: number
-          id: string
-          step_1_data: string | null
-          step_2_data: string | null
-          step_3_data: string | null
-          step_4_data: string | null
-          step_5_data: string | null
-          step_6_data: string | null
-          step_7_data: string | null
-          step_8_data: string | null
-          step_9_data: string | null
-          step_data: Json | null
-          updated_at: string | null
-          user_id: string
-          user_type: string
-        }
-        Insert: {
-          completed?: boolean | null
-          created_at?: string | null
-          current_step?: number
-          id?: string
-          step_1_data?: string | null
-          step_2_data?: string | null
-          step_3_data?: string | null
-          step_4_data?: string | null
-          step_5_data?: string | null
-          step_6_data?: string | null
-          step_7_data?: string | null
-          step_8_data?: string | null
-          step_9_data?: string | null
-          step_data?: Json | null
-          updated_at?: string | null
-          user_id: string
-          user_type: string
-        }
-        Update: {
-          completed?: boolean | null
-          created_at?: string | null
-          current_step?: number
-          id?: string
-          step_1_data?: string | null
-          step_2_data?: string | null
-          step_3_data?: string | null
-          step_4_data?: string | null
-          step_5_data?: string | null
-          step_6_data?: string | null
-          step_7_data?: string | null
-          step_8_data?: string | null
-          step_9_data?: string | null
-          step_data?: Json | null
-          updated_at?: string | null
-          user_id?: string
-          user_type?: string
-        }
-        Relationships: []
-      }
-      patient_clinical_overview: {
-        Row: {
-          adherence_score: number | null
-          alert_level: string | null
-          clinical_notes: string | null
-          clinician_id: string
-          created_at: string | null
-          enrollment_status: string | null
-          id: string
-          last_activity_date: string | null
-          last_review_date: string | null
-          next_appointment_date: string | null
-          patient_id: string
-          primary_diagnosis: string
-          review_required: boolean | null
-          secondary_diagnoses: string | null
-          trial_arm: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          adherence_score?: number | null
-          alert_level?: string | null
-          clinical_notes?: string | null
-          clinician_id: string
-          created_at?: string | null
-          enrollment_status?: string | null
-          id?: string
-          last_activity_date?: string | null
-          last_review_date?: string | null
-          next_appointment_date?: string | null
-          patient_id: string
-          primary_diagnosis: string
-          review_required?: boolean | null
-          secondary_diagnoses?: string | null
-          trial_arm?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          adherence_score?: number | null
-          alert_level?: string | null
-          clinical_notes?: string | null
-          clinician_id?: string
-          created_at?: string | null
-          enrollment_status?: string | null
-          id?: string
-          last_activity_date?: string | null
-          last_review_date?: string | null
-          next_appointment_date?: string | null
-          patient_id?: string
-          primary_diagnosis?: string
-          review_required?: boolean | null
-          secondary_diagnoses?: string | null
-          trial_arm?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "patient_clinical_overview_clinician_id_fkey"
-            columns: ["clinician_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "patient_clinical_overview_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       patient_clinician_connections: {
         Row: {
           clinician_id: string
           connected_at: string | null
-          created_at: string | null
           id: string
-          invited_by: string | null
           patient_id: string
-          status: string | null
-          updated_at: string | null
+          status: Database["public"]["Enums"]["connection_status_enum"] | null
         }
         Insert: {
           clinician_id: string
           connected_at?: string | null
-          created_at?: string | null
           id?: string
-          invited_by?: string | null
           patient_id: string
-          status?: string | null
-          updated_at?: string | null
+          status?: Database["public"]["Enums"]["connection_status_enum"] | null
         }
         Update: {
           clinician_id?: string
           connected_at?: string | null
-          created_at?: string | null
           id?: string
-          invited_by?: string | null
           patient_id?: string
-          status?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      patient_collab_chat: {
-        Row: {
-          attachments: Json | null
-          is_read: boolean | null
-          is_urgent: boolean | null
-          mentioned_users: string[] | null
-          message: string
-          message_id: string
-          patient_id: string
-          read_at: string | null
-          sender_id: string
-          sent_at: string | null
-          thread_id: string | null
-        }
-        Insert: {
-          attachments?: Json | null
-          is_read?: boolean | null
-          is_urgent?: boolean | null
-          mentioned_users?: string[] | null
-          message: string
-          message_id?: string
-          patient_id: string
-          read_at?: string | null
-          sender_id: string
-          sent_at?: string | null
-          thread_id?: string | null
-        }
-        Update: {
-          attachments?: Json | null
-          is_read?: boolean | null
-          is_urgent?: boolean | null
-          mentioned_users?: string[] | null
-          message?: string
-          message_id?: string
-          patient_id?: string
-          read_at?: string | null
-          sender_id?: string
-          sent_at?: string | null
-          thread_id?: string | null
-        }
-        Relationships: []
-      }
-      patient_invites: {
-        Row: {
-          accepted_at: string | null
-          clinician_id: string
-          created_at: string | null
-          email: string
-          expires_at: string | null
-          id: string
-          invite_id: string | null
-          invited_at: string | null
-          status: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          accepted_at?: string | null
-          clinician_id: string
-          created_at?: string | null
-          email: string
-          expires_at?: string | null
-          id?: string
-          invite_id?: string | null
-          invited_at?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          accepted_at?: string | null
-          clinician_id?: string
-          created_at?: string | null
-          email?: string
-          expires_at?: string | null
-          id?: string
-          invite_id?: string | null
-          invited_at?: string | null
-          status?: string | null
-          updated_at?: string | null
+          status?: Database["public"]["Enums"]["connection_status_enum"] | null
         }
         Relationships: []
       }
       patient_onboarding_data: {
         Row: {
-          carer_email: string | null
-          carer_name: string | null
-          carer_phone: string | null
+          completed_at: string | null
           created_at: string | null
-          date_of_birth: string | null
-          first_name: string
-          gender: string | null
           id: string
-          last_name: string
-          middle_name: string | null
-          preferred_tracking_times: string[] | null
-          research_data_types: string[] | null
+          research_data_types:
+            | Database["public"]["Enums"]["research_data_type_enum"][]
+            | null
           selected_conditions: string[] | null
           share_research_data: boolean | null
           track_menstrual_cycle: boolean | null
-          updated_at: string | null
           user_id: string
         }
         Insert: {
-          carer_email?: string | null
-          carer_name?: string | null
-          carer_phone?: string | null
+          completed_at?: string | null
           created_at?: string | null
-          date_of_birth?: string | null
-          first_name: string
-          gender?: string | null
           id?: string
-          last_name: string
-          middle_name?: string | null
-          preferred_tracking_times?: string[] | null
-          research_data_types?: string[] | null
+          research_data_types?:
+            | Database["public"]["Enums"]["research_data_type_enum"][]
+            | null
           selected_conditions?: string[] | null
           share_research_data?: boolean | null
           track_menstrual_cycle?: boolean | null
-          updated_at?: string | null
           user_id: string
         }
         Update: {
-          carer_email?: string | null
-          carer_name?: string | null
-          carer_phone?: string | null
+          completed_at?: string | null
           created_at?: string | null
-          date_of_birth?: string | null
-          first_name?: string
-          gender?: string | null
           id?: string
-          last_name?: string
-          middle_name?: string | null
-          preferred_tracking_times?: string[] | null
-          research_data_types?: string[] | null
+          research_data_types?:
+            | Database["public"]["Enums"]["research_data_type_enum"][]
+            | null
           selected_conditions?: string[] | null
           share_research_data?: boolean | null
           track_menstrual_cycle?: boolean | null
-          updated_at?: string | null
           user_id?: string
-        }
-        Relationships: []
-      }
-      patient_pro_timeline: {
-        Row: {
-          linked_intervention: string | null
-          notes: string | null
-          patient_id: string
-          pro_id: string
-          pro_type: string
-          reported_at: string | null
-          severity: number | null
-          value: Json
-        }
-        Insert: {
-          linked_intervention?: string | null
-          notes?: string | null
-          patient_id: string
-          pro_id?: string
-          pro_type: string
-          reported_at?: string | null
-          severity?: number | null
-          value: Json
-        }
-        Update: {
-          linked_intervention?: string | null
-          notes?: string | null
-          patient_id?: string
-          pro_id?: string
-          pro_type?: string
-          reported_at?: string | null
-          severity?: number | null
-          value?: Json
         }
         Relationships: []
       }
@@ -1483,731 +488,568 @@ export type Database = {
         Row: {
           created_at: string | null
           date_of_birth: string | null
-          first_name: string
-          gender: string | null
+          first_name: string | null
+          gender: Database["public"]["Enums"]["gender_enum"] | null
           id: string
-          last_name: string
-          middle_name: string | null
+          last_name: string | null
+          timezone: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           date_of_birth?: string | null
-          first_name: string
-          gender?: string | null
+          first_name?: string | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
-          last_name: string
-          middle_name?: string | null
+          last_name?: string | null
+          timezone?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           date_of_birth?: string | null
-          first_name?: string
-          gender?: string | null
+          first_name?: string | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
-          last_name?: string
-          middle_name?: string | null
+          last_name?: string | null
+          timezone?: string | null
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "patient_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      patient_risk_alerts: {
-        Row: {
-          alert_id: string
-          alert_level: string
-          created_at: string | null
-          patient_id: string
-          reason: string
-          resolved_at: string | null
-          resolved_by: string | null
-          risk_type: string
-          score: number
-          status: string | null
-        }
-        Insert: {
-          alert_id?: string
-          alert_level: string
-          created_at?: string | null
-          patient_id: string
-          reason: string
-          resolved_at?: string | null
-          resolved_by?: string | null
-          risk_type: string
-          score: number
-          status?: string | null
-        }
-        Update: {
-          alert_id?: string
-          alert_level?: string
-          created_at?: string | null
-          patient_id?: string
-          reason?: string
-          resolved_at?: string | null
-          resolved_by?: string | null
-          risk_type?: string
-          score?: number
-          status?: string | null
-        }
         Relationships: []
-      }
-      patient_snapshots: {
-        Row: {
-          author: string | null
-          generated_at: string | null
-          highlight_events: Json | null
-          patient_id: string
-          snapshot_id: string
-          summary: string
-        }
-        Insert: {
-          author?: string | null
-          generated_at?: string | null
-          highlight_events?: Json | null
-          patient_id: string
-          snapshot_id?: string
-          summary: string
-        }
-        Update: {
-          author?: string | null
-          generated_at?: string | null
-          highlight_events?: Json | null
-          patient_id?: string
-          snapshot_id?: string
-          summary?: string
-        }
-        Relationships: []
-      }
-      patient_timeline: {
-        Row: {
-          clinical_significance: string | null
-          color_code: string | null
-          created_at: string | null
-          description: string | null
-          event_date: string
-          event_type: string
-          icon_type: string | null
-          id: string
-          patient_id: string
-          related_id: string | null
-          related_table: string | null
-          title: string
-        }
-        Insert: {
-          clinical_significance?: string | null
-          color_code?: string | null
-          created_at?: string | null
-          description?: string | null
-          event_date: string
-          event_type: string
-          icon_type?: string | null
-          id?: string
-          patient_id: string
-          related_id?: string | null
-          related_table?: string | null
-          title: string
-        }
-        Update: {
-          clinical_significance?: string | null
-          color_code?: string | null
-          created_at?: string | null
-          description?: string | null
-          event_date?: string
-          event_type?: string
-          icon_type?: string | null
-          id?: string
-          patient_id?: string
-          related_id?: string | null
-          related_table?: string | null
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "patient_timeline_patient_id_fkey"
-            columns: ["patient_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       profiles: {
         Row: {
           created_at: string | null
-          email: string
-          emergency_contact_name: string | null
-          emergency_contact_phone: string | null
-          first_name: string | null
           id: string
-          institution: string | null
-          last_name: string | null
           onboarding_completed: boolean | null
-          selected_conditions: string | null
-          specialty: string | null
+          research_user_id: string | null
           updated_at: string | null
-          user_type: string | null
+          user_type: Database["public"]["Enums"]["user_type_enum"]
         }
         Insert: {
           created_at?: string | null
-          email: string
-          emergency_contact_name?: string | null
-          emergency_contact_phone?: string | null
-          first_name?: string | null
           id: string
-          institution?: string | null
-          last_name?: string | null
           onboarding_completed?: boolean | null
-          selected_conditions?: string | null
-          specialty?: string | null
+          research_user_id?: string | null
           updated_at?: string | null
-          user_type?: string | null
+          user_type: Database["public"]["Enums"]["user_type_enum"]
         }
         Update: {
           created_at?: string | null
-          email?: string
-          emergency_contact_name?: string | null
-          emergency_contact_phone?: string | null
-          first_name?: string | null
           id?: string
-          institution?: string | null
-          last_name?: string | null
           onboarding_completed?: boolean | null
-          selected_conditions?: string | null
-          specialty?: string | null
+          research_user_id?: string | null
           updated_at?: string | null
-          user_type?: string | null
+          user_type?: Database["public"]["Enums"]["user_type_enum"]
         }
         Relationships: []
       }
       research_consent: {
         Row: {
-          consent_date: string | null
-          consent_document_url: string | null
-          consent_version: string
+          consent_given_at: string | null
+          consent_status:
+            | Database["public"]["Enums"]["consent_status_enum"]
+            | null
+          consent_version: string | null
+          consent_withdrawn_at: string | null
           created_at: string | null
-          data_types_consented: Json | null
+          data_type: Database["public"]["Enums"]["research_data_type_enum"]
           id: string
-          is_active: boolean | null
-          updated_at: string | null
-          user_id: string
-          withdrawal_date: string | null
-        }
-        Insert: {
-          consent_date?: string | null
-          consent_document_url?: string | null
-          consent_version: string
-          created_at?: string | null
-          data_types_consented?: Json | null
-          id?: string
-          is_active?: boolean | null
-          updated_at?: string | null
-          user_id: string
-          withdrawal_date?: string | null
-        }
-        Update: {
-          consent_date?: string | null
-          consent_document_url?: string | null
-          consent_version?: string
-          created_at?: string | null
-          data_types_consented?: Json | null
-          id?: string
-          is_active?: boolean | null
-          updated_at?: string | null
-          user_id?: string
-          withdrawal_date?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "research_consent_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      research_data_quality: {
-        Row: {
-          assessment_details: Json | null
-          consistency_score: number | null
-          data_completeness_score: number | null
-          id: string
-          last_assessment_date: string | null
-          overall_quality_score: number | null
-          timeliness_score: number | null
           user_id: string
         }
         Insert: {
-          assessment_details?: Json | null
-          consistency_score?: number | null
-          data_completeness_score?: number | null
+          consent_given_at?: string | null
+          consent_status?:
+            | Database["public"]["Enums"]["consent_status_enum"]
+            | null
+          consent_version?: string | null
+          consent_withdrawn_at?: string | null
+          created_at?: string | null
+          data_type: Database["public"]["Enums"]["research_data_type_enum"]
           id?: string
-          last_assessment_date?: string | null
-          overall_quality_score?: number | null
-          timeliness_score?: number | null
           user_id: string
         }
         Update: {
-          assessment_details?: Json | null
-          consistency_score?: number | null
-          data_completeness_score?: number | null
+          consent_given_at?: string | null
+          consent_status?:
+            | Database["public"]["Enums"]["consent_status_enum"]
+            | null
+          consent_version?: string | null
+          consent_withdrawn_at?: string | null
+          created_at?: string | null
+          data_type?: Database["public"]["Enums"]["research_data_type_enum"]
           id?: string
-          last_assessment_date?: string | null
-          overall_quality_score?: number | null
-          timeliness_score?: number | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "research_data_quality_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      research_medication_data: {
+      research_medication_adherence: {
         Row: {
-          adherence_percentage: number | null
-          age_range: string | null
-          condition_category: string | null
+          adherence_status:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
+          age_range: Database["public"]["Enums"]["age_range_enum"] | null
           created_at: string | null
-          dosage_mg: number | null
-          effectiveness_rating: number | null
-          gender: string | null
+          days_since_baseline: number | null
+          gender: Database["public"]["Enums"]["gender_enum"] | null
           id: string
+          medication_category: string | null
           medication_generic_name: string | null
+          plasma_level: number | null
           research_user_id: string
-          side_effects: Json | null
-          years_on_medication: number | null
+          side_effect_severity:
+            | Database["public"]["Enums"]["side_effect_severity_enum"]
+            | null
+          side_effects_present: boolean | null
         }
         Insert: {
-          adherence_percentage?: number | null
-          age_range?: string | null
-          condition_category?: string | null
+          adherence_status?:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
           created_at?: string | null
-          dosage_mg?: number | null
-          effectiveness_rating?: number | null
-          gender?: string | null
+          days_since_baseline?: number | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
+          medication_category?: string | null
           medication_generic_name?: string | null
+          plasma_level?: number | null
           research_user_id: string
-          side_effects?: Json | null
-          years_on_medication?: number | null
+          side_effect_severity?:
+            | Database["public"]["Enums"]["side_effect_severity_enum"]
+            | null
+          side_effects_present?: boolean | null
         }
         Update: {
-          adherence_percentage?: number | null
-          age_range?: string | null
-          condition_category?: string | null
+          adherence_status?:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
           created_at?: string | null
-          dosage_mg?: number | null
-          effectiveness_rating?: number | null
-          gender?: string | null
+          days_since_baseline?: number | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
+          medication_category?: string | null
           medication_generic_name?: string | null
+          plasma_level?: number | null
           research_user_id?: string
-          side_effects?: Json | null
-          years_on_medication?: number | null
+          side_effect_severity?:
+            | Database["public"]["Enums"]["side_effect_severity_enum"]
+            | null
+          side_effects_present?: boolean | null
         }
         Relationships: []
       }
-      research_seizure_data: {
+      research_menstrual_seizure_correlation: {
         Row: {
-          age_range: string | null
-          consciousness_level: string | null
+          age_range: Database["public"]["Enums"]["age_range_enum"] | null
           created_at: string | null
+          cycle_day: number | null
+          cycle_phase:
+            | Database["public"]["Enums"]["menstrual_phase_enum"]
+            | null
+          id: string
+          research_user_id: string
+          seizure_occurred: boolean | null
+          seizure_type: Database["public"]["Enums"]["seizure_type_enum"] | null
+        }
+        Insert: {
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
+          created_at?: string | null
+          cycle_day?: number | null
+          cycle_phase?:
+            | Database["public"]["Enums"]["menstrual_phase_enum"]
+            | null
+          id?: string
+          research_user_id: string
+          seizure_occurred?: boolean | null
+          seizure_type?: Database["public"]["Enums"]["seizure_type_enum"] | null
+        }
+        Update: {
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
+          created_at?: string | null
+          cycle_day?: number | null
+          cycle_phase?:
+            | Database["public"]["Enums"]["menstrual_phase_enum"]
+            | null
+          id?: string
+          research_user_id?: string
+          seizure_occurred?: boolean | null
+          seizure_type?: Database["public"]["Enums"]["seizure_type_enum"] | null
+        }
+        Relationships: []
+      }
+      research_seizure_events: {
+        Row: {
+          age_range: Database["public"]["Enums"]["age_range_enum"] | null
+          aura_present: boolean | null
+          consciousness_level:
+            | Database["public"]["Enums"]["consciousness_level_enum"]
+            | null
+          created_at: string | null
+          days_since_baseline: number | null
           duration_seconds: number | null
-          gender: string | null
+          emergency_services_called: boolean | null
+          gender: Database["public"]["Enums"]["gender_enum"] | null
+          geographic_region:
+            | Database["public"]["Enums"]["geographic_region_enum"]
+            | null
+          hospitalized: boolean | null
           id: string
-          medications_count: number | null
+          identified_triggers:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          medication_adherence_prior:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
+          post_ictal_confusion_minutes: number | null
+          rescue_medication_used: boolean | null
           research_user_id: string
-          seizure_date: string | null
-          seizure_type: string | null
-          severity: number | null
-          triggers: Json | null
-          years_since_diagnosis: number | null
+          seizure_type: Database["public"]["Enums"]["seizure_type_enum"] | null
+          sleep_hours_prior: number | null
+          stress_level_category: string | null
+          time_of_day_category: string | null
+          witnessed: boolean | null
         }
         Insert: {
-          age_range?: string | null
-          consciousness_level?: string | null
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
+          aura_present?: boolean | null
+          consciousness_level?:
+            | Database["public"]["Enums"]["consciousness_level_enum"]
+            | null
           created_at?: string | null
+          days_since_baseline?: number | null
           duration_seconds?: number | null
-          gender?: string | null
+          emergency_services_called?: boolean | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
+          geographic_region?:
+            | Database["public"]["Enums"]["geographic_region_enum"]
+            | null
+          hospitalized?: boolean | null
           id?: string
-          medications_count?: number | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          medication_adherence_prior?:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
+          post_ictal_confusion_minutes?: number | null
+          rescue_medication_used?: boolean | null
           research_user_id: string
-          seizure_date?: string | null
-          seizure_type?: string | null
-          severity?: number | null
-          triggers?: Json | null
-          years_since_diagnosis?: number | null
+          seizure_type?: Database["public"]["Enums"]["seizure_type_enum"] | null
+          sleep_hours_prior?: number | null
+          stress_level_category?: string | null
+          time_of_day_category?: string | null
+          witnessed?: boolean | null
         }
         Update: {
-          age_range?: string | null
-          consciousness_level?: string | null
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
+          aura_present?: boolean | null
+          consciousness_level?:
+            | Database["public"]["Enums"]["consciousness_level_enum"]
+            | null
           created_at?: string | null
+          days_since_baseline?: number | null
           duration_seconds?: number | null
-          gender?: string | null
+          emergency_services_called?: boolean | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
+          geographic_region?:
+            | Database["public"]["Enums"]["geographic_region_enum"]
+            | null
+          hospitalized?: boolean | null
           id?: string
-          medications_count?: number | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          medication_adherence_prior?:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
+          post_ictal_confusion_minutes?: number | null
+          rescue_medication_used?: boolean | null
           research_user_id?: string
-          seizure_date?: string | null
-          seizure_type?: string | null
-          severity?: number | null
-          triggers?: Json | null
-          years_since_diagnosis?: number | null
+          seizure_type?: Database["public"]["Enums"]["seizure_type_enum"] | null
+          sleep_hours_prior?: number | null
+          stress_level_category?: string | null
+          time_of_day_category?: string | null
+          witnessed?: boolean | null
         }
         Relationships: []
       }
-      research_symptom_data: {
+      research_symptom_patterns: {
         Row: {
-          age_range: string | null
-          condition_category: string | null
+          age_range: Database["public"]["Enums"]["age_range_enum"] | null
           created_at: string | null
-          frequency_per_week: number | null
-          gender: string | null
+          days_since_baseline: number | null
+          duration_minutes: number | null
+          gender: Database["public"]["Enums"]["gender_enum"] | null
           id: string
-          medications_count: number | null
+          identified_triggers:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
           research_user_id: string
           severity: number | null
-          symptom_date: string | null
-          symptom_type: string | null
-          triggers: Json | null
+          symptom_type: Database["public"]["Enums"]["symptom_type_enum"] | null
         }
         Insert: {
-          age_range?: string | null
-          condition_category?: string | null
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
           created_at?: string | null
-          frequency_per_week?: number | null
-          gender?: string | null
+          days_since_baseline?: number | null
+          duration_minutes?: number | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
-          medications_count?: number | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
           research_user_id: string
           severity?: number | null
-          symptom_date?: string | null
-          symptom_type?: string | null
-          triggers?: Json | null
+          symptom_type?: Database["public"]["Enums"]["symptom_type_enum"] | null
         }
         Update: {
-          age_range?: string | null
-          condition_category?: string | null
+          age_range?: Database["public"]["Enums"]["age_range_enum"] | null
           created_at?: string | null
-          frequency_per_week?: number | null
-          gender?: string | null
+          days_since_baseline?: number | null
+          duration_minutes?: number | null
+          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
-          medications_count?: number | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
           research_user_id?: string
           severity?: number | null
-          symptom_date?: string | null
-          symptom_type?: string | null
-          triggers?: Json | null
+          symptom_type?: Database["public"]["Enums"]["symptom_type_enum"] | null
         }
         Relationships: []
       }
-      researcher_access_requests: {
+      research_user_mapping: {
         Row: {
           created_at: string | null
-          email: string
-          first_name: string | null
           id: string
-          institution: string | null
-          last_name: string | null
-          request_reason: string | null
-          research_area: string | null
-          status: string | null
-          updated_at: string | null
+          research_user_id: string
           user_id: string
         }
         Insert: {
           created_at?: string | null
-          email: string
-          first_name?: string | null
           id?: string
-          institution?: string | null
-          last_name?: string | null
-          request_reason?: string | null
-          research_area?: string | null
-          status?: string | null
-          updated_at?: string | null
+          research_user_id?: string
           user_id: string
         }
         Update: {
           created_at?: string | null
-          email?: string
-          first_name?: string | null
           id?: string
-          institution?: string | null
-          last_name?: string | null
-          request_reason?: string | null
-          research_area?: string | null
-          status?: string | null
-          updated_at?: string | null
+          research_user_id?: string
           user_id?: string
         }
         Relationships: []
       }
       seizure_logs: {
         Row: {
-          consciousness_level: string | null
+          aura_description: string | null
+          aura_present: boolean | null
+          consciousness_level:
+            | Database["public"]["Enums"]["consciousness_level_enum"]
+            | null
           created_at: string | null
           duration_seconds: number | null
+          emergency_services_called: boolean | null
+          event_date: string
+          event_time: string | null
+          hospitalized: boolean | null
           id: string
-          injuries: Json | null
-          location: string | null
-          log_date: string
-          log_time: string | null
+          identified_triggers:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          location_type: string | null
+          medication_adherence_prior:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
           notes: string | null
-          post_ictal_symptoms: Json | null
-          seizure_type: string | null
-          severity: number | null
-          triggers: Json | null
+          post_ictal_confusion_minutes: number | null
+          post_ictal_symptoms:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          pre_ictal_symptoms:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          recovery_time_minutes: number | null
+          rescue_medication_name: string | null
+          rescue_medication_used: boolean | null
+          seizure_type: Database["public"]["Enums"]["seizure_type_enum"]
+          sleep_hours_prior: number | null
+          stress_level: number | null
           user_id: string
-          warning_signs: Json | null
-          witness_account: string | null
-          witness_present: boolean | null
+          video_recorded: boolean | null
+          witness_name: string | null
+          witnessed: boolean | null
         }
         Insert: {
-          consciousness_level?: string | null
+          aura_description?: string | null
+          aura_present?: boolean | null
+          consciousness_level?:
+            | Database["public"]["Enums"]["consciousness_level_enum"]
+            | null
           created_at?: string | null
           duration_seconds?: number | null
+          emergency_services_called?: boolean | null
+          event_date: string
+          event_time?: string | null
+          hospitalized?: boolean | null
           id?: string
-          injuries?: Json | null
-          location?: string | null
-          log_date: string
-          log_time?: string | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          location_type?: string | null
+          medication_adherence_prior?:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
           notes?: string | null
-          post_ictal_symptoms?: Json | null
-          seizure_type?: string | null
-          severity?: number | null
-          triggers?: Json | null
+          post_ictal_confusion_minutes?: number | null
+          post_ictal_symptoms?:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          pre_ictal_symptoms?:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          recovery_time_minutes?: number | null
+          rescue_medication_name?: string | null
+          rescue_medication_used?: boolean | null
+          seizure_type: Database["public"]["Enums"]["seizure_type_enum"]
+          sleep_hours_prior?: number | null
+          stress_level?: number | null
           user_id: string
-          warning_signs?: Json | null
-          witness_account?: string | null
-          witness_present?: boolean | null
+          video_recorded?: boolean | null
+          witness_name?: string | null
+          witnessed?: boolean | null
         }
         Update: {
-          consciousness_level?: string | null
+          aura_description?: string | null
+          aura_present?: boolean | null
+          consciousness_level?:
+            | Database["public"]["Enums"]["consciousness_level_enum"]
+            | null
           created_at?: string | null
           duration_seconds?: number | null
+          emergency_services_called?: boolean | null
+          event_date?: string
+          event_time?: string | null
+          hospitalized?: boolean | null
           id?: string
-          injuries?: Json | null
-          location?: string | null
-          log_date?: string
-          log_time?: string | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          location_type?: string | null
+          medication_adherence_prior?:
+            | Database["public"]["Enums"]["medication_adherence_enum"]
+            | null
           notes?: string | null
-          post_ictal_symptoms?: Json | null
-          seizure_type?: string | null
-          severity?: number | null
-          triggers?: Json | null
+          post_ictal_confusion_minutes?: number | null
+          post_ictal_symptoms?:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          pre_ictal_symptoms?:
+            | Database["public"]["Enums"]["symptom_type_enum"][]
+            | null
+          recovery_time_minutes?: number | null
+          rescue_medication_name?: string | null
+          rescue_medication_used?: boolean | null
+          seizure_type?: Database["public"]["Enums"]["seizure_type_enum"]
+          sleep_hours_prior?: number | null
+          stress_level?: number | null
           user_id?: string
-          warning_signs?: Json | null
-          witness_account?: string | null
-          witness_present?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "seizure_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      sessions: {
-        Row: {
-          expire: string
-          sess: Json
-          sid: string
-        }
-        Insert: {
-          expire: string
-          sess: Json
-          sid: string
-        }
-        Update: {
-          expire?: string
-          sess?: Json
-          sid?: string
+          video_recorded?: boolean | null
+          witness_name?: string | null
+          witnessed?: boolean | null
         }
         Relationships: []
       }
       symptom_logs: {
         Row: {
-          body_parts: Json | null
+          body_locations:
+            | Database["public"]["Enums"]["body_location_enum"][]
+            | null
           created_at: string | null
           duration_minutes: number | null
           id: string
-          impact_on_activities: Json | null
+          identified_triggers:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          impact_on_daily_activities: number | null
           log_date: string
           log_time: string | null
           notes: string | null
-          relief_methods: Json | null
-          severity: number | null
-          symptom_type: string
-          triggers: Json | null
+          relief_effectiveness: number | null
+          relief_methods_tried: string[] | null
+          severity: number
+          symptom_type: Database["public"]["Enums"]["symptom_type_enum"]
           user_id: string
+          work_school_affected: boolean | null
         }
         Insert: {
-          body_parts?: Json | null
+          body_locations?:
+            | Database["public"]["Enums"]["body_location_enum"][]
+            | null
           created_at?: string | null
           duration_minutes?: number | null
           id?: string
-          impact_on_activities?: Json | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          impact_on_daily_activities?: number | null
           log_date: string
           log_time?: string | null
           notes?: string | null
-          relief_methods?: Json | null
-          severity?: number | null
-          symptom_type: string
-          triggers?: Json | null
+          relief_effectiveness?: number | null
+          relief_methods_tried?: string[] | null
+          severity: number
+          symptom_type: Database["public"]["Enums"]["symptom_type_enum"]
           user_id: string
+          work_school_affected?: boolean | null
         }
         Update: {
-          body_parts?: Json | null
+          body_locations?:
+            | Database["public"]["Enums"]["body_location_enum"][]
+            | null
           created_at?: string | null
           duration_minutes?: number | null
           id?: string
-          impact_on_activities?: Json | null
+          identified_triggers?:
+            | Database["public"]["Enums"]["seizure_trigger_enum"][]
+            | null
+          impact_on_daily_activities?: number | null
           log_date?: string
           log_time?: string | null
           notes?: string | null
-          relief_methods?: Json | null
-          severity?: number | null
-          symptom_type?: string
-          triggers?: Json | null
+          relief_effectiveness?: number | null
+          relief_methods_tried?: string[] | null
+          severity?: number
+          symptom_type?: Database["public"]["Enums"]["symptom_type_enum"]
           user_id?: string
+          work_school_affected?: boolean | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "symptom_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      tracking_entries: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          duration_minutes: number | null
-          energy_level: number | null
-          entry_date: string
-          entry_type: string
-          id: string
-          location: string | null
-          mood_rating: number | null
-          notes: string | null
-          severity: number | null
-          sleep_quality: number | null
-          title: string | null
-          triggers: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          duration_minutes?: number | null
-          energy_level?: number | null
-          entry_date: string
-          entry_type: string
-          id?: string
-          location?: string | null
-          mood_rating?: number | null
-          notes?: string | null
-          severity?: number | null
-          sleep_quality?: number | null
-          title?: string | null
-          triggers?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          duration_minutes?: number | null
-          energy_level?: number | null
-          entry_date?: string
-          entry_type?: string
-          id?: string
-          location?: string | null
-          mood_rating?: number | null
-          notes?: string | null
-          severity?: number | null
-          sleep_quality?: number | null
-          title?: string | null
-          triggers?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tracking_entries_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_achievements: {
         Row: {
-          achievement_name: string
-          achievement_type: string
-          badge_icon: string | null
-          category: string | null
-          description: string | null
+          achievement_code: string
           id: string
-          is_displayed: boolean | null
-          points_earned: number | null
-          unlock_date: string | null
+          unlocked_at: string | null
           user_id: string
         }
         Insert: {
-          achievement_name: string
-          achievement_type: string
-          badge_icon?: string | null
-          category?: string | null
-          description?: string | null
+          achievement_code: string
           id?: string
-          is_displayed?: boolean | null
-          points_earned?: number | null
-          unlock_date?: string | null
+          unlocked_at?: string | null
           user_id: string
         }
         Update: {
-          achievement_name?: string
-          achievement_type?: string
-          badge_icon?: string | null
-          category?: string | null
-          description?: string | null
+          achievement_code?: string
           id?: string
-          is_displayed?: boolean | null
-          points_earned?: number | null
-          unlock_date?: string | null
+          unlocked_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_achievements_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_conditions: {
         Row: {
@@ -2215,8 +1057,10 @@ export type Database = {
           created_at: string | null
           diagnosis_date: string | null
           id: string
-          notes: string | null
-          severity: string | null
+          severity: number | null
+          tracking_features_enabled:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
           user_id: string
         }
         Insert: {
@@ -2224,8 +1068,10 @@ export type Database = {
           created_at?: string | null
           diagnosis_date?: string | null
           id?: string
-          notes?: string | null
-          severity?: string | null
+          severity?: number | null
+          tracking_features_enabled?:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
           user_id: string
         }
         Update: {
@@ -2233,8 +1079,10 @@ export type Database = {
           created_at?: string | null
           diagnosis_date?: string | null
           id?: string
-          notes?: string | null
-          severity?: string | null
+          severity?: number | null
+          tracking_features_enabled?:
+            | Database["public"]["Enums"]["tracking_feature_enum"][]
+            | null
           user_id?: string
         }
         Relationships: [
@@ -2245,56 +1093,49 @@ export type Database = {
             referencedRelation: "conditions"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_conditions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_medications: {
         Row: {
           created_at: string | null
-          dosage: string
+          dosage_amount: number | null
+          dosage_unit: string | null
           end_date: string | null
-          frequency: string
+          frequency:
+            | Database["public"]["Enums"]["medication_frequency_enum"]
+            | null
           id: string
-          is_active: boolean | null
-          medication_id: string
-          notes: string | null
-          prescribing_doctor: string | null
+          medication_id: string | null
+          prescriber_name: string | null
           start_date: string | null
-          updated_at: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
-          dosage: string
+          dosage_amount?: number | null
+          dosage_unit?: string | null
           end_date?: string | null
-          frequency: string
+          frequency?:
+            | Database["public"]["Enums"]["medication_frequency_enum"]
+            | null
           id?: string
-          is_active?: boolean | null
-          medication_id: string
-          notes?: string | null
-          prescribing_doctor?: string | null
+          medication_id?: string | null
+          prescriber_name?: string | null
           start_date?: string | null
-          updated_at?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
-          dosage?: string
+          dosage_amount?: number | null
+          dosage_unit?: string | null
           end_date?: string | null
-          frequency?: string
+          frequency?:
+            | Database["public"]["Enums"]["medication_frequency_enum"]
+            | null
           id?: string
-          is_active?: boolean | null
-          medication_id?: string
-          notes?: string | null
-          prescribing_doctor?: string | null
+          medication_id?: string | null
+          prescriber_name?: string | null
           start_date?: string | null
-          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -2305,104 +1146,97 @@ export type Database = {
             referencedRelation: "medications"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_medications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
-      user_points: {
+      wearable_data_logs: {
         Row: {
+          confidence_score: number | null
           created_at: string | null
-          current_streak: number | null
+          data_quality_flag: string | null
+          data_type: Database["public"]["Enums"]["device_data_type_enum"]
+          device_id: string | null
           id: string
-          last_activity_date: string | null
-          level_name: string | null
-          level_number: number | null
-          longest_streak: number | null
-          monthly_points: number | null
-          total_points: number | null
-          updated_at: string | null
+          recorded_at: string
           user_id: string
-          weekly_points: number | null
+          value_numeric: number | null
+          value_text: string | null
+          value_unit: string | null
         }
         Insert: {
+          confidence_score?: number | null
           created_at?: string | null
-          current_streak?: number | null
+          data_quality_flag?: string | null
+          data_type: Database["public"]["Enums"]["device_data_type_enum"]
+          device_id?: string | null
           id?: string
-          last_activity_date?: string | null
-          level_name?: string | null
-          level_number?: number | null
-          longest_streak?: number | null
-          monthly_points?: number | null
-          total_points?: number | null
-          updated_at?: string | null
+          recorded_at: string
           user_id: string
-          weekly_points?: number | null
+          value_numeric?: number | null
+          value_text?: string | null
+          value_unit?: string | null
         }
         Update: {
+          confidence_score?: number | null
           created_at?: string | null
-          current_streak?: number | null
+          data_quality_flag?: string | null
+          data_type?: Database["public"]["Enums"]["device_data_type_enum"]
+          device_id?: string | null
           id?: string
-          last_activity_date?: string | null
-          level_name?: string | null
-          level_number?: number | null
-          longest_streak?: number | null
-          monthly_points?: number | null
-          total_points?: number | null
-          updated_at?: string | null
+          recorded_at?: string
           user_id?: string
-          weekly_points?: number | null
+          value_numeric?: number | null
+          value_text?: string | null
+          value_unit?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "user_points_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "wearable_data_logs_device_id_fkey"
+            columns: ["device_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "wearable_devices"
             referencedColumns: ["id"]
           },
         ]
       }
-      users: {
+      wearable_devices: {
         Row: {
-          auth_user_id: string
+          active: boolean | null
+          connected_at: string | null
           created_at: string | null
-          email: string | null
-          first_name: string | null
+          device_name: string | null
+          device_type: Database["public"]["Enums"]["device_type_enum"]
           id: string
-          last_name: string | null
-          onboarding_completed: boolean | null
-          profile_image_url: string | null
-          updated_at: string | null
-          user_type: string
+          last_sync_at: string | null
+          manufacturer: string | null
+          model: string | null
+          serial_number: string | null
+          user_id: string
         }
         Insert: {
-          auth_user_id?: string
+          active?: boolean | null
+          connected_at?: string | null
           created_at?: string | null
-          email?: string | null
-          first_name?: string | null
+          device_name?: string | null
+          device_type: Database["public"]["Enums"]["device_type_enum"]
           id?: string
-          last_name?: string | null
-          onboarding_completed?: boolean | null
-          profile_image_url?: string | null
-          updated_at?: string | null
-          user_type: string
+          last_sync_at?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          serial_number?: string | null
+          user_id: string
         }
         Update: {
-          auth_user_id?: string
+          active?: boolean | null
+          connected_at?: string | null
           created_at?: string | null
-          email?: string | null
-          first_name?: string | null
+          device_name?: string | null
+          device_type?: Database["public"]["Enums"]["device_type_enum"]
           id?: string
-          last_name?: string | null
-          onboarding_completed?: boolean | null
-          profile_image_url?: string | null
-          updated_at?: string | null
-          user_type?: string
+          last_sync_at?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          serial_number?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -2411,17 +1245,208 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      auth_uid_as_uuid: {
+      cleanup_old_audit_logs: {
         Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      set_user_context: {
-        Args: { auth_user_id: string; user_id: string }
         Returns: undefined
+      }
+      hash_ip: {
+        Args: { ip: unknown }
+        Returns: string
       }
     }
     Enums: {
-      [_ in never]: never
+      age_range_enum:
+        | "0_4"
+        | "5_9"
+        | "10_14"
+        | "15_19"
+        | "20_24"
+        | "25_29"
+        | "30_34"
+        | "35_39"
+        | "40_44"
+        | "45_49"
+        | "50_54"
+        | "55_59"
+        | "60_64"
+        | "65_69"
+        | "70_74"
+        | "75_79"
+        | "80_plus"
+      body_location_enum:
+        | "head"
+        | "face"
+        | "neck"
+        | "chest"
+        | "abdomen"
+        | "back"
+        | "left_arm"
+        | "right_arm"
+        | "left_leg"
+        | "right_leg"
+        | "left_hand"
+        | "right_hand"
+        | "generalized"
+        | "other"
+      connection_status_enum:
+        | "pending"
+        | "active"
+        | "inactive"
+        | "rejected"
+        | "expired"
+        | "verification_required"
+        | "revoked"
+      consciousness_level_enum:
+        | "fully_conscious"
+        | "impaired_awareness"
+        | "loss_of_consciousness"
+        | "confusion"
+        | "unknown"
+      consent_status_enum: "pending" | "active" | "withdrawn" | "expired"
+      device_data_type_enum:
+        | "heart_rate"
+        | "heart_rate_variability"
+        | "blood_oxygen"
+        | "sleep_stages"
+        | "steps"
+        | "activity_level"
+        | "skin_temperature"
+        | "eeg_signal"
+        | "seizure_detection"
+        | "fall_detection"
+        | "location"
+        | "other"
+      device_type_enum:
+        | "smartwatch"
+        | "fitness_tracker"
+        | "eeg_headband"
+        | "continuous_glucose_monitor"
+        | "heart_rate_monitor"
+        | "seizure_detection_device"
+        | "other"
+      energy_level_enum: "exhausted" | "low" | "moderate" | "high" | "very_high"
+      gender_enum:
+        | "male"
+        | "female"
+        | "non_binary"
+        | "other"
+        | "prefer_not_to_say"
+      geographic_region_enum:
+        | "north_america"
+        | "south_america"
+        | "europe"
+        | "asia"
+        | "africa"
+        | "oceania"
+        | "unknown"
+      medication_adherence_enum:
+        | "taken_on_time"
+        | "taken_late"
+        | "missed"
+        | "double_dose"
+        | "reduced_dose"
+      medication_frequency_enum:
+        | "once_daily"
+        | "twice_daily"
+        | "three_times_daily"
+        | "four_times_daily"
+        | "every_other_day"
+        | "weekly"
+        | "as_needed"
+        | "other"
+      menstrual_flow_enum:
+        | "spotting"
+        | "light"
+        | "moderate"
+        | "heavy"
+        | "very_heavy"
+      menstrual_phase_enum: "menstrual" | "follicular" | "ovulation" | "luteal"
+      mood_type_enum: "very_poor" | "poor" | "neutral" | "good" | "very_good"
+      relationship_enum:
+        | "parent"
+        | "spouse"
+        | "partner"
+        | "child"
+        | "sibling"
+        | "friend"
+        | "caregiver"
+        | "other"
+      research_data_type_enum:
+        | "seizure_data"
+        | "medication_data"
+        | "symptom_data"
+        | "menstrual_data"
+        | "wearable_data"
+        | "genetic_data"
+        | "imaging_data"
+        | "location_data"
+        | "demographic_data"
+        | "all_data"
+      seizure_trigger_enum:
+        | "stress"
+        | "sleep_deprivation"
+        | "missed_medication"
+        | "alcohol"
+        | "illness"
+        | "menstruation"
+        | "flashing_lights"
+        | "heat"
+        | "dehydration"
+        | "exercise"
+        | "unknown"
+        | "none_identified"
+      seizure_type_enum:
+        | "generalized_tonic_clonic"
+        | "focal_aware"
+        | "focal_impaired_awareness"
+        | "focal_to_bilateral_tonic_clonic"
+        | "absence"
+        | "myoclonic"
+        | "atonic"
+        | "tonic"
+        | "clonic"
+        | "epileptic_spasm"
+        | "unknown"
+      side_effect_severity_enum:
+        | "none"
+        | "mild"
+        | "moderate"
+        | "severe"
+        | "life_threatening"
+      sleep_quality_enum: "very_poor" | "poor" | "fair" | "good" | "excellent"
+      symptom_type_enum:
+        | "headache"
+        | "dizziness"
+        | "nausea"
+        | "fatigue"
+        | "tremor"
+        | "numbness"
+        | "tingling"
+        | "vision_changes"
+        | "balance_issues"
+        | "cognitive_fog"
+        | "memory_issues"
+        | "mood_changes"
+        | "sleep_disturbance"
+        | "pain"
+        | "weakness"
+        | "other"
+      tracking_feature_enum:
+        | "seizure"
+        | "tremor"
+        | "gait"
+        | "menstruation"
+        | "temperature"
+        | "mood"
+        | "energy"
+        | "sleep"
+        | "symptoms"
+        | "medication"
+        | "heart_rate"
+        | "blood_pressure"
+        | "weight"
+        | "exercise"
+      user_type_enum: "patient" | "carer" | "clinician" | "researcher" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2548,6 +1573,217 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      age_range_enum: [
+        "0_4",
+        "5_9",
+        "10_14",
+        "15_19",
+        "20_24",
+        "25_29",
+        "30_34",
+        "35_39",
+        "40_44",
+        "45_49",
+        "50_54",
+        "55_59",
+        "60_64",
+        "65_69",
+        "70_74",
+        "75_79",
+        "80_plus",
+      ],
+      body_location_enum: [
+        "head",
+        "face",
+        "neck",
+        "chest",
+        "abdomen",
+        "back",
+        "left_arm",
+        "right_arm",
+        "left_leg",
+        "right_leg",
+        "left_hand",
+        "right_hand",
+        "generalized",
+        "other",
+      ],
+      connection_status_enum: [
+        "pending",
+        "active",
+        "inactive",
+        "rejected",
+        "expired",
+        "verification_required",
+        "revoked",
+      ],
+      consciousness_level_enum: [
+        "fully_conscious",
+        "impaired_awareness",
+        "loss_of_consciousness",
+        "confusion",
+        "unknown",
+      ],
+      consent_status_enum: ["pending", "active", "withdrawn", "expired"],
+      device_data_type_enum: [
+        "heart_rate",
+        "heart_rate_variability",
+        "blood_oxygen",
+        "sleep_stages",
+        "steps",
+        "activity_level",
+        "skin_temperature",
+        "eeg_signal",
+        "seizure_detection",
+        "fall_detection",
+        "location",
+        "other",
+      ],
+      device_type_enum: [
+        "smartwatch",
+        "fitness_tracker",
+        "eeg_headband",
+        "continuous_glucose_monitor",
+        "heart_rate_monitor",
+        "seizure_detection_device",
+        "other",
+      ],
+      energy_level_enum: ["exhausted", "low", "moderate", "high", "very_high"],
+      gender_enum: [
+        "male",
+        "female",
+        "non_binary",
+        "other",
+        "prefer_not_to_say",
+      ],
+      geographic_region_enum: [
+        "north_america",
+        "south_america",
+        "europe",
+        "asia",
+        "africa",
+        "oceania",
+        "unknown",
+      ],
+      medication_adherence_enum: [
+        "taken_on_time",
+        "taken_late",
+        "missed",
+        "double_dose",
+        "reduced_dose",
+      ],
+      medication_frequency_enum: [
+        "once_daily",
+        "twice_daily",
+        "three_times_daily",
+        "four_times_daily",
+        "every_other_day",
+        "weekly",
+        "as_needed",
+        "other",
+      ],
+      menstrual_flow_enum: [
+        "spotting",
+        "light",
+        "moderate",
+        "heavy",
+        "very_heavy",
+      ],
+      menstrual_phase_enum: ["menstrual", "follicular", "ovulation", "luteal"],
+      mood_type_enum: ["very_poor", "poor", "neutral", "good", "very_good"],
+      relationship_enum: [
+        "parent",
+        "spouse",
+        "partner",
+        "child",
+        "sibling",
+        "friend",
+        "caregiver",
+        "other",
+      ],
+      research_data_type_enum: [
+        "seizure_data",
+        "medication_data",
+        "symptom_data",
+        "menstrual_data",
+        "wearable_data",
+        "genetic_data",
+        "imaging_data",
+        "location_data",
+        "demographic_data",
+        "all_data",
+      ],
+      seizure_trigger_enum: [
+        "stress",
+        "sleep_deprivation",
+        "missed_medication",
+        "alcohol",
+        "illness",
+        "menstruation",
+        "flashing_lights",
+        "heat",
+        "dehydration",
+        "exercise",
+        "unknown",
+        "none_identified",
+      ],
+      seizure_type_enum: [
+        "generalized_tonic_clonic",
+        "focal_aware",
+        "focal_impaired_awareness",
+        "focal_to_bilateral_tonic_clonic",
+        "absence",
+        "myoclonic",
+        "atonic",
+        "tonic",
+        "clonic",
+        "epileptic_spasm",
+        "unknown",
+      ],
+      side_effect_severity_enum: [
+        "none",
+        "mild",
+        "moderate",
+        "severe",
+        "life_threatening",
+      ],
+      sleep_quality_enum: ["very_poor", "poor", "fair", "good", "excellent"],
+      symptom_type_enum: [
+        "headache",
+        "dizziness",
+        "nausea",
+        "fatigue",
+        "tremor",
+        "numbness",
+        "tingling",
+        "vision_changes",
+        "balance_issues",
+        "cognitive_fog",
+        "memory_issues",
+        "mood_changes",
+        "sleep_disturbance",
+        "pain",
+        "weakness",
+        "other",
+      ],
+      tracking_feature_enum: [
+        "seizure",
+        "tremor",
+        "gait",
+        "menstruation",
+        "temperature",
+        "mood",
+        "energy",
+        "sleep",
+        "symptoms",
+        "medication",
+        "heart_rate",
+        "blood_pressure",
+        "weight",
+        "exercise",
+      ],
+      user_type_enum: ["patient", "carer", "clinician", "researcher", "admin"],
+    },
   },
 } as const
