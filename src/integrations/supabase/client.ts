@@ -5,8 +5,16 @@ import { createClient } from '@supabase/supabase-js';
 // that can occur with very large generated types. This keeps the UI build
 // healthy while functionality remains the same.
 
-const SUPABASE_URL = "https://jrpmvilcyctqwflnojbf.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpycG12aWxjeWN0cXdmbG5vamJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5OTA2OTksImV4cCI6MjA3NDU2NjY5OX0.T5rp8WNQRwDmCFYI8aeFSjxOxVZqswCpJCy2NVkzqEs";
+// SECURITY: Use environment variables, never hardcode credentials
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Validate environment variables are set
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  throw new Error(
+    'Missing Supabase environment variables. Please check your .env file.'
+  );
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
