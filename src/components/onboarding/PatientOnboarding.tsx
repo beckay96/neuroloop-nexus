@@ -182,47 +182,147 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
       }
     } else {
       try {
-        // Save patient onboarding data to the database
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        const { error: patientError } = await supabase
-          .from('patient_onboarding_data')
-          .insert({
+        // 1. Create patient profile
+        const { error: profileError } = await supabase
+          .from('patient_profiles')
+          .upsert({
             user_id: user.id,
             first_name: formData.firstName,
-            middle_name: formData.middleName,
             last_name: formData.lastName,
-            gender: formData.gender,
-            date_of_birth: formData.dateOfBirth,
-            carer_name: formData.carerName,
-            carer_phone: formData.carerPhone,
-            carer_email: formData.carerEmail,
-            selected_conditions: formData.selectedConditions,
-            preferred_tracking_times: formData.preferredTimes,
-            track_menstrual_cycle: formData.trackMenstrual,
-            share_research_data: formData.shareResearchData,
-            research_data_types: formData.researchDataTypes
+            date_of_birth: formData.dateOfBirth || null,
+            gender: formData.gender || null
           });
 
-        if (patientError) {
-          console.error('Error saving patient data:', patientError);
+        if (profileError) {
+          console.error('Error saving patient profile:', profileError);
           return;
         }
 
-        // Update onboarding progress
-        const { error: progressError } = await supabase
-          .from('onboarding_progress')
+        // 2. Create profiles record with user type
+        const { error: userProfileError } = await supabase
+          .from('profiles')
           .upsert({
-            user_id: user.id,
+            id: user.id,
             user_type: 'patient',
-            current_step: getMaxSteps(),
-            completed: true,
-            step_data: formData
+            onboarding_completed: true
           });
 
-        if (progressError) {
-          console.error('Error updating progress:', progressError);
+        if (userProfileError) {
+          console.error('Error saving profiles:', userProfileError);
+        }
+
+        // 3. Get condition UUIDs from database
+        const conditionNames = formData.selectedConditions.map(id => {
+          const condition = conditions.find(c => c.id === id);
+          return condition?.name;
+        }).filter(Boolean);
+
+        const { data: dbConditions } = await supabase
+          .from('conditions')
+          .select('id, name, tracking_features_array')
+          .in('name', conditionNames);
+
+        const conditionUUIDs = (dbConditions || []).map(c => c.id);
+
+        // 4. Save onboarding data
+        const { error: onboardingError } = await supabase
+          .from('patient_onboarding_data')
+          .upsert({
+            user_id: user.id,
+            selected_conditions: conditionUUIDs,
+            track_menstrual_cycle: formData.trackMenstrual,
+            share_research_data: formData.shareResearchData,
+            research_data_types: formData.researchDataTypes.length > 0 ? formData.researchDataTypes : null,
+            completed_at: new Date().toISOString()
+          });
+
+        if (onboardingError) {
+          console.error('Error saving onboarding data:', onboardingError);
+          return;
+        }
+
+        // 5. Create user_conditions records
+        if (dbConditions && dbConditions.length > 0) {
+          const conditionRecords = dbConditions.map(condition => ({
+            user_id: user.id,
+            condition_id: condition.id,
+            tracking_features_enabled: condition.tracking_features_array
+          }));
+
+          const { error: conditionsError } = await supabase
+            .from('user_conditions')
+            .upsert(conditionRecords, { onConflict: 'user_id,condition_id' });
+
+          if (conditionsError) {
+            console.error('Error saving user conditions:', conditionsError);
+          }
+        }
+
+        // 6. Create user_medications records
+        if (formData.medications.length > 0) {
+          const medicationRecords = formData.medications.map(med => ({
+            user_id: user.id,
+            medication_id: med.id || null,
+            dosage_amount: parseFloat(med.dosage) || null,
+            dosage_unit: med.dosage.replace(/[0-9.]/g, '').trim() || 'mg',
+            frequency: med.frequency,
+            start_date: new Date().toISOString().split('T')[0]
+          }));
+
+          const { error: medsError } = await supabase
+            .from('user_medications')
+            .insert(medicationRecords);
+
+          if (medsError) {
+            console.error('Error saving medications:', medsError);
+          }
+        }
+
+        // 7. Create research consent records
+        if (formData.shareResearchData && formData.researchDataTypes.length > 0) {
+          const consentRecords = formData.researchDataTypes.map(dataType => ({
+            user_id: user.id,
+            data_type: dataType,
+            consent_status: 'active',
+            consent_given_at: new Date().toISOString()
+          }));
+
+          const { error: consentError } = await supabase
+            .from('research_consent')
+            .upsert(consentRecords, { onConflict: 'user_id,data_type' });
+
+          if (consentError) {
+            console.error('Error saving research consent:', consentError);
+          }
+        }
+
+        // 8. Set up tracking preferences
+        let allTrackingFeatures: string[] = [];
+        if (dbConditions) {
+          dbConditions.forEach(condition => {
+            if (condition.tracking_features_array) {
+              allTrackingFeatures = [...allTrackingFeatures, ...condition.tracking_features_array];
+            }
+          });
+        }
+        if (formData.trackMenstrual) {
+          allTrackingFeatures.push('menstruation');
+        }
+        allTrackingFeatures = Array.from(new Set(allTrackingFeatures));
+
+        const { error: prefError } = await supabase
+          .from('daily_tracking_preferences')
+          .upsert({
+            user_id: user.id,
+            tracking_types: allTrackingFeatures,
+            notification_enabled: true
+          });
+
+        if (prefError) {
+          console.error('Error saving tracking preferences:', prefError);
         }
 
         onComplete(formData);
@@ -401,13 +501,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
               
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
-                <Select onValueChange={(value) => updateFormData({ gender: value })}>
+                <Select value={formData.gender} onValueChange={(value) => updateFormData({ gender: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent className="bg-popover border border-border z-50">
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="non_binary">Non-Binary</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                     <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
                   </SelectContent>

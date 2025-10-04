@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import AppNavbar from "@/components/navigation/AppNavbar";
-import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
+import DailyTrackingModal from "@/components/tracking/DailyTrackingModal.tsx";
 import SeizureLogModal from "@/components/tracking/SeizureLogModal";
 import MedicationModal from "@/components/tracking/MedicationModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
@@ -13,6 +13,12 @@ import SymptomsModal from "@/components/tracking/SymptomsModal";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { 
+  numericToMoodEnum,
+  numericToEnergyEnum,
+  numericToSleepEnum
+} from "@/utils/databaseEnums";
 const quickActions = [{
   id: "daily-tracking",
   title: "Daily Check-in",
@@ -187,9 +193,100 @@ export default function PatientDashboard() {
         break;
     }
   };
-  const handleModalComplete = (data: any, type: string) => {
-    // In production, save the data to Supabase here
-    // For now, the modals handle their own completion
+  const handleModalComplete = async (data: any, type: string) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({ 
+        title: "Error", 
+        description: "You must be logged in",
+        variant: "destructive" 
+      });
+      return;
+    }
+
+    try {
+      switch(type) {
+        case 'seizure-log':
+          const { error: seizureError } = await supabase
+            .from('seizure_logs')
+            .insert({
+              user_id: user.id,
+              ...data
+            });
+          if (seizureError) throw seizureError;
+          toast({ title: "✅ Seizure logged successfully" });
+          break;
+
+        case 'daily-tracking':
+          const wellnessData = {
+            user_id: user.id,
+            log_date: data.log_date,
+            mood: numericToMoodEnum(data.mood_numeric),
+            energy_level: numericToEnergyEnum(data.energy_numeric),
+            sleep_quality: numericToSleepEnum(data.sleep_numeric),
+            sleep_hours: data.sleep_hours,
+            sleep_interruptions: data.sleep_interruptions,
+            exercise_minutes: data.exercise_minutes,
+            exercise_type: data.exercise_type,
+            stress_level: data.stress_level,
+            notes: data.notes
+          };
+          
+          const { error: wellnessError } = await supabase
+            .from('daily_wellness_logs')
+            .upsert(wellnessData, { onConflict: 'user_id,log_date' });
+          if (wellnessError) throw wellnessError;
+          toast({ title: "✅ Daily tracking saved" });
+          break;
+
+        case 'medication-log':
+          const { error: medError } = await supabase
+            .from('medication_logs')
+            .insert({
+              user_id: user.id,
+              ...data
+            });
+          if (medError) throw medError;
+          toast({ title: "✅ Medication logged" });
+          break;
+
+        case 'symptoms-log':
+          const { error: symptomError } = await supabase
+            .from('symptom_logs')
+            .insert({
+              user_id: user.id,
+              ...data
+            });
+          if (symptomError) throw symptomError;
+          toast({ title: "✅ Symptoms logged" });
+          break;
+
+        case 'temperature-log':
+          const { error: tempError } = await supabase
+            .from('menstrual_cycle_logs')
+            .insert({
+              user_id: user.id,
+              basal_body_temperature: data.temperature,
+              log_date: data.date,
+              notes: data.notes
+            });
+          if (tempError) throw tempError;
+          toast({ title: "✅ Temperature logged" });
+          break;
+
+        case 'video-log':
+          // Video logs might need special handling for file uploads
+          toast({ title: "Video log feature coming soon" });
+          break;
+      }
+    } catch (error: any) {
+      console.error('Error saving data:', error);
+      toast({ 
+        title: "Error saving data", 
+        description: error.message || "Please try again",
+        variant: "destructive" 
+      });
+    }
   };
   return <>
       <DailyTrackingModal isOpen={showDailyTracking} onClose={() => setShowDailyTracking(false)} onComplete={data => {
