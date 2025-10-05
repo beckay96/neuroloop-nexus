@@ -12,6 +12,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DateInput } from "@/components/ui/date-input";
 import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
 import { 
   Heart,
@@ -29,9 +30,14 @@ import {
   AlertTriangle,
   Plus,
   X,
-  Search
+  Search,
+  Send,
+  CheckCircle,
+  Loader2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useInviteCarer } from "@/hooks/useInviteCarer";
+import { useToast } from "@/hooks/use-toast";
 
 interface PatientOnboardingProps {
   onComplete: (data: any) => void;
@@ -108,6 +114,10 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   const [customTime, setCustomTime] = useState("");
   const [availableMedications, setAvailableMedications] = useState<any[]>([]);
   const [medicationSearch, setMedicationSearch] = useState("");
+  const [carerInviteSent, setCarerInviteSent] = useState(false);
+  const [carerRelationship, setCarerRelationship] = useState("spouse");
+  const { inviteCarer, loading: inviteLoading } = useInviteCarer();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     // Personal Info
     firstName: "",
@@ -515,13 +525,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                 </Select>
               </div>
               
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="dateOfBirth">Date of Birth</Label>
-                <Input
+              <div className="md:col-span-2">
+                <DateInput
                   id="dateOfBirth"
-                  type="date"
+                  label="Date of Birth"
                   value={formData.dateOfBirth}
-                  onChange={(e) => updateFormData({ dateOfBirth: e.target.value })}
+                  onChange={(value) => updateFormData({ dateOfBirth: value })}
+                  max={new Date().toISOString().split('T')[0]}
+                  showFormatHint={true}
                 />
               </div>
             </div>
@@ -566,12 +577,101 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
                   type="email"
                   value={formData.carerEmail}
                   onChange={(e) => updateFormData({ carerEmail: e.target.value })}
-                  placeholder="Optional - for carer portal invite"
+                  placeholder="Email for carer portal invite (optional)"
                 />
-                <p className="text-sm text-muted-foreground">
-                  We'll send them an invite to access the carer portal (optional)
-                </p>
               </div>
+
+              {formData.carerEmail && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="carerRelationship">Relationship *</Label>
+                    <Select value={carerRelationship} onValueChange={setCarerRelationship}>
+                      <SelectTrigger id="carerRelationship">
+                        <SelectValue placeholder="Select relationship" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="spouse">Spouse/Partner</SelectItem>
+                        <SelectItem value="parent">Parent</SelectItem>
+                        <SelectItem value="child">Child</SelectItem>
+                        <SelectItem value="sibling">Sibling</SelectItem>
+                        <SelectItem value="friend">Friend</SelectItem>
+                        <SelectItem value="professional_caregiver">Professional Caregiver</SelectItem>
+                        <SelectItem value="other_family">Other Family</SelectItem>
+                        <SelectItem value="healthcare_worker">Healthcare Worker</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                    <div className="flex items-start gap-3 mb-3">
+                      <Send className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                      <div>
+                        <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                          Send Carer Portal Invite
+                        </h4>
+                        <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                          Invite {formData.carerName || 'this person'} to access the carer portal. 
+                          They'll be able to view your health data and assist with care.
+                        </p>
+                        {carerInviteSent ? (
+                          <div className="flex items-center gap-2 text-green-700 dark:text-green-300">
+                            <CheckCircle className="h-4 w-4" />
+                            <span className="text-sm font-medium">Invite sent!</span>
+                          </div>
+                        ) : (
+                          <Button
+                            type="button"
+                            onClick={async () => {
+                              if (!formData.carerEmail) return;
+                              
+                              const result = await inviteCarer({
+                                email: formData.carerEmail,
+                                relationship_type: carerRelationship
+                              });
+
+                              if (result.success) {
+                                setCarerInviteSent(true);
+                                toast({
+                                  title: 'Invite Sent!',
+                                  description: `Carer portal invite sent to ${formData.carerEmail}`,
+                                });
+                              } else {
+                                toast({
+                                  title: 'Failed to Send Invite',
+                                  description: result.error || 'Please try again',
+                                  variant: 'destructive'
+                                });
+                              }
+                            }}
+                            disabled={inviteLoading || !formData.carerEmail || !carerRelationship}
+                            variant="outline"
+                            size="sm"
+                            className="bg-white dark:bg-gray-900"
+                          >
+                            {inviteLoading ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Sending...
+                              </>
+                            ) : (
+                              <>
+                                <Send className="mr-2 h-4 w-4" />
+                                Send Invite Now
+                              </>
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                </>
+              )}
+
+              {!formData.carerEmail && (
+                <p className="text-sm text-muted-foreground italic">
+                  💡 Tip: Add an email address to send a carer portal invite
+                </p>
+              )}
             </div>
           </div>
         );

@@ -25,6 +25,10 @@ import {
 import { useTheme } from "@/components/ThemeProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { usePatientOnboarding } from "@/hooks/usePatientOnboarding";
+import { useClinicianOnboarding } from "@/hooks/useClinicianOnboarding";
+import { useCarerOnboarding } from "@/hooks/useCarerOnboarding";
+import { useResearcherOnboarding } from "@/hooks/useResearcherOnboarding";
 import heroImage from "@/assets/hero-neural.jpg";
 
 const features = [
@@ -115,32 +119,42 @@ export default function Landing() {
   };
 
   const [showFirstTracking, setShowFirstTracking] = useState(false);
+  
+  // Initialize onboarding hooks
+  const { saveOnboarding: savePatientOnboarding } = usePatientOnboarding();
+  const { saveOnboarding: saveClinicianOnboarding } = useClinicianOnboarding();
+  const { saveOnboarding: saveCarerOnboarding } = useCarerOnboarding();
+  const { saveOnboarding: saveResearcherOnboarding } = useResearcherOnboarding();
 
   const handleOnboardingComplete = async (data: any) => {
-    // Onboarding completed, save to database in production
-    
-    try {
-      // Update profile to mark onboarding as completed
-      const { error } = await supabase
-        .from('profiles')
-        .upsert([{
-          id: user?.id,
-          user_type: selectedUserType as any,
-          onboarding_completed: true
-        }]);
+    if (!user?.id) {
+      console.error('No user ID found');
+      return;
+    }
 
-      if (error) {
-        console.error('Error updating profile:', error);
-      } else {
+    try {
+      let result;
+
+      // Save data based on user type using appropriate hook
+      if (selectedUserType === 'patient') {
+        result = await savePatientOnboarding(user.id, data);
+      } else if (selectedUserType === 'clinician') {
+        result = await saveClinicianOnboarding(user.id, data);
+      } else if (selectedUserType === 'carer') {
+        result = await saveCarerOnboarding(user.id, data);
+      } else if (selectedUserType === 'researcher') {
+        result = await saveResearcherOnboarding(user.id, data);
+      }
+
+      if (result?.success) {
         setShowOnboarding(false);
         setShowUserTypeSelector(false);
-        setUserType(selectedUserType); // Set the user type immediately
+        setUserType(selectedUserType);
         
-        // Only show first tracking for patients, not clinicians/carers/researchers
+        // Only show first tracking for patients
         if (selectedUserType === 'patient') {
           setShowFirstTracking(true);
         } else {
-          // For non-patients, go straight to their dashboard
           setHasCompletedOnboarding(true);
         }
       }

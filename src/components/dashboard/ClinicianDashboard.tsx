@@ -33,6 +33,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { usePatientConnections } from "@/hooks/usePatientConnections";
 
 // Comprehensive mock data for demonstration
 const patientAlerts: Array<{
@@ -342,9 +343,8 @@ const getStatusColor = (status: string) => {
   }
 };
 export default function ClinicianDashboard() {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
+  const { connections, invitations, loading } = usePatientConnections(user?.id);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");

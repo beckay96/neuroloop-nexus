@@ -1,0 +1,147 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+// EXACT schema match from symptom_logs table
+export interface SymptomLog {
+  id?: string;
+  user_id: string;
+  log_date: string; // DATE
+  log_time?: string; // TIME
+  symptom_type?: string;
+  severity?: number; // 1-10
+  duration_minutes?: number;
+  triggers?: Record<string, any>; // JSONB
+  relief_methods?: Record<string, any>; // JSONB
+  body_parts?: Record<string, any>; // JSONB
+  impact_on_activities?: string;
+  notes?: string;
+  created_at?: string;
+}
+
+export const useSymptomLogs = (userId?: string) => {
+  const [symptomLogs, setSymptomLogs] = useState<SymptomLog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  const fetchSymptomLogs = async () => {
+    if (!userId) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('symptom_logs')
+        .select('*')
+        .eq('user_id', userId)
+        .order('log_date', { ascending: false });
+
+      if (error) throw error;
+      setSymptomLogs(data || []);
+    } catch (error) {
+      console.error('Error fetching symptom logs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addSymptomLog = async (logData: Omit<SymptomLog, 'id' | 'created_at'>) => {
+    try {
+      const { data, error } = await supabase
+        .from('symptom_logs')
+        .insert(logData)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setSymptomLogs([data, ...symptomLogs]);
+      
+      toast({
+        title: "Symptom Logged",
+        description: "Your symptom has been recorded successfully.",
+      });
+
+      return { success: true, data };
+    } catch (error: any) {
+      console.error('Error adding symptom log:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to log symptom",
+        variant: "destructive",
+      });
+      return { success: false, error };
+    }
+  };
+
+  const updateSymptomLog = async (id: string, updates: Partial<SymptomLog>) => {
+    try {
+      const { data, error } = await supabase
+        .from('symptom_logs')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setSymptomLogs(symptomLogs.map(log => log.id === id ? data : log));
+      
+      toast({
+        title: "Log Updated",
+        description: "Symptom log has been updated.",
+      });
+
+      return { success: true, data };
+    } catch (error: any) {
+      console.error('Error updating symptom log:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update log",
+        variant: "destructive",
+      });
+      return { success: false, error };
+    }
+  };
+
+  const deleteSymptomLog = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('symptom_logs')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setSymptomLogs(symptomLogs.filter(log => log.id !== id));
+      
+      toast({
+        title: "Log Deleted",
+        description: "Symptom log has been deleted.",
+      });
+
+      return { success: true };
+    } catch (error: any) {
+      console.error('Error deleting symptom log:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete log",
+        variant: "destructive",
+      });
+      return { success: false, error };
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchSymptomLogs();
+    }
+  }, [userId]);
+
+  return {
+    symptomLogs,
+    loading,
+    addSymptomLog,
+    updateSymptomLog,
+    deleteSymptomLog,
+    refetch: fetchSymptomLogs
+  };
+};

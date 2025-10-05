@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DateInput } from "@/components/ui/date-input";
 import { 
   Select,
   SelectContent,
@@ -145,12 +146,14 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="dateOfBirth">Date of Birth *</Label>
-                <Input
+                <DateInput
                   id="dateOfBirth"
-                  type="date"
+                  label="Date of Birth"
                   value={formData.dateOfBirth}
-                  onChange={(e) => updateFormData({ dateOfBirth: e.target.value })}
+                  onChange={(value) => updateFormData({ dateOfBirth: value })}
+                  required={true}
+                  max={new Date().toISOString().split('T')[0]}
+                  showFormatHint={true}
                 />
               </div>
               
@@ -198,12 +201,14 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="patientDateOfBirth">Patient's Date of Birth *</Label>
-                <Input
+                <DateInput
                   id="patientDateOfBirth"
-                  type="date"
+                  label="Patient's Date of Birth"
                   value={formData.patientDateOfBirth}
-                  onChange={(e) => updateFormData({ patientDateOfBirth: e.target.value })}
+                  onChange={(value) => updateFormData({ patientDateOfBirth: value })}
+                  required={true}
+                  max={new Date().toISOString().split('T')[0]}
+                  showFormatHint={true}
                 />
                 <p className="text-sm text-muted-foreground">
                   This helps us verify you're authorized to care for this patient

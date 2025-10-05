@@ -27,6 +27,8 @@ import {
   SYMPTOM_TYPES,
   MEDICATION_ADHERENCE 
 } from "@/utils/databaseEnums";
+import { useSeizureLogs } from "@/hooks/useSeizureLogs";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SeizureLogModalProps {
   isOpen: boolean;
@@ -35,6 +37,8 @@ interface SeizureLogModalProps {
 }
 
 export default function SeizureLogModal({ isOpen, onClose, onComplete }: SeizureLogModalProps) {
+  const { user } = useAuth();
+  const { addSeizureLog } = useSeizureLogs(user?.id);
   const [currentSection, setCurrentSection] = useState(0);
   const [seizureData, setSeizureData] = useState({
     event_date: new Date().toISOString().split('T')[0],
@@ -93,9 +97,41 @@ export default function SeizureLogModal({ isOpen, onClose, onComplete }: Seizure
     updateSeizureData(key, updated);
   };
 
-  const handleComplete = () => {
-    onComplete(seizureData);
-    onClose();
+  const handleComplete = async () => {
+    if (!user?.id) return;
+    
+    // Save to database
+    const result = await addSeizureLog({
+      user_id: user.id,
+      log_date: seizureData.event_date,
+      seizure_type: seizureData.seizure_type as any,
+      duration_seconds: seizureData.duration_seconds,
+      consciousness_level: seizureData.consciousness_level as any,
+      aura_present: seizureData.aura_present,
+      aura_description: seizureData.aura_description,
+      pre_ictal_symptoms: seizureData.pre_ictal_symptoms,
+      witnessed: seizureData.witnessed,
+      witness_name: seizureData.witness_name,
+      video_recorded: seizureData.video_recorded,
+      location_type: seizureData.location_type,
+      post_ictal_confusion_minutes: seizureData.post_ictal_confusion_minutes,
+      post_ictal_symptoms: seizureData.post_ictal_symptoms,
+      recovery_time_minutes: seizureData.recovery_time_minutes,
+      identified_triggers: seizureData.identified_triggers,
+      sleep_hours_prior: seizureData.sleep_hours_prior,
+      medication_adherence_prior: seizureData.medication_adherence_prior,
+      stress_level: seizureData.stress_level,
+      emergency_services_called: seizureData.emergency_services_called,
+      rescue_medication_used: seizureData.rescue_medication_used,
+      rescue_medication_name: seizureData.rescue_medication_name,
+      hospitalized: seizureData.hospitalized,
+      notes: seizureData.notes
+    });
+    
+    if (result?.success) {
+      onComplete(seizureData);
+      onClose();
+    }
   };
 
   const handleNext = () => {

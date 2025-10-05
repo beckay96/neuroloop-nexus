@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,11 @@ import SymptomsModal from "@/components/tracking/SymptomsModal";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { useConditions } from "@/hooks/useConditions";
+import { useSeizureLogs } from "@/hooks/useSeizureLogs";
+import { useMedicationLogs } from "@/hooks/useMedicationLogs";
+import { useTrackingEntries } from "@/hooks/useTrackingEntries";
+import { useTrackingPreferences } from "@/hooks/useTrackingPreferences";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   numericToMoodEnum,
@@ -146,9 +151,17 @@ const upcomingReminders = [{
   time: "Tomorrow 7:00 AM",
   urgent: false
 }];
+
 export default function PatientDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
+  
+  // Load user's conditions and tracking preferences
+  const { userConditions, loading: conditionsLoading } = useConditions(user?.id);
+  const { preferences, loading: preferencesLoading } = useTrackingPreferences(user?.id);
+  const { seizureLogs } = useSeizureLogs(user?.id);
+  const { medicationLogs } = useMedicationLogs(user?.id);
+  const { trackingEntries } = useTrackingEntries(user?.id);
   
   // Extract user name from profile data or fallback to email
   const getUserDisplayName = () => {
@@ -162,6 +175,38 @@ export default function PatientDashboard() {
   };
   
   const userName = getUserDisplayName();
+  
+  // Filter quick actions based on user's tracking features
+  const getEnabledQuickActions = () => {
+    if (!preferences?.tracking_types) {
+      // If no preferences yet, show all options
+      return quickActions;
+    }
+    
+    const trackingTypes = Array.isArray(preferences.tracking_types) 
+      ? preferences.tracking_types 
+      : [];
+    
+    return quickActions.filter(action => {
+      switch (action.id) {
+        case "log-seizure":
+          return trackingTypes.includes('seizure');
+        case "medication":
+          return trackingTypes.includes('medication');
+        case "symptom-log":
+          return trackingTypes.includes('symptoms');
+        case "basal-temp":
+          return trackingTypes.includes('temperature');
+        case "daily-tracking":
+          return trackingTypes.includes('mood') || trackingTypes.includes('energy') || trackingTypes.includes('sleep');
+        default:
+          return true; // Show other actions by default
+      }
+    });
+  };
+  
+  const enabledQuickActions = getEnabledQuickActions();
+  
   const [showDailyTracking, setShowDailyTracking] = useState(false);
   const [showSeizureLog, setShowSeizureLog] = useState(false);
   const [showMedicationLog, setShowMedicationLog] = useState(false);
@@ -353,7 +398,7 @@ export default function PatientDashboard() {
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {quickActions.map(action => {
+            {enabledQuickActions.map(action => {
               const IconComponent = action.icon;
               return <Card key={action.id} className="medical-card p-4 cursor-pointer group hover:shadow-glow-primary transition-all bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border-2 hover:border-primary/50 dark:border-gray-700" onClick={() => handleQuickAction(action.id)}>
                   <div className={`w-12 h-12 ${action.bg} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
