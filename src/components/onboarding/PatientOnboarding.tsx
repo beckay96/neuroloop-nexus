@@ -1415,7 +1415,9 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // @ts-ignore - Table exists in private_health_info schema
       const { error: patientError } = await supabase
+        .schema('private_health_info')
         .from('patient_onboarding_data')
         .upsert([{
           user_id: user.id,
