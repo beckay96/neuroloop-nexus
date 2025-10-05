@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { 
   Dialog,
   DialogContent,
@@ -144,11 +145,11 @@ export default function MedicationLogModal({ isOpen, onClose, onComplete }: Medi
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label>Date</Label>
-                  <Input
-                    type="date"
+                  <CustomDatePicker
+                    label="Date"
                     value={medicationLog.log_date}
-                    onChange={(e) => updateMedicationLog("log_date", e.target.value)}
+                    onChange={(value) => updateMedicationLog("log_date", value)}
+                    max={new Date().toISOString().split('T')[0]}
                   />
                 </div>
                 <div>

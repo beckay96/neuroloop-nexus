@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { 
   Dialog,
   DialogContent,
@@ -94,38 +95,34 @@ export default function MenstrualCycleLogModal({ isOpen, onClose, onComplete }: 
               Tracking your cycle helps identify patterns and improve treatment strategies.
             </p>
           </Card>
-
           <Card className="p-4">
             <h3 className="font-semibold mb-3">Cycle Dates</h3>
             
             <div className="space-y-4">
               <div>
-                <Label>Cycle Start Date *</Label>
-                <Input
-                  type="date"
+                <CustomDatePicker
+                  label="Cycle Start Date"
                   value={menstrualLog.cycle_start_date}
-                  onChange={(e) => {
-                    updateMenstrualLog("cycle_start_date", e.target.value);
-                    calculateCycleLength();
+                  onChange={(value) => {
+                    updateMenstrualLog("cycle_start_date", value);
+                    if (value) updateMenstrualLog("is_prediction", false);
                   }}
+                  required
+                  max={new Date().toISOString().split('T')[0]}
                 />
               </div>
 
               <div>
-                <Label>Cycle End Date (Optional)</Label>
-                <Input
-                  type="date"
+                <CustomDatePicker
+                  label="Cycle End Date (Optional)"
                   value={menstrualLog.cycle_end_date}
-                  onChange={(e) => {
-                    updateMenstrualLog("cycle_end_date", e.target.value);
-                    calculateCycleLength();
-                  }}
+                  onChange={(value) => updateMenstrualLog("cycle_end_date", value)}
+                  max={new Date().toISOString().split('T')[0]}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Leave blank if cycle is ongoing
                 </p>
               </div>
-
               {menstrualLog.cycle_length_days > 0 && (
                 <div className="p-3 bg-accent rounded-lg">
                   <p className="text-sm font-medium">

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -100,11 +101,11 @@ export function AppointmentBooking({ onClose, onBooked, patientId }: Appointment
           {/* Date and Time */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label>Date</Label>
-              <Input
-                type="date"
+              <CustomDatePicker
+                label="Date"
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                onChange={(value) => setFormData({ ...formData, date: value })}
+                min={new Date().toISOString().split('T')[0]}
               />
             </div>
             <div className="space-y-2">
