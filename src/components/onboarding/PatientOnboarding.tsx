@@ -12,7 +12,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DateInput } from "@/components/ui/date-input";
+import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
 import { 
   Heart,
@@ -612,13 +612,14 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
               </div>
               
               <div className="md:col-span-2">
-                <DateInput
+                <CustomDatePicker
                   id="dateOfBirth"
                   label="Date of Birth"
                   value={formData.dateOfBirth}
                   onChange={(value) => updateFormData({ dateOfBirth: value })}
                   max={new Date().toISOString().split('T')[0]}
                   showFormatHint={true}
+                  required={false}
                 />
               </div>
             </div>
