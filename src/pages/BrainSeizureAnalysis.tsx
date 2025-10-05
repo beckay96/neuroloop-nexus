@@ -316,7 +316,7 @@ export default function BrainSeizureAnalysis() {
             <div>
               <h3 className="font-medium mb-2">When to Seek Help</h3>
               <p className="text-sm text-muted-foreground">
-                If you experience seizures, consult a neurologist. Emergency care is needed for seizures lasting >5 minutes, 
+                If you experience seizures, consult a neurologist. Emergency care is needed for seizures lasting {'>'} 5 minutes, 
                 clusters of seizures, or injury during seizures.
               </p>
             </div>
