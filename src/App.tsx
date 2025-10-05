@@ -16,6 +16,10 @@ import ProfileSettings from "@/components/settings/ProfileSettings";
 import PrivacySettings from "@/pages/settings/PrivacySettings";
 import NotificationSettings from "@/pages/settings/NotificationSettings";
 import AllNotifications from "@/pages/AllNotifications";
+import PatientInvite from "@/pages/invite/PatientInvite";
+import CarerInvite from "@/pages/invite/CarerInvite";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 const queryClient = new QueryClient();
 
@@ -25,6 +29,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <SpeedInsights />
+        <Analytics />
         <AuthProvider>
           <ErrorBoundary>
             <BrowserRouter>
@@ -63,6 +69,9 @@ const App = () => (
                     <AllNotifications />
                   </ProtectedRoute>
                 } />
+                {/* Invite Pages - Public (no auth required) */}
+                <Route path="/invite/patient" element={<PatientInvite />} />
+                <Route path="/invite/carer" element={<CarerInvite />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
