@@ -416,25 +416,32 @@ export default function LandingPage() {
       </div>
 
       {/* Floating Brain Analysis Button - STUNNING! */}
-      <div className="fixed bottom-8 right-8 z-[9999]">
-        <Button
-          size="lg"
-          onClick={() => setShowBrainAnalysis(true)}
-          className="h-16 w-16 rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 shadow-2xl hover:shadow-purple-500/50 hover:scale-110 transition-all duration-300 animate-pulse relative"
-          title="Try Brain Analysis Tool!"
-        >
-          <Brain className="h-8 w-8 text-white" />
-          <div className="absolute -top-2 -right-2 h-6 w-6 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce">
-            NEW
-          </div>
-        </Button>
+      <div 
+        className="fixed bottom-8 right-8 z-[9999] bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 h-20 w-20 rounded-full shadow-2xl animate-pulse cursor-pointer hover:scale-110 transition-all duration-300 flex items-center justify-center"
+        onClick={() => {
+          console.log("Button clicked!");
+          setShowBrainAnalysis(true);
+        }}
+        style={{ 
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          zIndex: 99999
+        }}
+      >
+        <Brain className="h-10 w-10 text-white" />
+        <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg">
+          NEW
+        </div>
       </div>
 
       {/* Brain Analysis Modal */}
-      <PublicBrainAnalysis 
-        isOpen={showBrainAnalysis}
-        onClose={() => setShowBrainAnalysis(false)}
-      />
+      {showBrainAnalysis && (
+        <PublicBrainAnalysis 
+          isOpen={showBrainAnalysis}
+          onClose={() => setShowBrainAnalysis(false)}
+        />
+      )}
 
       {/* Footer */}
       <div className="border-t-4 border-gray-200 dark:border-gray-800 mt-16 bg-white dark:bg-gray-950">
