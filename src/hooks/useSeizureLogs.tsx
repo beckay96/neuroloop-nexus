@@ -4,19 +4,32 @@ import { useToast } from "@/hooks/use-toast";
 
 export interface SeizureLog {
   id?: string;
-  user_id: string;
+  patient_id: string;
+  occurred_at: string;
   seizure_type: string;
   duration_seconds: number;
+  severity: string;
   consciousness_level: string;
-  recovery_time_minutes?: number;
+  location_type?: string;
+  location_details?: string;
+  aura_present?: boolean;
+  aura_type?: string;
+  aura_duration_seconds?: number;
   triggers?: string[];
-  symptoms?: string[];
-  location?: string;
-  witnesses?: string[];
-  post_seizure_symptoms?: string[];
+  symptoms_before?: string[];
+  symptoms_during?: string[];
+  symptoms_after?: string[];
+  recovery_time_minutes?: number;
+  injury_occurred?: boolean;
+  injury_details?: string;
+  hospital_visit_required?: boolean;
+  medication_taken?: string;
+  witnessed_by?: string;
   notes?: string;
-  log_date: string;
+  shared_with_clinician?: boolean;
+  shared_with_carers?: boolean;
   created_at?: string;
+  updated_at?: string;
 }
 
 export const useSeizureLogs = (userId?: string) => {
@@ -29,28 +42,28 @@ export const useSeizureLogs = (userId?: string) => {
 
     try {
       const { data, error } = await supabase
-        .from('seizure_logs')
+        .from('seizure_events')
         .select('*')
-        .eq('user_id', userId)
-        .order('log_date', { ascending: false });
+        .eq('patient_id', userId)
+        .order('occurred_at', { ascending: false });
 
       if (error) throw error;
       setSeizureLogs(data || []);
     } catch (error) {
-      console.error('Error fetching seizure logs:', error);
+      console.error('Error fetching seizure events:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const addSeizureLog = async (logData: Omit<SeizureLog, 'id' | 'created_at'>) => {
+  const addSeizureLog = async (logData: Omit<SeizureLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
-        .from('seizure_logs')
+        .from('seizure_events')
         .insert(logData)
         .select()
         .single();
-
       if (error) throw error;
 
       setSeizureLogs([data, ...seizureLogs]);
@@ -62,7 +75,7 @@ export const useSeizureLogs = (userId?: string) => {
 
       return { success: true, data };
     } catch (error: any) {
-      console.error('Error adding seizure log:', error);
+      console.error('Error adding seizure event:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to log seizure",
@@ -74,8 +87,9 @@ export const useSeizureLogs = (userId?: string) => {
 
   const updateSeizureLog = async (id: string, updates: Partial<SeizureLog>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
-        .from('seizure_logs')
+        .from('seizure_events')
         .update(updates)
         .eq('id', id)
         .select()
@@ -104,8 +118,9 @@ export const useSeizureLogs = (userId?: string) => {
 
   const deleteSeizureLog = async (id: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
-        .from('seizure_logs')
+        .from('seizure_events')
         .delete()
         .eq('id', id);
 

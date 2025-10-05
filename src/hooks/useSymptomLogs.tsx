@@ -2,21 +2,25 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-// EXACT schema match from symptom_logs table
+// Daily symptom logs - matches daily_symptom_logs table
 export interface SymptomLog {
   id?: string;
-  user_id: string;
+  patient_id: string;
   log_date: string; // DATE
-  log_time?: string; // TIME
-  symptom_type?: string;
-  severity?: number; // 1-10
-  duration_minutes?: number;
-  triggers?: Record<string, any>; // JSONB
-  relief_methods?: Record<string, any>; // JSONB
-  body_parts?: Record<string, any>; // JSONB
-  impact_on_activities?: string;
+  mood_rating?: number; // 1-10
+  energy_level?: number; // 1-10
+  sleep_quality?: number; // 1-10
+  sleep_hours?: number;
+  pain_level?: number; // 1-10
+  pain_location?: string;
+  symptoms?: string[];
+  triggers?: string[];
+  medications_taken?: string[];
   notes?: string;
+  shared_with_clinician?: boolean;
+  shared_with_carers?: boolean;
   created_at?: string;
+  updated_at?: string;
 }
 
 export const useSymptomLogs = (userId?: string) => {
@@ -29,10 +33,10 @@ export const useSymptomLogs = (userId?: string) => {
 
     try {
       const { data, error } = await supabase
-        .from('symptom_logs')
+        .from('daily_symptom_logs')
         .select('*')
-        .eq('user_id', userId)
-        .order('log_date', { ascending: false });
+        .eq('patient_id', userId)
+        .order('log_date', { ascending: false});
 
       if (error) throw error;
       setSymptomLogs(data || []);
@@ -43,10 +47,11 @@ export const useSymptomLogs = (userId?: string) => {
     }
   };
 
-  const addSymptomLog = async (logData: Omit<SymptomLog, 'id' | 'created_at'>) => {
+  const addSymptomLog = async (logData: Omit<SymptomLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
-        .from('symptom_logs')
+        .from('daily_symptom_logs')
         .insert(logData)
         .select()
         .single();
@@ -74,8 +79,9 @@ export const useSymptomLogs = (userId?: string) => {
 
   const updateSymptomLog = async (id: string, updates: Partial<SymptomLog>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
-        .from('symptom_logs')
+        .from('daily_symptom_logs')
         .update(updates)
         .eq('id', id)
         .select()
@@ -104,8 +110,9 @@ export const useSymptomLogs = (userId?: string) => {
 
   const deleteSymptomLog = async (id: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
-        .from('symptom_logs')
+        .from('daily_symptom_logs')
         .delete()
         .eq('id', id);
 

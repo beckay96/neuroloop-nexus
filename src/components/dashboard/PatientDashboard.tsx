@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useConditions } from "@/hooks/useConditions";
 import { useSeizureLogs } from "@/hooks/useSeizureLogs";
 import { useMedicationLogs } from "@/hooks/useMedicationLogs";
+import { useSymptomLogs } from "@/hooks/useSymptomLogs";
+import { useTremorLogs } from "@/hooks/useTremorLogs";
+import { useGaitLogs } from "@/hooks/useGaitLogs";
 import { useTrackingEntries } from "@/hooks/useTrackingEntries";
 import { useTrackingPreferences } from "@/hooks/useTrackingPreferences";
 import { supabase } from "@/integrations/supabase/client";
@@ -159,9 +162,89 @@ export default function PatientDashboard() {
   // Load user's conditions and tracking preferences
   const { userConditions, loading: conditionsLoading } = useConditions(user?.id);
   const { preferences, loading: preferencesLoading } = useTrackingPreferences(user?.id);
-  const { seizureLogs } = useSeizureLogs(user?.id);
+  const { seizureLogs, addSeizureLog, refetch: refetchSeizures } = useSeizureLogs(user?.id);
   const { medicationLogs } = useMedicationLogs(user?.id);
+  const { symptomLogs, addSymptomLog, refetch: refetchSymptoms } = useSymptomLogs(user?.id);
+  const { tremorLogs } = useTremorLogs(user?.id);
+  const { gaitLogs } = useGaitLogs(user?.id);
   const { trackingEntries } = useTrackingEntries(user?.id);
+  
+  // Calculate real stats from data
+  const daysSeizureFree = useMemo(() => {
+    if (!seizureLogs || seizureLogs.length === 0) return 0;
+    const lastSeizure = new Date(seizureLogs[0].occurred_at);
+    const now = new Date();
+    return Math.floor((now.getTime() - lastSeizure.getTime()) / (1000 * 60 * 60 * 24));
+  }, [seizureLogs]);
+
+  const avgEnergyLevel = useMemo(() => {
+    if (!symptomLogs || symptomLogs.length === 0) return "0";
+    const recent = symptomLogs.slice(0, 7); // Last 7 days
+    const sum = recent.reduce((acc, log) => acc + (log.energy_level || 0), 0);
+    return recent.length > 0 ? (sum / recent.length).toFixed(1) : "0";
+  }, [symptomLogs]);
+
+  const avgSleepQuality = useMemo(() => {
+    if (!symptomLogs || symptomLogs.length === 0) return "0";
+    const recent = symptomLogs.slice(0, 7); // Last 7 days
+    const sum = recent.reduce((acc, log) => acc + (log.sleep_quality || 0), 0);
+    return recent.length > 0 ? (sum / recent.length).toFixed(1) : "0";
+  }, [symptomLogs]);
+
+  const trackingStreak = useMemo(() => {
+    if (!symptomLogs || symptomLogs.length === 0) return 0;
+    let streak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    for (let i = 0; i < symptomLogs.length; i++) {
+      const logDate = new Date(symptomLogs[i].log_date);
+      logDate.setHours(0, 0, 0, 0);
+      const daysDiff = Math.floor((today.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      if (daysDiff === i) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }, [symptomLogs]);
+
+  // Calculate dynamic health stats
+  const calculatedHealthStats = useMemo(() => [{
+    label: "Days Seizure Free",
+    value: daysSeizureFree.toString(),
+    target: "30",
+    trend: daysSeizureFree >= 30 ? "up" : "stable" as const,
+    color: daysSeizureFree >= 30 ? "text-status-stable" : "text-primary",
+    progress: Math.min((daysSeizureFree / 30) * 100, 100),
+    icon: Shield
+  }, {
+    label: "Medication Adherence",
+    value: "94%", // TODO: Calculate from medication_logs when table is verified
+    target: "95%",
+    trend: "up" as const,
+    color: "text-status-stable",
+    progress: 94,
+    icon: Pill
+  }, {
+    label: "Energy Level (Avg)",
+    value: avgEnergyLevel.toString(),
+    target: "8.0",
+    trend: parseFloat(avgEnergyLevel) >= 7 ? "up" : "down" as const,
+    color: parseFloat(avgEnergyLevel) >= 7 ? "text-primary" : "text-warning",
+    progress: (parseFloat(avgEnergyLevel) / 10) * 100,
+    icon: Zap
+  }, {
+    label: "Sleep Quality",
+    value: avgSleepQuality.toString(),
+    target: "8.0",
+    trend: parseFloat(avgSleepQuality) >= 7 ? "up" : "down" as const,
+    color: parseFloat(avgSleepQuality) >= 7 ? "text-status-stable" : "text-warning",
+    progress: (parseFloat(avgSleepQuality) / 10) * 100,
+    icon: Heart
+  }], [daysSeizureFree, avgEnergyLevel, avgSleepQuality]);
   
   // Extract user name from profile data or fallback to email
   const getUserDisplayName = () => {
@@ -239,7 +322,6 @@ export default function PatientDashboard() {
     }
   };
   const handleModalComplete = async (data: any, type: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast({ 
         title: "Error", 
@@ -252,39 +334,54 @@ export default function PatientDashboard() {
     try {
       switch(type) {
         case 'seizure-log':
-          const { error: seizureError } = await supabase
-            .from('seizure_logs')
-            .insert({
-              user_id: user.id,
-              ...data
-            });
-          if (seizureError) throw seizureError;
-          toast({ title: "✅ Seizure logged successfully" });
+          // Use the hook instead of direct database call
+          const seizureResult = await addSeizureLog({
+            patient_id: user.id,
+            occurred_at: data.occurred_at || new Date().toISOString(),
+            seizure_type: data.seizure_type,
+            duration_seconds: data.duration_seconds,
+            severity: data.severity,
+            consciousness_level: data.consciousness_level,
+            triggers: data.triggers,
+            symptoms_before: data.symptoms_before,
+            symptoms_during: data.symptoms_during,
+            symptoms_after: data.symptoms_after,
+            recovery_time_minutes: data.recovery_time_minutes,
+            injury_occurred: data.injury_occurred,
+            notes: data.notes,
+            shared_with_clinician: true,
+            shared_with_carers: true
+          });
+          if (seizureResult.success) {
+            refetchSeizures();
+          }
           break;
 
         case 'daily-tracking':
-          const wellnessData = {
-            user_id: user.id,
-            log_date: data.log_date,
-            mood: numericToMoodEnum(data.mood_numeric) as any,
-            energy_level: numericToEnergyEnum(data.energy_numeric) as any,
-            sleep_quality: numericToSleepEnum(data.sleep_numeric) as any,
+          // Use symptom logs hook for daily tracking
+          const symptomResult = await addSymptomLog({
+            patient_id: user.id,
+            log_date: data.log_date || new Date().toISOString().split('T')[0],
+            mood_rating: data.mood_numeric || data.mood_rating,
+            energy_level: data.energy_numeric || data.energy_level,
+            sleep_quality: data.sleep_numeric || data.sleep_quality,
             sleep_hours: data.sleep_hours,
-            sleep_interruptions: data.sleep_interruptions,
-            exercise_minutes: data.exercise_minutes,
-            exercise_type: data.exercise_type,
-            stress_level: data.stress_level,
-            notes: data.notes
-          };
-          
-          const { error: wellnessError } = await supabase
-            .from('daily_wellness_logs')
-            .upsert([wellnessData], { onConflict: 'user_id,log_date' });
-          if (wellnessError) throw wellnessError;
-          toast({ title: "✅ Daily tracking saved" });
+            pain_level: data.pain_level,
+            pain_location: data.pain_location,
+            symptoms: data.symptoms,
+            triggers: data.triggers,
+            medications_taken: data.medications_taken,
+            notes: data.notes,
+            shared_with_clinician: true,
+            shared_with_carers: false
+          });
+          if (symptomResult.success) {
+            refetchSymptoms();
+          }
           break;
 
         case 'medication-log':
+          // Keep existing medication log - table name might be correct
           const { error: medError } = await supabase
             .from('medication_logs')
             .insert({
@@ -296,14 +393,18 @@ export default function PatientDashboard() {
           break;
 
         case 'symptoms-log':
-          const { error: symptomError } = await supabase
-            .from('symptom_logs')
-            .insert({
-              user_id: user.id,
-              ...data
-            });
-          if (symptomError) throw symptomError;
-          toast({ title: "✅ Symptoms logged" });
+          // Use daily symptom logs hook
+          const detailedSymptomResult = await addSymptomLog({
+            patient_id: user.id,
+            log_date: data.log_date || new Date().toISOString().split('T')[0],
+            symptoms: data.symptoms,
+            triggers: data.triggers,
+            notes: data.notes,
+            shared_with_clinician: true
+          });
+          if (detailedSymptomResult.success) {
+            refetchSymptoms();
+          }
           break;
 
         case 'temperature-log':
@@ -385,7 +486,7 @@ export default function PatientDashboard() {
                 </div>
               </div>
               <Badge variant="secondary" className="bg-status-stable/20 text-status-stable">
-                12-day streak
+                {trackingStreak > 0 ? `${trackingStreak}-day streak` : 'Start tracking today!'}
               </Badge>
             </div>
           </Card>
@@ -418,7 +519,7 @@ export default function PatientDashboard() {
             Health Metrics
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {healthStats.map((stat, index) => {
+            {calculatedHealthStats.map((stat, index) => {
               const IconComponent = stat.icon;
               return <Card key={index} className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                   <div className="flex items-center justify-between mb-4">

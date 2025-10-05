@@ -6,19 +6,51 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
-import { Brain, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Brain, Mail, Lock, User, AlertCircle, CheckCircle, Stethoscope, Heart, FlaskConical } from 'lucide-react';
 import { z } from 'zod';
+import { Enums } from '@/integrations/supabase/types';
+
+type UserType = Enums<'user_type_enum'>;
 
 const signupSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long')
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
+  userType: z.enum(['patient', 'clinician', 'carer', 'researcher'])
 });
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(1, 'Password is required')
 });
+
+const USER_TYPE_OPTIONS: { value: UserType; label: string; icon: any; description: string }[] = [
+  { 
+    value: 'patient', 
+    label: 'Patient', 
+    icon: User,
+    description: 'Track your neurological health and symptoms'
+  },
+  { 
+    value: 'clinician', 
+    label: 'Clinician', 
+    icon: Stethoscope,
+    description: 'Manage and monitor your patients'
+  },
+  { 
+    value: 'carer', 
+    label: 'Carer', 
+    icon: Heart,
+    description: 'Support and care for your loved ones'
+  },
+  { 
+    value: 'researcher', 
+    label: 'Researcher', 
+    icon: FlaskConical,
+    description: 'Access anonymized data for research'
+  }
+];
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -27,7 +59,8 @@ export default function Auth() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [signupData, setSignupData] = useState({
     email: '',
-    password: ''
+    password: '',
+    userType: 'patient' as UserType
   });
   const [loginData, setLoginData] = useState({
     email: '',
@@ -59,28 +92,65 @@ export default function Auth() {
       
       const redirectUrl = `${window.location.origin}/`;
       
-      const { error } = await supabase.auth.signUp({
+      // Step 1: Create auth user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: validatedData.email,
         password: validatedData.password,
         options: {
-          emailRedirectTo: redirectUrl
+          emailRedirectTo: redirectUrl,
+          data: {
+            user_type: validatedData.userType
+          }
         }
       });
 
-      if (error) {
-        if (error.message.includes('already registered')) {
+      if (authError) {
+        if (authError.message.includes('already registered')) {
           setMessage({ type: 'error', text: 'An account with this email already exists. Please try logging in instead.' });
         } else {
-          setMessage({ type: 'error', text: error.message });
+          setMessage({ type: 'error', text: authError.message });
         }
-      } else {
-        // Since email confirmation is disabled, user is automatically signed in
-        navigate('/dashboard');
+        return;
       }
+
+      if (!authData.user) {
+        setMessage({ type: 'error', text: 'Failed to create user account' });
+        return;
+      }
+
+      // Step 2: Initialize user profile and settings
+      // @ts-ignore - Type definitions incomplete, function exists in database
+      const { data: initData, error: initError } = await supabase.rpc('initialize_new_user', {
+        p_user_id: authData.user.id,
+        p_email: authData.user.email!,
+        p_user_type: validatedData.userType
+      });
+
+      if (initError) {
+        console.error('Error initializing user:', initError);
+        setMessage({ type: 'error', text: 'Account created but initialization failed. Please contact support.' });
+        return;
+      }
+
+      // Check initialization result
+      const result = initData as { success: boolean; message: string };
+      if (!result.success) {
+        setMessage({ type: 'error', text: result.message });
+        return;
+      }
+
+      // Step 3: Navigate to onboarding based on user type
+      setMessage({ type: 'success', text: 'Account created successfully! Redirecting to onboarding...' });
+      
+      setTimeout(() => {
+        navigate(`/onboarding/${validatedData.userType}`);
+      }, 1000);
+      
     } catch (error) {
       if (error instanceof z.ZodError) {
         setMessage({ type: 'error', text: error.errors[0].message });
       } else {
+        console.error('Signup error:', error);
         setMessage({ type: 'error', text: 'An unexpected error occurred. Please try again.' });
       }
     } finally {
@@ -217,6 +287,34 @@ export default function Auth() {
               </div>
               
               <form onSubmit={handleSignup} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="user-type">I am a...</Label>
+                  <Select
+                    value={signupData.userType}
+                    onValueChange={(value: UserType) => setSignupData(prev => ({ ...prev, userType: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {USER_TYPE_OPTIONS.map((option) => {
+                        const Icon = option.icon;
+                        return (
+                          <SelectItem key={option.value} value={option.value}>
+                            <div className="flex items-center gap-2">
+                              <Icon className="h-4 w-4" />
+                              <div>
+                                <div className="font-medium">{option.label}</div>
+                                <div className="text-xs text-muted-foreground">{option.description}</div>
+                              </div>
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">

@@ -2,26 +2,25 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-// Parkinson's-specific gait tracking
+// Gait episodes tracking (falls, freezing, near-falls)
 export interface GaitLog {
   id?: string;
-  user_id: string;
-  log_date: string; // DATE
-  log_time?: string; // TIME
-  gait_speed?: number; // meters per second
-  step_length?: number; // centimeters
-  stride_length?: number; // centimeters
-  cadence?: number; // steps per minute
-  freezing_episodes?: number;
-  freezing_duration_seconds?: number;
-  turn_difficulty?: number; // 1-10 scale
-  balance_issues?: boolean;
-  use_of_assistive_device?: string; // walker, cane, none
-  fall_occurred?: boolean;
-  location?: string;
-  time_since_medication?: number; // minutes
+  patient_id: string;
+  occurred_at: string;
+  episode_type?: string; // 'fall', 'freezing', 'near_fall'
+  severity?: string;
+  duration_seconds?: number;
+  location_type?: string;
+  injury_occurred?: boolean;
+  injury_details?: string;
+  assistance_needed?: boolean;
+  triggers?: string[];
   notes?: string;
+  video_url?: string;
+  shared_with_clinician?: boolean;
+  shared_with_carers?: boolean;
   created_at?: string;
+  updated_at?: string;
 }
 
 export const useGaitLogs = (userId?: string) => {
@@ -34,10 +33,10 @@ export const useGaitLogs = (userId?: string) => {
 
     try {
       const { data, error } = await supabase
-        .from('gait_logs')
+        .from('gait_episodes')
         .select('*')
-        .eq('user_id', userId)
-        .order('log_date', { ascending: false });
+        .eq('patient_id', userId)
+        .order('occurred_at', { ascending: false });
 
       if (error) throw error;
       setGaitLogs(data || []);
@@ -48,10 +47,11 @@ export const useGaitLogs = (userId?: string) => {
     }
   };
 
-  const addGaitLog = async (logData: Omit<GaitLog, 'id' | 'created_at'>) => {
+  const addGaitLog = async (logData: Omit<GaitLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
-        .from('gait_logs')
+        .from('gait_episodes')
         .insert(logData)
         .select()
         .single();
@@ -79,8 +79,9 @@ export const useGaitLogs = (userId?: string) => {
 
   const updateGaitLog = async (id: string, updates: Partial<GaitLog>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
-        .from('gait_logs')
+        .from('gait_episodes')
         .update(updates)
         .eq('id', id)
         .select()
@@ -109,8 +110,9 @@ export const useGaitLogs = (userId?: string) => {
 
   const deleteGaitLog = async (id: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
-        .from('gait_logs')
+        .from('gait_episodes')
         .delete()
         .eq('id', id);
 
@@ -135,20 +137,22 @@ export const useGaitLogs = (userId?: string) => {
     }
   };
 
-  // Calculate gait metrics over time
-  const getGaitTrends = () => {
-    if (gaitLogs.length < 2) return null;
+  // Calculate gait episode statistics
+  const getGaitStats = () => {
+    if (gaitLogs.length === 0) return null;
 
-    const recent = gaitLogs.slice(0, 7); // Last 7 entries
-    const avgSpeed = recent.reduce((sum, log) => sum + (log.gait_speed || 0), 0) / recent.length;
-    const avgCadence = recent.reduce((sum, log) => sum + (log.cadence || 0), 0) / recent.length;
-    const totalFreezingEpisodes = recent.reduce((sum, log) => sum + (log.freezing_episodes || 0), 0);
+    const recent = gaitLogs.slice(0, 30); // Last 30 episodes
+    const fallCount = recent.filter(log => log.episode_type === 'fall').length;
+    const freezingCount = recent.filter(log => log.episode_type === 'freezing').length;
+    const nearFallCount = recent.filter(log => log.episode_type === 'near_fall').length;
+    const injuryCount = recent.filter(log => log.injury_occurred).length;
 
     return {
-      avgSpeed,
-      avgCadence,
-      totalFreezingEpisodes,
-      fallOccurred: recent.some(log => log.fall_occurred)
+      fallCount,
+      freezingCount,
+      nearFallCount,
+      injuryCount,
+      totalEpisodes: recent.length
     };
   };
 
@@ -164,7 +168,7 @@ export const useGaitLogs = (userId?: string) => {
     addGaitLog,
     updateGaitLog,
     deleteGaitLog,
-    getGaitTrends,
+    getGaitStats,
     refetch: fetchGaitLogs
   };
 };

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LandingPage from "@/components/landing/LandingPage";
-import DashboardLanding from "./pages/Landing";
+import DashboardRouter from "./pages/DashboardRouter";
 import Auth from "./pages/Auth";
 import PatientView from "./pages/PatientView";
 import NotFound from "./pages/NotFound";
@@ -18,8 +18,12 @@ import NotificationSettings from "@/pages/settings/NotificationSettings";
 import AllNotifications from "@/pages/AllNotifications";
 import PatientInvite from "@/pages/invite/PatientInvite";
 import CarerInvite from "@/pages/invite/CarerInvite";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
+import PatientOnboardingPage from "@/pages/onboarding/PatientOnboardingPage";
+import ClinicianOnboardingPage from "@/pages/onboarding/ClinicianOnboardingPage";
+import CarerOnboardingPage from "@/pages/onboarding/CarerOnboardingPage";
+import ResearcherOnboardingPage from "@/pages/onboarding/ResearcherOnboardingPage";
+import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/react"
 
 const queryClient = new QueryClient();
 
@@ -41,7 +45,7 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
-                    <DashboardLanding />
+                    <DashboardRouter />
                   </ProtectedRoute>
                 } />
                 <Route path="/patient/:patientId" element={
@@ -67,6 +71,27 @@ const App = () => (
                 <Route path="/notifications" element={
                   <ProtectedRoute>
                     <AllNotifications />
+                  </ProtectedRoute>
+                } />
+                {/* Onboarding Pages - Protected */}
+                <Route path="/onboarding/patient" element={
+                  <ProtectedRoute>
+                    <PatientOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/onboarding/clinician" element={
+                  <ProtectedRoute>
+                    <ClinicianOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/onboarding/carer" element={
+                  <ProtectedRoute>
+                    <CarerOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/onboarding/researcher" element={
+                  <ProtectedRoute>
+                    <ResearcherOnboardingPage />
                   </ProtectedRoute>
                 } />
                 {/* Invite Pages - Public (no auth required) */}
