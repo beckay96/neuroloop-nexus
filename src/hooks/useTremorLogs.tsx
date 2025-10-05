@@ -31,7 +31,9 @@ export const useTremorLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('tremor_episodes')
         .select('*')
         .eq('patient_id', userId)
@@ -50,6 +52,7 @@ export const useTremorLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('tremor_episodes')
         .insert(logData)
         .select()
@@ -80,6 +83,7 @@ export const useTremorLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('tremor_episodes')
         .update(updates)
         .eq('id', id)
@@ -111,6 +115,7 @@ export const useTremorLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
+        .schema('private_health_info')
         .from('tremor_episodes')
         .delete()
         .eq('id', id);

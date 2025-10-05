@@ -22,6 +22,7 @@ import PatientOnboardingPage from "@/pages/onboarding/PatientOnboardingPage";
 import ClinicianOnboardingPage from "@/pages/onboarding/ClinicianOnboardingPage";
 import CarerOnboardingPage from "@/pages/onboarding/CarerOnboardingPage";
 import ResearcherOnboardingPage from "@/pages/onboarding/ResearcherOnboardingPage";
+import BrainSeizureAnalysis from "@/pages/BrainSeizureAnalysis";
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 
@@ -97,6 +98,12 @@ const App = () => (
                 {/* Invite Pages - Public (no auth required) */}
                 <Route path="/invite/patient" element={<PatientInvite />} />
                 <Route path="/invite/carer" element={<CarerInvite />} />
+                {/* Brain Seizure Analysis Tool */}
+                <Route path="/brain-analysis" element={
+                  <ProtectedRoute>
+                    <BrainSeizureAnalysis />
+                  </ProtectedRoute>
+                } />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

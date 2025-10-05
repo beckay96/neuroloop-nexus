@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -7,6 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useNotifications } from "@/hooks/useNotifications";
 import { 
   Bell, ArrowLeft, Pill, Calendar, AlertTriangle, 
   MessageSquare, Activity, Moon, Volume2, Smartphone
@@ -15,6 +17,8 @@ import {
 export default function NotificationSettings() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { preferences, updatePreferences, requestPermission, loading } = useNotifications(user?.id);
   
   const [notificationSettings, setNotificationSettings] = useState({
     // Push Notifications
@@ -51,18 +55,78 @@ export default function NotificationSettings() {
     vibrationEnabled: true,
   });
 
-  const handleToggle = (key: keyof typeof notificationSettings) => {
-    setNotificationSettings(prev => ({ ...prev, [key]: !prev[key] }));
-    toast({
-      title: "Setting Updated",
-      description: "Your notification preference has been saved",
-    });
+  // Load preferences from database
+  useEffect(() => {
+    if (preferences) {
+      setNotificationSettings({
+        pushEnabled: preferences.push_enabled,
+        medicationReminders: preferences.medication_reminders,
+        medicationReminderTime: preferences.medication_reminder_minutes,
+        appointmentReminders: preferences.appointment_reminders,
+        appointmentReminderHours: preferences.appointment_reminder_hours,
+        criticalAlerts: preferences.critical_alerts,
+        patternAlerts: preferences.pattern_alerts,
+        achievementNotifications: preferences.achievement_notifications,
+        messageNotifications: preferences.message_notifications,
+        directMessages: preferences.direct_messages,
+        dailyCheckInReminder: preferences.daily_checkin_reminder,
+        dailyCheckInTime: preferences.daily_checkin_time,
+        quietHoursEnabled: preferences.quiet_hours_enabled,
+        quietHoursStart: preferences.quiet_hours_start,
+        quietHoursEnd: preferences.quiet_hours_end,
+        soundEnabled: preferences.sound_enabled,
+        vibrationEnabled: preferences.vibration_enabled,
+      });
+    }
+  }, [preferences]);
+
+  const handleToggle = async (key: keyof typeof notificationSettings) => {
+    const newValue = !notificationSettings[key];
+    setNotificationSettings(prev => ({ ...prev, [key]: newValue }));
+    
+    // Map to database field names
+    const dbFieldMap: Record<string, string> = {
+      pushEnabled: 'push_enabled',
+      medicationReminders: 'medication_reminders',
+      appointmentReminders: 'appointment_reminders',
+      criticalAlerts: 'critical_alerts',
+      patternAlerts: 'pattern_alerts',
+      achievementNotifications: 'achievement_notifications',
+      messageNotifications: 'message_notifications',
+      directMessages: 'direct_messages',
+      dailyCheckInReminder: 'daily_checkin_reminder',
+      quietHoursEnabled: 'quiet_hours_enabled',
+      soundEnabled: 'sound_enabled',
+      vibrationEnabled: 'vibration_enabled',
+    };
+    
+    const dbField = dbFieldMap[key];
+    if (dbField && updatePreferences) {
+      await updatePreferences({ [dbField]: newValue } as any);
+    }
   };
 
-  const handleSaveChanges = () => {
-    toast({
-      title: "Settings Saved",
-      description: "All notification settings have been updated",
+  const handleSaveChanges = async () => {
+    if (!updatePreferences) return;
+    
+    await updatePreferences({
+      push_enabled: notificationSettings.pushEnabled,
+      medication_reminders: notificationSettings.medicationReminders,
+      medication_reminder_minutes: notificationSettings.medicationReminderTime,
+      appointment_reminders: notificationSettings.appointmentReminders,
+      appointment_reminder_hours: notificationSettings.appointmentReminderHours,
+      critical_alerts: notificationSettings.criticalAlerts,
+      pattern_alerts: notificationSettings.patternAlerts,
+      achievement_notifications: notificationSettings.achievementNotifications,
+      message_notifications: notificationSettings.messageNotifications,
+      direct_messages: notificationSettings.directMessages,
+      daily_checkin_reminder: notificationSettings.dailyCheckInReminder,
+      daily_checkin_time: notificationSettings.dailyCheckInTime,
+      quiet_hours_enabled: notificationSettings.quietHoursEnabled,
+      quiet_hours_start: notificationSettings.quietHoursStart,
+      quiet_hours_end: notificationSettings.quietHoursEnd,
+      sound_enabled: notificationSettings.soundEnabled,
+      vibration_enabled: notificationSettings.vibrationEnabled,
     });
   };
 

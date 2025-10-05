@@ -32,7 +32,9 @@ export const useGaitLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('gait_episodes')
         .select('*')
         .eq('patient_id', userId)
@@ -51,6 +53,7 @@ export const useGaitLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('gait_episodes')
         .insert(logData)
         .select()
@@ -81,6 +84,7 @@ export const useGaitLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('gait_episodes')
         .update(updates)
         .eq('id', id)

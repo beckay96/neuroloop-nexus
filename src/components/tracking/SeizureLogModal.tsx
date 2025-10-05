@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Zap, Clock, AlertTriangle, Brain, Activity } from "lucide-react";
+import { Zap, Clock, AlertTriangle, Brain, Activity, AlertCircle } from "lucide-react";
 import { 
   SEIZURE_TYPES, 
   CONSCIOUSNESS_LEVELS, 
@@ -29,7 +29,11 @@ import {
   MEDICATION_ADHERENCE 
 } from "@/utils/databaseEnums";
 import { useSeizureLogs } from "@/hooks/useSeizureLogs";
+import { useSeizureResearch } from "@/hooks/useSeizureResearch";
 import { useAuth } from "@/hooks/useAuth";
+import BrainVisualizationImages from "@/components/brain-analysis/BrainVisualizationImages";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface SeizureLogModalProps {
   isOpen: boolean;
@@ -40,7 +44,23 @@ interface SeizureLogModalProps {
 export default function SeizureLogModal({ isOpen, onClose, onComplete }: SeizureLogModalProps) {
   const { user } = useAuth();
   const { addSeizureLog } = useSeizureLogs(user?.id);
+  const { 
+    seizureSigns, 
+    brainRegions, 
+    triggers,
+    calculateBrainRegions, 
+    assessGeneralized,
+    saveResearchSeizureLog,
+    loading: researchLoading 
+  } = useSeizureResearch(user?.id);
+  
   const [currentSection, setCurrentSection] = useState(0);
+  const [selectedSigns, setSelectedSigns] = useState<number[]>([]);
+  const [selectedTriggers, setSelectedTriggers] = useState<number[]>([]);
+  const [triggerStrengths, setTriggerStrengths] = useState<Record<number, string>>({});
+  const [calculatedRegions, setCalculatedRegions] = useState<Record<number, number>>({});
+  const [generalizedAssessment, setGeneralizedAssessment] = useState<any>(null);
+  
   const [seizureData, setSeizureData] = useState({
     event_date: new Date().toISOString().split('T')[0],
     event_time: new Date().toTimeString().slice(0, 5),
@@ -83,9 +103,27 @@ export default function SeizureLogModal({ isOpen, onClose, onComplete }: Seizure
     { title: "Basic Info", icon: Clock },
     { title: "Pre-Seizure", icon: Brain },
     { title: "During Seizure", icon: Zap },
+    { title: "Brain Area Mapping", icon: Brain }, // NEW STEP 2.5
     { title: "After Seizure", icon: Activity },
     { title: "Context & Response", icon: AlertTriangle }
   ];
+  
+  // Toggle sign selection
+  const toggleSign = (signId: number) => {
+    const newSelected = selectedSigns.includes(signId)
+      ? selectedSigns.filter(id => id !== signId)
+      : [...selectedSigns, signId];
+    
+    setSelectedSigns(newSelected);
+    
+    // Recalculate brain regions
+    const regions = calculateBrainRegions(newSelected);
+    setCalculatedRegions(regions);
+    
+    // Assess if generalized
+    const assessment = assessGeneralized(newSelected);
+    setGeneralizedAssessment(assessment);
+  };
 
   const updateSeizureData = (key: string, value: any) => {
     setSeizureData(prev => ({ ...prev, [key]: value }));
@@ -101,37 +139,68 @@ export default function SeizureLogModal({ isOpen, onClose, onComplete }: Seizure
   const handleComplete = async () => {
     if (!user?.id) return;
     
-    // Save to database
-    const result = await addSeizureLog({
+    // Map to research-grade enums
+    const mapToEnum = (value: any, prefix: string = '') => {
+      if (typeof value === 'boolean') return value ? 'YES' : 'NO';
+      if (typeof value === 'string') return value.toUpperCase().replace(/\s+/g, '_');
+      return value;
+    };
+    
+    // Prepare research-grade log data (atomic fields only)
+    const researchLogData = {
       user_id: user.id,
       log_date: seizureData.event_date,
-      seizure_type: seizureData.seizure_type as any,
+      log_time: seizureData.event_time,
+      seizure_type: seizureData.seizure_type.toUpperCase().replace(/\s+/g, '_'),
+      consciousness_level: seizureData.consciousness_level.toUpperCase(),
       duration_seconds: seizureData.duration_seconds,
-      consciousness_level: seizureData.consciousness_level as any,
-      aura_present: seizureData.aura_present,
-      aura_description: seizureData.aura_description,
-      pre_ictal_symptoms: seizureData.pre_ictal_symptoms,
-      witnessed: seizureData.witnessed,
-      witness_name: seizureData.witness_name,
-      video_recorded: seizureData.video_recorded,
-      location_type: seizureData.location_type,
+      aura_present: mapToEnum(seizureData.aura_present),
+      aura_description: seizureData.aura_description.slice(0, 255), // Constrain length
+      witnessed: mapToEnum(seizureData.witnessed),
+      witness_role: seizureData.witnessed ? 'FAMILY' : 'SELF', // Default mapping
+      video_recorded: mapToEnum(seizureData.video_recorded),
+      location_type: seizureData.location_type || 'HOME',
       post_ictal_confusion_minutes: seizureData.post_ictal_confusion_minutes,
-      post_ictal_symptoms: seizureData.post_ictal_symptoms,
       recovery_time_minutes: seizureData.recovery_time_minutes,
-      identified_triggers: seizureData.identified_triggers,
       sleep_hours_prior: seizureData.sleep_hours_prior,
-      medication_adherence_prior: seizureData.medication_adherence_prior,
-      stress_level: seizureData.stress_level,
-      emergency_services_called: seizureData.emergency_services_called,
-      rescue_medication_used: seizureData.rescue_medication_used,
-      rescue_medication_name: seizureData.rescue_medication_name,
-      hospitalized: seizureData.hospitalized,
-      notes: seizureData.notes
-    });
+      medication_adherence_prior: seizureData.medication_adherence_prior.toUpperCase(),
+      stress_level: String(seizureData.stress_level),
+      emergency_services_called: mapToEnum(seizureData.emergency_services_called),
+      rescue_medication_used: mapToEnum(seizureData.rescue_medication_used),
+      rescue_medication_type: seizureData.rescue_medication_used ? 'OTHER' : 'NONE',
+      hospitalized: mapToEnum(seizureData.hospitalized),
+      research_grade: 'YES',
+      notes: seizureData.notes.slice(0, 255)
+    };
+    
+    // Map post-ictal symptoms to enum format
+    const postIctalSymptoms = seizureData.post_ictal_symptoms.map(symptom => ({
+      symptom: symptom.toUpperCase().replace(/\s+/g, '_'),
+      severity: 5 // Default severity
+    }));
+    
+    // Map triggers (use trigger IDs from reference table)
+    const triggerIds = triggers
+      .filter(t => seizureData.identified_triggers.includes(t.trigger_type.toLowerCase()))
+      .map(t => t.trigger_id);
+    
+    // Save research-grade log with all linking tables
+    const result = await saveResearchSeizureLog(
+      researchLogData,
+      selectedSigns,
+      triggerIds,
+      triggerStrengths,
+      postIctalSymptoms
+    );
     
     if (result?.success) {
       onComplete(seizureData);
       onClose();
+      
+      // Reset state
+      setSelectedSigns([]);
+      setCalculatedRegions({});
+      setGeneralizedAssessment(null);
     }
   };
 
@@ -309,7 +378,130 @@ export default function SeizureLogModal({ isOpen, onClose, onComplete }: Seizure
           </div>
         );
 
-      case 3: // After Seizure
+      case 3: // Brain Area Mapping (NEW STEP!)
+        return (
+          <div className="space-y-4">
+            <Card className="p-4 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
+              <div className="flex items-start gap-3">
+                <Brain className="h-5 w-5 text-purple-600 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">
+                    Brain Area Mapping
+                  </h4>
+                  <p className="text-sm text-purple-800 dark:text-purple-300">
+                    Select seizure signs to identify probable brain regions involved. This creates research-grade data.
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Sign Selection */}
+            <div>
+              <Label className="text-base font-semibold mb-3 block">Select Seizure Signs</Label>
+              <p className="text-xs text-muted-foreground mb-3">
+                Check all signs that occurred during this seizure
+              </p>
+              
+              <div className="max-h-96 overflow-y-auto space-y-3 border rounded-lg p-4">
+                {/* Group by category */}
+                {['AURA', 'MOTOR', 'AUTONOMIC', 'CONSCIOUSNESS', 'BEHAVIORAL'].map(category => {
+                  const categorySigns = seizureSigns.filter(s => s.category === category);
+                  if (categorySigns.length === 0) return null;
+                  
+                  return (
+                    <div key={category}>
+                      <h5 className="font-medium text-sm mb-2 text-primary">
+                        {category.charAt(0) + category.slice(1).toLowerCase()} Signs
+                      </h5>
+                      <div className="space-y-2 pl-2">
+                        {categorySigns.map(sign => (
+                          <div key={sign.sign_id} className="flex items-start space-x-2">
+                            <Checkbox
+                              checked={selectedSigns.includes(sign.sign_id)}
+                              onCheckedChange={() => toggleSign(sign.sign_id)}
+                              id={`sign-${sign.sign_id}`}
+                            />
+                            <label htmlFor={`sign-${sign.sign_id}`} className="text-sm cursor-pointer flex-1">
+                              <div className="font-medium">{sign.display_name}</div>
+                              {sign.description && (
+                                <div className="text-xs text-muted-foreground">{sign.description}</div>
+                              )}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {selectedSigns.length > 0 && (
+                <Badge variant="secondary" className="mt-2">
+                  {selectedSigns.length} sign{selectedSigns.length !== 1 ? 's' : ''} selected
+                </Badge>
+              )}
+            </div>
+
+            {/* Brain Visualization */}
+            {selectedSigns.length > 0 && (
+              <div>
+                <Label className="text-base font-semibold mb-3 block">Probable Brain Regions</Label>
+                
+                <BrainVisualizationImages 
+                  highlightedRegions={Object.fromEntries(
+                    Object.entries(calculatedRegions).map(([regionId, prob]) => {
+                      const region = brainRegions.find(r => r.region_id === parseInt(regionId));
+                      return [region?.display_name || 'Unknown', prob];
+                    })
+                  )}
+                  selectedSigns={selectedSigns.map(String)}
+                />
+
+                {/* Region Probabilities List */}
+                <Card className="p-4 bg-accent mt-4">
+                  <h4 className="font-semibold mb-2">Localization Probabilities:</h4>
+                  <div className="space-y-2">
+                    {Object.entries(calculatedRegions)
+                      .sort(([, a], [, b]) => b - a)
+                      .map(([regionId, probability]) => {
+                        const region = brainRegions.find(r => r.region_id === parseInt(regionId));
+                        if (!region) return null;
+                        
+                        return (
+                          <div key={regionId} className="flex items-center justify-between">
+                            <div>
+                              <span className="text-sm font-medium">{region.display_name}</span>
+                              {region.function_description && (
+                                <p className="text-xs text-muted-foreground">{region.function_description}</p>
+                              )}
+                            </div>
+                            <Badge variant={probability > 60 ? "destructive" : probability > 40 ? "default" : "secondary"}>
+                              {probability}%
+                            </Badge>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </Card>
+
+                {/* Generalized Assessment */}
+                {generalizedAssessment && generalizedAssessment.type === 'GENERALIZED' && (
+                  <Alert className="bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+                    <AlertCircle className="h-4 w-4 text-red-600" />
+                    <AlertTitle className="text-red-900 dark:text-red-200">
+                      Generalized Seizure Pattern Detected
+                    </AlertTitle>
+                    <AlertDescription className="text-red-800 dark:text-red-300">
+                      The selected signs suggest bilateral brain involvement. Confidence: {generalizedAssessment.confidence}%
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
+            )}
+          </div>
+        );
+
+      case 4: // After Seizure
         return (
           <div className="space-y-4">
             <div>
@@ -352,7 +544,7 @@ export default function SeizureLogModal({ isOpen, onClose, onComplete }: Seizure
           </div>
         );
 
-      case 4: // Context & Response
+      case 5: // Context & Response
         return (
           <div className="space-y-4">
             <div>

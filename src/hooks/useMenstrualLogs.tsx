@@ -8,8 +8,14 @@ export interface MenstrualLog {
   user_id: string;
   cycle_start_date: string; // DATE
   cycle_end_date?: string; // DATE
+  cycle_length_days?: number;
   flow_intensity?: string;
-  symptoms?: Record<string, any>; // JSONB
+  cycle_phase?: string;
+  symptoms?: string[] | Record<string, any>; // JSONB - can be array or object
+  symptom_severity?: number;
+  seizure_count_during_cycle?: number;
+  seizure_clustered_around_menstruation?: boolean;
+  catamenial_pattern_suspected?: boolean;
   seizure_correlation?: Record<string, any>; // JSONB
   notes?: string;
   created_at?: string;
@@ -24,7 +30,9 @@ export const useMenstrualLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('menstrual_cycle_logs')
         .select('*')
         .eq('user_id', userId)
@@ -41,7 +49,9 @@ export const useMenstrualLogs = (userId?: string) => {
 
   const addMenstrualLog = async (logData: Omit<MenstrualLog, 'id' | 'created_at'>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('menstrual_cycle_logs')
         .insert(logData)
         .select()
@@ -70,7 +80,9 @@ export const useMenstrualLogs = (userId?: string) => {
 
   const updateMenstrualLog = async (id: string, updates: Partial<MenstrualLog>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('menstrual_cycle_logs')
         .update(updates)
         .eq('id', id)
@@ -100,7 +112,9 @@ export const useMenstrualLogs = (userId?: string) => {
 
   const deleteMenstrualLog = async (id: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
+        .schema('private_health_info')
         .from('menstrual_cycle_logs')
         .delete()
         .eq('id', id);

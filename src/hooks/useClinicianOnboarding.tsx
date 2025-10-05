@@ -17,8 +17,10 @@ export const useClinicianOnboarding = () => {
 
   const saveOnboarding = async (userId: string, data: ClinicianOnboardingData) => {
     try {
-      // 1. Save to clinician_onboarding_data
+      // 1. Save to clinician_onboarding_data in private_health_info schema
+      // @ts-ignore - Table exists in private_health_info schema
       const { error: onboardingError } = await supabase
+        .schema('private_health_info')
         .from('clinician_onboarding_data')
         .upsert([{
           user_id: userId,

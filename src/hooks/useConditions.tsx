@@ -47,7 +47,9 @@ export const useConditions = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('user_conditions')
         .select(`
           *,
@@ -76,7 +78,9 @@ export const useConditions = (userId?: string) => {
     }
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('user_conditions')
         .insert({
           user_id: userId,
@@ -114,7 +118,9 @@ export const useConditions = (userId?: string) => {
   // Remove condition from user
   const removeCondition = async (userConditionId: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
+        .schema('private_health_info')
         .from('user_conditions')
         .delete()
         .eq('id', userConditionId);

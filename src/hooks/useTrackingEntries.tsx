@@ -30,7 +30,9 @@ export const useTrackingEntries = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('tracking_entries')
         .select('*')
         .eq('user_id', userId)
@@ -47,7 +49,9 @@ export const useTrackingEntries = (userId?: string) => {
 
   const addTrackingEntry = async (entryData: Omit<TrackingEntry, 'id' | 'created_at'>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('tracking_entries')
         .insert(entryData)
         .select()
@@ -76,7 +80,9 @@ export const useTrackingEntries = (userId?: string) => {
 
   const updateTrackingEntry = async (id: string, updates: Partial<TrackingEntry>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('tracking_entries')
         .update(updates)
         .eq('id', id)
@@ -106,7 +112,9 @@ export const useTrackingEntries = (userId?: string) => {
 
   const deleteTrackingEntry = async (id: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
+        .schema('private_health_info')
         .from('tracking_entries')
         .delete()
         .eq('id', id);

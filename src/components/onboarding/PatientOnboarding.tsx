@@ -158,7 +158,50 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   // Load medications from database
   useEffect(() => {
     loadMedications();
+    loadOnboardingProgress(); // Load saved progress
   }, []);
+
+  // Load saved onboarding progress
+  const loadOnboardingProgress = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // @ts-ignore - Table exists in private_health_info schema
+      const { data, error } = await supabase
+        .schema('private_health_info')
+        .from('patient_onboarding_data')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error loading onboarding progress:', error);
+        return;
+      }
+
+      if (data && !data.completed_at) {
+        // Resume from saved step
+        setCurrentStep(data.onboarding_step || 0);
+        
+        // Restore form data
+        setFormData(prev => ({
+          ...prev,
+          firstName: data.first_name || '',
+          lastName: data.last_name || '',
+          middleName: data.middle_name || '',
+          gender: data.gender || '',
+          dateOfBirth: data.date_of_birth || '',
+          selectedConditions: data.selected_conditions || [],
+          trackMenstrual: data.track_menstrual_cycle || false,
+          shareResearchData: data.share_research_data || false,
+          researchDataTypes: data.research_data_types || [],
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading onboarding progress:', error);
+    }
+  };
 
   const loadMedications = async () => {
     try {
@@ -182,14 +225,50 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
+  // Save progress to database
+  const saveProgress = async (nextStep: number) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // @ts-ignore - Table exists in private_health_info schema
+      await supabase
+        .schema('private_health_info')
+        .from('patient_onboarding_data')
+        .upsert([{
+          user_id: user.id,
+          onboarding_step: nextStep,
+          first_name: formData.firstName || null,
+          last_name: formData.lastName || null,
+          middle_name: formData.middleName || null,
+          gender: formData.gender || null,
+          date_of_birth: formData.dateOfBirth || null,
+          selected_conditions: formData.selectedConditions.length > 0 ? formData.selectedConditions : null,
+          track_menstrual_cycle: formData.trackMenstrual,
+          share_research_data: formData.shareResearchData,
+          research_data_types: formData.researchDataTypes.length > 0 ? formData.researchDataTypes as any[] : null,
+        }], { onConflict: 'user_id' });
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
+  };
+
   const handleNext = async () => {
     if (currentStep < getMaxSteps()) {
+      // Determine next step
+      let nextStep;
       // Skip menstrual cycle step if not female
       if (currentStep === 4 && formData.gender !== "female") {
-        setCurrentStep(6); // Skip menstrual cycle, go to tracking
+        nextStep = 6; // Skip menstrual cycle, go to tracking
       } else {
-        setCurrentStep(prev => prev + 1);
+        nextStep = currentStep + 1;
       }
+      
+      // Save progress before moving to next step
+      await saveProgress(nextStep);
+      
+      // Update current step
+      setCurrentStep(nextStep);
     } else {
       try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -237,8 +316,10 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
 
         const conditionUUIDs = (dbConditions || []).map(c => c.id);
 
-        // 4. Save onboarding data
+        // 4. Save onboarding data to private_health_info schema
+        // @ts-ignore - Table exists in private_health_info schema  
         const { error: onboardingError } = await supabase
+          .schema('private_health_info')
           .from('patient_onboarding_data')
           .upsert([{
             user_id: user.id,
@@ -246,6 +327,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             track_menstrual_cycle: formData.trackMenstrual,
             share_research_data: formData.shareResearchData,
             research_data_types: formData.researchDataTypes.length > 0 ? formData.researchDataTypes as any[] : null,
+            onboarding_step: currentStep,
             completed_at: new Date().toISOString()
           }], { onConflict: 'user_id' });
 
@@ -262,7 +344,9 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             tracking_features_enabled: condition.tracking_features_array
           }));
 
+          // @ts-ignore - Table exists in private_health_info schema
           const { error: conditionsError } = await supabase
+            .schema('private_health_info')
             .from('user_conditions')
             .upsert(conditionRecords, { onConflict: 'user_id,condition_id' });
 
@@ -282,7 +366,9 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             start_date: new Date().toISOString().split('T')[0]
           }));
 
+          // @ts-ignore - Table exists in private_health_info schema
           const { error: medsError } = await supabase
+            .schema('private_health_info')
             .from('user_medications')
             .insert(medicationRecords);
 

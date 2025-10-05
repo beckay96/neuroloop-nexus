@@ -2,98 +2,86 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-export interface SeizureLog {
+export interface TemperatureLog {
   id?: string;
-  patient_id: string;
-  occurred_at: string;
-  seizure_type: string;
-  duration_seconds: number;
-  severity: string;
-  consciousness_level: string;
-  location_type?: string;
-  location_details?: string;
-  aura_present?: boolean;
-  aura_type?: string;
-  aura_duration_seconds?: number;
-  triggers?: string[];
-  symptoms_before?: string[];
-  symptoms_during?: string[];
-  symptoms_after?: string[];
-  recovery_time_minutes?: number;
-  injury_occurred?: boolean;
-  injury_details?: string;
-  hospital_visit_required?: boolean;
-  medication_taken?: string;
-  witnessed_by?: string;
+  user_id: string;
+  log_date: string; // DATE
+  log_time: string; // TIME
+  temperature: number; // NUMERIC(4,1)
+  temperature_unit: string; // 'F' or 'C'
+  measurement_type?: string; // 'basal', 'regular', 'fever'
+  measurement_location?: string;
+  menstrual_cycle_day?: number;
+  sleep_quality?: string;
+  time_awake?: string;
   notes?: string;
-  shared_with_clinician?: boolean;
-  shared_with_carers?: boolean;
   created_at?: string;
   updated_at?: string;
 }
 
-export const useSeizureLogs = (userId?: string) => {
-  const [seizureLogs, setSeizureLogs] = useState<SeizureLog[]>([]);
+export const useTemperatureLogs = (userId?: string) => {
+  const [temperatureLogs, setTemperatureLogs] = useState<TemperatureLog[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchSeizureLogs = async () => {
+  const fetchTemperatureLogs = async () => {
     if (!userId) return;
 
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
         .schema('private_health_info')
-        .from('seizure_events')
+        .from('basal_temperature_logs')
         .select('*')
-        .eq('patient_id', userId)
-        .order('occurred_at', { ascending: false });
+        .eq('user_id', userId)
+        .order('log_date', { ascending: false });
 
       if (error) throw error;
-      setSeizureLogs(data || []);
+      setTemperatureLogs(data || []);
     } catch (error) {
-      console.error('Error fetching seizure events:', error);
+      console.error('Error fetching temperature logs:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const addSeizureLog = async (logData: Omit<SeizureLog, 'id' | 'created_at' | 'updated_at'>) => {
+  const addTemperatureLog = async (logData: Omit<TemperatureLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
         .schema('private_health_info')
-        .from('seizure_events')
+        .from('basal_temperature_logs')
         .insert(logData)
         .select()
         .single();
+
       if (error) throw error;
 
-      setSeizureLogs([data, ...seizureLogs]);
+      setTemperatureLogs([data, ...temperatureLogs]);
       
       toast({
-        title: "Seizure Logged",
-        description: "Your seizure has been recorded successfully.",
+        title: "Temperature Logged",
+        description: "Your temperature has been recorded successfully.",
       });
 
       return { success: true, data };
     } catch (error: any) {
-      console.error('Error adding seizure event:', error);
+      console.error('Error adding temperature log:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to log seizure",
+        description: error.message || "Failed to log temperature",
         variant: "destructive",
       });
       return { success: false, error };
     }
   };
 
-  const updateSeizureLog = async (id: string, updates: Partial<SeizureLog>) => {
+  const updateTemperatureLog = async (id: string, updates: Partial<TemperatureLog>) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
         .schema('private_health_info')
-        .from('seizure_events')
+        .from('basal_temperature_logs')
         .update(updates)
         .eq('id', id)
         .select()
@@ -101,16 +89,16 @@ export const useSeizureLogs = (userId?: string) => {
 
       if (error) throw error;
 
-      setSeizureLogs(seizureLogs.map(log => log.id === id ? data : log));
+      setTemperatureLogs(temperatureLogs.map(log => log.id === id ? data : log));
       
       toast({
         title: "Log Updated",
-        description: "Seizure log has been updated.",
+        description: "Temperature log has been updated.",
       });
 
       return { success: true, data };
     } catch (error: any) {
-      console.error('Error updating seizure log:', error);
+      console.error('Error updating temperature log:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to update log",
@@ -120,27 +108,27 @@ export const useSeizureLogs = (userId?: string) => {
     }
   };
 
-  const deleteSeizureLog = async (id: string) => {
+  const deleteTemperatureLog = async (id: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
         .schema('private_health_info')
-        .from('seizure_events')
+        .from('basal_temperature_logs')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
 
-      setSeizureLogs(seizureLogs.filter(log => log.id !== id));
+      setTemperatureLogs(temperatureLogs.filter(log => log.id !== id));
       
       toast({
         title: "Log Deleted",
-        description: "Seizure log has been deleted.",
+        description: "Temperature log has been deleted.",
       });
 
       return { success: true };
     } catch (error: any) {
-      console.error('Error deleting seizure log:', error);
+      console.error('Error deleting temperature log:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to delete log",
@@ -152,16 +140,16 @@ export const useSeizureLogs = (userId?: string) => {
 
   useEffect(() => {
     if (userId) {
-      fetchSeizureLogs();
+      fetchTemperatureLogs();
     }
   }, [userId]);
 
   return {
-    seizureLogs,
+    temperatureLogs,
     loading,
-    addSeizureLog,
-    updateSeizureLog,
-    deleteSeizureLog,
-    refetch: fetchSeizureLogs
+    addTemperatureLog,
+    updateTemperatureLog,
+    deleteTemperatureLog,
+    refetch: fetchTemperatureLogs
   };
 };

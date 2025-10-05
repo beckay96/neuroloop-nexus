@@ -10,6 +10,7 @@ import MedicationModal from "@/components/tracking/MedicationModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomsModal from "@/components/tracking/SymptomsModal";
+import MenstrualCycleLogModal from "@/components/tracking/MenstrualCycleLogModal";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +20,8 @@ import { useMedicationLogs } from "@/hooks/useMedicationLogs";
 import { useSymptomLogs } from "@/hooks/useSymptomLogs";
 import { useTremorLogs } from "@/hooks/useTremorLogs";
 import { useGaitLogs } from "@/hooks/useGaitLogs";
+import { useMenstrualLogs } from "@/hooks/useMenstrualLogs";
+import { useTemperatureLogs } from "@/hooks/useTemperatureLogs";
 import { useTrackingEntries } from "@/hooks/useTrackingEntries";
 import { useTrackingPreferences } from "@/hooks/useTrackingPreferences";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,6 +72,13 @@ const quickActions = [{
   color: "text-accent",
   bg: "bg-accent/30",
   description: "Detailed symptom tracking"
+}, {
+  id: "menstrual-cycle",
+  title: "Menstrual Cycle",
+  icon: Calendar,
+  color: "text-pink-500",
+  bg: "bg-pink-100 dark:bg-pink-950/20",
+  description: "Track cycle & seizure patterns"
 }];
 const healthStats = [{
   label: "Days Seizure Free",
@@ -163,8 +173,10 @@ export default function PatientDashboard() {
   const { userConditions, loading: conditionsLoading } = useConditions(user?.id);
   const { preferences, loading: preferencesLoading } = useTrackingPreferences(user?.id);
   const { seizureLogs, addSeizureLog, refetch: refetchSeizures } = useSeizureLogs(user?.id);
-  const { medicationLogs } = useMedicationLogs(user?.id);
+  const { medicationLogs, addMedicationLog, refetch: refetchMedications } = useMedicationLogs(user?.id);
   const { symptomLogs, addSymptomLog, refetch: refetchSymptoms } = useSymptomLogs(user?.id);
+  const { addMenstrualLog } = useMenstrualLogs(user?.id);
+  const { addTemperatureLog } = useTemperatureLogs(user?.id);
   const { tremorLogs } = useTremorLogs(user?.id);
   const { gaitLogs } = useGaitLogs(user?.id);
   const { trackingEntries } = useTrackingEntries(user?.id);
@@ -296,6 +308,7 @@ export default function PatientDashboard() {
   const [showVideoLog, setShowVideoLog] = useState(false);
   const [showTemperatureLog, setShowTemperatureLog] = useState(false);
   const [showSymptomsLog, setShowSymptomsLog] = useState(false);
+  const [showMenstrualLog, setShowMenstrualLog] = useState(false);
   const handleQuickAction = (actionId: string) => {
     switch (actionId) {
       case "daily-tracking":
@@ -315,6 +328,9 @@ export default function PatientDashboard() {
         break;
       case "symptom-log":
         setShowSymptomsLog(true);
+        break;
+      case "menstrual-cycle":
+        setShowMenstrualLog(true);
         break;
       default:
         // All actions implemented
@@ -381,15 +397,20 @@ export default function PatientDashboard() {
           break;
 
         case 'medication-log':
-          // Keep existing medication log - table name might be correct
-          const { error: medError } = await supabase
-            .from('medication_logs')
-            .insert({
-              user_id: user.id,
-              ...data
-            });
-          if (medError) throw medError;
-          toast({ title: "✅ Medication logged" });
+          // Use medication logs hook
+          const medResult = await addMedicationLog({
+            user_id: user.id,
+            log_date: data.log_date || new Date().toISOString().split('T')[0],
+            user_medication_id: data.user_medication_id,
+            log_time: data.log_time,
+            dosage_taken: data.dosage_taken,
+            taken: data.taken,
+            side_effects: data.side_effects,
+            notes: data.notes
+          });
+          if (medResult.success) {
+            refetchMedications();
+          }
           break;
 
         case 'symptoms-log':
@@ -408,15 +429,44 @@ export default function PatientDashboard() {
           break;
 
         case 'temperature-log':
-          const { error: tempError } = await supabase
-            .from('menstrual_cycle_logs')
-            .insert({
-              user_id: user.id,
-              cycle_start_date: data.date,
-              notes: data.notes
-            });
-          if (tempError) throw tempError;
-          toast({ title: "✅ Temperature logged" });
+          // Use temperature logs hook for basal body temperature
+          const tempResult = await addTemperatureLog({
+            user_id: user.id,
+            log_date: data.date || new Date().toISOString().split('T')[0],
+            log_time: data.time || new Date().toTimeString().slice(0, 5),
+            temperature: data.temperature,
+            temperature_unit: data.temperature_unit || 'F',
+            measurement_type: data.measurement_type || 'basal',
+            measurement_location: data.measurement_location,
+            menstrual_cycle_day: data.menstrual_cycle_day,
+            sleep_quality: data.sleep_quality,
+            time_awake: data.time_awake,
+            notes: data.notes
+          });
+          if (tempResult.success) {
+            toast({ title: "✅ Temperature logged" });
+          }
+          break;
+
+        case 'menstrual-cycle':
+          // Use menstrual logs hook for full cycle tracking
+          const menstrualResult = await addMenstrualLog({
+            user_id: user.id,
+            cycle_start_date: data.cycle_start_date,
+            cycle_end_date: data.cycle_end_date,
+            cycle_length_days: data.cycle_length_days,
+            flow_intensity: data.flow_intensity,
+            cycle_phase: data.cycle_phase,
+            symptoms: data.symptoms,
+            symptom_severity: data.symptom_severity,
+            seizure_count_during_cycle: data.seizure_count_during_cycle,
+            seizure_clustered_around_menstruation: data.seizure_clustered_around_menstruation,
+            catamenial_pattern_suspected: data.catamenial_pattern_suspected,
+            notes: data.notes
+          });
+          if (menstrualResult.success) {
+            toast({ title: "✅ Menstrual cycle logged" });
+          }
           break;
 
         case 'video-log':
@@ -462,6 +512,11 @@ export default function PatientDashboard() {
       <SymptomsModal isOpen={showSymptomsLog} onClose={() => setShowSymptomsLog(false)} onComplete={data => {
       handleModalComplete(data, "symptoms-log");
       setShowSymptomsLog(false);
+    }} />
+      
+      <MenstrualCycleLogModal isOpen={showMenstrualLog} onClose={() => setShowMenstrualLog(false)} onComplete={data => {
+      handleModalComplete(data, "menstrual-cycle");
+      setShowMenstrualLog(false);
     }} />
       
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">

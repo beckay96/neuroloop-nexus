@@ -163,7 +163,32 @@ export default function Landing() {
     }
   };
 
-  const handleFirstTrackingComplete = () => {
+  const handleFirstTrackingComplete = async (trackingData: any) => {
+    if (!user?.id) return;
+
+    try {
+      // Save first tracking entry to tracking_entries table
+      // @ts-ignore - Table exists in private_health_info schema
+      const { error } = await supabase
+        .schema('private_health_info')
+        .from('tracking_entries')
+        .insert({
+          user_id: user.id,
+          entry_date: trackingData.log_date,
+          entry_type: 'daily_wellness',
+          mood_rating: trackingData.mood_numeric,
+          energy_level: trackingData.energy_numeric,
+          sleep_quality: trackingData.sleep_numeric,
+          notes: trackingData.notes || null
+        });
+
+      if (error) {
+        console.error('Error saving first tracking:', error);
+      }
+    } catch (error) {
+      console.error('Error in first tracking:', error);
+    }
+
     setShowFirstTracking(false);
     setHasCompletedOnboarding(true);
   };
@@ -179,7 +204,10 @@ export default function Landing() {
       <>
         <DailyTrackingModal 
           isOpen={true}
-          onClose={handleFirstTrackingComplete}
+          onClose={() => {
+            setShowFirstTracking(false);
+            setHasCompletedOnboarding(true);
+          }}
           onComplete={handleFirstTrackingComplete}
           isFirstTracking={true}
         />

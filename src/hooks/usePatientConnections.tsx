@@ -36,24 +36,33 @@ export const usePatientConnections = (clinicianId?: string) => {
     if (!clinicianId) return;
 
     try {
+      // Note: patient_onboarding_data is now in private_health_info schema
+      // We'll fetch it separately to avoid join issues across schemas
       const { data, error } = await supabase
         .from('patient_clinician_connections')
-        .select(`
-          *,
-          patient_onboarding_data!inner(first_name, last_name)
-        `)
+        .select('*')
         .eq('clinician_id', clinicianId)
         .order('connected_at', { ascending: false });
 
       if (error) throw error;
       
-      // Map the data to include patient_profile
-      const mappedData = (data || []).map(conn => ({
-        ...conn,
-        patient_profile: {
-          first_name: (conn as any).patient_onboarding_data?.first_name,
-          last_name: (conn as any).patient_onboarding_data?.last_name
-        }
+      // Fetch patient names from private_health_info schema
+      const mappedData = await Promise.all((data || []).map(async (conn) => {
+        // @ts-ignore - Table exists in private_health_info schema
+        const { data: onboardingData } = await supabase
+          .schema('private_health_info')
+          .from('patient_onboarding_data')
+          .select('first_name, last_name')
+          .eq('user_id', conn.patient_id)
+          .single();
+        
+        return {
+          ...conn,
+          patient_profile: {
+            first_name: onboardingData?.first_name,
+            last_name: onboardingData?.last_name
+          }
+        };
       }));
       
       setConnections(mappedData);

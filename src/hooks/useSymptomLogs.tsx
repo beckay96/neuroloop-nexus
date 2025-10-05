@@ -32,7 +32,9 @@ export const useSymptomLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('daily_symptom_logs')
         .select('*')
         .eq('patient_id', userId)
@@ -51,6 +53,7 @@ export const useSymptomLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('daily_symptom_logs')
         .insert(logData)
         .select()
@@ -81,6 +84,7 @@ export const useSymptomLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('daily_symptom_logs')
         .update(updates)
         .eq('id', id)
@@ -112,6 +116,7 @@ export const useSymptomLogs = (userId?: string) => {
     try {
       // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
+        .schema('private_health_info')
         .from('daily_symptom_logs')
         .delete()
         .eq('id', id);

@@ -25,7 +25,9 @@ export const useMedicationLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('medication_logs')
         .select('*')
         .eq('user_id', userId)
@@ -42,7 +44,9 @@ export const useMedicationLogs = (userId?: string) => {
 
   const addMedicationLog = async (logData: Omit<MedicationLog, 'id' | 'created_at'>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('medication_logs')
         .insert(logData)
         .select()
@@ -71,7 +75,9 @@ export const useMedicationLogs = (userId?: string) => {
 
   const updateMedicationLog = async (id: string, updates: Partial<MedicationLog>) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
+        .schema('private_health_info')
         .from('medication_logs')
         .update(updates)
         .eq('id', id)
@@ -101,7 +107,9 @@ export const useMedicationLogs = (userId?: string) => {
 
   const deleteMedicationLog = async (id: string) => {
     try {
+      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
+        .schema('private_health_info')
         .from('medication_logs')
         .delete()
         .eq('id', id);

@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
 import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun } from "lucide-react";
+import PublicBrainAnalysis from "@/components/brain-analysis/PublicBrainAnalysis";
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const {
@@ -12,6 +14,7 @@ export default function LandingPage() {
     setTheme
   } = useTheme();
   const [showFullWarning, setShowFullWarning] = useState(false);
+  const [showBrainAnalysis, setShowBrainAnalysis] = useState(false);
   const features = [{
     icon: Brain,
     title: "Comprehensive Seizure Tracking",
@@ -411,6 +414,30 @@ export default function LandingPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Floating Brain Analysis Button - STUNNING! */}
+      <div className="fixed bottom-8 right-8 z-50">
+        <Button
+          size="lg"
+          onClick={() => setShowBrainAnalysis(true)}
+          className="h-16 w-16 rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 shadow-2xl hover:shadow-purple-500/50 hover:scale-110 transition-all duration-300 animate-pulse group relative"
+        >
+          <Brain className="h-8 w-8 text-white group-hover:rotate-12 transition-transform duration-300" />
+          <div className="absolute -top-2 -right-2 h-6 w-6 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce">
+            NEW
+          </div>
+        </Button>
+        <div className="absolute bottom-20 right-0 bg-white dark:bg-gray-900 px-4 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          <p className="text-sm font-semibold">Try Brain Analysis Tool!</p>
+          <p className="text-xs text-muted-foreground">Interactive seizure localization</p>
+        </div>
+      </div>
+
+      {/* Brain Analysis Modal */}
+      <PublicBrainAnalysis 
+        isOpen={showBrainAnalysis}
+        onClose={() => setShowBrainAnalysis(false)}
+      />
 
       {/* Footer */}
       <div className="border-t-4 border-gray-200 dark:border-gray-800 mt-16 bg-white dark:bg-gray-950">
