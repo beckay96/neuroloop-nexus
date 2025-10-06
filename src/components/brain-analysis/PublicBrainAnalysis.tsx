@@ -414,7 +414,6 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
                 <Info className="h-3 w-3" />
                 <span>
                   <strong>Privacy:</strong> Data not saved. Selections stay in your browser only. 
-                  Share link encodes signs in URL (no server storage).
                 </span>
               </p>
             </div>
