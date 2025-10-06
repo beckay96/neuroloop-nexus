@@ -118,28 +118,10 @@ export default function Auth() {
         return;
       }
 
-      // Step 2: Initialize user profile and settings
-      // @ts-ignore - Type definitions incomplete, function exists in database
-      const { data: initData, error: initError } = await supabase.rpc('initialize_new_user', {
-        p_user_id: authData.user.id,
-        p_email: authData.user.email!,
-        p_user_type: validatedData.userType
-      });
-
-      if (initError) {
-        console.error('Error initializing user:', initError);
-        setMessage({ type: 'error', text: 'Account created but initialization failed. Please contact support.' });
-        return;
-      }
-
-      // Check initialization result
-      const result = initData as { success: boolean; message: string };
-      if (!result.success) {
-        setMessage({ type: 'error', text: result.message });
-        return;
-      }
-
-      // Step 3: Navigate to onboarding based on user type
+      // The auth trigger will automatically initialize the user profile
+      // No need to manually call initialize_new_user anymore
+      
+      // Navigate to onboarding based on user type
       setMessage({ type: 'success', text: 'Account created successfully! Redirecting to onboarding...' });
       
       setTimeout(() => {
