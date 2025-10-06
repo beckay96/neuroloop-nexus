@@ -456,41 +456,7 @@ CREATE POLICY "researcher_profiles_insert"
     );
 
 -- ============================================================================
--- STEP 4: Create Helper Function to Test User Creation
--- ============================================================================
-
-CREATE OR REPLACE FUNCTION public.test_user_creation(
-    p_email TEXT,
-    p_user_type TEXT DEFAULT 'patient'
-) RETURNS JSONB
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-DECLARE
-    v_user_id UUID;
-    v_result JSONB;
-BEGIN
-    -- Generate a test user ID
-    v_user_id := gen_random_uuid();
-    
-    -- Simulate user creation in auth.users (for testing)
-    -- In production, this happens through Supabase Auth
-    
-    -- Call initialize_new_user
-    v_result := public.initialize_new_user(v_user_id, p_email, p_user_type);
-    
-    -- Return the result with test info
-    RETURN jsonb_build_object(
-        'test_user_id', v_user_id,
-        'test_email', p_email,
-        'test_user_type', p_user_type,
-        'initialization_result', v_result
-    );
-END;
-$$;
-
--- ============================================================================
--- STEP 5: Grant Necessary Permissions
+-- STEP 4: Grant Necessary Permissions
 -- ============================================================================
 
 -- Grant usage on schemas
@@ -547,48 +513,7 @@ BEGIN
     RAISE NOTICE '1. Test signup with a new account';
     RAISE NOTICE '2. Check function_execution_logs for any errors';
     RAISE NOTICE '3. Verify all initial tables are populated';
-    RAISE NOTICE '';
-    RAISE NOTICE 'To test manually:';
-    RAISE NOTICE 'SELECT * FROM public.test_user_creation(''test@example.com'', ''patient'');';
 END;
 $$;
 
 COMMIT;
-
--- ============================================================================
--- TESTING QUERIES
--- ============================================================================
-
--- Check recent signup attempts:
-/*
-SELECT 
-    started_at,
-    function_name,
-    input_user_id,
-    input_user_type,
-    success,
-    error_message
-FROM public.function_execution_logs
-WHERE function_name = 'initialize_new_user'
-ORDER BY started_at DESC
-LIMIT 10;
-*/
-
--- Check system logs for errors:
-/*
-SELECT 
-    created_at,
-    event_type,
-    message,
-    context_data
-FROM public.system_logs
-WHERE function_name = 'initialize_new_user'
-AND log_level = 'ERROR'
-ORDER BY created_at DESC
-LIMIT 10;
-*/
-
--- Test the initialization function:
-/*
-SELECT public.test_user_creation('newuser@example.com', 'patient');
-*/
