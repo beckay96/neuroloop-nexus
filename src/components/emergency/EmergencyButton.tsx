@@ -50,16 +50,17 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
   const loadEmergencyContact = async () => {
     try {
       const { data, error } = await supabase
-        .from('patient_onboarding_data')
+        .from('patient_onboarding_data' as any)
         .select('emergency_contact_name, emergency_contact_phone, emergency_contact_relationship')
         .eq('user_id', userId)
         .single();
 
       if (data && !error) {
+        const contactData = data as any;
         setEmergencyContact({
-          name: data.emergency_contact_name,
-          phone: data.emergency_contact_phone,
-          relationship: data.emergency_contact_relationship || 'Emergency Contact'
+          name: contactData.emergency_contact_name,
+          phone: contactData.emergency_contact_phone,
+          relationship: contactData.emergency_contact_relationship || 'Emergency Contact'
         });
       }
     } catch (error) {
@@ -144,7 +145,7 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
     try {
       // Log to a dedicated emergency_events table (would need to be created)
       const { error } = await supabase
-        .from('tracking_entries')
+        .from('tracking_entries' as any)
         .insert({
           user_id: userId,
           entry_date: new Date().toISOString().split('T')[0],
@@ -278,7 +279,7 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
                 </li>
                 <li className="flex items-start gap-2">
                   <Phone className="h-3 w-3 text-blue-500 mt-1" />
-                  <span>Call 911 if: First seizure, >5 minutes, or injured</span>
+                  <span>Call 911 if: First seizure, &gt;5 minutes, or injured</span>
                 </li>
               </ul>
             </Card>
