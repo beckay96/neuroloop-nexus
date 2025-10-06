@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
 import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun } from "lucide-react";
 import PublicBrainAnalysis from "@/components/brain-analysis/PublicBrainAnalysis";
-import { AccessCodeGate } from "@/components/AccessCodeGate";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -14,7 +13,6 @@ export default function LandingPage() {
     theme,
     setTheme
   } = useTheme();
-  const [hasAccess, setHasAccess] = useState(false);
   const [showFullWarning, setShowFullWarning] = useState(false);
   const [showBrainAnalysis, setShowBrainAnalysis] = useState(false);
   const features = [{
@@ -75,11 +73,6 @@ export default function LandingPage() {
     text: "Real-time care coordination",
     color: "text-teal-600 dark:text-teal-400"
   }];
-  
-  // Show access code gate first
-  if (!hasAccess) {
-    return <AccessCodeGate onAccessGranted={() => setHasAccess(true)} />;
-  }
   
   return <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       {/* Theme Toggle - Top Right */}

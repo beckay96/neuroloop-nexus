@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Brain, Mail, Lock, User, AlertCircle, CheckCircle, Stethoscope, Heart, FlaskConical } from 'lucide-react';
 import { z } from 'zod';
 import { Enums } from '@/integrations/supabase/types';
+import { AccessCodeGate } from '@/components/AccessCodeGate';
 
 type UserType = Enums<'user_type_enum'>;
 
@@ -55,6 +56,7 @@ const USER_TYPE_OPTIONS: { value: UserType; label: string; icon: any; descriptio
 export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [hasAccess, setHasAccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [signupData, setSignupData] = useState({
@@ -175,6 +177,11 @@ export default function Auth() {
       setLoading(false);
     }
   };
+
+  // Show access code gate first
+  if (!hasAccess) {
+    return <AccessCodeGate onAccessGranted={() => setHasAccess(true)} />;
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
