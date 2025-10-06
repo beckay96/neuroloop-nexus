@@ -22,9 +22,14 @@ export default function LandingPage() {
     color: "text-purple-500 dark:text-purple-400"
   }, {
     icon: Activity,
+    title: "Parkinson's Movement Tracking",
+    description: "Track tremors, rigidity, bradykinesia, gait patterns, and dyskinesia with specialized tools for motor symptom monitoring",
+    color: "text-blue-500 dark:text-blue-400"
+  }, {
+    icon: Activity,
     title: "Daily Health Monitoring",
     description: "Track symptoms, medications, temperature, and vital signs with intuitive interfaces",
-    color: "text-blue-500 dark:text-blue-400"
+    color: "text-teal-500 dark:text-teal-400"
   }, {
     icon: Users,
     title: "Care Team Collaboration",
@@ -146,7 +151,7 @@ export default function LandingPage() {
       {/* Hero Section - Enhanced */}
       <div className="max-w-7xl mx-auto px-4 py-16 sm:py-24">
         <div className="text-center space-y-8">
-          <Badge variant="secondary" className="text-lg px-6 py-3 shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <Badge className="text-lg px-6 py-3 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0">
             <Brain className="h-5 w-5 mr-2 inline" />
             Neurological Health Management Platform
           </Badge>
@@ -675,7 +680,7 @@ export default function LandingPage() {
           <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                © 2025 NeuroLoop. Demo Environment • Not for Real Health Data
+                © 2025 Elevita AI. NeuroLoop™ Demo Environment • Not for Real Health Data
               </p>
               <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
                 <span>ILAE-Compliant</span>
