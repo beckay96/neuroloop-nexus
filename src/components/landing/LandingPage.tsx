@@ -417,7 +417,7 @@ export default function LandingPage() {
 
       {/* Floating Brain Analysis Button - STUNNING! */}
       <div 
-        className="fixed bottom-8 right-8 z-[9999] bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 h-20 w-20 rounded-full shadow-2xl animate-pulse cursor-pointer hover:scale-110 transition-all duration-300 flex items-center justify-center"
+        className="fixed bottom-8 right-8 z-[9999] bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 h-20 w-20 rounded-full shadow-2xl cursor-pointer hover:scale-110 transition-all duration-300 flex items-center justify-center"
         onClick={() => {
           console.log("Button clicked!");
           setShowBrainAnalysis(true);
@@ -430,7 +430,7 @@ export default function LandingPage() {
         }}
       >
         <Brain className="h-10 w-10 text-white" />
-        <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg">
+        <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg mx-4">
           NEW
         </div>
       </div>
