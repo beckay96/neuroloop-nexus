@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   Select,
   SelectContent,
@@ -59,74 +58,6 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
   const { sendMultipleInvites } = usePatientInvites();
   const { toast } = useToast();
 
-  // Load saved onboarding progress
-  useEffect(() => {
-    loadOnboardingProgress();
-  }, []);
-
-  const loadOnboardingProgress = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('clinician_onboarding_data')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (error) {
-        console.error('Error loading onboarding progress:', error);
-        return;
-      }
-
-      if (data && !data.completed_at) {
-        setCurrentStep(data.onboarding_step || 1);
-        setFormData(prev => ({
-          ...prev,
-          firstName: data.first_name || '',
-          lastName: data.last_name || '',
-          middleName: data.middle_name || '',
-          clinicianTitle: data.clinician_title || '',
-          specialty: data.specialty || '',
-          institution: data.institution || '',
-          licenseNumber: data.license_number || '',
-          patientInviteEmails: data.patient_invite_emails || []
-        }));
-      }
-    } catch (error) {
-      console.error('Error loading onboarding progress:', error);
-    }
-  };
-
-  const saveProgress = async (nextStep: number) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // @ts-ignore - Table exists in private_health_info schema
-      await supabase
-        .schema('private_health_info')
-        .from('clinician_onboarding_data')
-        .upsert([{
-          user_id: user.id,
-          onboarding_step: nextStep,
-          first_name: formData.firstName || null,
-          last_name: formData.lastName || null,
-          middle_name: formData.middleName || null,
-          clinician_title: formData.clinicianTitle || null,
-          specialty: formData.specialty || null,
-          institution: formData.institution || null,
-          license_number: formData.licenseNumber || null,
-          patient_invite_emails: formData.patientInviteEmails.length > 0 ? formData.patientInviteEmails : null,
-        }], { onConflict: 'user_id' });
-    } catch (error) {
-      console.error('Error saving progress:', error);
-    }
-  };
-
   const updateFormData = (updates: Partial<typeof formData>) => {
     setFormData(prev => ({ ...prev, ...updates }));
   };
@@ -148,9 +79,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
 
   const handleNext = async () => {
     if (currentStep < 3) {
-      const nextStep = currentStep + 1;
-      await saveProgress(nextStep);
-      setCurrentStep(nextStep);
+      setCurrentStep(currentStep + 1);
     } else {
       setIsSubmitting(true);
       try {
@@ -265,7 +194,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
               
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="specialty">Specialty *</Label>
-                <Select onValueChange={(value) => updateFormData({ specialty: value })}>
+                <Select onValueChange={(value) => updateFormData({ specialty: value })} value={formData.specialty}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your specialty" />
                   </SelectTrigger>
