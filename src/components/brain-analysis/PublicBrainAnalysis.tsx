@@ -19,7 +19,7 @@ import {
   SheetDescription,
   SheetTrigger
 } from "@/components/ui/sheet";
-import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check } from "lucide-react";
+import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check, EyeOff } from "lucide-react";
 import BrainVisualizationImages from "@/components/brain-analysis/BrainVisualizationImages";
 import { SEIZURE_SEMIOLOGY, BRAIN_REGIONS } from "@/data/brain-seizure-data";
 import { useToast } from "@/hooks/use-toast";
@@ -375,6 +375,31 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
                   </div>
                 </Card>
               )}
+            </Card>
+
+            <Card className="mt-6 p-6 bg-sky-50 dark:bg-sky-950/30 border-sky-200 dark:border-sky-800">
+              <div className="flex items-start gap-3">
+                <EyeOff className="h-5 w-5 text-sky-700 dark:text-sky-300 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold text-sky-900 dark:text-sky-100">
+                    Why Some Regions Disappear
+                  </h3>
+                  <ul className="text-sm space-y-2 text-sky-900 dark:text-sky-200 list-disc list-inside">
+                    <li>
+                      <strong>Probability thresholds:</strong> When multiple signs are selected, regions that fall below the display threshold (e.g., &lt;20% or unsupported by the chosen semiologies) are hidden to prevent low-confidence noise.
+                    </li>
+                    <li>
+                      <strong>Combination logic:</strong> Each new sign triggers a recomputation against the population meta-analysis, mirroring how neurologists narrow localization as more evidence accumulates.
+                    </li>
+                    <li>
+                      <strong>Research-backed behavior:</strong> Strong localizers (for example, epigastric aura or déjà vu) push temporal lobe probabilities high, while less associated regions (frontal, insula, parietal) naturally approach zero and are removed to reduce cognitive overload.
+                    </li>
+                  </ul>
+                  <p className="text-xs text-sky-800/80 dark:text-sky-300/80">
+                    Sources: Brain Communications (2022) meta-analysis; PubMed-indexed semiology localization studies.
+                  </p>
+                </div>
+              </div>
             </Card>
 
             {/* Next Steps & Safety Info */}
