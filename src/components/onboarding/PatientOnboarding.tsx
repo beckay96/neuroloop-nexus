@@ -12,8 +12,11 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CustomDatePicker } from "@/components/ui/custom-date-picker";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { 
   Heart,
   User,
@@ -127,7 +130,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
     middleName: "",
     lastName: "",
     gender: "",
-    dateOfBirth: "",
+    dateOfBirth: undefined as Date | undefined,
     
     // Emergency Contact
     emergencyContactName: "",
@@ -212,7 +215,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         const result = await saveOnboarding(user.id, {
           firstName: formData.firstName,
           lastName: formData.lastName,
-          dateOfBirth: formData.dateOfBirth,
+          dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth.toISOString().split('T')[0] : '',
           gender: formData.gender,
           selectedConditions: conditionUUIDs,
           medications: formData.medications,
@@ -335,11 +338,30 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
               
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="dob">Date of Birth *</Label>
-                <CustomDatePicker
-                  value={formData.dateOfBirth}
-                  onChange={(date) => updateFormData({ dateOfBirth: date })}
-                  maxDate={new Date()}
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !formData.dateOfBirth && "text-muted-foreground"
+                      )}
+                    >
+                      <Calendar className="mr-2 h-4 w-4" />
+                      {formData.dateOfBirth ? format(formData.dateOfBirth, "PPP") : <span>Select your date of birth</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <CalendarComponent
+                      mode="single"
+                      selected={formData.dateOfBirth}
+                      onSelect={(date) => updateFormData({ dateOfBirth: date })}
+                      disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </div>
@@ -629,7 +651,7 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.firstName && formData.lastName && formData.gender && formData.dateOfBirth;
+        return formData.firstName && formData.lastName && formData.gender && !!formData.dateOfBirth;
       case 2:
         return formData.emergencyContactName && formData.emergencyContactPhone;
       case 3:
