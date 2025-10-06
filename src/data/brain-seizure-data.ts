@@ -5,11 +5,93 @@
 // Validation: Surgical outcomes (Engel Ia/Ib, ILAE 1/2), concordant imaging/EEG, invasive SEEG
 // Baseline Prevalences (bias-corrected): Temporal 44%, Frontal 31%, Other regions <15%
 
+// ============================================================================
+// TYPE SAFETY ENUMS
+// ============================================================================
+
+/**
+ * Primary brain regions for seizure localization.
+ * Note: "Bilateral" and "Generalized" are clinical descriptors, not anatomical regions.
+ */
+export enum BrainRegionType {
+  TEMPORAL = "Temporal Lobe",
+  FRONTAL = "Frontal Lobe",
+  PARIETAL = "Parietal Lobe",
+  OCCIPITAL = "Occipital Lobe",
+  INSULA = "Insula",
+  CINGULATE = "Cingulate Cortex",
+  HYPOTHALAMUS = "Hypothalamus",
+  // Clinical descriptors (not anatomical)
+  BILATERAL = "Bilateral",
+  GENERALIZED = "Generalized",
+  THALAMUS = "Thalamus"
+}
+
+/**
+ * Temporal lobe subregions for refined localization.
+ */
+export enum TemporalSubregion {
+  MESIAL = "Mesial Temporal",
+  LATERAL = "Lateral Temporal",
+  ANTERIOR = "Anterior Temporal",
+  POSTERIOR = "Posterior Temporal",
+  BASAL = "Basal Temporal"
+}
+
+/**
+ * Other anatomical subregions.
+ */
+export enum OtherSubregion {
+  SUPPLEMENTARY_MOTOR_AREA = "Supplementary Motor Area",
+  PRIMARY_MOTOR_CORTEX = "Primary Motor Cortex",
+  PRIMARY_SOMATOSENSORY_CORTEX = "Primary Somatosensory Cortex",
+  PRIMARY_VISUAL_CORTEX = "Primary Visual Cortex",
+  BROCAS_AREA = "Broca's Area",
+  AUDITORY_CORTEX = "Auditory Cortex",
+  ANTERIOR_CINGULATE = "Anterior Cingulate",
+  AMYGDALA = "Amygdala",
+  HIPPOCAMPUS = "Hippocampus"
+}
+
+/**
+ * Semiology types for categorization.
+ */
+export enum SemiologyType {
+  SUBJECTIVE_SENSORY = "Subjective Sensory",
+  MOTOR_SIGNS = "Motor Signs",
+  AUTONOMIC_SIGNS = "Autonomic Signs",
+  CONSCIOUSNESS = "Consciousness",
+  LANGUAGE = "Language",
+  POST_ICTAL = "Post-Ictal",
+  BEHAVIORAL = "Behavioral",
+  GENERALIZED = "Generalized",
+  ASSOCIATED_FEATURES = "Associated Features"
+}
+
+// ============================================================================
+// DATA STRUCTURES
+// ============================================================================
+
 export interface SeizureSign {
   name: string;
   description: string;
-  type: string;
-  localizations: Record<string, number>; // region -> probability %
+  type: string; // Consider using SemiologyType enum
+  /**
+   * Region/subregion localization probabilities (%)
+   * 
+   * IMPORTANT - Probability Interpretation:
+   * - Parent region probabilities (e.g., "Temporal Lobe": 83) represent 
+   *   the total likelihood of involvement anywhere within that lobe
+   * - Subregion probabilities (e.g., "Mesial Temporal": 61) represent
+   *   the likelihood of involvement in that SPECIFIC subregion
+   * - Subregion values are NOT additive to parent; they are CONDITIONAL
+   *   (i.e., IF temporal lobe involved, THEN 61/83 = 73% chance it's mesial)
+   * - When multiple regions are listed, they represent independent localization
+   *   probabilities based on population data
+   * - Network effects: Many seizures involve multiple regions; these values
+   *   reflect seizure ONSET or early propagation zones, not all involved areas
+   */
+  localizations: Record<string, number>;
   additionalSigns?: string[];
 }
 
@@ -709,6 +791,15 @@ export function getProbabilityColor(probability: number): string {
  * - Hypothalamus: <5% (rare)
  * 
  * Total does not equal 100% due to network involvement and overlap.
+ * 
+ * IMPORTANT - Bilateral/Generalized Modeling:
+ * "Bilateral" and "Generalized" are CLINICAL DESCRIPTORS, not anatomical regions.
+ * They represent seizure patterns involving both hemispheres simultaneously.
+ * These should be modeled as separate classification axes:
+ * - Axis 1: Focal (single region) vs Generalized (bilateral/whole brain)
+ * - Axis 2: IF focal, THEN which anatomical region(s)
+ * Do not treat "Bilateral" or "Generalized" as competing with anatomical regions
+ * in the same probability space.
  */
 
 /**
@@ -787,15 +878,15 @@ export function getProbabilityColor(probability: number): string {
  * - 4,643 unique patients
  * - 11,230 data points
  * - 10,000 bootstrap samples for confidence intervals
- * 
- * Last Updated: 2022
+ *   * Original Research Published: 2022
  * Implementation Date: 2025-01-06
+ * Last Code Update: 2025-10-06
  */
 
 /**
  * KNOWN LIMITATIONS & FUTURE DIRECTIONS
  * 
- * Current Limitations:
+{{ ... }}
  * 1. Temporal lobe over-representation in literature (bias corrected but residual)
  * 2. Insular seizures may be underreported (access/detection challenges)
  * 3. Network effects not fully captured in localization percentages
