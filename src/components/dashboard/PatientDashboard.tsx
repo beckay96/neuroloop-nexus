@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import AppNavbar from "@/components/navigation/AppNavbar";
-import DailyTrackingModal from "@/components/tracking/DailyTrackingModal.tsx";
+import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
 import SeizureLogModal from "@/components/tracking/SeizureLogModal";
 import MedicationModal from "@/components/tracking/MedicationModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
-import SymptomsModal from "@/components/tracking/SymptomsModal";
+import SymptomLogModalEnhanced from "@/components/tracking/SymptomLogModalEnhanced";
 import MenstrualCycleLogModal from "@/components/tracking/MenstrualCycleLogModal";
+import { FloatingEmergencyButton } from "@/components/emergency/EmergencyButton";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -509,10 +510,15 @@ export default function PatientDashboard() {
       setShowTemperatureLog(false);
     }} />
       
-      <SymptomsModal isOpen={showSymptomsLog} onClose={() => setShowSymptomsLog(false)} onComplete={data => {
-      handleModalComplete(data, "symptoms-log");
-      setShowSymptomsLog(false);
-    }} />
+      <SymptomLogModalEnhanced 
+        isOpen={showSymptomsLog} 
+        onClose={() => setShowSymptomsLog(false)} 
+        onComplete={data => {
+          handleModalComplete(data, "symptoms-log");
+          setShowSymptomsLog(false);
+        }} 
+        userConditions={userConditions.map(uc => uc.conditions?.name || '').filter(Boolean)} 
+      />
       
       <MenstrualCycleLogModal isOpen={showMenstrualLog} onClose={() => setShowMenstrualLog(false)} onComplete={data => {
       handleModalComplete(data, "menstrual-cycle");
@@ -818,6 +824,9 @@ export default function PatientDashboard() {
           </Card>
         </section>
       </main>
+      
+      {/* Floating Emergency Button - Always Accessible */}
+      {user && <FloatingEmergencyButton userId={user.id} />}
     </div>
     </>;
 }

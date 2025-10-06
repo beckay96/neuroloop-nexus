@@ -1,0 +1,16 @@
+| schema_oid | schema_name         | owner          |
+| ---------- | ------------------- | -------------- |
+| 16494      | auth                | supabase_admin |
+| 20597      | clinical            | postgres       |
+| 16388      | extensions          | postgres       |
+| 16624      | graphql             | supabase_admin |
+| 16613      | graphql_public      | supabase_admin |
+| 20596      | linkage             | postgres       |
+| 20595      | private_health_info | postgres       |
+| 19554      | protected           | postgres       |
+| 18464      | public              | postgres       |
+| 16605      | realtime            | supabase_admin |
+| 21871      | research            | postgres       |
+| 16542      | storage             | supabase_admin |
+| 19701      | supabase_migrations | postgres       |
+| 16653      | vault               | supabase_admin |

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,10 +26,30 @@ import ResearcherOnboardingPage from "@/pages/onboarding/ResearcherOnboardingPag
 import BrainSeizureAnalysis from "@/pages/BrainSeizureAnalysis";
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
+import { MedicationReminderService } from "@/services/medicationReminders";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  // Initialize critical services on app start
+  useEffect(() => {
+    // Initialize medication reminder service
+    MedicationReminderService.getInstance();
+    
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+    
+    // Request notification permission if not already granted
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" storageKey="neuroloop-ui-theme">
       <TooltipProvider>
@@ -113,6 +134,7 @@ const App = () => (
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
