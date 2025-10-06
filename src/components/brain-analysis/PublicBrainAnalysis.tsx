@@ -158,6 +158,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
                   Research-grade educational tool. Select signs to explore likely brain regions (population estimates).
                 </DialogDescription>
               </div>
+              
             </div>
             <div className="flex items-center gap-2">
               <Sheet open={methodologyOpen} onOpenChange={setMethodologyOpen}>
@@ -215,7 +216,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
                     <div>
                       <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Last Reviewed</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        January 2025 | Data current as of Q4 2024
+                        October 2025 | Data current as of Q4 2024
                       </p>
                     </div>
 
@@ -256,7 +257,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
         </DialogHeader>
 
         {/* Educational Disclaimer - Always Visible */}
-        <Card className="p-4 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-700 sticky top-0 z-20">
+        <Card className="p-4 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-700">
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
             <div className="text-sm">
@@ -349,16 +350,6 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
             <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Brain Region Localization</h2>
-                {selectedSigns.length > 0 && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handleCopyLink}
-                  >
-                    {linkCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                    {linkCopied ? "Copied!" : "Copy Link"}
-                  </Button>
-                )}
               </div>
               
               <div aria-live="polite" aria-atomic="true">
@@ -429,14 +420,6 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
             </div>
           </div>
         </div>
-
-      {/* Footer Disclaimer */}
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-center text-gray-600 dark:text-gray-400">
-          Educational use only. Population estimates, not personal diagnosis. Accurate localization requires EEG/imaging and clinical evaluation. 
-          © 2025 NeuroLoop | Last reviewed: October 2025
-        </p>
-      </div>
       </DialogContent>
     </Dialog>
   );
