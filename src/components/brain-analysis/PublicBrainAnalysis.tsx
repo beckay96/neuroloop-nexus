@@ -430,13 +430,13 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
           </div>
         </div>
 
-        {/* Footer Disclaimer */}
-        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <p className="text-xs text-center text-gray-600 dark:text-gray-400">
-            Educational use only. Population estimates, not personal diagnosis. Accurate localization requires EEG/imaging and clinical evaluation. 
-            © 2025 NeuroLoop | Last reviewed: January 2025
-          </p>
-        </div>
+      {/* Footer Disclaimer */}
+      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <p className="text-xs text-center text-gray-600 dark:text-gray-400">
+          Educational use only. Population estimates, not personal diagnosis. Accurate localization requires EEG/imaging and clinical evaluation. 
+          © 2025 NeuroLoop | Last reviewed: October 2025
+        </p>
+      </div>
       </DialogContent>
     </Dialog>
   );
