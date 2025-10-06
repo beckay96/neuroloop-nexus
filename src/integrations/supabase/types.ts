@@ -16,400 +16,400 @@ export type Database = {
     Tables: {
       ai_insights_cards: {
         Row: {
-          action_taken: boolean | null
-          action_url: string | null
-          ai_model_version: string | null
-          clinician_id: string
-          confidence_score: number | null
-          content: string
-          dismissed_at: string | null
-          generated_at: string
-          has_action: boolean | null
-          impact_metric: Json | null
           insight_id: string
+          clinician_id: string
+          title: string
+          content: string
           insight_type: string
+          impact_metric: Json | null
+          ai_model_version: string | null
+          confidence_score: number | null
+          is_read: boolean | null
           is_dismissed: boolean | null
           is_pinned: boolean | null
-          is_read: boolean | null
+          has_action: boolean | null
+          action_url: string | null
+          action_taken: boolean | null
+          generated_at: string
           read_at: string | null
-          title: string
+          dismissed_at: string | null
         }
         Insert: {
-          action_taken?: boolean | null
-          action_url?: string | null
-          ai_model_version?: string | null
+          insight_id?: string | null
           clinician_id: string
-          confidence_score?: number | null
+          title: string
           content: string
-          dismissed_at?: string | null
-          generated_at?: string
-          has_action?: boolean | null
-          impact_metric?: Json | null
-          insight_id?: string
           insight_type: string
+          impact_metric?: Json | null
+          ai_model_version?: string | null
+          confidence_score?: number | null
+          is_read?: boolean | null
           is_dismissed?: boolean | null
           is_pinned?: boolean | null
-          is_read?: boolean | null
+          has_action?: boolean | null
+          action_url?: string | null
+          action_taken?: boolean | null
+          generated_at?: string | null
           read_at?: string | null
-          title: string
+          dismissed_at?: string | null
         }
         Update: {
-          action_taken?: boolean | null
-          action_url?: string | null
-          ai_model_version?: string | null
-          clinician_id?: string
-          confidence_score?: number | null
-          content?: string
-          dismissed_at?: string | null
-          generated_at?: string
-          has_action?: boolean | null
-          impact_metric?: Json | null
           insight_id?: string
+          clinician_id?: string
+          title?: string
+          content?: string
           insight_type?: string
+          impact_metric?: Json | null
+          ai_model_version?: string | null
+          confidence_score?: number | null
+          is_read?: boolean | null
           is_dismissed?: boolean | null
           is_pinned?: boolean | null
-          is_read?: boolean | null
+          has_action?: boolean | null
+          action_url?: string | null
+          action_taken?: boolean | null
+          generated_at?: string
           read_at?: string | null
-          title?: string
+          dismissed_at?: string | null
         }
         Relationships: []
-      }
+      },
       case_data_panels: {
         Row: {
+          panel_id: string
+          patient_id: string
+          panel_type: string
+          custom_panel_name: string | null
+          title: string
+          content: Json
+          display_order: number | null
+          is_visible: boolean | null
+          is_collapsed: boolean | null
+          priority_score: number | null
           added_at: string
           added_by: string | null
-          content: Json
-          custom_panel_name: string | null
-          display_order: number | null
-          is_collapsed: boolean | null
-          is_visible: boolean | null
-          panel_id: string
-          panel_type: string
-          patient_id: string
-          priority_score: number | null
-          title: string
           updated_at: string | null
         }
         Insert: {
-          added_at?: string
-          added_by?: string | null
-          content: Json
-          custom_panel_name?: string | null
-          display_order?: number | null
-          is_collapsed?: boolean | null
-          is_visible?: boolean | null
-          panel_id?: string
-          panel_type: string
+          panel_id?: string | null
           patient_id: string
-          priority_score?: number | null
+          panel_type: string
+          custom_panel_name?: string | null
           title: string
+          content: Json
+          display_order?: number | null
+          is_visible?: boolean | null
+          is_collapsed?: boolean | null
+          priority_score?: number | null
+          added_at?: string | null
+          added_by?: string | null
           updated_at?: string | null
         }
         Update: {
+          panel_id?: string
+          patient_id?: string
+          panel_type?: string
+          custom_panel_name?: string | null
+          title?: string
+          content?: Json
+          display_order?: number | null
+          is_visible?: boolean | null
+          is_collapsed?: boolean | null
+          priority_score?: number | null
           added_at?: string
           added_by?: string | null
-          content?: Json
-          custom_panel_name?: string | null
-          display_order?: number | null
-          is_collapsed?: boolean | null
-          is_visible?: boolean | null
-          panel_id?: string
-          panel_type?: string
-          patient_id?: string
-          priority_score?: number | null
-          title?: string
           updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       clinical_notes_exports: {
         Row: {
-          author_id: string
-          content: string
-          digital_signature: string | null
-          file_path: string | null
-          format: string
-          generated_at: string
           note_id: string
-          note_type: string
           patient_id: string
-          shared_at: string | null
-          shared_with: string[] | null
-          signed_at: string | null
-          signed_by: string | null
+          note_type: string
+          content: string
+          format: string
+          file_path: string | null
           status: string | null
-          updated_at: string | null
+          author_id: string
+          signed_by: string | null
+          signed_at: string | null
+          digital_signature: string | null
+          shared_with: string | null
+          shared_at: string | null
           visit_date: string | null
+          generated_at: string
+          updated_at: string | null
         }
         Insert: {
-          author_id: string
-          content: string
-          digital_signature?: string | null
-          file_path?: string | null
-          format: string
-          generated_at?: string
-          note_id?: string
-          note_type: string
+          note_id?: string | null
           patient_id: string
-          shared_at?: string | null
-          shared_with?: string[] | null
-          signed_at?: string | null
-          signed_by?: string | null
+          note_type: string
+          content: string
+          format: string
+          file_path?: string | null
           status?: string | null
-          updated_at?: string | null
+          author_id: string
+          signed_by?: string | null
+          signed_at?: string | null
+          digital_signature?: string | null
+          shared_with?: string | null
+          shared_at?: string | null
           visit_date?: string | null
+          generated_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          author_id?: string
-          content?: string
-          digital_signature?: string | null
-          file_path?: string | null
-          format?: string
-          generated_at?: string
           note_id?: string
-          note_type?: string
           patient_id?: string
-          shared_at?: string | null
-          shared_with?: string[] | null
-          signed_at?: string | null
-          signed_by?: string | null
+          note_type?: string
+          content?: string
+          format?: string
+          file_path?: string | null
           status?: string | null
-          updated_at?: string | null
+          author_id?: string
+          signed_by?: string | null
+          signed_at?: string | null
+          digital_signature?: string | null
+          shared_with?: string | null
+          shared_at?: string | null
           visit_date?: string | null
+          generated_at?: string
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       clinical_scale_results: {
         Row: {
-          assessed_at: string
-          assessed_by: string | null
-          assessment_notes: string | null
-          change_alert: boolean | null
-          change_from_baseline: number | null
-          due_at: string | null
-          entered_at: string | null
-          entered_by: string
-          is_significant_change: boolean | null
-          patient_condition: string | null
-          patient_id: string
           scale_id: string
+          patient_id: string
           scale_type: string
           scale_version: string | null
-          subscale_scores: Json | null
           total_score: number | null
+          subscale_scores: Json | null
+          assessed_at: string
+          due_at: string | null
+          change_from_baseline: number | null
+          change_alert: boolean | null
+          is_significant_change: boolean | null
           trend: Json | null
+          assessed_by: string | null
+          assessment_notes: string | null
+          patient_condition: string | null
+          entered_by: string
+          entered_at: string | null
           updated_at: string | null
         }
         Insert: {
-          assessed_at: string
-          assessed_by?: string | null
-          assessment_notes?: string | null
-          change_alert?: boolean | null
-          change_from_baseline?: number | null
-          due_at?: string | null
-          entered_at?: string | null
-          entered_by: string
-          is_significant_change?: boolean | null
-          patient_condition?: string | null
+          scale_id?: string | null
           patient_id: string
-          scale_id?: string
           scale_type: string
           scale_version?: string | null
-          subscale_scores?: Json | null
           total_score?: number | null
+          subscale_scores?: Json | null
+          assessed_at: string
+          due_at?: string | null
+          change_from_baseline?: number | null
+          change_alert?: boolean | null
+          is_significant_change?: boolean | null
           trend?: Json | null
-          updated_at?: string | null
-        }
-        Update: {
-          assessed_at?: string
           assessed_by?: string | null
           assessment_notes?: string | null
-          change_alert?: boolean | null
-          change_from_baseline?: number | null
-          due_at?: string | null
-          entered_at?: string | null
-          entered_by?: string
-          is_significant_change?: boolean | null
           patient_condition?: string | null
-          patient_id?: string
-          scale_id?: string
-          scale_type?: string
-          scale_version?: string | null
-          subscale_scores?: Json | null
-          total_score?: number | null
-          trend?: Json | null
+          entered_by: string
+          entered_at?: string | null
           updated_at?: string | null
-        }
-        Relationships: []
-      }
-      clinician_today_view: {
-        Row: {
-          alerts: Json | null
-          appointments: Json | null
-          clinician_id: string
-          created_at: string | null
-          date: string
-          high_priority_patients: Json | null
-          last_refreshed: string | null
-          layout_config: Json | null
-          pending_tasks: Json | null
-          updated_at: string | null
-          view_id: string
-          widget_order: number[] | null
-        }
-        Insert: {
-          alerts?: Json | null
-          appointments?: Json | null
-          clinician_id: string
-          created_at?: string | null
-          date?: string
-          high_priority_patients?: Json | null
-          last_refreshed?: string | null
-          layout_config?: Json | null
-          pending_tasks?: Json | null
-          updated_at?: string | null
-          view_id?: string
-          widget_order?: number[] | null
         }
         Update: {
-          alerts?: Json | null
-          appointments?: Json | null
-          clinician_id?: string
-          created_at?: string | null
-          date?: string
-          high_priority_patients?: Json | null
-          last_refreshed?: string | null
-          layout_config?: Json | null
-          pending_tasks?: Json | null
+          scale_id?: string
+          patient_id?: string
+          scale_type?: string
+          scale_version?: string | null
+          total_score?: number | null
+          subscale_scores?: Json | null
+          assessed_at?: string
+          due_at?: string | null
+          change_from_baseline?: number | null
+          change_alert?: boolean | null
+          is_significant_change?: boolean | null
+          trend?: Json | null
+          assessed_by?: string | null
+          assessment_notes?: string | null
+          patient_condition?: string | null
+          entered_by?: string
+          entered_at?: string | null
           updated_at?: string | null
-          view_id?: string
-          widget_order?: number[] | null
         }
         Relationships: []
-      }
+      },
+      clinician_today_view: {
+        Row: {
+          view_id: string
+          clinician_id: string
+          date: string
+          appointments: Json | null
+          alerts: Json | null
+          high_priority_patients: Json | null
+          pending_tasks: Json | null
+          layout_config: Json | null
+          widget_order: number | null
+          last_refreshed: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          view_id?: string | null
+          clinician_id: string
+          date?: string | null
+          appointments?: Json | null
+          alerts?: Json | null
+          high_priority_patients?: Json | null
+          pending_tasks?: Json | null
+          layout_config?: Json | null
+          widget_order?: number | null
+          last_refreshed?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          view_id?: string
+          clinician_id?: string
+          date?: string
+          appointments?: Json | null
+          alerts?: Json | null
+          high_priority_patients?: Json | null
+          pending_tasks?: Json | null
+          layout_config?: Json | null
+          widget_order?: number | null
+          last_refreshed?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      },
       neuro_imaging_results: {
         Row: {
-          ai_findings: Json | null
-          ai_processed: boolean | null
-          annotations: Json | null
-          critical_findings: boolean | null
+          image_id: string
+          patient_id: string
+          study_type: string
+          study_protocol: string | null
+          modality_details: string | null
+          image_path: string | null
           dicom_uid: string | null
           file_size_mb: number | null
           findings_summary: string | null
-          image_id: string
-          image_path: string | null
           impression: string | null
-          modality_details: string | null
-          ordering_physician: string | null
-          patient_id: string
-          radiologist: string | null
+          annotations: Json | null
+          critical_findings: boolean | null
           study_date: string
-          study_protocol: string | null
-          study_type: string
-          updated_at: string | null
+          radiologist: string | null
+          ordering_physician: string | null
+          ai_processed: boolean | null
+          ai_findings: Json | null
           uploaded_at: string | null
           uploaded_by: string | null
+          updated_at: string | null
         }
         Insert: {
-          ai_findings?: Json | null
-          ai_processed?: boolean | null
-          annotations?: Json | null
-          critical_findings?: boolean | null
+          image_id?: string | null
+          patient_id: string
+          study_type: string
+          study_protocol?: string | null
+          modality_details?: string | null
+          image_path?: string | null
           dicom_uid?: string | null
           file_size_mb?: number | null
           findings_summary?: string | null
-          image_id?: string
-          image_path?: string | null
           impression?: string | null
-          modality_details?: string | null
-          ordering_physician?: string | null
-          patient_id: string
-          radiologist?: string | null
+          annotations?: Json | null
+          critical_findings?: boolean | null
           study_date: string
-          study_protocol?: string | null
-          study_type: string
-          updated_at?: string | null
+          radiologist?: string | null
+          ordering_physician?: string | null
+          ai_processed?: boolean | null
+          ai_findings?: Json | null
           uploaded_at?: string | null
           uploaded_by?: string | null
+          updated_at?: string | null
         }
         Update: {
-          ai_findings?: Json | null
-          ai_processed?: boolean | null
-          annotations?: Json | null
-          critical_findings?: boolean | null
+          image_id?: string
+          patient_id?: string
+          study_type?: string
+          study_protocol?: string | null
+          modality_details?: string | null
+          image_path?: string | null
           dicom_uid?: string | null
           file_size_mb?: number | null
           findings_summary?: string | null
-          image_id?: string
-          image_path?: string | null
           impression?: string | null
-          modality_details?: string | null
-          ordering_physician?: string | null
-          patient_id?: string
-          radiologist?: string | null
+          annotations?: Json | null
+          critical_findings?: boolean | null
           study_date?: string
-          study_protocol?: string | null
-          study_type?: string
-          updated_at?: string | null
+          radiologist?: string | null
+          ordering_physician?: string | null
+          ai_processed?: boolean | null
+          ai_findings?: Json | null
           uploaded_at?: string | null
           uploaded_by?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       patient_collab_chat: {
         Row: {
-          attachments: Json | null
-          deleted_at: string | null
-          edited_at: string | null
-          is_read: boolean | null
-          is_urgent: boolean | null
-          mentioned_users: string[] | null
-          message: string
           message_id: string
-          parent_message_id: string | null
           patient_id: string
-          read_at: string | null
-          read_by: string[] | null
-          requires_response: boolean | null
           sender_id: string
-          sent_at: string
+          message: string
           thread_id: string | null
+          parent_message_id: string | null
+          attachments: Json | null
+          is_urgent: boolean | null
+          requires_response: boolean | null
+          is_read: boolean | null
+          read_by: string | null
+          read_at: string | null
+          mentioned_users: string | null
+          sent_at: string
+          edited_at: string | null
+          deleted_at: string | null
         }
         Insert: {
-          attachments?: Json | null
-          deleted_at?: string | null
-          edited_at?: string | null
-          is_read?: boolean | null
-          is_urgent?: boolean | null
-          mentioned_users?: string[] | null
-          message: string
-          message_id?: string
-          parent_message_id?: string | null
+          message_id?: string | null
           patient_id: string
-          read_at?: string | null
-          read_by?: string[] | null
-          requires_response?: boolean | null
           sender_id: string
-          sent_at?: string
+          message: string
           thread_id?: string | null
+          parent_message_id?: string | null
+          attachments?: Json | null
+          is_urgent?: boolean | null
+          requires_response?: boolean | null
+          is_read?: boolean | null
+          read_by?: string | null
+          read_at?: string | null
+          mentioned_users?: string | null
+          sent_at?: string | null
+          edited_at?: string | null
+          deleted_at?: string | null
         }
         Update: {
-          attachments?: Json | null
-          deleted_at?: string | null
-          edited_at?: string | null
-          is_read?: boolean | null
-          is_urgent?: boolean | null
-          mentioned_users?: string[] | null
-          message?: string
           message_id?: string
-          parent_message_id?: string | null
           patient_id?: string
-          read_at?: string | null
-          read_by?: string[] | null
-          requires_response?: boolean | null
           sender_id?: string
-          sent_at?: string
+          message?: string
           thread_id?: string | null
+          parent_message_id?: string | null
+          attachments?: Json | null
+          is_urgent?: boolean | null
+          requires_response?: boolean | null
+          is_read?: boolean | null
+          read_by?: string | null
+          read_at?: string | null
+          mentioned_users?: string | null
+          sent_at?: string
+          edited_at?: string | null
+          deleted_at?: string | null
         }
         Relationships: [
           {
@@ -420,169 +420,169 @@ export type Database = {
             referencedColumns: ["message_id"]
           },
         ]
-      }
+      },
       patient_pro_timeline: {
         Row: {
-          collection_method: string | null
-          created_at: string | null
+          pro_id: string
+          patient_id: string
+          pro_type: string
           custom_type_name: string | null
+          value: number | null
+          value_unit: string | null
+          value_json: Json | null
+          reported_at: string
+          collection_method: string | null
+          linked_intervention: string | null
           intervention_notes: string | null
           is_validated: boolean | null
-          linked_intervention: string | null
-          patient_id: string
-          pro_id: string
-          pro_type: string
-          reported_at: string
-          updated_at: string | null
           validated_by: string | null
           validation_notes: string | null
-          value: number | null
-          value_json: Json | null
-          value_unit: string | null
-        }
-        Insert: {
-          collection_method?: string | null
-          created_at?: string | null
-          custom_type_name?: string | null
-          intervention_notes?: string | null
-          is_validated?: boolean | null
-          linked_intervention?: string | null
-          patient_id: string
-          pro_id?: string
-          pro_type: string
-          reported_at?: string
-          updated_at?: string | null
-          validated_by?: string | null
-          validation_notes?: string | null
-          value?: number | null
-          value_json?: Json | null
-          value_unit?: string | null
-        }
-        Update: {
-          collection_method?: string | null
-          created_at?: string | null
-          custom_type_name?: string | null
-          intervention_notes?: string | null
-          is_validated?: boolean | null
-          linked_intervention?: string | null
-          patient_id?: string
-          pro_id?: string
-          pro_type?: string
-          reported_at?: string
-          updated_at?: string | null
-          validated_by?: string | null
-          validation_notes?: string | null
-          value?: number | null
-          value_json?: Json | null
-          value_unit?: string | null
-        }
-        Relationships: []
-      }
-      patient_risk_alerts: {
-        Row: {
-          acknowledged_at: string | null
-          acknowledged_by: string | null
-          alert_id: string
-          alert_level: string
-          context_data: Json | null
-          created_at: string
-          patient_id: string
-          reason: string
-          resolution_notes: string | null
-          resolved_at: string | null
-          resolved_by: string | null
-          risk_type: string
-          score: number | null
-          status: string | null
+          created_at: string | null
           updated_at: string | null
         }
         Insert: {
-          acknowledged_at?: string | null
-          acknowledged_by?: string | null
-          alert_id?: string
-          alert_level?: string
-          context_data?: Json | null
-          created_at?: string
+          pro_id?: string | null
           patient_id: string
-          reason: string
-          resolution_notes?: string | null
-          resolved_at?: string | null
-          resolved_by?: string | null
-          risk_type: string
-          score?: number | null
-          status?: string | null
+          pro_type: string
+          custom_type_name?: string | null
+          value?: number | null
+          value_unit?: string | null
+          value_json?: Json | null
+          reported_at?: string | null
+          collection_method?: string | null
+          linked_intervention?: string | null
+          intervention_notes?: string | null
+          is_validated?: boolean | null
+          validated_by?: string | null
+          validation_notes?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Update: {
-          acknowledged_at?: string | null
-          acknowledged_by?: string | null
-          alert_id?: string
-          alert_level?: string
-          context_data?: Json | null
-          created_at?: string
+          pro_id?: string
           patient_id?: string
-          reason?: string
-          resolution_notes?: string | null
-          resolved_at?: string | null
-          resolved_by?: string | null
-          risk_type?: string
-          score?: number | null
-          status?: string | null
+          pro_type?: string
+          custom_type_name?: string | null
+          value?: number | null
+          value_unit?: string | null
+          value_json?: Json | null
+          reported_at?: string
+          collection_method?: string | null
+          linked_intervention?: string | null
+          intervention_notes?: string | null
+          is_validated?: boolean | null
+          validated_by?: string | null
+          validation_notes?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Relationships: []
-      }
-      patient_snapshots: {
+      },
+      patient_risk_alerts: {
         Row: {
-          ai_model_version: string | null
-          author: string
-          author_id: string | null
-          generated_at: string
-          highlight_events: Json | null
-          is_archived: boolean | null
-          is_pinned: boolean | null
-          key_metrics: Json | null
+          alert_id: string
           patient_id: string
-          period_end: string | null
-          period_start: string | null
-          reviewed_at: string | null
-          reviewed_by: string | null
-          snapshot_id: string
-          summary: string
+          risk_type: string
+          alert_level: string
+          score: number | null
+          reason: string
+          context_data: Json | null
+          status: string | null
+          acknowledged_by: string | null
+          acknowledged_at: string | null
+          resolved_by: string | null
+          resolved_at: string | null
+          resolution_notes: string | null
+          created_at: string
+          updated_at: string | null
         }
         Insert: {
-          ai_model_version?: string | null
-          author: string
-          author_id?: string | null
-          generated_at?: string
-          highlight_events?: Json | null
-          is_archived?: boolean | null
-          is_pinned?: boolean | null
-          key_metrics?: Json | null
+          alert_id?: string | null
           patient_id: string
-          period_end?: string | null
-          period_start?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          snapshot_id?: string
-          summary: string
+          risk_type: string
+          alert_level?: string | null
+          score?: number | null
+          reason: string
+          context_data?: Json | null
+          status?: string | null
+          acknowledged_by?: string | null
+          acknowledged_at?: string | null
+          resolved_by?: string | null
+          resolved_at?: string | null
+          resolution_notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
+          alert_id?: string
+          patient_id?: string
+          risk_type?: string
+          alert_level?: string
+          score?: number | null
+          reason?: string
+          context_data?: Json | null
+          status?: string | null
+          acknowledged_by?: string | null
+          acknowledged_at?: string | null
+          resolved_by?: string | null
+          resolved_at?: string | null
+          resolution_notes?: string | null
+          created_at?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      },
+      patient_snapshots: {
+        Row: {
+          snapshot_id: string
+          patient_id: string
+          summary: string
+          highlight_events: Json | null
+          key_metrics: Json | null
+          author: string
+          author_id: string | null
+          ai_model_version: string | null
+          period_start: string | null
+          period_end: string | null
+          is_pinned: boolean | null
+          is_archived: boolean | null
+          generated_at: string
+          reviewed_by: string | null
+          reviewed_at: string | null
+        }
+        Insert: {
+          snapshot_id?: string | null
+          patient_id: string
+          summary: string
+          highlight_events?: Json | null
+          key_metrics?: Json | null
+          author: string
+          author_id?: string | null
           ai_model_version?: string | null
+          period_start?: string | null
+          period_end?: string | null
+          is_pinned?: boolean | null
+          is_archived?: boolean | null
+          generated_at?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+        }
+        Update: {
+          snapshot_id?: string
+          patient_id?: string
+          summary?: string
+          highlight_events?: Json | null
+          key_metrics?: Json | null
           author?: string
           author_id?: string | null
-          generated_at?: string
-          highlight_events?: Json | null
-          is_archived?: boolean | null
-          is_pinned?: boolean | null
-          key_metrics?: Json | null
-          patient_id?: string
-          period_end?: string | null
+          ai_model_version?: string | null
           period_start?: string | null
-          reviewed_at?: string | null
+          period_end?: string | null
+          is_pinned?: boolean | null
+          is_archived?: boolean | null
+          generated_at?: string
           reviewed_by?: string | null
-          snapshot_id?: string
-          summary?: string
+          reviewed_at?: string | null
         }
         Relationships: []
       }
@@ -604,43 +604,43 @@ export type Database = {
     Tables: {
       research_id_map: {
         Row: {
-          access_count: number | null
-          consent_version: string | null
+          id: string
+          user_id: string
+          research_id: string
           created_at: string
           created_by: string | null
-          id: string
-          irb_protocol_number: string | null
-          is_locked: boolean | null
           last_accessed: string | null
+          access_count: number | null
+          irb_protocol_number: string | null
+          consent_version: string | null
+          is_locked: boolean | null
           notes: string | null
-          research_id: string
-          user_id: string
         }
         Insert: {
-          access_count?: number | null
-          consent_version?: string | null
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          irb_protocol_number?: string | null
-          is_locked?: boolean | null
-          last_accessed?: string | null
-          notes?: string | null
-          research_id?: string
+          id?: string | null
           user_id: string
+          research_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          last_accessed?: string | null
+          access_count?: number | null
+          irb_protocol_number?: string | null
+          consent_version?: string | null
+          is_locked?: boolean | null
+          notes?: string | null
         }
         Update: {
-          access_count?: number | null
-          consent_version?: string | null
+          id?: string
+          user_id?: string
+          research_id?: string
           created_at?: string
           created_by?: string | null
-          id?: string
-          irb_protocol_number?: string | null
-          is_locked?: boolean | null
           last_accessed?: string | null
+          access_count?: number | null
+          irb_protocol_number?: string | null
+          consent_version?: string | null
+          is_locked?: boolean | null
           notes?: string | null
-          research_id?: string
-          user_id?: string
         }
         Relationships: []
       }
@@ -662,451 +662,439 @@ export type Database = {
     Tables: {
       clinical_media: {
         Row: {
-          description: string | null
-          duration_seconds: number | null
-          file_size_mb: number | null
-          file_type: string
-          file_url: string
           media_id: string
-          mime_type: string | null
-          parent_id: string
-          parent_type: string
           patient_id: string
-          shared_with_clinician: boolean | null
+          parent_type: string
+          parent_id: string
+          file_url: string
+          file_type: string
+          file_size_mb: number | null
+          mime_type: string | null
+          thumbnail_url: string | null
+          duration_seconds: number | null
+          description: string | null
+          tags: Json | null
           storage_bucket: string | null
           storage_path: string | null
-          tags: Json | null
-          thumbnail_url: string | null
+          shared_with_clinician: boolean | null
+          visible_to_researchers: boolean | null
           uploaded_at: string | null
           uploaded_by: string | null
-          visible_to_researchers: boolean | null
         }
         Insert: {
-          description?: string | null
-          duration_seconds?: number | null
-          file_size_mb?: number | null
-          file_type: string
-          file_url: string
-          media_id?: string
-          mime_type?: string | null
-          parent_id: string
-          parent_type: string
+          media_id?: string | null
           patient_id: string
-          shared_with_clinician?: boolean | null
+          parent_type: string
+          parent_id: string
+          file_url: string
+          file_type: string
+          file_size_mb?: number | null
+          mime_type?: string | null
+          thumbnail_url?: string | null
+          duration_seconds?: number | null
+          description?: string | null
+          tags?: Json | null
           storage_bucket?: string | null
           storage_path?: string | null
-          tags?: Json | null
-          thumbnail_url?: string | null
+          shared_with_clinician?: boolean | null
+          visible_to_researchers?: boolean | null
           uploaded_at?: string | null
           uploaded_by?: string | null
-          visible_to_researchers?: boolean | null
         }
         Update: {
-          description?: string | null
-          duration_seconds?: number | null
-          file_size_mb?: number | null
-          file_type?: string
-          file_url?: string
           media_id?: string
-          mime_type?: string | null
-          parent_id?: string
-          parent_type?: string
           patient_id?: string
-          shared_with_clinician?: boolean | null
+          parent_type?: string
+          parent_id?: string
+          file_url?: string
+          file_type?: string
+          file_size_mb?: number | null
+          mime_type?: string | null
+          thumbnail_url?: string | null
+          duration_seconds?: number | null
+          description?: string | null
+          tags?: Json | null
           storage_bucket?: string | null
           storage_path?: string | null
-          tags?: Json | null
-          thumbnail_url?: string | null
+          shared_with_clinician?: boolean | null
+          visible_to_researchers?: boolean | null
           uploaded_at?: string | null
           uploaded_by?: string | null
-          visible_to_researchers?: boolean | null
         }
         Relationships: []
-      }
+      },
       clinician_onboarding_data: {
         Row: {
+          id: string
+          user_id: string
+          first_name: string | null
+          middle_name: string | null
+          last_name: string | null
           clinician_title: string | null
+          specialty: string | null
+          institution: string | null
+          license_number: string | null
+          patient_invite_emails: string | null
           completed_at: string | null
           created_at: string | null
-          first_name: string | null
-          id: string
-          institution: string | null
-          last_name: string | null
-          last_updated_at: string | null
-          license_number: string | null
-          middle_name: string | null
-          onboarding_step: number | null
-          patient_invite_emails: string[] | null
-          specialty: string | null
           updated_at: string | null
-          user_id: string
+          onboarding_step: number | null
+          last_updated_at: string | null
         }
         Insert: {
+          id?: string | null
+          user_id: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
           clinician_title?: string | null
+          specialty?: string | null
+          institution?: string | null
+          license_number?: string | null
+          patient_invite_emails?: string | null
           completed_at?: string | null
           created_at?: string | null
-          first_name?: string | null
-          id?: string
-          institution?: string | null
-          last_name?: string | null
-          last_updated_at?: string | null
-          license_number?: string | null
-          middle_name?: string | null
-          onboarding_step?: number | null
-          patient_invite_emails?: string[] | null
-          specialty?: string | null
           updated_at?: string | null
-          user_id: string
+          onboarding_step?: number | null
+          last_updated_at?: string | null
         }
         Update: {
+          id?: string
+          user_id?: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
           clinician_title?: string | null
+          specialty?: string | null
+          institution?: string | null
+          license_number?: string | null
+          patient_invite_emails?: string | null
           completed_at?: string | null
           created_at?: string | null
-          first_name?: string | null
-          id?: string
-          institution?: string | null
-          last_name?: string | null
-          last_updated_at?: string | null
-          license_number?: string | null
-          middle_name?: string | null
-          onboarding_step?: number | null
-          patient_invite_emails?: string[] | null
-          specialty?: string | null
           updated_at?: string | null
-          user_id?: string
+          onboarding_step?: number | null
+          last_updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       clinician_phi: {
         Row: {
-          board_certifications: string[] | null
-          created_at: string | null
-          dea_number: string | null
           id: string
-          license_expiry: string | null
+          user_id: string
+          npi_number: string | null
+          dea_number: string | null
           license_number: string | null
           license_state: string | null
-          medical_degree: string | null
-          npi_number: string | null
-          office_fax: string | null
+          license_expiry: string | null
           office_phone: string | null
+          office_fax: string | null
           practice_address: Json | null
+          medical_degree: string | null
+          board_certifications: string | null
+          created_at: string | null
           updated_at: string | null
-          user_id: string
         }
         Insert: {
-          board_certifications?: string[] | null
-          created_at?: string | null
+          id?: string | null
+          user_id: string
+          npi_number?: string | null
           dea_number?: string | null
-          id?: string
-          license_expiry?: string | null
           license_number?: string | null
           license_state?: string | null
-          medical_degree?: string | null
-          npi_number?: string | null
-          office_fax?: string | null
+          license_expiry?: string | null
           office_phone?: string | null
+          office_fax?: string | null
           practice_address?: Json | null
+          medical_degree?: string | null
+          board_certifications?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id: string
         }
         Update: {
-          board_certifications?: string[] | null
-          created_at?: string | null
-          dea_number?: string | null
           id?: string
-          license_expiry?: string | null
+          user_id?: string
+          npi_number?: string | null
+          dea_number?: string | null
           license_number?: string | null
           license_state?: string | null
-          medical_degree?: string | null
-          npi_number?: string | null
-          office_fax?: string | null
+          license_expiry?: string | null
           office_phone?: string | null
+          office_fax?: string | null
           practice_address?: Json | null
+          medical_degree?: string | null
+          board_certifications?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       daily_symptom_logs: {
         Row: {
-          activities_difficult: Json | null
-          adl_independence_level: number | null
-          all_medications_taken: boolean | null
-          autonomic_symptoms: Json | null
-          cognitive_issues: Json | null
-          created_at: string | null
-          dyskinesia_severity: number | null
-          energy_level: number | null
-          exercise_minutes: number | null
-          fatigue_level: number | null
-          log_date: string
           log_id: string
-          medication_side_effects: Json | null
-          missed_doses: string | null
-          mood: number | null
-          mood_issues: Json | null
-          motor_fluctuations_occurred: boolean | null
-          notable_events: string | null
-          off_time_hours: number | null
-          on_time_hours: number | null
-          other_symptoms: Json | null
-          overall_feeling: number | null
-          pain_level: number | null
           patient_id: string
-          shared_with_clinician: boolean | null
-          sleep_disturbances: Json | null
-          sleep_hours: number | null
+          log_date: string
+          overall_feeling: number | null
+          mood: number | null
+          energy_level: number | null
+          fatigue_level: number | null
+          pain_level: number | null
           sleep_quality: number | null
-          slowness_severity: number | null
+          sleep_hours: number | null
+          sleep_disturbances: Json | null
+          motor_fluctuations_occurred: boolean | null
+          on_time_hours: number | null
+          off_time_hours: number | null
+          dyskinesia_severity: number | null
           stiffness_severity: number | null
-          stress_level: number | null
+          slowness_severity: number | null
+          cognitive_issues: Json | null
+          mood_issues: Json | null
+          autonomic_symptoms: Json | null
+          adl_independence_level: number | null
+          activities_difficult: Json | null
+          all_medications_taken: boolean | null
+          missed_doses: string | null
+          medication_side_effects: Json | null
+          other_symptoms: Json | null
           symptom_notes: string | null
-          updated_at: string | null
+          stress_level: number | null
+          exercise_minutes: number | null
+          notable_events: string | null
+          shared_with_clinician: boolean | null
           visible_to_researchers: boolean | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          activities_difficult?: Json | null
-          adl_independence_level?: number | null
-          all_medications_taken?: boolean | null
-          autonomic_symptoms?: Json | null
-          cognitive_issues?: Json | null
-          created_at?: string | null
-          dyskinesia_severity?: number | null
-          energy_level?: number | null
-          exercise_minutes?: number | null
-          fatigue_level?: number | null
-          log_date: string
-          log_id?: string
-          medication_side_effects?: Json | null
-          missed_doses?: string | null
-          mood?: number | null
-          mood_issues?: Json | null
-          motor_fluctuations_occurred?: boolean | null
-          notable_events?: string | null
-          off_time_hours?: number | null
-          on_time_hours?: number | null
-          other_symptoms?: Json | null
-          overall_feeling?: number | null
-          pain_level?: number | null
+          log_id?: string | null
           patient_id: string
-          shared_with_clinician?: boolean | null
-          sleep_disturbances?: Json | null
-          sleep_hours?: number | null
+          log_date: string
+          overall_feeling?: number | null
+          mood?: number | null
+          energy_level?: number | null
+          fatigue_level?: number | null
+          pain_level?: number | null
           sleep_quality?: number | null
-          slowness_severity?: number | null
+          sleep_hours?: number | null
+          sleep_disturbances?: Json | null
+          motor_fluctuations_occurred?: boolean | null
+          on_time_hours?: number | null
+          off_time_hours?: number | null
+          dyskinesia_severity?: number | null
           stiffness_severity?: number | null
-          stress_level?: number | null
+          slowness_severity?: number | null
+          cognitive_issues?: Json | null
+          mood_issues?: Json | null
+          autonomic_symptoms?: Json | null
+          adl_independence_level?: number | null
+          activities_difficult?: Json | null
+          all_medications_taken?: boolean | null
+          missed_doses?: string | null
+          medication_side_effects?: Json | null
+          other_symptoms?: Json | null
           symptom_notes?: string | null
-          updated_at?: string | null
+          stress_level?: number | null
+          exercise_minutes?: number | null
+          notable_events?: string | null
+          shared_with_clinician?: boolean | null
           visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          activities_difficult?: Json | null
-          adl_independence_level?: number | null
-          all_medications_taken?: boolean | null
-          autonomic_symptoms?: Json | null
-          cognitive_issues?: Json | null
-          created_at?: string | null
-          dyskinesia_severity?: number | null
-          energy_level?: number | null
-          exercise_minutes?: number | null
-          fatigue_level?: number | null
-          log_date?: string
           log_id?: string
-          medication_side_effects?: Json | null
-          missed_doses?: string | null
-          mood?: number | null
-          mood_issues?: Json | null
-          motor_fluctuations_occurred?: boolean | null
-          notable_events?: string | null
-          off_time_hours?: number | null
-          on_time_hours?: number | null
-          other_symptoms?: Json | null
-          overall_feeling?: number | null
-          pain_level?: number | null
           patient_id?: string
-          shared_with_clinician?: boolean | null
-          sleep_disturbances?: Json | null
-          sleep_hours?: number | null
+          log_date?: string
+          overall_feeling?: number | null
+          mood?: number | null
+          energy_level?: number | null
+          fatigue_level?: number | null
+          pain_level?: number | null
           sleep_quality?: number | null
-          slowness_severity?: number | null
+          sleep_hours?: number | null
+          sleep_disturbances?: Json | null
+          motor_fluctuations_occurred?: boolean | null
+          on_time_hours?: number | null
+          off_time_hours?: number | null
+          dyskinesia_severity?: number | null
           stiffness_severity?: number | null
-          stress_level?: number | null
+          slowness_severity?: number | null
+          cognitive_issues?: Json | null
+          mood_issues?: Json | null
+          autonomic_symptoms?: Json | null
+          adl_independence_level?: number | null
+          activities_difficult?: Json | null
+          all_medications_taken?: boolean | null
+          missed_doses?: string | null
+          medication_side_effects?: Json | null
+          other_symptoms?: Json | null
           symptom_notes?: string | null
-          updated_at?: string | null
+          stress_level?: number | null
+          exercise_minutes?: number | null
+          notable_events?: string | null
+          shared_with_clinician?: boolean | null
           visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       gait_episodes: {
         Row: {
-          activity: string | null
-          broke_freeze_with: string | null
-          created_at: string | null
-          duration_seconds: number | null
-          environmental_factors: Json | null
-          event_type: string
-          fall_direction: string | null
-          freezing_trigger: string | null
           gait_id: string
-          hours_since_medication: number | null
-          injury_description: string | null
-          injury_occurred: boolean | null
-          location: string | null
-          media_urls: Json | null
-          medication_status: string | null
-          notes: string | null
-          occurred_at: string
           patient_id: string
-          required_assistance: boolean | null
-          resulted_in_fall: boolean | null
+          occurred_at: string
+          duration_seconds: number | null
+          event_type: string
           severity: number | null
-          shared_with_clinician: boolean | null
-          updated_at: string | null
+          resulted_in_fall: boolean | null
+          fall_direction: string | null
+          injury_occurred: boolean | null
+          injury_description: string | null
+          required_assistance: boolean | null
+          location: string | null
+          activity: string | null
+          environmental_factors: Json | null
+          medication_status: string | null
+          hours_since_medication: number | null
+          freezing_trigger: string | null
+          broke_freeze_with: string | null
           video_recorded: boolean | null
+          media_urls: Json | null
+          notes: string | null
+          shared_with_clinician: boolean | null
           visible_to_researchers: boolean | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          activity?: string | null
-          broke_freeze_with?: string | null
-          created_at?: string | null
-          duration_seconds?: number | null
-          environmental_factors?: Json | null
-          event_type: string
-          fall_direction?: string | null
-          freezing_trigger?: string | null
-          gait_id?: string
-          hours_since_medication?: number | null
-          injury_description?: string | null
-          injury_occurred?: boolean | null
-          location?: string | null
-          media_urls?: Json | null
-          medication_status?: string | null
-          notes?: string | null
-          occurred_at: string
+          gait_id?: string | null
           patient_id: string
-          required_assistance?: boolean | null
-          resulted_in_fall?: boolean | null
+          occurred_at: string
+          duration_seconds?: number | null
+          event_type: string
           severity?: number | null
-          shared_with_clinician?: boolean | null
-          updated_at?: string | null
+          resulted_in_fall?: boolean | null
+          fall_direction?: string | null
+          injury_occurred?: boolean | null
+          injury_description?: string | null
+          required_assistance?: boolean | null
+          location?: string | null
+          activity?: string | null
+          environmental_factors?: Json | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          freezing_trigger?: string | null
+          broke_freeze_with?: string | null
           video_recorded?: boolean | null
+          media_urls?: Json | null
+          notes?: string | null
+          shared_with_clinician?: boolean | null
           visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          activity?: string | null
-          broke_freeze_with?: string | null
-          created_at?: string | null
-          duration_seconds?: number | null
-          environmental_factors?: Json | null
-          event_type?: string
-          fall_direction?: string | null
-          freezing_trigger?: string | null
           gait_id?: string
-          hours_since_medication?: number | null
-          injury_description?: string | null
-          injury_occurred?: boolean | null
-          location?: string | null
-          media_urls?: Json | null
-          medication_status?: string | null
-          notes?: string | null
-          occurred_at?: string
           patient_id?: string
-          required_assistance?: boolean | null
-          resulted_in_fall?: boolean | null
+          occurred_at?: string
+          duration_seconds?: number | null
+          event_type?: string
           severity?: number | null
-          shared_with_clinician?: boolean | null
-          updated_at?: string | null
+          resulted_in_fall?: boolean | null
+          fall_direction?: string | null
+          injury_occurred?: boolean | null
+          injury_description?: string | null
+          required_assistance?: boolean | null
+          location?: string | null
+          activity?: string | null
+          environmental_factors?: Json | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          freezing_trigger?: string | null
+          broke_freeze_with?: string | null
           video_recorded?: boolean | null
+          media_urls?: Json | null
+          notes?: string | null
+          shared_with_clinician?: boolean | null
           visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       menstrual_cycle_logs: {
         Row: {
-          catamenial_pattern_suspected: boolean | null
-          created_at: string
+          id: string
+          user_id: string
+          cycle_start_date: string
           cycle_end_date: string | null
           cycle_length_days: number | null
-          cycle_phase: Database["public"]["Enums"]["cycle_phase_enum"] | null
-          cycle_start_date: string
-          flow_intensity:
-            | Database["public"]["Enums"]["flow_intensity_enum"]
-            | null
-          id: string
-          notes: string | null
+          flow_intensity: unknown | null
+          cycle_phase: unknown | null
           overall_symptom_severity: number | null
-          seizure_clustered_around_menstruation: boolean | null
           seizure_count_during_cycle: number | null
+          seizure_clustered_around_menstruation: boolean | null
+          catamenial_pattern_suspected: boolean | null
+          notes: string | null
+          created_at: string
           updated_at: string
-          user_id: string
         }
         Insert: {
-          catamenial_pattern_suspected?: boolean | null
-          created_at?: string
+          id?: string | null
+          user_id: string
+          cycle_start_date: string
           cycle_end_date?: string | null
           cycle_length_days?: number | null
-          cycle_phase?: Database["public"]["Enums"]["cycle_phase_enum"] | null
-          cycle_start_date: string
-          flow_intensity?:
-            | Database["public"]["Enums"]["flow_intensity_enum"]
-            | null
-          id?: string
-          notes?: string | null
+          flow_intensity?: unknown | null
+          cycle_phase?: unknown | null
           overall_symptom_severity?: number | null
-          seizure_clustered_around_menstruation?: boolean | null
           seizure_count_during_cycle?: number | null
-          updated_at?: string
-          user_id: string
+          seizure_clustered_around_menstruation?: boolean | null
+          catamenial_pattern_suspected?: boolean | null
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          catamenial_pattern_suspected?: boolean | null
-          created_at?: string
+          id?: string
+          user_id?: string
+          cycle_start_date?: string
           cycle_end_date?: string | null
           cycle_length_days?: number | null
-          cycle_phase?: Database["public"]["Enums"]["cycle_phase_enum"] | null
-          cycle_start_date?: string
-          flow_intensity?:
-            | Database["public"]["Enums"]["flow_intensity_enum"]
-            | null
-          id?: string
-          notes?: string | null
+          flow_intensity?: unknown | null
+          cycle_phase?: unknown | null
           overall_symptom_severity?: number | null
-          seizure_clustered_around_menstruation?: boolean | null
           seizure_count_during_cycle?: number | null
+          seizure_clustered_around_menstruation?: boolean | null
+          catamenial_pattern_suspected?: boolean | null
+          notes?: string | null
+          created_at?: string
           updated_at?: string
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       menstrual_log_symptoms: {
         Row: {
-          created_at: string
           id: string
           log_id: string
-          severity:
-            | Database["public"]["Enums"]["menstrual_symptom_severity_enum"]
-            | null
           symptom_id: string
+          severity: unknown | null
+          created_at: string
         }
         Insert: {
-          created_at?: string
-          id?: string
+          id?: string | null
           log_id: string
-          severity?:
-            | Database["public"]["Enums"]["menstrual_symptom_severity_enum"]
-            | null
           symptom_id: string
+          severity?: unknown | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string
           id?: string
           log_id?: string
-          severity?:
-            | Database["public"]["Enums"]["menstrual_symptom_severity_enum"]
-            | null
           symptom_id?: string
+          severity?: unknown | null
+          created_at?: string
         }
         Relationships: [
           {
@@ -1117,361 +1105,355 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
       patient_onboarding_data: {
         Row: {
+          id: string
+          user_id: string
+          first_name: string | null
+          middle_name: string | null
+          last_name: string | null
+          date_of_birth: string | null
+          gender: unknown | null
+          phone_number: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
+          selected_conditions: string | null
+          track_menstrual_cycle: boolean | null
+          share_research_data: boolean | null
+          research_data_types: unknown[] | null
           completed_at: string | null
           created_at: string | null
-          date_of_birth: string | null
-          emergency_contact_name: string | null
-          emergency_contact_phone: string | null
-          emergency_contact_relationship: string | null
-          first_name: string | null
-          gender: Database["public"]["Enums"]["gender_enum"] | null
-          id: string
-          last_name: string | null
-          last_updated_at: string | null
-          middle_name: string | null
-          onboarding_step: number | null
-          phone_number: string | null
-          research_data_types:
-            | Database["public"]["Enums"]["research_data_type_enum"][]
-            | null
-          selected_conditions: string[] | null
-          share_research_data: boolean | null
-          track_menstrual_cycle: boolean | null
           updated_at: string | null
-          user_id: string
+          onboarding_step: number | null
+          last_updated_at: string | null
         }
         Insert: {
-          completed_at?: string | null
-          created_at?: string | null
+          id?: string | null
+          user_id: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
           date_of_birth?: string | null
+          gender?: unknown | null
+          phone_number?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
           emergency_contact_relationship?: string | null
-          first_name?: string | null
-          gender?: Database["public"]["Enums"]["gender_enum"] | null
-          id?: string
-          last_name?: string | null
-          last_updated_at?: string | null
-          middle_name?: string | null
-          onboarding_step?: number | null
-          phone_number?: string | null
-          research_data_types?:
-            | Database["public"]["Enums"]["research_data_type_enum"][]
-            | null
-          selected_conditions?: string[] | null
-          share_research_data?: boolean | null
+          selected_conditions?: string | null
           track_menstrual_cycle?: boolean | null
+          share_research_data?: boolean | null
+          research_data_types?: unknown[] | null
+          completed_at?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id: string
+          onboarding_step?: number | null
+          last_updated_at?: string | null
         }
         Update: {
-          completed_at?: string | null
-          created_at?: string | null
+          id?: string
+          user_id?: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
           date_of_birth?: string | null
+          gender?: unknown | null
+          phone_number?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
           emergency_contact_relationship?: string | null
-          first_name?: string | null
-          gender?: Database["public"]["Enums"]["gender_enum"] | null
-          id?: string
-          last_name?: string | null
-          last_updated_at?: string | null
-          middle_name?: string | null
-          onboarding_step?: number | null
-          phone_number?: string | null
-          research_data_types?:
-            | Database["public"]["Enums"]["research_data_type_enum"][]
-            | null
-          selected_conditions?: string[] | null
-          share_research_data?: boolean | null
+          selected_conditions?: string | null
           track_menstrual_cycle?: boolean | null
+          share_research_data?: boolean | null
+          research_data_types?: unknown[] | null
+          completed_at?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id?: string
+          onboarding_step?: number | null
+          last_updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       patient_phi: {
         Row: {
-          aadhaar_number_encrypted: string | null
-          ayushman_bharat_id_encrypted: string | null
-          country_code: string | null
-          created_at: string | null
+          id: string
+          user_id: string
           date_of_birth: string | null
-          diagnosis_date: string | null
-          dva_number_encrypted: string | null
+          social_security_number_encrypted: string | null
+          medical_record_number: string | null
+          gender: string | null
+          ethnicity: string | null
+          race: string | null
+          primary_language: string | null
+          preferred_pronouns: string | null
+          home_address: Json | null
+          phone_number: string | null
           emergency_contact_name: string | null
           emergency_contact_phone: string | null
           emergency_contact_relationship: string | null
-          ethnicity: string | null
-          gender: string | null
-          home_address: Json | null
-          id: string
-          insurance_member_id: string | null
-          insurance_provider: string | null
-          medical_record_number: string | null
-          medicare_expiry: string | null
-          medicare_irn: string | null
-          medicare_number_encrypted: string | null
-          national_health_id_encrypted: string | null
-          pan_number_encrypted: string | null
-          phone_number: string | null
-          preferred_pronouns: string | null
-          primary_care_physician: string | null
           primary_diagnosis: string | null
-          primary_language: string | null
+          diagnosis_date: string | null
+          referring_physician: string | null
+          primary_care_physician: string | null
+          insurance_provider: string | null
+          insurance_member_id: string | null
+          timezone: string | null
+          created_at: string | null
+          updated_at: string | null
+          medicare_number_encrypted: string | null
+          medicare_irn: string | null
+          medicare_expiry: string | null
+          dva_number_encrypted: string | null
           private_health_insurer: string | null
           private_health_member_id_encrypted: string | null
-          race: string | null
-          referring_physician: string | null
-          social_security_number_encrypted: string | null
-          timezone: string | null
-          updated_at: string | null
-          user_id: string
+          aadhaar_number_encrypted: string | null
+          pan_number_encrypted: string | null
+          ayushman_bharat_id_encrypted: string | null
+          country_code: string | null
+          national_health_id_encrypted: string | null
         }
         Insert: {
-          aadhaar_number_encrypted?: string | null
-          ayushman_bharat_id_encrypted?: string | null
-          country_code?: string | null
-          created_at?: string | null
+          id?: string | null
+          user_id: string
           date_of_birth?: string | null
-          diagnosis_date?: string | null
-          dva_number_encrypted?: string | null
+          social_security_number_encrypted?: string | null
+          medical_record_number?: string | null
+          gender?: string | null
+          ethnicity?: string | null
+          race?: string | null
+          primary_language?: string | null
+          preferred_pronouns?: string | null
+          home_address?: Json | null
+          phone_number?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
           emergency_contact_relationship?: string | null
-          ethnicity?: string | null
-          gender?: string | null
-          home_address?: Json | null
-          id?: string
-          insurance_member_id?: string | null
-          insurance_provider?: string | null
-          medical_record_number?: string | null
-          medicare_expiry?: string | null
-          medicare_irn?: string | null
-          medicare_number_encrypted?: string | null
-          national_health_id_encrypted?: string | null
-          pan_number_encrypted?: string | null
-          phone_number?: string | null
-          preferred_pronouns?: string | null
-          primary_care_physician?: string | null
           primary_diagnosis?: string | null
-          primary_language?: string | null
+          diagnosis_date?: string | null
+          referring_physician?: string | null
+          primary_care_physician?: string | null
+          insurance_provider?: string | null
+          insurance_member_id?: string | null
+          timezone?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          medicare_number_encrypted?: string | null
+          medicare_irn?: string | null
+          medicare_expiry?: string | null
+          dva_number_encrypted?: string | null
           private_health_insurer?: string | null
           private_health_member_id_encrypted?: string | null
-          race?: string | null
-          referring_physician?: string | null
-          social_security_number_encrypted?: string | null
-          timezone?: string | null
-          updated_at?: string | null
-          user_id: string
+          aadhaar_number_encrypted?: string | null
+          pan_number_encrypted?: string | null
+          ayushman_bharat_id_encrypted?: string | null
+          country_code?: string | null
+          national_health_id_encrypted?: string | null
         }
         Update: {
-          aadhaar_number_encrypted?: string | null
-          ayushman_bharat_id_encrypted?: string | null
-          country_code?: string | null
-          created_at?: string | null
+          id?: string
+          user_id?: string
           date_of_birth?: string | null
-          diagnosis_date?: string | null
-          dva_number_encrypted?: string | null
+          social_security_number_encrypted?: string | null
+          medical_record_number?: string | null
+          gender?: string | null
+          ethnicity?: string | null
+          race?: string | null
+          primary_language?: string | null
+          preferred_pronouns?: string | null
+          home_address?: Json | null
+          phone_number?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
           emergency_contact_relationship?: string | null
-          ethnicity?: string | null
-          gender?: string | null
-          home_address?: Json | null
-          id?: string
-          insurance_member_id?: string | null
-          insurance_provider?: string | null
-          medical_record_number?: string | null
-          medicare_expiry?: string | null
-          medicare_irn?: string | null
-          medicare_number_encrypted?: string | null
-          national_health_id_encrypted?: string | null
-          pan_number_encrypted?: string | null
-          phone_number?: string | null
-          preferred_pronouns?: string | null
-          primary_care_physician?: string | null
           primary_diagnosis?: string | null
-          primary_language?: string | null
+          diagnosis_date?: string | null
+          referring_physician?: string | null
+          primary_care_physician?: string | null
+          insurance_provider?: string | null
+          insurance_member_id?: string | null
+          timezone?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          medicare_number_encrypted?: string | null
+          medicare_irn?: string | null
+          medicare_expiry?: string | null
+          dva_number_encrypted?: string | null
           private_health_insurer?: string | null
           private_health_member_id_encrypted?: string | null
-          race?: string | null
-          referring_physician?: string | null
-          social_security_number_encrypted?: string | null
-          timezone?: string | null
-          updated_at?: string | null
-          user_id?: string
+          aadhaar_number_encrypted?: string | null
+          pan_number_encrypted?: string | null
+          ayushman_bharat_id_encrypted?: string | null
+          country_code?: string | null
+          national_health_id_encrypted?: string | null
         }
         Relationships: []
-      }
+      },
       seizure_events: {
         Row: {
-          activity_before: string | null
-          aura_description: string | null
-          aura_signs: Json | null
-          body_parts_affected: Json | null
-          consciousness_level: string | null
-          created_at: string | null
-          duration_seconds: number | null
           event_id: string
-          fully_recovered: boolean | null
+          patient_id: string
+          occurred_at: string
+          duration_seconds: number | null
+          seizure_type: string
+          seizure_subtype: string | null
+          severity: number | null
+          consciousness_level: string | null
           had_aura: boolean | null
-          hours_since_last_dose: number | null
-          injuries_occurred: boolean | null
-          injury_description: string | null
-          injury_types: Json | null
-          location: string | null
-          media_urls: Json | null
-          medication_taken_as_prescribed: boolean | null
+          aura_signs: Json | null
+          aura_description: string | null
+          warning_time_seconds: number | null
+          possible_triggers: Json | null
+          trigger_details: string | null
+          body_parts_affected: Json | null
           motor_symptoms: Json | null
           non_motor_symptoms: Json | null
-          notes: string | null
-          occurred_at: string
-          patient_concerns: string | null
-          patient_id: string
-          possible_triggers: Json | null
           post_ictal_confusion: boolean | null
-          post_ictal_duration_minutes: number | null
           post_ictal_effects: Json | null
-          recent_medication_changes: boolean | null
-          recovery_time_minutes: number | null
+          post_ictal_duration_minutes: number | null
+          injuries_occurred: boolean | null
+          injury_types: Json | null
+          injury_description: string | null
           required_medical_attention: boolean | null
-          seizure_subtype: string | null
-          seizure_type: string
-          severity: number | null
-          shared_with_carers: boolean | null
-          shared_with_clinician: boolean | null
-          synced_to_clinician_at: string | null
-          trigger_details: string | null
-          updated_at: string | null
-          video_recorded: boolean | null
-          visible_to_researchers: boolean | null
-          warning_time_seconds: number | null
-          witness_description: string | null
-          witness_name: string | null
+          location: string | null
+          activity_before: string | null
           witnessed: boolean | null
+          witness_name: string | null
+          witness_description: string | null
+          medication_taken_as_prescribed: boolean | null
+          hours_since_last_dose: number | null
+          recent_medication_changes: boolean | null
+          fully_recovered: boolean | null
+          recovery_time_minutes: number | null
+          video_recorded: boolean | null
+          media_urls: Json | null
+          notes: string | null
+          patient_concerns: string | null
+          shared_with_clinician: boolean | null
+          shared_with_carers: boolean | null
+          visible_to_researchers: boolean | null
+          created_at: string | null
+          updated_at: string | null
+          synced_to_clinician_at: string | null
         }
         Insert: {
-          activity_before?: string | null
-          aura_description?: string | null
-          aura_signs?: Json | null
-          body_parts_affected?: Json | null
-          consciousness_level?: string | null
-          created_at?: string | null
+          event_id?: string | null
+          patient_id: string
+          occurred_at: string
           duration_seconds?: number | null
-          event_id?: string
-          fully_recovered?: boolean | null
+          seizure_type: string
+          seizure_subtype?: string | null
+          severity?: number | null
+          consciousness_level?: string | null
           had_aura?: boolean | null
-          hours_since_last_dose?: number | null
-          injuries_occurred?: boolean | null
-          injury_description?: string | null
-          injury_types?: Json | null
-          location?: string | null
-          media_urls?: Json | null
-          medication_taken_as_prescribed?: boolean | null
+          aura_signs?: Json | null
+          aura_description?: string | null
+          warning_time_seconds?: number | null
+          possible_triggers?: Json | null
+          trigger_details?: string | null
+          body_parts_affected?: Json | null
           motor_symptoms?: Json | null
           non_motor_symptoms?: Json | null
-          notes?: string | null
-          occurred_at: string
-          patient_concerns?: string | null
-          patient_id: string
-          possible_triggers?: Json | null
           post_ictal_confusion?: boolean | null
-          post_ictal_duration_minutes?: number | null
           post_ictal_effects?: Json | null
-          recent_medication_changes?: boolean | null
-          recovery_time_minutes?: number | null
+          post_ictal_duration_minutes?: number | null
+          injuries_occurred?: boolean | null
+          injury_types?: Json | null
+          injury_description?: string | null
           required_medical_attention?: boolean | null
-          seizure_subtype?: string | null
-          seizure_type: string
-          severity?: number | null
-          shared_with_carers?: boolean | null
-          shared_with_clinician?: boolean | null
-          synced_to_clinician_at?: string | null
-          trigger_details?: string | null
-          updated_at?: string | null
-          video_recorded?: boolean | null
-          visible_to_researchers?: boolean | null
-          warning_time_seconds?: number | null
-          witness_description?: string | null
-          witness_name?: string | null
+          location?: string | null
+          activity_before?: string | null
           witnessed?: boolean | null
+          witness_name?: string | null
+          witness_description?: string | null
+          medication_taken_as_prescribed?: boolean | null
+          hours_since_last_dose?: number | null
+          recent_medication_changes?: boolean | null
+          fully_recovered?: boolean | null
+          recovery_time_minutes?: number | null
+          video_recorded?: boolean | null
+          media_urls?: Json | null
+          notes?: string | null
+          patient_concerns?: string | null
+          shared_with_clinician?: boolean | null
+          shared_with_carers?: boolean | null
+          visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
+          synced_to_clinician_at?: string | null
         }
         Update: {
-          activity_before?: string | null
-          aura_description?: string | null
-          aura_signs?: Json | null
-          body_parts_affected?: Json | null
-          consciousness_level?: string | null
-          created_at?: string | null
-          duration_seconds?: number | null
           event_id?: string
-          fully_recovered?: boolean | null
+          patient_id?: string
+          occurred_at?: string
+          duration_seconds?: number | null
+          seizure_type?: string
+          seizure_subtype?: string | null
+          severity?: number | null
+          consciousness_level?: string | null
           had_aura?: boolean | null
-          hours_since_last_dose?: number | null
-          injuries_occurred?: boolean | null
-          injury_description?: string | null
-          injury_types?: Json | null
-          location?: string | null
-          media_urls?: Json | null
-          medication_taken_as_prescribed?: boolean | null
+          aura_signs?: Json | null
+          aura_description?: string | null
+          warning_time_seconds?: number | null
+          possible_triggers?: Json | null
+          trigger_details?: string | null
+          body_parts_affected?: Json | null
           motor_symptoms?: Json | null
           non_motor_symptoms?: Json | null
-          notes?: string | null
-          occurred_at?: string
-          patient_concerns?: string | null
-          patient_id?: string
-          possible_triggers?: Json | null
           post_ictal_confusion?: boolean | null
-          post_ictal_duration_minutes?: number | null
           post_ictal_effects?: Json | null
-          recent_medication_changes?: boolean | null
-          recovery_time_minutes?: number | null
+          post_ictal_duration_minutes?: number | null
+          injuries_occurred?: boolean | null
+          injury_types?: Json | null
+          injury_description?: string | null
           required_medical_attention?: boolean | null
-          seizure_subtype?: string | null
-          seizure_type?: string
-          severity?: number | null
-          shared_with_carers?: boolean | null
-          shared_with_clinician?: boolean | null
-          synced_to_clinician_at?: string | null
-          trigger_details?: string | null
-          updated_at?: string | null
-          video_recorded?: boolean | null
-          visible_to_researchers?: boolean | null
-          warning_time_seconds?: number | null
-          witness_description?: string | null
-          witness_name?: string | null
+          location?: string | null
+          activity_before?: string | null
           witnessed?: boolean | null
+          witness_name?: string | null
+          witness_description?: string | null
+          medication_taken_as_prescribed?: boolean | null
+          hours_since_last_dose?: number | null
+          recent_medication_changes?: boolean | null
+          fully_recovered?: boolean | null
+          recovery_time_minutes?: number | null
+          video_recorded?: boolean | null
+          media_urls?: Json | null
+          notes?: string | null
+          patient_concerns?: string | null
+          shared_with_clinician?: boolean | null
+          shared_with_carers?: boolean | null
+          visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
+          synced_to_clinician_at?: string | null
         }
         Relationships: []
-      }
+      },
       seizure_generalized_assessment: {
         Row: {
-          assessment_type: Database["public"]["Enums"]["assessment_type_enum"]
+          id: string
+          log_id: string
+          assessment_type: unknown
           classifier_basis: string | null
           confidence_score: number | null
           created_at: string | null
-          id: string
-          log_id: string
         }
         Insert: {
-          assessment_type: Database["public"]["Enums"]["assessment_type_enum"]
+          id?: string | null
+          log_id: string
+          assessment_type: unknown
           classifier_basis?: string | null
           confidence_score?: number | null
           created_at?: string | null
-          id?: string
-          log_id: string
         }
         Update: {
-          assessment_type?: Database["public"]["Enums"]["assessment_type_enum"]
+          id?: string
+          log_id?: string
+          assessment_type?: unknown
           classifier_basis?: string | null
           confidence_score?: number | null
           created_at?: string | null
-          id?: string
-          log_id?: string
         }
         Relationships: [
           {
@@ -1482,37 +1464,31 @@ export type Database = {
             referencedColumns: ["log_id"]
           },
         ]
-      }
+      },
       seizure_log_brain_regions: {
         Row: {
-          calculated_probability: number | null
-          created_at: string | null
           id: string
           log_id: string
-          probability_grade:
-            | Database["public"]["Enums"]["probability_grade_enum"]
-            | null
           region_id: number
+          calculated_probability: number | null
+          probability_grade: unknown | null
+          created_at: string | null
         }
         Insert: {
-          calculated_probability?: number | null
-          created_at?: string | null
-          id?: string
+          id?: string | null
           log_id: string
-          probability_grade?:
-            | Database["public"]["Enums"]["probability_grade_enum"]
-            | null
           region_id: number
+          calculated_probability?: number | null
+          probability_grade?: unknown | null
+          created_at?: string | null
         }
         Update: {
-          calculated_probability?: number | null
-          created_at?: string | null
           id?: string
           log_id?: string
-          probability_grade?:
-            | Database["public"]["Enums"]["probability_grade_enum"]
-            | null
           region_id?: number
+          calculated_probability?: number | null
+          probability_grade?: unknown | null
+          created_at?: string | null
         }
         Relationships: [
           {
@@ -1523,28 +1499,28 @@ export type Database = {
             referencedColumns: ["log_id"]
           },
         ]
-      }
+      },
       seizure_log_post_ictal_symptoms: {
         Row: {
-          created_at: string | null
           id: string
           log_id: string
+          symptom: unknown
           severity: number | null
-          symptom: Database["public"]["Enums"]["post_ictal_symptom_enum"]
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string
+          id?: string | null
           log_id: string
+          symptom: unknown
           severity?: number | null
-          symptom: Database["public"]["Enums"]["post_ictal_symptom_enum"]
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: string
           log_id?: string
+          symptom?: unknown
           severity?: number | null
-          symptom?: Database["public"]["Enums"]["post_ictal_symptom_enum"]
+          created_at?: string | null
         }
         Relationships: [
           {
@@ -1555,35 +1531,31 @@ export type Database = {
             referencedColumns: ["log_id"]
           },
         ]
-      }
+      },
       seizure_log_signs: {
         Row: {
-          created_at: string | null
           id: string
           log_id: string
-          observer_rank: Database["public"]["Enums"]["witness_role_enum"] | null
-          present: Database["public"]["Enums"]["yes_no_enum"] | null
           sign_id: number
+          present: unknown | null
+          observer_rank: unknown | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string
+          id?: string | null
           log_id: string
-          observer_rank?:
-            | Database["public"]["Enums"]["witness_role_enum"]
-            | null
-          present?: Database["public"]["Enums"]["yes_no_enum"] | null
           sign_id: number
+          present?: unknown | null
+          observer_rank?: unknown | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: string
           log_id?: string
-          observer_rank?:
-            | Database["public"]["Enums"]["witness_role_enum"]
-            | null
-          present?: Database["public"]["Enums"]["yes_no_enum"] | null
           sign_id?: number
+          present?: unknown | null
+          observer_rank?: unknown | null
+          created_at?: string | null
         }
         Relationships: [
           {
@@ -1594,34 +1566,28 @@ export type Database = {
             referencedColumns: ["log_id"]
           },
         ]
-      }
+      },
       seizure_log_triggers: {
         Row: {
-          created_at: string | null
           id: string
           log_id: string
           trigger_id: number
-          trigger_strength:
-            | Database["public"]["Enums"]["trigger_strength_enum"]
-            | null
+          trigger_strength: unknown | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string
+          id?: string | null
           log_id: string
           trigger_id: number
-          trigger_strength?:
-            | Database["public"]["Enums"]["trigger_strength_enum"]
-            | null
+          trigger_strength?: unknown | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: string
           log_id?: string
           trigger_id?: number
-          trigger_strength?:
-            | Database["public"]["Enums"]["trigger_strength_enum"]
-            | null
+          trigger_strength?: unknown | null
+          created_at?: string | null
         }
         Relationships: [
           {
@@ -1632,319 +1598,277 @@ export type Database = {
             referencedColumns: ["log_id"]
           },
         ]
-      }
+      },
       seizure_logs_research: {
         Row: {
-          aura_description: string | null
-          aura_present: Database["public"]["Enums"]["yes_no_enum"] | null
-          consciousness_level:
-            | Database["public"]["Enums"]["consciousness_level_enum"]
-            | null
-          created_at: string | null
-          duration_seconds: number | null
-          emergency_services_called:
-            | Database["public"]["Enums"]["yes_no_enum"]
-            | null
-          hospitalized: Database["public"]["Enums"]["yes_no_enum"] | null
-          location_type:
-            | Database["public"]["Enums"]["location_type_enum"]
-            | null
-          log_date: string
           log_id: string
-          log_time: string
-          medication_adherence_prior:
-            | Database["public"]["Enums"]["medication_adherence_enum"]
-            | null
-          notes: string | null
+          user_id: string
+          log_date: string
+          log_time: unknown
+          seizure_type: unknown
+          consciousness_level: unknown | null
+          duration_seconds: number | null
+          aura_present: unknown | null
+          aura_description: string | null
+          witnessed: unknown | null
+          witness_role: unknown | null
+          video_recorded: unknown | null
+          location_type: unknown | null
           post_ictal_confusion_minutes: number | null
           recovery_time_minutes: number | null
-          rescue_medication_type:
-            | Database["public"]["Enums"]["rescue_medication_enum"]
-            | null
-          rescue_medication_used:
-            | Database["public"]["Enums"]["yes_no_enum"]
-            | null
-          research_grade: Database["public"]["Enums"]["yes_no_enum"] | null
-          seizure_type: Database["public"]["Enums"]["seizure_type_enum"]
           sleep_hours_prior: number | null
-          stress_level: Database["public"]["Enums"]["stress_level_enum"] | null
+          medication_adherence_prior: unknown | null
+          stress_level: unknown | null
+          emergency_services_called: unknown | null
+          rescue_medication_used: unknown | null
+          rescue_medication_type: unknown | null
+          hospitalized: unknown | null
+          research_grade: unknown | null
+          notes: string | null
+          created_at: string | null
           updated_at: string | null
-          user_id: string
-          video_recorded: Database["public"]["Enums"]["yes_no_enum"] | null
-          witness_role: Database["public"]["Enums"]["witness_role_enum"] | null
-          witnessed: Database["public"]["Enums"]["yes_no_enum"] | null
         }
         Insert: {
-          aura_description?: string | null
-          aura_present?: Database["public"]["Enums"]["yes_no_enum"] | null
-          consciousness_level?:
-            | Database["public"]["Enums"]["consciousness_level_enum"]
-            | null
-          created_at?: string | null
-          duration_seconds?: number | null
-          emergency_services_called?:
-            | Database["public"]["Enums"]["yes_no_enum"]
-            | null
-          hospitalized?: Database["public"]["Enums"]["yes_no_enum"] | null
-          location_type?:
-            | Database["public"]["Enums"]["location_type_enum"]
-            | null
+          log_id?: string | null
+          user_id: string
           log_date: string
-          log_id?: string
-          log_time: string
-          medication_adherence_prior?:
-            | Database["public"]["Enums"]["medication_adherence_enum"]
-            | null
-          notes?: string | null
+          log_time: unknown
+          seizure_type: unknown
+          consciousness_level?: unknown | null
+          duration_seconds?: number | null
+          aura_present?: unknown | null
+          aura_description?: string | null
+          witnessed?: unknown | null
+          witness_role?: unknown | null
+          video_recorded?: unknown | null
+          location_type?: unknown | null
           post_ictal_confusion_minutes?: number | null
           recovery_time_minutes?: number | null
-          rescue_medication_type?:
-            | Database["public"]["Enums"]["rescue_medication_enum"]
-            | null
-          rescue_medication_used?:
-            | Database["public"]["Enums"]["yes_no_enum"]
-            | null
-          research_grade?: Database["public"]["Enums"]["yes_no_enum"] | null
-          seizure_type: Database["public"]["Enums"]["seizure_type_enum"]
           sleep_hours_prior?: number | null
-          stress_level?: Database["public"]["Enums"]["stress_level_enum"] | null
+          medication_adherence_prior?: unknown | null
+          stress_level?: unknown | null
+          emergency_services_called?: unknown | null
+          rescue_medication_used?: unknown | null
+          rescue_medication_type?: unknown | null
+          hospitalized?: unknown | null
+          research_grade?: unknown | null
+          notes?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id: string
-          video_recorded?: Database["public"]["Enums"]["yes_no_enum"] | null
-          witness_role?: Database["public"]["Enums"]["witness_role_enum"] | null
-          witnessed?: Database["public"]["Enums"]["yes_no_enum"] | null
         }
         Update: {
-          aura_description?: string | null
-          aura_present?: Database["public"]["Enums"]["yes_no_enum"] | null
-          consciousness_level?:
-            | Database["public"]["Enums"]["consciousness_level_enum"]
-            | null
-          created_at?: string | null
-          duration_seconds?: number | null
-          emergency_services_called?:
-            | Database["public"]["Enums"]["yes_no_enum"]
-            | null
-          hospitalized?: Database["public"]["Enums"]["yes_no_enum"] | null
-          location_type?:
-            | Database["public"]["Enums"]["location_type_enum"]
-            | null
-          log_date?: string
           log_id?: string
-          log_time?: string
-          medication_adherence_prior?:
-            | Database["public"]["Enums"]["medication_adherence_enum"]
-            | null
-          notes?: string | null
+          user_id?: string
+          log_date?: string
+          log_time?: unknown
+          seizure_type?: unknown
+          consciousness_level?: unknown | null
+          duration_seconds?: number | null
+          aura_present?: unknown | null
+          aura_description?: string | null
+          witnessed?: unknown | null
+          witness_role?: unknown | null
+          video_recorded?: unknown | null
+          location_type?: unknown | null
           post_ictal_confusion_minutes?: number | null
           recovery_time_minutes?: number | null
-          rescue_medication_type?:
-            | Database["public"]["Enums"]["rescue_medication_enum"]
-            | null
-          rescue_medication_used?:
-            | Database["public"]["Enums"]["yes_no_enum"]
-            | null
-          research_grade?: Database["public"]["Enums"]["yes_no_enum"] | null
-          seizure_type?: Database["public"]["Enums"]["seizure_type_enum"]
           sleep_hours_prior?: number | null
-          stress_level?: Database["public"]["Enums"]["stress_level_enum"] | null
+          medication_adherence_prior?: unknown | null
+          stress_level?: unknown | null
+          emergency_services_called?: unknown | null
+          rescue_medication_used?: unknown | null
+          rescue_medication_type?: unknown | null
+          hospitalized?: unknown | null
+          research_grade?: unknown | null
+          notes?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id?: string
-          video_recorded?: Database["public"]["Enums"]["yes_no_enum"] | null
-          witness_role?: Database["public"]["Enums"]["witness_role_enum"] | null
-          witnessed?: Database["public"]["Enums"]["yes_no_enum"] | null
         }
         Relationships: []
-      }
+      },
       tracking_entries: {
         Row: {
-          created_at: string | null
-          entry_date: string | null
           id: string
-          metadata: Json | null
-          notes: string | null
-          severity: number | null
-          tracking_type: Database["public"]["Enums"]["tracking_feature_enum"]
-          updated_at: string | null
           user_id: string
+          tracking_type: unknown
+          entry_date: string | null
           value: number | null
+          severity: number | null
+          notes: string | null
+          metadata: Json | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          entry_date?: string | null
-          id?: string
-          metadata?: Json | null
-          notes?: string | null
-          severity?: number | null
-          tracking_type: Database["public"]["Enums"]["tracking_feature_enum"]
-          updated_at?: string | null
+          id?: string | null
           user_id: string
+          tracking_type: unknown
+          entry_date?: string | null
           value?: number | null
+          severity?: number | null
+          notes?: string | null
+          metadata?: Json | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string | null
-          entry_date?: string | null
           id?: string
-          metadata?: Json | null
-          notes?: string | null
-          severity?: number | null
-          tracking_type?: Database["public"]["Enums"]["tracking_feature_enum"]
-          updated_at?: string | null
           user_id?: string
+          tracking_type?: unknown
+          entry_date?: string | null
           value?: number | null
+          severity?: number | null
+          notes?: string | null
+          metadata?: Json | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       tremor_episodes: {
         Row: {
-          activities_affected: Json | null
-          body_regions: Json | null
-          created_at: string | null
-          dominant_side: string | null
-          duration_seconds: number | null
-          frequency_hz: number | null
-          hours_since_medication: number | null
-          interfered_with_activities: boolean | null
-          media_urls: Json | null
-          medication_status: string | null
-          notes: string | null
-          occurred_at: string
-          occurred_during: string | null
-          patient_id: string
-          possible_triggers: Json | null
-          severity: number | null
-          shared_with_clinician: boolean | null
           tremor_id: string
+          patient_id: string
+          occurred_at: string
+          duration_seconds: number | null
           tremor_type: string | null
+          severity: number | null
+          frequency_hz: number | null
+          body_regions: Json | null
+          dominant_side: string | null
+          interfered_with_activities: boolean | null
+          activities_affected: Json | null
+          occurred_during: string | null
+          medication_status: string | null
+          hours_since_medication: number | null
+          possible_triggers: Json | null
           trigger_details: string | null
-          updated_at: string | null
           video_recorded: boolean | null
+          media_urls: Json | null
+          notes: string | null
+          shared_with_clinician: boolean | null
           visible_to_researchers: boolean | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          activities_affected?: Json | null
-          body_regions?: Json | null
-          created_at?: string | null
-          dominant_side?: string | null
-          duration_seconds?: number | null
-          frequency_hz?: number | null
-          hours_since_medication?: number | null
-          interfered_with_activities?: boolean | null
-          media_urls?: Json | null
-          medication_status?: string | null
-          notes?: string | null
-          occurred_at: string
-          occurred_during?: string | null
+          tremor_id?: string | null
           patient_id: string
-          possible_triggers?: Json | null
-          severity?: number | null
-          shared_with_clinician?: boolean | null
-          tremor_id?: string
+          occurred_at: string
+          duration_seconds?: number | null
           tremor_type?: string | null
+          severity?: number | null
+          frequency_hz?: number | null
+          body_regions?: Json | null
+          dominant_side?: string | null
+          interfered_with_activities?: boolean | null
+          activities_affected?: Json | null
+          occurred_during?: string | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          possible_triggers?: Json | null
           trigger_details?: string | null
-          updated_at?: string | null
           video_recorded?: boolean | null
+          media_urls?: Json | null
+          notes?: string | null
+          shared_with_clinician?: boolean | null
           visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          activities_affected?: Json | null
-          body_regions?: Json | null
-          created_at?: string | null
-          dominant_side?: string | null
-          duration_seconds?: number | null
-          frequency_hz?: number | null
-          hours_since_medication?: number | null
-          interfered_with_activities?: boolean | null
-          media_urls?: Json | null
-          medication_status?: string | null
-          notes?: string | null
-          occurred_at?: string
-          occurred_during?: string | null
-          patient_id?: string
-          possible_triggers?: Json | null
-          severity?: number | null
-          shared_with_clinician?: boolean | null
           tremor_id?: string
+          patient_id?: string
+          occurred_at?: string
+          duration_seconds?: number | null
           tremor_type?: string | null
+          severity?: number | null
+          frequency_hz?: number | null
+          body_regions?: Json | null
+          dominant_side?: string | null
+          interfered_with_activities?: boolean | null
+          activities_affected?: Json | null
+          occurred_during?: string | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          possible_triggers?: Json | null
           trigger_details?: string | null
-          updated_at?: string | null
           video_recorded?: boolean | null
+          media_urls?: Json | null
+          notes?: string | null
+          shared_with_clinician?: boolean | null
           visible_to_researchers?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       user_conditions: {
         Row: {
-          condition_id: string
-          created_at: string | null
-          diagnosis_date: string | null
           id: string
-          severity: number | null
-          tracking_features_enabled:
-            | Database["public"]["Enums"]["tracking_feature_enum"][]
-            | null
           user_id: string
+          condition_id: string
+          diagnosis_date: string | null
+          severity: number | null
+          tracking_features_enabled: unknown[] | null
+          created_at: string | null
         }
         Insert: {
-          condition_id: string
-          created_at?: string | null
-          diagnosis_date?: string | null
-          id?: string
-          severity?: number | null
-          tracking_features_enabled?:
-            | Database["public"]["Enums"]["tracking_feature_enum"][]
-            | null
+          id?: string | null
           user_id: string
+          condition_id: string
+          diagnosis_date?: string | null
+          severity?: number | null
+          tracking_features_enabled?: unknown[] | null
+          created_at?: string | null
         }
         Update: {
-          condition_id?: string
-          created_at?: string | null
-          diagnosis_date?: string | null
           id?: string
-          severity?: number | null
-          tracking_features_enabled?:
-            | Database["public"]["Enums"]["tracking_feature_enum"][]
-            | null
           user_id?: string
+          condition_id?: string
+          diagnosis_date?: string | null
+          severity?: number | null
+          tracking_features_enabled?: unknown[] | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       user_medications: {
         Row: {
-          created_at: string | null
+          id: string
+          user_id: string
+          medication_id: string | null
           dosage_amount: number | null
           dosage_unit: string | null
-          end_date: string | null
           frequency: string | null
-          id: string
-          is_active: boolean | null
-          medication_id: string | null
           start_date: string | null
-          user_id: string
+          end_date: string | null
+          is_active: boolean | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
+          id?: string | null
+          user_id: string
+          medication_id?: string | null
           dosage_amount?: number | null
           dosage_unit?: string | null
-          end_date?: string | null
           frequency?: string | null
-          id?: string
-          is_active?: boolean | null
-          medication_id?: string | null
           start_date?: string | null
-          user_id: string
+          end_date?: string | null
+          is_active?: boolean | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
+          id?: string
+          user_id?: string
+          medication_id?: string | null
           dosage_amount?: number | null
           dosage_unit?: string | null
-          end_date?: string | null
           frequency?: string | null
-          id?: string
-          is_active?: boolean | null
-          medication_id?: string | null
           start_date?: string | null
-          user_id?: string
+          end_date?: string | null
+          is_active?: boolean | null
+          created_at?: string | null
         }
         Relationships: []
       }
@@ -1969,210 +1893,210 @@ export type Database = {
     Tables: {
       achievements: {
         Row: {
-          category: string | null
-          created_at: string | null
+          id: string
+          name: string
           description: string | null
           icon: string | null
-          id: string
-          name: string
           points: number | null
+          category: string | null
+          created_at: string | null
         }
         Insert: {
-          category?: string | null
-          created_at?: string | null
+          id?: string | null
+          name: string
           description?: string | null
           icon?: string | null
-          id?: string
-          name: string
           points?: number | null
+          category?: string | null
+          created_at?: string | null
         }
         Update: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          icon?: string | null
           id?: string
           name?: string
+          description?: string | null
+          icon?: string | null
           points?: number | null
+          category?: string | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       api_request_logs: {
         Row: {
-          created_at: string
-          duration_ms: number | null
-          endpoint: string
-          error_message: string | null
-          error_type: string | null
           id: string
-          ip_address: unknown | null
+          endpoint: string
           method: string
-          rate_limit_remaining: number | null
+          status_code: number | null
+          user_id: string | null
+          session_id: string | null
+          ip_address: unknown | null
+          user_agent: string | null
           request_time: string
           response_time: string | null
-          session_id: string | null
-          status_code: number | null
-          user_agent: string | null
-          user_id: string | null
+          duration_ms: number | null
+          error_message: string | null
+          error_type: string | null
+          rate_limit_remaining: number | null
+          created_at: string
         }
         Insert: {
-          created_at?: string
-          duration_ms?: number | null
+          id?: string | null
           endpoint: string
+          method: string
+          status_code?: number | null
+          user_id?: string | null
+          session_id?: string | null
+          ip_address?: unknown | null
+          user_agent?: string | null
+          request_time?: string | null
+          response_time?: string | null
+          duration_ms?: number | null
           error_message?: string | null
           error_type?: string | null
-          id?: string
-          ip_address?: unknown | null
-          method: string
           rate_limit_remaining?: number | null
-          request_time?: string
-          response_time?: string | null
-          session_id?: string | null
-          status_code?: number | null
-          user_agent?: string | null
-          user_id?: string | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string
-          duration_ms?: number | null
-          endpoint?: string
-          error_message?: string | null
-          error_type?: string | null
           id?: string
-          ip_address?: unknown | null
+          endpoint?: string
           method?: string
-          rate_limit_remaining?: number | null
+          status_code?: number | null
+          user_id?: string | null
+          session_id?: string | null
+          ip_address?: unknown | null
+          user_agent?: string | null
           request_time?: string
           response_time?: string | null
-          session_id?: string | null
-          status_code?: number | null
-          user_agent?: string | null
-          user_id?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          error_type?: string | null
+          rate_limit_remaining?: number | null
+          created_at?: string
         }
         Relationships: []
-      }
+      },
       audit_log: {
         Row: {
-          action: string
-          created_at: string | null
           id: string
-          ip_address_hash: string | null
-          new_values: Json | null
-          old_values: Json | null
-          record_id: string | null
-          table_name: string | null
           user_id: string | null
+          action: string
+          table_name: string | null
+          record_id: string | null
+          old_values: Json | null
+          new_values: Json | null
+          ip_address_hash: string | null
+          created_at: string | null
         }
         Insert: {
-          action: string
-          created_at?: string | null
-          id?: string
-          ip_address_hash?: string | null
-          new_values?: Json | null
-          old_values?: Json | null
-          record_id?: string | null
-          table_name?: string | null
+          id?: string | null
           user_id?: string | null
+          action: string
+          table_name?: string | null
+          record_id?: string | null
+          old_values?: Json | null
+          new_values?: Json | null
+          ip_address_hash?: string | null
+          created_at?: string | null
         }
         Update: {
-          action?: string
-          created_at?: string | null
           id?: string
-          ip_address_hash?: string | null
-          new_values?: Json | null
-          old_values?: Json | null
-          record_id?: string | null
-          table_name?: string | null
           user_id?: string | null
+          action?: string
+          table_name?: string | null
+          record_id?: string | null
+          old_values?: Json | null
+          new_values?: Json | null
+          ip_address_hash?: string | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       brain_regions_reference: {
         Row: {
-          created_at: string | null
+          region_id: number
+          lobe: unknown
+          subregion: unknown | null
+          laterality: unknown | null
           display_name: string
           function_description: string | null
-          laterality: Database["public"]["Enums"]["laterality_enum"] | null
-          lobe: Database["public"]["Enums"]["brain_lobe_enum"]
-          region_id: number
-          subregion: Database["public"]["Enums"]["brain_subregion_enum"] | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
+          region_id?: number | null
+          lobe: unknown
+          subregion?: unknown | null
+          laterality?: unknown | null
           display_name: string
           function_description?: string | null
-          laterality?: Database["public"]["Enums"]["laterality_enum"] | null
-          lobe: Database["public"]["Enums"]["brain_lobe_enum"]
-          region_id?: number
-          subregion?: Database["public"]["Enums"]["brain_subregion_enum"] | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
+          region_id?: number
+          lobe?: unknown
+          subregion?: unknown | null
+          laterality?: unknown | null
           display_name?: string
           function_description?: string | null
-          laterality?: Database["public"]["Enums"]["laterality_enum"] | null
-          lobe?: Database["public"]["Enums"]["brain_lobe_enum"]
-          region_id?: number
-          subregion?: Database["public"]["Enums"]["brain_subregion_enum"] | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       carer_invitations: {
         Row: {
-          accepted_at: string | null
-          cancelled_at: string | null
+          id: string
+          relationship_id: string
+          patient_user_id: string
           carer_email: string
           carer_email_hash: string
+          invitation_token: string
+          status: string | null
+          dob_verification_attempts: number | null
+          max_dob_attempts: number | null
+          last_verification_attempt: string | null
+          invited_at: string | null
+          expires_at: string | null
+          accepted_at: string | null
+          cancelled_at: string | null
           carer_user_id: string | null
           created_at: string | null
-          dob_verification_attempts: number | null
-          expires_at: string | null
-          id: string
-          invitation_token: string
-          invited_at: string | null
-          last_verification_attempt: string | null
-          max_dob_attempts: number | null
-          patient_user_id: string
-          relationship_id: string
-          status: string | null
           updated_at: string | null
         }
         Insert: {
-          accepted_at?: string | null
-          cancelled_at?: string | null
+          id?: string | null
+          relationship_id: string
+          patient_user_id: string
           carer_email: string
           carer_email_hash: string
+          invitation_token?: string | null
+          status?: string | null
+          dob_verification_attempts?: number | null
+          max_dob_attempts?: number | null
+          last_verification_attempt?: string | null
+          invited_at?: string | null
+          expires_at?: string | null
+          accepted_at?: string | null
+          cancelled_at?: string | null
           carer_user_id?: string | null
           created_at?: string | null
-          dob_verification_attempts?: number | null
-          expires_at?: string | null
-          id?: string
-          invitation_token?: string
-          invited_at?: string | null
-          last_verification_attempt?: string | null
-          max_dob_attempts?: number | null
-          patient_user_id: string
-          relationship_id: string
-          status?: string | null
           updated_at?: string | null
         }
         Update: {
-          accepted_at?: string | null
-          cancelled_at?: string | null
+          id?: string
+          relationship_id?: string
+          patient_user_id?: string
           carer_email?: string
           carer_email_hash?: string
+          invitation_token?: string
+          status?: string | null
+          dob_verification_attempts?: number | null
+          max_dob_attempts?: number | null
+          last_verification_attempt?: string | null
+          invited_at?: string | null
+          expires_at?: string | null
+          accepted_at?: string | null
+          cancelled_at?: string | null
           carer_user_id?: string | null
           created_at?: string | null
-          dob_verification_attempts?: number | null
-          expires_at?: string | null
-          id?: string
-          invitation_token?: string
-          invited_at?: string | null
-          last_verification_attempt?: string | null
-          max_dob_attempts?: number | null
-          patient_user_id?: string
-          relationship_id?: string
-          status?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -2184,1075 +2108,1063 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
       carer_onboarding_data: {
         Row: {
+          id: string
+          user_id: string
+          first_name: string | null
+          middle_name: string | null
+          last_name: string | null
           completed_at: string | null
           created_at: string | null
-          first_name: string | null
-          id: string
-          last_name: string | null
-          middle_name: string | null
           updated_at: string | null
-          user_id: string
         }
         Insert: {
+          id?: string | null
+          user_id: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
           completed_at?: string | null
           created_at?: string | null
-          first_name?: string | null
-          id?: string
-          last_name?: string | null
-          middle_name?: string | null
           updated_at?: string | null
-          user_id: string
         }
         Update: {
+          id?: string
+          user_id?: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
           completed_at?: string | null
           created_at?: string | null
-          first_name?: string | null
-          id?: string
-          last_name?: string | null
-          middle_name?: string | null
           updated_at?: string | null
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       carer_profiles: {
         Row: {
-          availability_notes: string | null
-          certifications: string[] | null
-          created_at: string | null
           id: string
-          preferred_contact_method: string | null
-          updated_at: string | null
           user_id: string
+          preferred_contact_method: string | null
+          availability_notes: string | null
+          certifications: string | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          availability_notes?: string | null
-          certifications?: string[] | null
-          created_at?: string | null
-          id?: string
-          preferred_contact_method?: string | null
-          updated_at?: string | null
+          id?: string | null
           user_id: string
+          preferred_contact_method?: string | null
+          availability_notes?: string | null
+          certifications?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          availability_notes?: string | null
-          certifications?: string[] | null
-          created_at?: string | null
           id?: string
-          preferred_contact_method?: string | null
-          updated_at?: string | null
           user_id?: string
+          preferred_contact_method?: string | null
+          availability_notes?: string | null
+          certifications?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       carer_relationships: {
         Row: {
-          approved_at: string | null
-          can_manage_appointments: boolean | null
-          can_receive_alerts: boolean | null
-          can_view_health_data: boolean | null
-          carer_user_id: string | null
-          created_at: string
           id: string
-          invited_at: string | null
           patient_user_id: string
-          relationship_details: string | null
+          carer_user_id: string | null
           relationship_type: string
+          relationship_details: string | null
           status: string
+          can_view_health_data: boolean | null
+          can_receive_alerts: boolean | null
+          can_manage_appointments: boolean | null
+          invited_at: string | null
+          approved_at: string | null
           terminated_at: string | null
           termination_reason: string | null
+          created_at: string
           updated_at: string | null
         }
         Insert: {
-          approved_at?: string | null
-          can_manage_appointments?: boolean | null
-          can_receive_alerts?: boolean | null
-          can_view_health_data?: boolean | null
-          carer_user_id?: string | null
-          created_at?: string
-          id?: string
-          invited_at?: string | null
+          id?: string | null
           patient_user_id: string
-          relationship_details?: string | null
+          carer_user_id?: string | null
           relationship_type: string
-          status?: string
+          relationship_details?: string | null
+          status?: string | null
+          can_view_health_data?: boolean | null
+          can_receive_alerts?: boolean | null
+          can_manage_appointments?: boolean | null
+          invited_at?: string | null
+          approved_at?: string | null
           terminated_at?: string | null
           termination_reason?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Update: {
-          approved_at?: string | null
-          can_manage_appointments?: boolean | null
-          can_receive_alerts?: boolean | null
-          can_view_health_data?: boolean | null
-          carer_user_id?: string | null
-          created_at?: string
           id?: string
-          invited_at?: string | null
           patient_user_id?: string
-          relationship_details?: string | null
+          carer_user_id?: string | null
           relationship_type?: string
+          relationship_details?: string | null
           status?: string
+          can_view_health_data?: boolean | null
+          can_receive_alerts?: boolean | null
+          can_manage_appointments?: boolean | null
+          invited_at?: string | null
+          approved_at?: string | null
           terminated_at?: string | null
           termination_reason?: string | null
+          created_at?: string
           updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       clinician_profiles: {
         Row: {
-          accepting_new_patients: boolean | null
-          created_at: string | null
-          department: string | null
           id: string
-          institution: string | null
-          patient_capacity: number | null
-          preferred_communication: string | null
+          user_id: string
           specialty: string | null
           sub_specialty: string | null
-          updated_at: string | null
-          user_id: string
+          institution: string | null
+          department: string | null
           years_in_practice: number | null
+          patient_capacity: number | null
+          accepting_new_patients: boolean | null
+          preferred_communication: string | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          accepting_new_patients?: boolean | null
-          created_at?: string | null
-          department?: string | null
-          id?: string
-          institution?: string | null
-          patient_capacity?: number | null
-          preferred_communication?: string | null
+          id?: string | null
+          user_id: string
           specialty?: string | null
           sub_specialty?: string | null
-          updated_at?: string | null
-          user_id: string
+          institution?: string | null
+          department?: string | null
           years_in_practice?: number | null
+          patient_capacity?: number | null
+          accepting_new_patients?: boolean | null
+          preferred_communication?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          accepting_new_patients?: boolean | null
-          created_at?: string | null
-          department?: string | null
           id?: string
-          institution?: string | null
-          patient_capacity?: number | null
-          preferred_communication?: string | null
+          user_id?: string
           specialty?: string | null
           sub_specialty?: string | null
-          updated_at?: string | null
-          user_id?: string
+          institution?: string | null
+          department?: string | null
           years_in_practice?: number | null
+          patient_capacity?: number | null
+          accepting_new_patients?: boolean | null
+          preferred_communication?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       conditions: {
         Row: {
-          category: string | null
-          created_at: string | null
-          description: string | null
-          icd10_code: string | null
           id: string
           name: string
+          category: string | null
+          description: string | null
           snomed_code: string | null
-          tracking_features_array:
-            | Database["public"]["Enums"]["tracking_feature_enum"][]
-            | null
+          icd10_code: string | null
+          tracking_features_array: unknown[] | null
+          created_at: string | null
         }
         Insert: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          icd10_code?: string | null
-          id?: string
+          id?: string | null
           name: string
+          category?: string | null
+          description?: string | null
           snomed_code?: string | null
-          tracking_features_array?:
-            | Database["public"]["Enums"]["tracking_feature_enum"][]
-            | null
+          icd10_code?: string | null
+          tracking_features_array?: unknown[] | null
+          created_at?: string | null
         }
         Update: {
-          category?: string | null
-          created_at?: string | null
-          description?: string | null
-          icd10_code?: string | null
           id?: string
           name?: string
+          category?: string | null
+          description?: string | null
           snomed_code?: string | null
-          tracking_features_array?:
-            | Database["public"]["Enums"]["tracking_feature_enum"][]
-            | null
+          icd10_code?: string | null
+          tracking_features_array?: unknown[] | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       data_sharing_preferences: {
         Row: {
-          carer_access_rules: Json | null
-          clinician_access_rules: Json | null
-          created_at: string | null
-          daily_logs_visibility: string | null
-          default_share_with_carers: boolean | null
-          default_share_with_clinicians: boolean | null
-          default_share_with_researchers: boolean | null
-          gait_episodes_visibility: string | null
           id: string
-          media_visibility: string | null
-          medications_visibility: string | null
           patient_id: string
-          research_demographic_data: boolean | null
-          research_gait_data: boolean | null
-          research_imaging_data: boolean | null
-          research_medication_data: boolean | null
+          default_share_with_clinicians: boolean | null
+          default_share_with_carers: boolean | null
+          default_share_with_researchers: boolean | null
+          clinician_access_rules: Json | null
+          carer_access_rules: Json | null
           research_seizure_data: boolean | null
-          research_symptom_data: boolean | null
           research_tremor_data: boolean | null
+          research_gait_data: boolean | null
+          research_medication_data: boolean | null
+          research_symptom_data: boolean | null
+          research_imaging_data: boolean | null
+          research_demographic_data: boolean | null
           seizure_events_visibility: string | null
           tremor_episodes_visibility: string | null
+          gait_episodes_visibility: string | null
+          daily_logs_visibility: string | null
+          medications_visibility: string | null
+          media_visibility: string | null
+          created_at: string | null
           updated_at: string | null
         }
         Insert: {
-          carer_access_rules?: Json | null
-          clinician_access_rules?: Json | null
-          created_at?: string | null
-          daily_logs_visibility?: string | null
-          default_share_with_carers?: boolean | null
-          default_share_with_clinicians?: boolean | null
-          default_share_with_researchers?: boolean | null
-          gait_episodes_visibility?: string | null
-          id?: string
-          media_visibility?: string | null
-          medications_visibility?: string | null
+          id?: string | null
           patient_id: string
-          research_demographic_data?: boolean | null
-          research_gait_data?: boolean | null
-          research_imaging_data?: boolean | null
-          research_medication_data?: boolean | null
+          default_share_with_clinicians?: boolean | null
+          default_share_with_carers?: boolean | null
+          default_share_with_researchers?: boolean | null
+          clinician_access_rules?: Json | null
+          carer_access_rules?: Json | null
           research_seizure_data?: boolean | null
-          research_symptom_data?: boolean | null
           research_tremor_data?: boolean | null
+          research_gait_data?: boolean | null
+          research_medication_data?: boolean | null
+          research_symptom_data?: boolean | null
+          research_imaging_data?: boolean | null
+          research_demographic_data?: boolean | null
           seizure_events_visibility?: string | null
           tremor_episodes_visibility?: string | null
+          gait_episodes_visibility?: string | null
+          daily_logs_visibility?: string | null
+          medications_visibility?: string | null
+          media_visibility?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Update: {
-          carer_access_rules?: Json | null
-          clinician_access_rules?: Json | null
-          created_at?: string | null
-          daily_logs_visibility?: string | null
-          default_share_with_carers?: boolean | null
-          default_share_with_clinicians?: boolean | null
-          default_share_with_researchers?: boolean | null
-          gait_episodes_visibility?: string | null
           id?: string
-          media_visibility?: string | null
-          medications_visibility?: string | null
           patient_id?: string
-          research_demographic_data?: boolean | null
-          research_gait_data?: boolean | null
-          research_imaging_data?: boolean | null
-          research_medication_data?: boolean | null
+          default_share_with_clinicians?: boolean | null
+          default_share_with_carers?: boolean | null
+          default_share_with_researchers?: boolean | null
+          clinician_access_rules?: Json | null
+          carer_access_rules?: Json | null
           research_seizure_data?: boolean | null
-          research_symptom_data?: boolean | null
           research_tremor_data?: boolean | null
+          research_gait_data?: boolean | null
+          research_medication_data?: boolean | null
+          research_symptom_data?: boolean | null
+          research_imaging_data?: boolean | null
+          research_demographic_data?: boolean | null
           seizure_events_visibility?: string | null
           tremor_episodes_visibility?: string | null
+          gait_episodes_visibility?: string | null
+          daily_logs_visibility?: string | null
+          medications_visibility?: string | null
+          media_visibility?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       database_operation_logs: {
         Row: {
-          created_at: string
-          error_message: string | null
-          executed_at: string
-          executed_by_role: string | null
-          executed_by_user_id: string | null
           id: string
-          operation_detail: string | null
           operation_type: string
-          rows_affected: number | null
-          session_id: string | null
-          sql_state: string | null
-          success: boolean
-          table_name: string
           table_schema: string
+          table_name: string
+          executed_by_user_id: string | null
+          executed_by_role: string | null
+          operation_detail: string | null
+          rows_affected: number | null
+          success: boolean
+          error_message: string | null
+          sql_state: string | null
+          executed_at: string
+          session_id: string | null
+          created_at: string
         }
         Insert: {
-          created_at?: string
-          error_message?: string | null
-          executed_at?: string
-          executed_by_role?: string | null
-          executed_by_user_id?: string | null
-          id?: string
-          operation_detail?: string | null
+          id?: string | null
           operation_type: string
-          rows_affected?: number | null
-          session_id?: string | null
-          sql_state?: string | null
-          success: boolean
-          table_name: string
           table_schema: string
+          table_name: string
+          executed_by_user_id?: string | null
+          executed_by_role?: string | null
+          operation_detail?: string | null
+          rows_affected?: number | null
+          success: boolean
+          error_message?: string | null
+          sql_state?: string | null
+          executed_at?: string | null
+          session_id?: string | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string
-          error_message?: string | null
-          executed_at?: string
-          executed_by_role?: string | null
-          executed_by_user_id?: string | null
           id?: string
-          operation_detail?: string | null
           operation_type?: string
-          rows_affected?: number | null
-          session_id?: string | null
-          sql_state?: string | null
-          success?: boolean
-          table_name?: string
           table_schema?: string
+          table_name?: string
+          executed_by_user_id?: string | null
+          executed_by_role?: string | null
+          operation_detail?: string | null
+          rows_affected?: number | null
+          success?: boolean
+          error_message?: string | null
+          sql_state?: string | null
+          executed_at?: string
+          session_id?: string | null
+          created_at?: string
         }
         Relationships: []
-      }
+      },
       function_execution_logs: {
         Row: {
-          completed_at: string | null
-          created_at: string
-          duration_ms: number | null
-          error_detail: string | null
-          error_hint: string | null
-          error_message: string | null
-          execution_status: string
-          function_name: string
           id: string
-          input_parameters: Json | null
+          function_name: string
+          execution_status: string
+          started_at: string
+          completed_at: string | null
+          duration_ms: number | null
           input_user_id: string | null
           input_user_type: string | null
+          input_parameters: Json | null
           return_value: Json | null
-          session_id: string | null
-          sql_state: string | null
-          started_at: string
           success: boolean | null
+          error_message: string | null
+          error_detail: string | null
+          error_hint: string | null
+          sql_state: string | null
+          session_id: string | null
           triggered_by: string | null
+          created_at: string
         }
         Insert: {
-          completed_at?: string | null
-          created_at?: string
-          duration_ms?: number | null
-          error_detail?: string | null
-          error_hint?: string | null
-          error_message?: string | null
-          execution_status: string
+          id?: string | null
           function_name: string
-          id?: string
-          input_parameters?: Json | null
+          execution_status: string
+          started_at?: string | null
+          completed_at?: string | null
+          duration_ms?: number | null
           input_user_id?: string | null
           input_user_type?: string | null
+          input_parameters?: Json | null
           return_value?: Json | null
-          session_id?: string | null
-          sql_state?: string | null
-          started_at?: string
           success?: boolean | null
+          error_message?: string | null
+          error_detail?: string | null
+          error_hint?: string | null
+          sql_state?: string | null
+          session_id?: string | null
           triggered_by?: string | null
+          created_at?: string | null
         }
         Update: {
-          completed_at?: string | null
-          created_at?: string
-          duration_ms?: number | null
-          error_detail?: string | null
-          error_hint?: string | null
-          error_message?: string | null
-          execution_status?: string
-          function_name?: string
           id?: string
-          input_parameters?: Json | null
+          function_name?: string
+          execution_status?: string
+          started_at?: string
+          completed_at?: string | null
+          duration_ms?: number | null
           input_user_id?: string | null
           input_user_type?: string | null
+          input_parameters?: Json | null
           return_value?: Json | null
-          session_id?: string | null
-          sql_state?: string | null
-          started_at?: string
           success?: boolean | null
+          error_message?: string | null
+          error_detail?: string | null
+          error_hint?: string | null
+          sql_state?: string | null
+          session_id?: string | null
           triggered_by?: string | null
+          created_at?: string
         }
         Relationships: []
-      }
+      },
       medications: {
         Row: {
-          atc_code: string | null
-          category: string | null
-          common_dosages: string | null
-          contraindications: string[] | null
-          created_at: string | null
-          generic_name: string | null
           id: string
           name: string
+          generic_name: string | null
+          category: string | null
           rxnorm_code: string | null
+          atc_code: string | null
+          common_dosages: string | null
+          contraindications: string | null
+          created_at: string | null
         }
         Insert: {
-          atc_code?: string | null
-          category?: string | null
-          common_dosages?: string | null
-          contraindications?: string[] | null
-          created_at?: string | null
-          generic_name?: string | null
-          id?: string
+          id?: string | null
           name: string
+          generic_name?: string | null
+          category?: string | null
           rxnorm_code?: string | null
+          atc_code?: string | null
+          common_dosages?: string | null
+          contraindications?: string | null
+          created_at?: string | null
         }
         Update: {
-          atc_code?: string | null
-          category?: string | null
-          common_dosages?: string | null
-          contraindications?: string[] | null
-          created_at?: string | null
-          generic_name?: string | null
           id?: string
           name?: string
+          generic_name?: string | null
+          category?: string | null
           rxnorm_code?: string | null
+          atc_code?: string | null
+          common_dosages?: string | null
+          contraindications?: string | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       menstrual_symptom_options: {
         Row: {
-          active: boolean | null
+          id: string
           category: string
-          created_at: string | null
+          symptom_name: string
           description: string | null
           display_order: number | null
-          id: string
-          symptom_name: string
+          active: boolean | null
+          created_at: string | null
         }
         Insert: {
-          active?: boolean | null
+          id?: string | null
           category: string
-          created_at?: string | null
+          symptom_name: string
           description?: string | null
           display_order?: number | null
-          id?: string
-          symptom_name: string
+          active?: boolean | null
+          created_at?: string | null
         }
         Update: {
-          active?: boolean | null
+          id?: string
           category?: string
-          created_at?: string | null
+          symptom_name?: string
           description?: string | null
           display_order?: number | null
-          id?: string
-          symptom_name?: string
+          active?: boolean | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       notification_history: {
         Row: {
+          id: string
+          user_id: string
+          notification_type: string
+          sent_at: string
+          opened_at: string | null
           action_taken: boolean | null
           created_at: string | null
-          id: string
-          notification_type: string
-          opened_at: string | null
-          sent_at: string
-          user_id: string
         }
         Insert: {
+          id?: string | null
+          user_id: string
+          notification_type: string
+          sent_at: string
+          opened_at?: string | null
           action_taken?: boolean | null
           created_at?: string | null
-          id?: string
-          notification_type: string
-          opened_at?: string | null
-          sent_at: string
-          user_id: string
         }
         Update: {
+          id?: string
+          user_id?: string
+          notification_type?: string
+          sent_at?: string
+          opened_at?: string | null
           action_taken?: boolean | null
           created_at?: string | null
-          id?: string
-          notification_type?: string
-          opened_at?: string | null
-          sent_at?: string
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       notification_preferences: {
         Row: {
-          achievement_notifications: boolean | null
-          appointment_reminder_hours: number | null
-          appointment_reminders: boolean | null
-          created_at: string | null
-          critical_alerts: boolean | null
-          daily_checkin_reminder: boolean | null
-          daily_checkin_time: string | null
-          direct_messages: boolean | null
-          email_enabled: boolean | null
           id: string
-          medication_reminder_minutes: number | null
-          medication_reminders: boolean | null
-          message_notifications: boolean | null
-          pattern_alerts: boolean | null
-          push_enabled: boolean | null
-          quiet_hours_enabled: boolean | null
-          quiet_hours_end: string | null
-          quiet_hours_start: string | null
-          sound_enabled: boolean | null
-          updated_at: string | null
           user_id: string
+          push_enabled: boolean | null
+          email_enabled: boolean | null
+          medication_reminders: boolean | null
+          medication_reminder_minutes: number | null
+          appointment_reminders: boolean | null
+          appointment_reminder_hours: number | null
+          critical_alerts: boolean | null
+          pattern_alerts: boolean | null
+          achievement_notifications: boolean | null
+          message_notifications: boolean | null
+          direct_messages: boolean | null
+          daily_checkin_reminder: boolean | null
+          daily_checkin_time: unknown | null
+          quiet_hours_enabled: boolean | null
+          quiet_hours_start: unknown | null
+          quiet_hours_end: unknown | null
+          sound_enabled: boolean | null
           vibration_enabled: boolean | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          achievement_notifications?: boolean | null
-          appointment_reminder_hours?: number | null
-          appointment_reminders?: boolean | null
-          created_at?: string | null
-          critical_alerts?: boolean | null
-          daily_checkin_reminder?: boolean | null
-          daily_checkin_time?: string | null
-          direct_messages?: boolean | null
-          email_enabled?: boolean | null
-          id?: string
-          medication_reminder_minutes?: number | null
-          medication_reminders?: boolean | null
-          message_notifications?: boolean | null
-          pattern_alerts?: boolean | null
-          push_enabled?: boolean | null
-          quiet_hours_enabled?: boolean | null
-          quiet_hours_end?: string | null
-          quiet_hours_start?: string | null
-          sound_enabled?: boolean | null
-          updated_at?: string | null
+          id?: string | null
           user_id: string
+          push_enabled?: boolean | null
+          email_enabled?: boolean | null
+          medication_reminders?: boolean | null
+          medication_reminder_minutes?: number | null
+          appointment_reminders?: boolean | null
+          appointment_reminder_hours?: number | null
+          critical_alerts?: boolean | null
+          pattern_alerts?: boolean | null
+          achievement_notifications?: boolean | null
+          message_notifications?: boolean | null
+          direct_messages?: boolean | null
+          daily_checkin_reminder?: boolean | null
+          daily_checkin_time?: unknown | null
+          quiet_hours_enabled?: boolean | null
+          quiet_hours_start?: unknown | null
+          quiet_hours_end?: unknown | null
+          sound_enabled?: boolean | null
           vibration_enabled?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          achievement_notifications?: boolean | null
-          appointment_reminder_hours?: number | null
-          appointment_reminders?: boolean | null
-          created_at?: string | null
-          critical_alerts?: boolean | null
-          daily_checkin_reminder?: boolean | null
-          daily_checkin_time?: string | null
-          direct_messages?: boolean | null
-          email_enabled?: boolean | null
           id?: string
-          medication_reminder_minutes?: number | null
-          medication_reminders?: boolean | null
-          message_notifications?: boolean | null
-          pattern_alerts?: boolean | null
-          push_enabled?: boolean | null
-          quiet_hours_enabled?: boolean | null
-          quiet_hours_end?: string | null
-          quiet_hours_start?: string | null
-          sound_enabled?: boolean | null
-          updated_at?: string | null
           user_id?: string
+          push_enabled?: boolean | null
+          email_enabled?: boolean | null
+          medication_reminders?: boolean | null
+          medication_reminder_minutes?: number | null
+          appointment_reminders?: boolean | null
+          appointment_reminder_hours?: number | null
+          critical_alerts?: boolean | null
+          pattern_alerts?: boolean | null
+          achievement_notifications?: boolean | null
+          message_notifications?: boolean | null
+          direct_messages?: boolean | null
+          daily_checkin_reminder?: boolean | null
+          daily_checkin_time?: unknown | null
+          quiet_hours_enabled?: boolean | null
+          quiet_hours_start?: unknown | null
+          quiet_hours_end?: unknown | null
+          sound_enabled?: boolean | null
           vibration_enabled?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       notification_queue: {
         Row: {
-          action_url: string | null
-          body: string
-          created_at: string | null
           id: string
+          user_id: string
           notification_type: string
-          priority: string | null
+          title: string
+          body: string
+          action_url: string | null
           reference_id: string | null
+          status: string
           scheduled_for: string
           sent_at: string | null
-          status: string
-          title: string
+          priority: string | null
+          created_at: string | null
           updated_at: string | null
-          user_id: string
         }
         Insert: {
-          action_url?: string | null
-          body: string
-          created_at?: string | null
-          id?: string
+          id?: string | null
+          user_id: string
           notification_type: string
-          priority?: string | null
+          title: string
+          body: string
+          action_url?: string | null
           reference_id?: string | null
+          status?: string | null
           scheduled_for: string
           sent_at?: string | null
-          status?: string
-          title: string
+          priority?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id: string
         }
         Update: {
-          action_url?: string | null
-          body?: string
-          created_at?: string | null
           id?: string
+          user_id?: string
           notification_type?: string
-          priority?: string | null
+          title?: string
+          body?: string
+          action_url?: string | null
           reference_id?: string | null
+          status?: string
           scheduled_for?: string
           sent_at?: string | null
-          status?: string
-          title?: string
+          priority?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       patient_clinician_connections: {
         Row: {
-          access_expires_at: string | null
-          access_level: string | null
-          approved_at: string | null
-          clinician_id: string
-          connected_at: string | null
-          created_at: string
           id: string
           patient_id: string
+          clinician_id: string
           status: string
+          access_level: string | null
+          access_expires_at: string | null
+          connected_at: string | null
+          approved_at: string | null
           terminated_at: string | null
           termination_reason: string | null
+          created_at: string
           updated_at: string | null
         }
         Insert: {
-          access_expires_at?: string | null
-          access_level?: string | null
-          approved_at?: string | null
-          clinician_id: string
-          connected_at?: string | null
-          created_at?: string
-          id?: string
+          id?: string | null
           patient_id: string
-          status?: string
+          clinician_id: string
+          status?: string | null
+          access_level?: string | null
+          access_expires_at?: string | null
+          connected_at?: string | null
+          approved_at?: string | null
           terminated_at?: string | null
           termination_reason?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Update: {
-          access_expires_at?: string | null
-          access_level?: string | null
-          approved_at?: string | null
-          clinician_id?: string
-          connected_at?: string | null
-          created_at?: string
           id?: string
           patient_id?: string
+          clinician_id?: string
           status?: string
+          access_level?: string | null
+          access_expires_at?: string | null
+          connected_at?: string | null
+          approved_at?: string | null
           terminated_at?: string | null
           termination_reason?: string | null
+          created_at?: string
           updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       patient_invitations: {
         Row: {
+          id: string
+          clinician_id: string
+          patient_email: string
+          patient_email_hash: string
+          invitation_token: string
+          status: string | null
+          patient_id: string | null
+          message: string | null
+          invited_at: string | null
+          expires_at: string | null
           accepted_at: string | null
           cancelled_at: string | null
-          clinician_id: string
           created_at: string | null
-          expires_at: string | null
-          id: string
-          invitation_token: string
-          invited_at: string | null
-          message: string | null
-          patient_email: string
-          patient_email_hash: string
-          patient_id: string | null
-          status: string | null
           updated_at: string | null
         }
         Insert: {
-          accepted_at?: string | null
-          cancelled_at?: string | null
+          id?: string | null
           clinician_id: string
-          created_at?: string | null
-          expires_at?: string | null
-          id?: string
-          invitation_token?: string
-          invited_at?: string | null
-          message?: string | null
           patient_email: string
           patient_email_hash: string
-          patient_id?: string | null
+          invitation_token?: string | null
           status?: string | null
+          patient_id?: string | null
+          message?: string | null
+          invited_at?: string | null
+          expires_at?: string | null
+          accepted_at?: string | null
+          cancelled_at?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Update: {
-          accepted_at?: string | null
-          cancelled_at?: string | null
-          clinician_id?: string
-          created_at?: string | null
-          expires_at?: string | null
           id?: string
-          invitation_token?: string
-          invited_at?: string | null
-          message?: string | null
+          clinician_id?: string
           patient_email?: string
           patient_email_hash?: string
-          patient_id?: string | null
+          invitation_token?: string
           status?: string | null
+          patient_id?: string | null
+          message?: string | null
+          invited_at?: string | null
+          expires_at?: string | null
+          accepted_at?: string | null
+          cancelled_at?: string | null
+          created_at?: string | null
           updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       patient_profiles: {
         Row: {
-          created_at: string | null
-          date_of_birth: string | null
-          first_name: string | null
-          gender: Database["public"]["Enums"]["gender_enum"] | null
           id: string
-          last_name: string | null
-          preferred_language: string | null
-          timezone: string | null
-          updated_at: string | null
           user_id: string
+          timezone: string | null
+          preferred_language: string | null
+          created_at: string | null
+          updated_at: string | null
+          first_name: string | null
+          last_name: string | null
+          date_of_birth: string | null
+          gender: unknown | null
         }
         Insert: {
-          created_at?: string | null
-          date_of_birth?: string | null
-          first_name?: string | null
-          gender?: Database["public"]["Enums"]["gender_enum"] | null
-          id?: string
-          last_name?: string | null
-          preferred_language?: string | null
-          timezone?: string | null
-          updated_at?: string | null
+          id?: string | null
           user_id: string
+          timezone?: string | null
+          preferred_language?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          first_name?: string | null
+          last_name?: string | null
+          date_of_birth?: string | null
+          gender?: unknown | null
         }
         Update: {
-          created_at?: string | null
-          date_of_birth?: string | null
-          first_name?: string | null
-          gender?: Database["public"]["Enums"]["gender_enum"] | null
           id?: string
-          last_name?: string | null
-          preferred_language?: string | null
-          timezone?: string | null
-          updated_at?: string | null
           user_id?: string
+          timezone?: string | null
+          preferred_language?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          first_name?: string | null
+          last_name?: string | null
+          date_of_birth?: string | null
+          gender?: unknown | null
         }
         Relationships: []
-      }
+      },
       profiles: {
         Row: {
-          created_at: string | null
-          email: string | null
-          first_name: string | null
           id: string
-          last_name: string | null
+          user_type: unknown | null
+          first_name: string | null
           middle_name: string | null
-          onboarding_completed: boolean | null
+          last_name: string | null
+          email: string | null
           phone_number: string | null
+          onboarding_completed: boolean | null
+          created_at: string | null
           updated_at: string | null
-          user_type: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Insert: {
-          created_at?: string | null
-          email?: string | null
-          first_name?: string | null
           id: string
-          last_name?: string | null
+          user_type?: unknown | null
+          first_name?: string | null
           middle_name?: string | null
-          onboarding_completed?: boolean | null
+          last_name?: string | null
+          email?: string | null
           phone_number?: string | null
+          onboarding_completed?: boolean | null
+          created_at?: string | null
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Update: {
-          created_at?: string | null
-          email?: string | null
-          first_name?: string | null
           id?: string
-          last_name?: string | null
+          user_type?: unknown | null
+          first_name?: string | null
           middle_name?: string | null
-          onboarding_completed?: boolean | null
+          last_name?: string | null
+          email?: string | null
           phone_number?: string | null
+          onboarding_completed?: boolean | null
+          created_at?: string | null
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Relationships: []
-      }
+      },
       pwa_push_subscriptions: {
         Row: {
-          active: boolean | null
-          auth_key: string
-          browser: string | null
-          created_at: string | null
-          device_type: string | null
-          endpoint: string
           id: string
-          last_used_at: string | null
-          p256dh_key: string
-          updated_at: string | null
           user_id: string
+          endpoint: string
+          p256dh_key: string
+          auth_key: string
+          device_type: string | null
+          browser: string | null
+          active: boolean | null
+          last_used_at: string | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          active?: boolean | null
-          auth_key: string
-          browser?: string | null
-          created_at?: string | null
-          device_type?: string | null
-          endpoint: string
-          id?: string
-          last_used_at?: string | null
-          p256dh_key: string
-          updated_at?: string | null
+          id?: string | null
           user_id: string
+          endpoint: string
+          p256dh_key: string
+          auth_key: string
+          device_type?: string | null
+          browser?: string | null
+          active?: boolean | null
+          last_used_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          active?: boolean | null
-          auth_key?: string
-          browser?: string | null
-          created_at?: string | null
-          device_type?: string | null
-          endpoint?: string
           id?: string
-          last_used_at?: string | null
-          p256dh_key?: string
-          updated_at?: string | null
           user_id?: string
+          endpoint?: string
+          p256dh_key?: string
+          auth_key?: string
+          device_type?: string | null
+          browser?: string | null
+          active?: boolean | null
+          last_used_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
-      }
+      },
       research_consent: {
         Row: {
-          consent_given_at: string | null
-          consent_status:
-            | Database["public"]["Enums"]["consent_status_enum"]
-            | null
-          consent_version: string | null
-          consent_withdrawn_at: string | null
-          created_at: string | null
-          data_type: Database["public"]["Enums"]["research_data_type_enum"]
           id: string
           user_id: string
+          data_type: unknown
+          consent_status: unknown | null
+          consent_given_at: string | null
+          consent_withdrawn_at: string | null
+          consent_version: string | null
+          created_at: string | null
         }
         Insert: {
-          consent_given_at?: string | null
-          consent_status?:
-            | Database["public"]["Enums"]["consent_status_enum"]
-            | null
-          consent_version?: string | null
-          consent_withdrawn_at?: string | null
-          created_at?: string | null
-          data_type: Database["public"]["Enums"]["research_data_type_enum"]
-          id?: string
+          id?: string | null
           user_id: string
+          data_type: unknown
+          consent_status?: unknown | null
+          consent_given_at?: string | null
+          consent_withdrawn_at?: string | null
+          consent_version?: string | null
+          created_at?: string | null
         }
         Update: {
-          consent_given_at?: string | null
-          consent_status?:
-            | Database["public"]["Enums"]["consent_status_enum"]
-            | null
-          consent_version?: string | null
-          consent_withdrawn_at?: string | null
-          created_at?: string | null
-          data_type?: Database["public"]["Enums"]["research_data_type_enum"]
           id?: string
           user_id?: string
+          data_type?: unknown
+          consent_status?: unknown | null
+          consent_given_at?: string | null
+          consent_withdrawn_at?: string | null
+          consent_version?: string | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       researcher_onboarding_data: {
         Row: {
+          id: string
+          user_id: string
+          first_name: string | null
+          middle_name: string | null
+          last_name: string | null
+          institution: string | null
+          research_focus: string | null
+          credentials: string | null
           completed_at: string | null
           created_at: string | null
-          credentials: string | null
-          first_name: string | null
-          id: string
-          institution: string | null
-          last_name: string | null
-          middle_name: string | null
-          research_focus: string | null
           updated_at: string | null
-          user_id: string
         }
         Insert: {
+          id?: string | null
+          user_id: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
+          institution?: string | null
+          research_focus?: string | null
+          credentials?: string | null
           completed_at?: string | null
           created_at?: string | null
-          credentials?: string | null
-          first_name?: string | null
-          id?: string
-          institution?: string | null
-          last_name?: string | null
-          middle_name?: string | null
-          research_focus?: string | null
           updated_at?: string | null
-          user_id: string
         }
         Update: {
+          id?: string
+          user_id?: string
+          first_name?: string | null
+          middle_name?: string | null
+          last_name?: string | null
+          institution?: string | null
+          research_focus?: string | null
+          credentials?: string | null
           completed_at?: string | null
           created_at?: string | null
-          credentials?: string | null
-          first_name?: string | null
-          id?: string
-          institution?: string | null
-          last_name?: string | null
-          middle_name?: string | null
-          research_focus?: string | null
           updated_at?: string | null
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       researcher_profiles: {
         Row: {
+          id: string
+          user_id: string
+          institution: string | null
+          department: string | null
+          research_focus: string | null
+          credentials: string | null
           access_level: string | null
           created_at: string | null
-          credentials: string | null
-          department: string | null
-          id: string
-          institution: string | null
-          research_focus: string | null
           updated_at: string | null
-          user_id: string
         }
         Insert: {
+          id?: string | null
+          user_id: string
+          institution?: string | null
+          department?: string | null
+          research_focus?: string | null
+          credentials?: string | null
           access_level?: string | null
           created_at?: string | null
-          credentials?: string | null
-          department?: string | null
-          id?: string
-          institution?: string | null
-          research_focus?: string | null
           updated_at?: string | null
-          user_id: string
         }
         Update: {
+          id?: string
+          user_id?: string
+          institution?: string | null
+          department?: string | null
+          research_focus?: string | null
+          credentials?: string | null
           access_level?: string | null
           created_at?: string | null
-          credentials?: string | null
-          department?: string | null
-          id?: string
-          institution?: string | null
-          research_focus?: string | null
           updated_at?: string | null
-          user_id?: string
         }
         Relationships: []
-      }
+      },
       security_incidents: {
         Row: {
-          created_at: string | null
-          description: string | null
           id: string
+          user_id: string | null
           incident_type: string
+          severity: string | null
+          description: string | null
           ip_address_hash: string | null
+          user_agent: string | null
           resolved: boolean | null
           resolved_at: string | null
           resolved_by: string | null
-          severity: string | null
+          created_at: string | null
           updated_at: string | null
-          user_agent: string | null
-          user_id: string | null
         }
         Insert: {
-          created_at?: string | null
-          description?: string | null
-          id?: string
+          id?: string | null
+          user_id?: string | null
           incident_type: string
+          severity?: string | null
+          description?: string | null
           ip_address_hash?: string | null
+          user_agent?: string | null
           resolved?: boolean | null
           resolved_at?: string | null
           resolved_by?: string | null
-          severity?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_agent?: string | null
-          user_id?: string | null
         }
         Update: {
-          created_at?: string | null
-          description?: string | null
           id?: string
+          user_id?: string | null
           incident_type?: string
+          severity?: string | null
+          description?: string | null
           ip_address_hash?: string | null
+          user_agent?: string | null
           resolved?: boolean | null
           resolved_at?: string | null
           resolved_by?: string | null
-          severity?: string | null
+          created_at?: string | null
           updated_at?: string | null
-          user_agent?: string | null
-          user_id?: string | null
         }
         Relationships: []
-      }
+      },
       seizure_signs_reference: {
         Row: {
-          category: Database["public"]["Enums"]["semiology_category_enum"]
-          created_at: string | null
-          description: string | null
-          display_name: string
-          research_code: string | null
           sign_id: number
-          sign_name: Database["public"]["Enums"]["seizure_sign_enum"]
+          sign_name: unknown
+          category: unknown
+          display_name: string
+          description: string | null
+          research_code: string | null
+          created_at: string | null
         }
         Insert: {
-          category: Database["public"]["Enums"]["semiology_category_enum"]
-          created_at?: string | null
-          description?: string | null
+          sign_id?: number | null
+          sign_name: unknown
+          category: unknown
           display_name: string
+          description?: string | null
           research_code?: string | null
-          sign_id?: number
-          sign_name: Database["public"]["Enums"]["seizure_sign_enum"]
+          created_at?: string | null
         }
         Update: {
-          category?: Database["public"]["Enums"]["semiology_category_enum"]
-          created_at?: string | null
-          description?: string | null
-          display_name?: string
-          research_code?: string | null
           sign_id?: number
-          sign_name?: Database["public"]["Enums"]["seizure_sign_enum"]
+          sign_name?: unknown
+          category?: unknown
+          display_name?: string
+          description?: string | null
+          research_code?: string | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       seizure_triggers_reference: {
         Row: {
-          created_at: string | null
-          description: string | null
-          display_name: string
           trigger_id: number
-          trigger_type: Database["public"]["Enums"]["trigger_type_enum"]
+          trigger_type: unknown
+          display_name: string
+          description: string | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          description?: string | null
+          trigger_id?: number | null
+          trigger_type: unknown
           display_name: string
-          trigger_id?: number
-          trigger_type: Database["public"]["Enums"]["trigger_type_enum"]
+          description?: string | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
-          description?: string | null
-          display_name?: string
           trigger_id?: number
-          trigger_type?: Database["public"]["Enums"]["trigger_type_enum"]
+          trigger_type?: unknown
+          display_name?: string
+          description?: string | null
+          created_at?: string | null
         }
         Relationships: []
-      }
+      },
       sign_brain_region_mapping: {
         Row: {
-          created_at: string | null
           id: number
-          probability_grade: Database["public"]["Enums"]["probability_grade_enum"]
-          probability_percentage: number | null
-          region_id: number
-          research_basis: string | null
           sign_id: number
+          region_id: number
+          probability_grade: unknown
+          probability_percentage: number | null
+          research_basis: string | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: number
-          probability_grade: Database["public"]["Enums"]["probability_grade_enum"]
-          probability_percentage?: number | null
-          region_id: number
-          research_basis?: string | null
+          id?: number | null
           sign_id: number
+          region_id: number
+          probability_grade: unknown
+          probability_percentage?: number | null
+          research_basis?: string | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: number
-          probability_grade?: Database["public"]["Enums"]["probability_grade_enum"]
-          probability_percentage?: number | null
-          region_id?: number
-          research_basis?: string | null
           sign_id?: number
+          region_id?: number
+          probability_grade?: unknown
+          probability_percentage?: number | null
+          research_basis?: string | null
+          created_at?: string | null
         }
         Relationships: [
           {
@@ -3270,139 +3182,139 @@ export type Database = {
             referencedColumns: ["sign_id"]
           },
         ]
-      }
+      },
       symptom_options: {
         Row: {
-          active: boolean | null
+          id: string
           category: string
+          symptom_name: string
           description: string | null
           display_order: number | null
-          id: string
-          symptom_name: string
+          active: boolean | null
         }
         Insert: {
-          active?: boolean | null
+          id?: string | null
           category: string
+          symptom_name: string
           description?: string | null
           display_order?: number | null
-          id?: string
-          symptom_name: string
+          active?: boolean | null
         }
         Update: {
-          active?: boolean | null
+          id?: string
           category?: string
+          symptom_name?: string
           description?: string | null
           display_order?: number | null
-          id?: string
-          symptom_name?: string
+          active?: boolean | null
         }
         Relationships: []
-      }
+      },
       system_logs: {
         Row: {
-          category: string
-          context_data: Json | null
-          created_at: string
-          error_code: string | null
-          event_type: string
-          function_name: string | null
           id: string
-          ip_address: unknown | null
           log_level: string
+          category: string
+          event_type: string
           message: string
+          user_id: string | null
+          function_name: string | null
+          table_name: string | null
           operation: string | null
-          session_id: string | null
+          error_code: string | null
           sql_state: string | null
           stack_trace: string | null
-          table_name: string | null
+          context_data: Json | null
+          created_at: string
+          session_id: string | null
+          ip_address: unknown | null
           user_agent: string | null
-          user_id: string | null
         }
         Insert: {
-          category: string
-          context_data?: Json | null
-          created_at?: string
-          error_code?: string | null
-          event_type: string
-          function_name?: string | null
-          id?: string
-          ip_address?: unknown | null
+          id?: string | null
           log_level: string
+          category: string
+          event_type: string
           message: string
+          user_id?: string | null
+          function_name?: string | null
+          table_name?: string | null
           operation?: string | null
-          session_id?: string | null
+          error_code?: string | null
           sql_state?: string | null
           stack_trace?: string | null
-          table_name?: string | null
+          context_data?: Json | null
+          created_at?: string | null
+          session_id?: string | null
+          ip_address?: unknown | null
           user_agent?: string | null
-          user_id?: string | null
         }
         Update: {
-          category?: string
-          context_data?: Json | null
-          created_at?: string
-          error_code?: string | null
-          event_type?: string
-          function_name?: string | null
           id?: string
-          ip_address?: unknown | null
           log_level?: string
+          category?: string
+          event_type?: string
           message?: string
+          user_id?: string | null
+          function_name?: string | null
+          table_name?: string | null
           operation?: string | null
-          session_id?: string | null
+          error_code?: string | null
           sql_state?: string | null
           stack_trace?: string | null
-          table_name?: string | null
+          context_data?: Json | null
+          created_at?: string
+          session_id?: string | null
+          ip_address?: unknown | null
           user_agent?: string | null
-          user_id?: string | null
         }
         Relationships: []
-      }
+      },
       trigger_options: {
         Row: {
-          active: boolean | null
+          id: string
           category: string
+          trigger_name: string
           description: string | null
           display_order: number | null
-          id: string
-          trigger_name: string
+          active: boolean | null
         }
         Insert: {
-          active?: boolean | null
+          id?: string | null
           category: string
+          trigger_name: string
           description?: string | null
           display_order?: number | null
-          id?: string
-          trigger_name: string
+          active?: boolean | null
         }
         Update: {
-          active?: boolean | null
+          id?: string
           category?: string
+          trigger_name?: string
           description?: string | null
           display_order?: number | null
-          id?: string
-          trigger_name?: string
+          active?: boolean | null
         }
         Relationships: []
-      }
+      },
       user_achievements: {
         Row: {
-          achievement_id: string
-          earned_at: string | null
           id: string
           user_id: string
+          achievement_id: string
+          earned_at: string | null
         }
         Insert: {
+          id?: string | null
+          user_id: string
           achievement_id: string
           earned_at?: string | null
-          id?: string
-          user_id: string
         }
         Update: {
-          achievement_id?: string
-          earned_at?: string | null
           id?: string
           user_id?: string
+          achievement_id?: string
+          earned_at?: string | null
         }
         Relationships: [
           {
@@ -3413,37 +3325,37 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
       user_points: {
         Row: {
-          created_at: string | null
           id: string
-          last_activity_date: string | null
-          level: number | null
-          points: number | null
-          streak_days: number | null
-          updated_at: string | null
           user_id: string
+          points: number | null
+          level: number | null
+          streak_days: number | null
+          last_activity_date: string | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string
-          last_activity_date?: string | null
-          level?: number | null
-          points?: number | null
-          streak_days?: number | null
-          updated_at?: string | null
+          id?: string | null
           user_id: string
+          points?: number | null
+          level?: number | null
+          streak_days?: number | null
+          last_activity_date?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: string
-          last_activity_date?: string | null
-          level?: number | null
-          points?: number | null
-          streak_days?: number | null
-          updated_at?: string | null
           user_id?: string
+          points?: number | null
+          level?: number | null
+          streak_days?: number | null
+          last_activity_date?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -3452,358 +3364,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+
       can_carer_see_patient_data: {
-        Args: { p_carer_id: string; p_data_type: string; p_patient_id: string }
-        Returns: boolean
-      }
-      can_clinician_see_patient_data: {
-        Args: {
-          p_clinician_id: string
-          p_data_type: string
-          p_patient_id: string
-        }
-        Returns: boolean
-      }
-      cleanup_old_logs: {
-        Args: { p_days_to_keep?: number }
-        Returns: {
-          rows_deleted: number
-          table_name: string
-        }[]
-      }
-      complete_function_execution: {
-        Args: {
-          p_error_message?: string
-          p_execution_id: string
-          p_return_value?: Json
-          p_success: boolean
-        }
-        Returns: undefined
-      }
-      complete_onboarding: {
-        Args: { p_user_id: string; p_user_type: string }
-        Returns: Json
-      }
-      get_function_stats: {
-        Args: { p_function_name?: string }
-        Returns: {
-          avg_duration_ms: number
-          failed: number
-          function_name: string
-          last_execution: string
-          max_duration_ms: number
-          successful: number
-          total_executions: number
-        }[]
-      }
-      get_recent_errors: {
-        Args: { p_limit?: number }
-        Returns: {
-          category: string
-          error_code: string
-          event: string
-          function_name: string
-          level: string
-          log_time: string
-          message: string
-          user_id: string
-        }[]
-      }
-      get_research_id: {
-        Args: { p_user_id: string }
-        Returns: string
-      }
-      get_user_type: {
-        Args: { p_user_id: string }
-        Returns: string
-      }
-      initialize_new_user: {
-        Args: { p_email: string; p_user_id: string; p_user_type?: string }
-        Returns: Json
-      }
-      initialize_new_user_jsonb: {
-        Args: { p_email: string; p_user_id: string; p_user_type: string }
-        Returns: Json
-      }
-      is_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_approved_researcher: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_carer_related_to_patient: {
-        Args: { p_carer_id: string; p_patient_id: string }
-        Returns: boolean
-      }
-      is_clinician_connected_to_patient: {
-        Args: { p_clinician_id: string; p_patient_id: string }
-        Returns: boolean
-      }
-      is_in_quiet_hours: {
-        Args: { p_user_id: string }
-        Returns: boolean
-      }
-      log_system_event: {
-        Args: {
-          p_category: string
-          p_context?: Json
-          p_error_code?: string
-          p_event_type: string
-          p_function_name?: string
-          p_level: string
-          p_message: string
-          p_user_id?: string
-        }
-        Returns: string
-      }
-      mark_notification_read: {
-        Args: { p_notification_id: string }
-        Returns: undefined
-      }
-      schedule_daily_checkin_reminders: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      schedule_notification: {
-        Args: {
-          p_action_url?: string
-          p_body: string
-          p_priority?: string
-          p_reference_id?: string
-          p_scheduled_for?: string
-          p_title: string
-          p_type: string
-          p_user_id: string
-        }
-        Returns: string
-      }
-      start_function_execution: {
-        Args: {
-          p_function_name: string
-          p_triggered_by?: string
-          p_user_id?: string
-          p_user_type?: string
-        }
-        Returns: string
-      }
-    }
+        Args: { p_carer_id: string; p_data_type: string; p_patient_id: string     }
     Enums: {
-      assessment_type_enum:
-        | "FOCAL"
-        | "GENERALIZED"
-        | "SECONDARY_GENERALIZED"
-        | "UNKNOWN"
-      brain_lobe_enum:
-        | "TEMPORAL"
-        | "FRONTAL"
-        | "PARIETAL"
-        | "OCCIPITAL"
-        | "INSULA"
-        | "CINGULATE"
-        | "HYPOTHALAMUS"
-        | "BILATERAL"
-      brain_subregion_enum:
-        | "MESIAL_TEMPORAL"
-        | "LATERAL_TEMPORAL"
-        | "ANTERIOR_TEMPORAL"
-        | "POSTERIOR_TEMPORAL"
-        | "BASAL_TEMPORAL"
-        | "HIPPOCAMPUS"
-        | "AMYGDALA"
-        | "PRIMARY_MOTOR_CORTEX"
-        | "PREMOTOR_CORTEX"
-        | "SUPPLEMENTARY_MOTOR_AREA"
-        | "BROCA_AREA"
-        | "PREFRONTAL_CORTEX"
-        | "PRIMARY_SOMATOSENSORY_CORTEX"
-        | "SUPERIOR_PARIETAL_LOBULE"
-        | "INFERIOR_PARIETAL_LOBULE"
-        | "PRIMARY_VISUAL_CORTEX"
-        | "VISUAL_ASSOCIATION_AREAS"
-        | "ANTERIOR_INSULA"
-        | "POSTERIOR_INSULA"
-        | "ANTERIOR_CINGULATE"
-        | "POSTERIOR_CINGULATE"
-      consciousness_level_enum: "FULL" | "PARTIAL" | "NONE"
-      consent_status_enum: "pending" | "active" | "withdrawn" | "expired"
-      cycle_phase_enum: "MENSTRUAL" | "FOLLICULAR" | "OVULATION" | "LUTEAL"
-      flow_intensity_enum:
-        | "SPOTTING"
-        | "LIGHT"
-        | "MODERATE"
-        | "HEAVY"
-        | "VERY_HEAVY"
-      gender_enum:
-        | "male"
-        | "female"
-        | "non_binary"
-        | "other"
-        | "prefer_not_to_say"
-      laterality_enum: "LEFT" | "RIGHT" | "BILATERAL" | "UNKNOWN"
-      location_type_enum:
-        | "HOME"
-        | "WORK"
-        | "SCHOOL"
-        | "OUTDOORS"
-        | "TRANSIT"
-        | "CLINICAL"
-        | "PUBLIC_PLACE"
-        | "UNKNOWN"
-      medication_adherence_enum: "TAKEN_ON_TIME" | "LATE" | "MISSED" | "UNKNOWN"
-      menstrual_symptom_severity_enum:
-        | "NONE"
-        | "MILD"
-        | "MODERATE"
-        | "SEVERE"
-        | "VERY_SEVERE"
-      post_ictal_symptom_enum:
-        | "CONFUSION"
-        | "FATIGUE"
-        | "HEADACHE"
-        | "AGITATION"
-        | "WEAKNESS"
-        | "SPEECH_DIFFICULTY"
-        | "MEMORY_LOSS"
-        | "MUSCLE_PAIN"
-        | "NAUSEA"
-      probability_grade_enum:
-        | "VERY_LOW"
-        | "LOW"
-        | "MODERATE"
-        | "HIGH"
-        | "VERY_HIGH"
-      relationship_enum:
-        | "parent"
-        | "spouse"
-        | "partner"
-        | "child"
-        | "sibling"
-        | "friend"
-        | "caregiver"
-        | "other"
-      rescue_medication_enum:
-        | "MIDAZOLAM"
-        | "DIAZEPAM"
-        | "LORAZEPAM"
-        | "CLONAZEPAM"
-        | "NONE"
-        | "OTHER"
-      research_data_type_enum:
-        | "seizure_data"
-        | "medication_data"
-        | "symptom_data"
-        | "menstrual_data"
-        | "wearable_data"
-        | "genetic_data"
-        | "imaging_data"
-        | "location_data"
-        | "demographic_data"
-        | "all_data"
-      seizure_sign_enum:
-        | "EPIGASTRIC_AURA"
-        | "OLFACTORY_AURA"
-        | "GUSTATORY_AURA"
-        | "VISUAL_AURA"
-        | "AUDITORY_AURA"
-        | "SOMATOSENSORY_AURA"
-        | "FEAR_ANXIETY_AURA"
-        | "DEJA_VU"
-        | "JAMAIS_VU"
-        | "AUTOMATISMS_ORAL"
-        | "AUTOMATISMS_MANUAL"
-        | "TONIC_ACTIVITY"
-        | "CLONIC_ACTIVITY"
-        | "MYOCLONIC_JERKS"
-        | "ATONIC_DROP"
-        | "HEAD_VERSION"
-        | "EYE_DEVIATION"
-        | "DYSTONIC_POSTURING"
-        | "HYPERMOTOR_ACTIVITY"
-        | "MIMETIC_AUTOMATISMS"
-        | "GELASTIC"
-        | "DACRYSTIC"
-        | "VOCALIZATION"
-        | "SPEECH_ARREST"
-        | "LOSS_OF_AWARENESS"
-        | "STARING"
-        | "BEHAVIORAL_ARREST"
-        | "AUTONOMIC_FEATURES"
-        | "PALLOR"
-        | "FLUSHING"
-        | "SWEATING"
-        | "PILOERECTION"
-        | "HEART_RATE_CHANGE"
-        | "BREATHING_CHANGE"
-        | "INCONTINENCE"
-        | "TONGUE_BITING"
-      seizure_type_enum:
-        | "FOCAL_AWARE"
-        | "FOCAL_IMPAIRED"
-        | "FOCAL_TO_BILATERAL_TONIC_CLONIC"
-        | "GENERALIZED_TONIC_CLONIC"
-        | "GENERALIZED_ABSENCE"
-        | "GENERALIZED_MYOCLONIC"
-        | "GENERALIZED_ATONIC"
-        | "GENERALIZED_TONIC"
-        | "GENERALIZED_CLONIC"
-        | "UNKNOWN"
-      semiology_category_enum:
-        | "AURA"
-        | "MOTOR"
-        | "AUTONOMIC"
-        | "CONSCIOUSNESS"
-        | "BEHAVIORAL"
-        | "SENSORY"
-      stress_level_enum:
-        | "1"
-        | "2"
-        | "3"
-        | "4"
-        | "5"
-        | "6"
-        | "7"
-        | "8"
-        | "9"
-        | "10"
-      tracking_feature_enum:
-        | "seizure"
-        | "tremor"
-        | "gait"
-        | "menstruation"
-        | "temperature"
-        | "mood"
-        | "energy"
-        | "sleep"
-        | "symptoms"
-        | "medication"
-        | "heart_rate"
-        | "blood_pressure"
-        | "weight"
-        | "exercise"
-      trigger_strength_enum: "NONE" | "WEAK" | "MODERATE" | "STRONG"
-      trigger_type_enum:
-        | "SLEEP_DEPRIVATION"
-        | "FEVER"
-        | "ALCOHOL"
-        | "MEDICATION_MISSED"
-        | "EMOTIONAL_STRESS"
-        | "PHYSICAL_STRESS"
-        | "FLASHING_LIGHTS"
-        | "MENSTRUATION"
-        | "ILLNESS"
-        | "UNKNOWN"
-      user_type_enum: "patient" | "carer" | "clinician" | "researcher" | "admin"
-      witness_role_enum:
-        | "SELF"
-        | "FAMILY"
-        | "FRIEND"
-        | "CLINICIAN"
-        | "CARER"
-        | "STRANGER"
-        | "UNKNOWN"
-      yes_no_enum: "YES" | "NO"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3813,307 +3378,307 @@ export type Database = {
     Tables: {
       daily_symptom_logs: {
         Row: {
-          activities_difficult: Json | null
-          adl_independence_level: number | null
-          all_medications_taken: boolean | null
-          autonomic_symptoms: Json | null
-          cognitive_issues: Json | null
-          created_at: string | null
-          dyskinesia_severity: number | null
-          energy_level: number | null
-          exercise_minutes: number | null
-          fatigue_level: number | null
-          log_date: string
           log_id: string
-          medication_side_effects: Json | null
-          mood: number | null
-          mood_issues: Json | null
-          motor_fluctuations_occurred: boolean | null
-          off_time_hours: number | null
-          on_time_hours: number | null
-          overall_feeling: number | null
-          pain_level: number | null
           research_id: string
-          sleep_disturbances: Json | null
-          sleep_hours: number | null
+          log_date: string
+          overall_feeling: number | null
+          mood: number | null
+          energy_level: number | null
+          fatigue_level: number | null
+          pain_level: number | null
           sleep_quality: number | null
-          slowness_severity: number | null
-          source_log_id: string | null
+          sleep_hours: number | null
+          sleep_disturbances: Json | null
+          motor_fluctuations_occurred: boolean | null
+          on_time_hours: number | null
+          off_time_hours: number | null
+          dyskinesia_severity: number | null
           stiffness_severity: number | null
+          slowness_severity: number | null
+          cognitive_issues: Json | null
+          mood_issues: Json | null
+          autonomic_symptoms: Json | null
+          adl_independence_level: number | null
+          activities_difficult: Json | null
+          all_medications_taken: boolean | null
+          medication_side_effects: Json | null
           stress_level: number | null
+          exercise_minutes: number | null
+          created_at: string | null
+          source_log_id: string | null
         }
         Insert: {
-          activities_difficult?: Json | null
-          adl_independence_level?: number | null
-          all_medications_taken?: boolean | null
-          autonomic_symptoms?: Json | null
-          cognitive_issues?: Json | null
-          created_at?: string | null
-          dyskinesia_severity?: number | null
-          energy_level?: number | null
-          exercise_minutes?: number | null
-          fatigue_level?: number | null
-          log_date: string
-          log_id?: string
-          medication_side_effects?: Json | null
-          mood?: number | null
-          mood_issues?: Json | null
-          motor_fluctuations_occurred?: boolean | null
-          off_time_hours?: number | null
-          on_time_hours?: number | null
-          overall_feeling?: number | null
-          pain_level?: number | null
+          log_id?: string | null
           research_id: string
-          sleep_disturbances?: Json | null
-          sleep_hours?: number | null
+          log_date: string
+          overall_feeling?: number | null
+          mood?: number | null
+          energy_level?: number | null
+          fatigue_level?: number | null
+          pain_level?: number | null
           sleep_quality?: number | null
-          slowness_severity?: number | null
-          source_log_id?: string | null
+          sleep_hours?: number | null
+          sleep_disturbances?: Json | null
+          motor_fluctuations_occurred?: boolean | null
+          on_time_hours?: number | null
+          off_time_hours?: number | null
+          dyskinesia_severity?: number | null
           stiffness_severity?: number | null
+          slowness_severity?: number | null
+          cognitive_issues?: Json | null
+          mood_issues?: Json | null
+          autonomic_symptoms?: Json | null
+          adl_independence_level?: number | null
+          activities_difficult?: Json | null
+          all_medications_taken?: boolean | null
+          medication_side_effects?: Json | null
           stress_level?: number | null
+          exercise_minutes?: number | null
+          created_at?: string | null
+          source_log_id?: string | null
         }
         Update: {
-          activities_difficult?: Json | null
-          adl_independence_level?: number | null
-          all_medications_taken?: boolean | null
-          autonomic_symptoms?: Json | null
-          cognitive_issues?: Json | null
-          created_at?: string | null
-          dyskinesia_severity?: number | null
-          energy_level?: number | null
-          exercise_minutes?: number | null
-          fatigue_level?: number | null
-          log_date?: string
           log_id?: string
-          medication_side_effects?: Json | null
-          mood?: number | null
-          mood_issues?: Json | null
-          motor_fluctuations_occurred?: boolean | null
-          off_time_hours?: number | null
-          on_time_hours?: number | null
-          overall_feeling?: number | null
-          pain_level?: number | null
           research_id?: string
-          sleep_disturbances?: Json | null
-          sleep_hours?: number | null
+          log_date?: string
+          overall_feeling?: number | null
+          mood?: number | null
+          energy_level?: number | null
+          fatigue_level?: number | null
+          pain_level?: number | null
           sleep_quality?: number | null
-          slowness_severity?: number | null
-          source_log_id?: string | null
+          sleep_hours?: number | null
+          sleep_disturbances?: Json | null
+          motor_fluctuations_occurred?: boolean | null
+          on_time_hours?: number | null
+          off_time_hours?: number | null
+          dyskinesia_severity?: number | null
           stiffness_severity?: number | null
+          slowness_severity?: number | null
+          cognitive_issues?: Json | null
+          mood_issues?: Json | null
+          autonomic_symptoms?: Json | null
+          adl_independence_level?: number | null
+          activities_difficult?: Json | null
+          all_medications_taken?: boolean | null
+          medication_side_effects?: Json | null
           stress_level?: number | null
+          exercise_minutes?: number | null
+          created_at?: string | null
+          source_log_id?: string | null
         }
         Relationships: []
-      }
+      },
       gait_episodes: {
         Row: {
-          created_at: string | null
-          duration_seconds: number | null
-          environmental_factors: Json | null
-          event_type: string
-          fall_direction: string | null
-          freezing_trigger: string | null
           gait_id: string
-          hours_since_medication: number | null
-          injury_occurred: boolean | null
-          medication_status: string | null
+          research_id: string
           occurred_at_date: string
           occurred_at_hour: number | null
-          required_assistance: boolean | null
-          research_id: string
-          resulted_in_fall: boolean | null
+          duration_seconds: number | null
+          event_type: string
           severity: number | null
+          resulted_in_fall: boolean | null
+          fall_direction: string | null
+          injury_occurred: boolean | null
+          required_assistance: boolean | null
+          environmental_factors: Json | null
+          medication_status: string | null
+          hours_since_medication: number | null
+          freezing_trigger: string | null
+          created_at: string | null
           source_gait_id: string | null
         }
         Insert: {
-          created_at?: string | null
-          duration_seconds?: number | null
-          environmental_factors?: Json | null
-          event_type: string
-          fall_direction?: string | null
-          freezing_trigger?: string | null
-          gait_id?: string
-          hours_since_medication?: number | null
-          injury_occurred?: boolean | null
-          medication_status?: string | null
+          gait_id?: string | null
+          research_id: string
           occurred_at_date: string
           occurred_at_hour?: number | null
-          required_assistance?: boolean | null
-          research_id: string
-          resulted_in_fall?: boolean | null
+          duration_seconds?: number | null
+          event_type: string
           severity?: number | null
+          resulted_in_fall?: boolean | null
+          fall_direction?: string | null
+          injury_occurred?: boolean | null
+          required_assistance?: boolean | null
+          environmental_factors?: Json | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          freezing_trigger?: string | null
+          created_at?: string | null
           source_gait_id?: string | null
         }
         Update: {
-          created_at?: string | null
-          duration_seconds?: number | null
-          environmental_factors?: Json | null
-          event_type?: string
-          fall_direction?: string | null
-          freezing_trigger?: string | null
           gait_id?: string
-          hours_since_medication?: number | null
-          injury_occurred?: boolean | null
-          medication_status?: string | null
+          research_id?: string
           occurred_at_date?: string
           occurred_at_hour?: number | null
-          required_assistance?: boolean | null
-          research_id?: string
-          resulted_in_fall?: boolean | null
+          duration_seconds?: number | null
+          event_type?: string
           severity?: number | null
+          resulted_in_fall?: boolean | null
+          fall_direction?: string | null
+          injury_occurred?: boolean | null
+          required_assistance?: boolean | null
+          environmental_factors?: Json | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          freezing_trigger?: string | null
+          created_at?: string | null
           source_gait_id?: string | null
         }
         Relationships: []
-      }
+      },
       seizure_events: {
         Row: {
-          aura_signs: Json | null
-          body_parts_affected: Json | null
-          consciousness_level: string | null
-          created_at: string | null
-          duration_seconds: number | null
           event_id: string
-          fully_recovered: boolean | null
+          research_id: string
+          occurred_at_date: string
+          occurred_at_hour: number | null
+          duration_seconds: number | null
+          seizure_type: string
+          severity: number | null
+          consciousness_level: string | null
           had_aura: boolean | null
-          hours_since_last_dose: number | null
-          injuries_occurred: boolean | null
-          injury_types: Json | null
-          medication_taken_as_prescribed: boolean | null
+          aura_signs: Json | null
+          possible_triggers: Json | null
+          body_parts_affected: Json | null
           motor_symptoms: Json | null
           non_motor_symptoms: Json | null
-          occurred_at_date: string
-          occurred_at_hour: number | null
-          possible_triggers: Json | null
-          post_ictal_duration_minutes: number | null
           post_ictal_effects: Json | null
-          recent_medication_changes: boolean | null
-          recovery_time_minutes: number | null
+          post_ictal_duration_minutes: number | null
+          injuries_occurred: boolean | null
+          injury_types: Json | null
           required_medical_attention: boolean | null
-          research_id: string
-          seizure_type: string
-          severity: number | null
-          source_event_id: string | null
           witnessed: boolean | null
+          medication_taken_as_prescribed: boolean | null
+          hours_since_last_dose: number | null
+          recent_medication_changes: boolean | null
+          fully_recovered: boolean | null
+          recovery_time_minutes: number | null
+          created_at: string | null
+          source_event_id: string | null
         }
         Insert: {
-          aura_signs?: Json | null
-          body_parts_affected?: Json | null
-          consciousness_level?: string | null
-          created_at?: string | null
-          duration_seconds?: number | null
-          event_id?: string
-          fully_recovered?: boolean | null
-          had_aura?: boolean | null
-          hours_since_last_dose?: number | null
-          injuries_occurred?: boolean | null
-          injury_types?: Json | null
-          medication_taken_as_prescribed?: boolean | null
-          motor_symptoms?: Json | null
-          non_motor_symptoms?: Json | null
+          event_id?: string | null
+          research_id: string
           occurred_at_date: string
           occurred_at_hour?: number | null
-          possible_triggers?: Json | null
-          post_ictal_duration_minutes?: number | null
-          post_ictal_effects?: Json | null
-          recent_medication_changes?: boolean | null
-          recovery_time_minutes?: number | null
-          required_medical_attention?: boolean | null
-          research_id: string
+          duration_seconds?: number | null
           seizure_type: string
           severity?: number | null
-          source_event_id?: string | null
-          witnessed?: boolean | null
-        }
-        Update: {
-          aura_signs?: Json | null
-          body_parts_affected?: Json | null
           consciousness_level?: string | null
-          created_at?: string | null
-          duration_seconds?: number | null
-          event_id?: string
-          fully_recovered?: boolean | null
           had_aura?: boolean | null
-          hours_since_last_dose?: number | null
-          injuries_occurred?: boolean | null
-          injury_types?: Json | null
-          medication_taken_as_prescribed?: boolean | null
+          aura_signs?: Json | null
+          possible_triggers?: Json | null
+          body_parts_affected?: Json | null
           motor_symptoms?: Json | null
           non_motor_symptoms?: Json | null
+          post_ictal_effects?: Json | null
+          post_ictal_duration_minutes?: number | null
+          injuries_occurred?: boolean | null
+          injury_types?: Json | null
+          required_medical_attention?: boolean | null
+          witnessed?: boolean | null
+          medication_taken_as_prescribed?: boolean | null
+          hours_since_last_dose?: number | null
+          recent_medication_changes?: boolean | null
+          fully_recovered?: boolean | null
+          recovery_time_minutes?: number | null
+          created_at?: string | null
+          source_event_id?: string | null
+        }
+        Update: {
+          event_id?: string
+          research_id?: string
           occurred_at_date?: string
           occurred_at_hour?: number | null
-          possible_triggers?: Json | null
-          post_ictal_duration_minutes?: number | null
-          post_ictal_effects?: Json | null
-          recent_medication_changes?: boolean | null
-          recovery_time_minutes?: number | null
-          required_medical_attention?: boolean | null
-          research_id?: string
+          duration_seconds?: number | null
           seizure_type?: string
           severity?: number | null
-          source_event_id?: string | null
+          consciousness_level?: string | null
+          had_aura?: boolean | null
+          aura_signs?: Json | null
+          possible_triggers?: Json | null
+          body_parts_affected?: Json | null
+          motor_symptoms?: Json | null
+          non_motor_symptoms?: Json | null
+          post_ictal_effects?: Json | null
+          post_ictal_duration_minutes?: number | null
+          injuries_occurred?: boolean | null
+          injury_types?: Json | null
+          required_medical_attention?: boolean | null
           witnessed?: boolean | null
+          medication_taken_as_prescribed?: boolean | null
+          hours_since_last_dose?: number | null
+          recent_medication_changes?: boolean | null
+          fully_recovered?: boolean | null
+          recovery_time_minutes?: number | null
+          created_at?: string | null
+          source_event_id?: string | null
         }
         Relationships: []
-      }
+      },
       tremor_episodes: {
         Row: {
-          activities_affected: Json | null
-          body_regions: Json | null
-          created_at: string | null
-          dominant_side: string | null
-          duration_seconds: number | null
-          frequency_hz: number | null
-          hours_since_medication: number | null
-          interfered_with_activities: boolean | null
-          medication_status: string | null
+          tremor_id: string
+          research_id: string
           occurred_at_date: string
           occurred_at_hour: number | null
-          occurred_during: string | null
-          possible_triggers: Json | null
-          research_id: string
-          severity: number | null
-          source_tremor_id: string | null
-          tremor_id: string
+          duration_seconds: number | null
           tremor_type: string | null
+          severity: number | null
+          frequency_hz: number | null
+          body_regions: Json | null
+          dominant_side: string | null
+          interfered_with_activities: boolean | null
+          activities_affected: Json | null
+          occurred_during: string | null
+          medication_status: string | null
+          hours_since_medication: number | null
+          possible_triggers: Json | null
+          created_at: string | null
+          source_tremor_id: string | null
         }
         Insert: {
-          activities_affected?: Json | null
-          body_regions?: Json | null
-          created_at?: string | null
-          dominant_side?: string | null
-          duration_seconds?: number | null
-          frequency_hz?: number | null
-          hours_since_medication?: number | null
-          interfered_with_activities?: boolean | null
-          medication_status?: string | null
+          tremor_id?: string | null
+          research_id: string
           occurred_at_date: string
           occurred_at_hour?: number | null
-          occurred_during?: string | null
-          possible_triggers?: Json | null
-          research_id: string
-          severity?: number | null
-          source_tremor_id?: string | null
-          tremor_id?: string
+          duration_seconds?: number | null
           tremor_type?: string | null
+          severity?: number | null
+          frequency_hz?: number | null
+          body_regions?: Json | null
+          dominant_side?: string | null
+          interfered_with_activities?: boolean | null
+          activities_affected?: Json | null
+          occurred_during?: string | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          possible_triggers?: Json | null
+          created_at?: string | null
+          source_tremor_id?: string | null
         }
         Update: {
-          activities_affected?: Json | null
-          body_regions?: Json | null
-          created_at?: string | null
-          dominant_side?: string | null
-          duration_seconds?: number | null
-          frequency_hz?: number | null
-          hours_since_medication?: number | null
-          interfered_with_activities?: boolean | null
-          medication_status?: string | null
+          tremor_id?: string
+          research_id?: string
           occurred_at_date?: string
           occurred_at_hour?: number | null
-          occurred_during?: string | null
-          possible_triggers?: Json | null
-          research_id?: string
-          severity?: number | null
-          source_tremor_id?: string | null
-          tremor_id?: string
+          duration_seconds?: number | null
           tremor_type?: string | null
+          severity?: number | null
+          frequency_hz?: number | null
+          body_regions?: Json | null
+          dominant_side?: string | null
+          interfered_with_activities?: boolean | null
+          activities_affected?: Json | null
+          occurred_during?: string | null
+          medication_status?: string | null
+          hours_since_medication?: number | null
+          possible_triggers?: Json | null
+          created_at?: string | null
+          source_tremor_id?: string | null
         }
         Relationships: []
       }
@@ -4484,6 +4049,16 @@ export const Constants = {
         "UNKNOWN",
       ],
       yes_no_enum: ["YES", "NO"],
+      relationship_enum: [
+        "parent",
+        "spouse", 
+        "partner",
+        "child",
+        "sibling",
+        "friend",
+        "caregiver",
+        "other",
+      ],
     },
   },
   research: {
