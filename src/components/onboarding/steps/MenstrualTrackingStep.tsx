@@ -29,7 +29,7 @@ export function MenstrualTrackingStep({
       </div>
 
       {/* Main Tracking Card */}
-      <Card className="p-6 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+      <Card className="p-6 border-2 border-dashed border-teal-500/30 bg-card">
         <div className="flex items-start gap-4">
           <Checkbox
             id="trackMenstrual"
@@ -37,7 +37,7 @@ export function MenstrualTrackingStep({
             onCheckedChange={(checked) => 
               onUpdate({ trackMenstrual: checked as boolean, basalTempTime })
             }
-            className="mt-1"
+            className="mt-1 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
           />
           <div className="flex-1 space-y-4">
             <div>
@@ -45,13 +45,11 @@ export function MenstrualTrackingStep({
                 Track menstrual cycle and basal temperature
               </Label>
               {hasEpilepsy && (
-                <div className="mt-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                <div className="mt-3 p-3 bg-background/50 rounded-lg border border-border">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div>
-                      <div className="font-semibold text-sm text-foreground">Research shows:</div>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        <strong className="text-primary">Catamenial epilepsy</strong> affects up to 40% of women with epilepsy. 
+                    <div className="text-sm">
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">Research shows:</strong> Catamenial epilepsy affects up to 40% of women with epilepsy. 
                         Hormonal fluctuations can significantly impact seizure frequency and other neurological symptoms.
                       </p>
                     </div>
