@@ -10,6 +10,9 @@ interface ResearchConsentStepProps {
     parkinsonData: boolean;
     medicationData: boolean;
     menstrualData: boolean;
+    dailyWellness: boolean;
+    movementData: boolean;
+    demographics: boolean;
   };
   onUpdate: (data: {
     shareResearch: boolean;
@@ -18,6 +21,9 @@ interface ResearchConsentStepProps {
       parkinsonData: boolean;
       medicationData: boolean;
       menstrualData: boolean;
+      dailyWellness: boolean;
+      movementData: boolean;
+      demographics: boolean;
     };
   }) => void;
   hasEpilepsy: boolean;
@@ -48,41 +54,43 @@ export function ResearchConsentStep({
       id: 'seizureData' as const,
       title: 'Epilepsy & seizure data',
       description: 'Seizure patterns, triggers, frequency - critical for advancing epilepsy care',
-      icon: TrendingUp,
-      color: 'text-red-500',
-      bgColor: 'bg-red-500/10',
-      borderColor: 'border-red-500/20',
       show: hasEpilepsy
     },
     {
       id: 'parkinsonData' as const,
       title: "Parkinson's symptom data",
       description: 'Motor symptoms, on/off periods, dyskinesia tracking for movement disorder research',
-      icon: Heart,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
-      borderColor: 'border-purple-500/20',
       show: hasParkinsons
     },
     {
       id: 'medicationData' as const,
       title: 'Medication effectiveness data',
       description: 'Dosing, adherence, side effects - improve treatment protocols worldwide',
-      icon: Pill,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
-      borderColor: 'border-blue-500/20',
       show: true
     },
     {
       id: 'menstrualData' as const,
       title: 'Menstrual cycle correlations',
       description: 'Critical for understanding catamenial epilepsy - severely understudied area',
-      icon: Calendar,
-      color: 'text-pink-500',
-      bgColor: 'bg-pink-500/10',
-      borderColor: 'border-pink-500/20',
       show: tracksMenstrual
+    },
+    {
+      id: 'dailyWellness' as const,
+      title: 'Daily wellness tracking',
+      description: 'Mood, energy, sleep, triggers - provides comprehensive health picture',
+      show: true
+    },
+    {
+      id: 'movementData' as const,
+      title: 'Movement & activity patterns',
+      description: 'Gait, tremor, rigidity patterns for movement disorder research',
+      show: true
+    },
+    {
+      id: 'demographics' as const,
+      title: 'Age, gender, condition type',
+      description: 'Ensure research represents diverse populations globally',
+      show: true
     }
   ].filter(option => option.show);
 
@@ -160,28 +168,21 @@ export function ResearchConsentStep({
           </div>
 
           {dataOptions.map((option) => {
-            const Icon = option.icon;
-            const isSelected = dataTypes[option.id];
+            const isSelected = dataTypes[option.id] || false;
 
             return (
               <Card
                 key={option.id}
-                className={`p-4 cursor-pointer transition-all ${
-                  isSelected
-                    ? `${option.bgColor} ${option.borderColor} border-2`
-                    : 'border border-border hover:border-primary/50'
-                }`}
+                className="p-4 cursor-pointer transition-all border border-border hover:border-teal-500/30"
                 onClick={() => toggleDataType(option.id)}
               >
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-lg ${option.bgColor}`}>
-                    <Icon className={`h-6 w-6 ${option.color}`} />
-                  </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox 
+                    checked={isSelected}
+                    className="mt-1 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
+                  />
                   <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-foreground">{option.title}</h4>
-                      <Checkbox checked={isSelected} />
-                    </div>
+                    <h4 className="font-semibold text-foreground mb-1">{option.title}</h4>
                     <p className="text-sm text-muted-foreground">
                       {option.description}
                     </p>
@@ -191,39 +192,21 @@ export function ResearchConsentStep({
             );
           })}
 
-          {/* Impact Statement */}
-          <Card className="p-4 bg-gradient-to-br from-teal-500/10 to-purple-500/10 border-teal-500/20">
-            <div className="flex items-start gap-3">
-              <Users className="h-6 w-6 text-teal-500 mt-0.5 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-foreground mb-2">Your potential impact:</h4>
-                <p className="text-sm text-muted-foreground">
-                  By sharing your data, you're contributing to a global effort to understand and treat neurological conditions. 
-                  Large-scale datasets like yours are essential for:
-                </p>
-                <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-500">•</span>
-                    <span>Identifying new treatment approaches</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-500">•</span>
-                    <span>Understanding disease patterns and triggers</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-teal-500">•</span>
-                    <span>Developing AI-powered diagnostic tools</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-500">•</span>
-                    <span>Improving quality of life for millions worldwide</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Card>
         </div>
       )}
+
+      {/* Privacy Protection Notice */}
+      <Card className="p-4 bg-teal-500/5 border-teal-500/20">
+        <div className="flex items-start gap-3">
+          <span className="text-xl">🔒</span>
+          <div className="flex-1">
+            <p className="text-sm text-foreground">
+              <strong>Your privacy is protected:</strong> All data is anonymized, encrypted, and you can 
+              withdraw consent at any time. No personal identifiers are ever shared.
+            </p>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

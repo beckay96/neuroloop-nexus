@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import AppNavbar from "@/components/navigation/AppNavbar";
 import DailyTrackingModal from "@/components/tracking/DailyTrackingModal";
 import SeizureLogModal from "@/components/tracking/SeizureLogModal";
-import MedicationModal from "@/components/tracking/MedicationModal";
+import MedicationLogModal from "@/components/tracking/MedicationLogModal";
 import VideoLogModal from "@/components/tracking/VideoLogModal";
 import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomLogModalEnhanced from "@/components/tracking/SymptomLogModalEnhanced";
@@ -76,36 +76,11 @@ const quickActions = [{
 }, {
   id: "menstrual-cycle",
   title: "Menstrual Cycle",
-  icon: Calendar,
   color: "text-pink-500",
   bg: "bg-pink-100 dark:bg-pink-950/20",
   description: "Track cycle & seizure patterns"
 }];
 const healthStats = [{
-  label: "Days Seizure Free",
-  value: "12",
-  target: "30",
-  trend: "up",
-  color: "text-status-stable",
-  progress: 40,
-  icon: Shield
-}, {
-  label: "Medication Adherence",
-  value: "94%",
-  target: "95%",
-  trend: "up",
-  color: "text-status-stable",
-  progress: 94,
-  icon: Pill
-}, {
-  label: "Energy Level (Avg)",
-  value: "7.2",
-  target: "8.0",
-  trend: "up",
-  color: "text-primary",
-  progress: 72,
-  icon: Zap
-}, {
   label: "Sleep Quality",
   value: "6.8",
   target: "8.0",
@@ -113,6 +88,30 @@ const healthStats = [{
   color: "text-warning",
   progress: 68,
   icon: Heart
+}, {
+  label: "Medication Adherence",
+  value: "94%",
+  target: "95%",
+  trend: "up",
+  color: "text-teal-500",
+  progress: 94,
+  icon: Pill
+}, {
+  label: "Average Energy",
+  value: "7.5",
+  target: "8.0",
+  trend: "up",
+  color: "text-primary",
+  progress: 72,
+  icon: Zap
+}, {
+  label: "Days Seizure Free",
+  value: "12",
+  target: "30",
+  trend: "up",
+  color: "text-status-stable",
+  progress: 40,
+  icon: Shield
 }];
 const achievements = [{
   id: 1,
@@ -495,7 +494,7 @@ export default function PatientDashboard() {
       setShowSeizureLog(false);
     }} />
       
-      <MedicationModal isOpen={showMedicationLog} onClose={() => setShowMedicationLog(false)} onComplete={data => {
+      <MedicationLogModal isOpen={showMedicationLog} onClose={() => setShowMedicationLog(false)} onComplete={data => {
       handleModalComplete(data, "medication-log");
       setShowMedicationLog(false);
     }} />

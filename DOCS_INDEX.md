@@ -1,10 +1,12 @@
-# 📚 NeuroLoop Nexus Documentation Index
+# NeuroLoop Documentation Hub
+
+**⚠️ UPDATED INDEX:** See [docs/INDEX.md](./docs/INDEX.md) for the current consolidated documentation index.
+
+---Index
 
 **Last Updated:** October 6, 2025
 
-## 🚀 Quick Start
-
-- **`README.md`** - Main project overview and getting started
+## Quick Start
 - **`START_HERE.md`** - Quick guide for database setup (post-audit)
 - **`CHANGELOG.md`** - Project change history
 

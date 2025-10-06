@@ -3,68 +3,71 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Clock, Plus, X, Brain, Pill, Thermometer, Calendar as CalendarIcon } from "lucide-react";
+import { Clock, Plus, X, Brain, Pill, Thermometer, Calendar as CalendarIcon, Activity, Moon, Zap } from "lucide-react";
 
 interface DailyTrackingStepProps {
   trackingTimes: string[];
   basalTempTime?: string;
   medicationTimes: string[];
   onUpdate: (times: string[]) => void;
+  medications?: Array<{ name: string; times: string[]; frequency?: string }>;
+  tracksMenstrual?: boolean;
 }
 
 export function DailyTrackingStep({
   trackingTimes,
   basalTempTime,
   medicationTimes,
-  onUpdate
+  onUpdate,
+  medications = [],
+  tracksMenstrual = false
 }: DailyTrackingStepProps) {
-  const [customTime, setCustomTime] = useState("12:00");
+  const [customTime, setCustomTime] = useState("");
 
   // Generate smart schedule based on medication and basal temp times
   const generateSmartSchedule = () => {
-    const times = new Set<string>();
+    const timeMap = new Map<string, { time: string; type: string; emoji: string }>();
     
     // Add basal temp time if exists
-    if (basalTempTime) times.add(basalTempTime);
-    
-    // Add medication times
-    medicationTimes.forEach(time => times.add(time));
-    
-    // Ensure we have at least 2 tracking times
-    if (times.size === 0) {
-      times.add("08:00");
-      times.add("20:00");
-    } else if (times.size === 1) {
-      // Add an evening time if only morning exists
-      const existing = Array.from(times)[0];
-      const hour = parseInt(existing.split(':')[0]);
-      if (hour < 12) {
-        times.add("20:00");
-      } else {
-        times.add("08:00");
-      }
+    if (basalTempTime && tracksMenstrual) {
+      timeMap.set(basalTempTime, { 
+        time: basalTempTime, 
+        type: "Basal temp",
+        emoji: "🌡️"
+      });
     }
     
-    return Array.from(times).sort();
+    // Add medication times
+    medicationTimes.forEach(time => {
+      if (!timeMap.has(time)) {
+        timeMap.set(time, {
+          time: time,
+          type: "Medication",
+          emoji: "💊"
+        });
+      }
+    });
+    
+    return Array.from(timeMap.values()).sort((a, b) => a.time.localeCompare(b.time));
   };
 
   const smartSchedule = generateSmartSchedule();
 
-  const addTime = () => {
+  const addTimeFromSuggestion = (time: string) => {
+    if (!trackingTimes.includes(time)) {
+      onUpdate([...trackingTimes, time].sort());
+    }
+  };
+
+  const addCustomTime = () => {
     if (customTime && !trackingTimes.includes(customTime)) {
       onUpdate([...trackingTimes, customTime].sort());
-      setCustomTime("12:00");
+      setCustomTime("");
     }
   };
 
   const removeTime = (time: string) => {
     onUpdate(trackingTimes.filter(t => t !== time));
-  };
-
-  const getTimeLabel = (time: string) => {
-    if (basalTempTime === time) return "Basal temp";
-    if (medicationTimes.includes(time)) return "Medication";
-    return "Custom";
   };
 
   return (
@@ -77,80 +80,75 @@ export function DailyTrackingStep({
         </p>
       </div>
 
-      {/* Smart Schedule Card */}
-      <Card className="p-6 bg-gradient-to-br from-primary/10 to-purple-500/5 border-primary/20">
+      {/* Smart Tracking Schedule Card */}
+      <Card className="p-6 bg-card border-border">
         <div className="flex items-start gap-3 mb-4">
-          <div className="p-2 rounded-lg bg-primary/20">
-            <Brain className="h-6 w-6 text-primary" />
-          </div>
+          <span className="text-2xl">🧠</span>
           <div className="flex-1">
             <h3 className="font-semibold text-lg text-foreground">Smart Tracking Schedule</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Based on your medication times and basal temperature schedule, we've created an optimal tracking schedule. 
+              Based on your medication times{tracksMenstrual && " and basal temperature schedule"}, we've created an optimal tracking schedule. 
               You can customize any times.
             </p>
           </div>
         </div>
 
-        {/* Suggested Times */}
-        <div className="grid grid-cols-2 gap-3 mt-4">
-          {smartSchedule.map((time, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border"
+        {/* Suggested Time Cards */}
+        <div className="grid grid-cols-2 gap-3">
+          {smartSchedule.map((item) => (
+            <Card
+              key={item.time}
+              className="p-3 cursor-pointer border-2 hover:border-teal-500/50 transition-all"
+              onClick={() => addTimeFromSuggestion(item.time)}
             >
-              <div className="flex-1">
-                <div className="font-mono text-lg font-semibold text-foreground">{time}</div>
-                <div className="text-xs text-muted-foreground flex items-center gap-1">
-                  {basalTempTime === time && (
-                    <>
-                      <Thermometer className="h-3 w-3" />
-                      <span>Basal temp</span>
-                    </>
-                  )}
-                  {medicationTimes.includes(time) && (
-                    <>
-                      <Pill className="h-3 w-3" />
-                      <span>Medication</span>
-                    </>
-                  )}
+              <div className="text-center">
+                <div className="font-mono text-xl font-bold text-foreground">{item.time}</div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  <span className="mr-1">{item.emoji}</span>
+                  {item.type}
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </Card>
 
       {/* Add Custom Time */}
-      <Card className="p-4 bg-card border-border">
-        <Label className="text-sm font-semibold mb-3 block text-foreground">Add Custom Time:</Label>
+      <div className="space-y-2">
+        <Label className="font-semibold text-foreground">Add Custom Time:</Label>
         <div className="flex gap-2">
           <Input
             type="time"
             value={customTime}
             onChange={(e) => setCustomTime(e.target.value)}
-            className="flex-1 font-mono text-lg"
+            className="flex-1 font-mono border-2 focus-visible:border-teal-500 focus-visible:ring-teal-500"
           />
-          <Button onClick={addTime} className="px-6">
-            <Plus className="h-4 w-4 mr-2" />
-            Add
+          <Button 
+            onClick={addCustomTime}
+            className="bg-teal-600 hover:bg-teal-700"
+          >
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
-      </Card>
+      </div>
 
       {/* Your Selected Times */}
-      {trackingTimes.length > 0 && (
-        <Card className="p-4 bg-card border-border">
-          <Label className="text-sm font-semibold mb-3 block text-foreground">
-            Your Selected Times ({trackingTimes.length}):
-          </Label>
+      <div className="space-y-2">
+        <Label className="font-semibold text-foreground">
+          Your Selected Times ({trackingTimes.length}):
+        </Label>
+        {trackingTimes.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No times selected yet - select from suggestions above
+          </p>
+        ) : (
           <div className="flex flex-wrap gap-2">
             {trackingTimes.map((time) => (
               <div
                 key={time}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-teal-500/10 border border-teal-500/20"
               >
-                <span className="font-mono font-semibold text-primary">{time}</span>
+                <span className="font-mono font-semibold text-teal-600 dark:text-teal-400">{time}</span>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -162,42 +160,58 @@ export function DailyTrackingStep({
               </div>
             ))}
           </div>
-        </Card>
-      )}
+        )}
+      </div>
 
-      {/* Complete Schedule Preview */}
-      <Card className="p-4 bg-gradient-to-br from-teal-500/5 to-purple-500/5 border-teal-500/20">
+      {/* Your Complete Tracking Schedule */}
+      <Card className="p-4 bg-card border-border">
         <div className="flex items-start gap-3">
-          <CalendarIcon className="h-5 w-5 text-teal-500 mt-0.5" />
-          <div className="flex-1">
+          <span className="text-xl">📋</span>
+          <div className="flex-1 space-y-4">
             <h3 className="font-semibold text-foreground">Your Complete Tracking Schedule</h3>
-            <div className="mt-3 space-y-2">
-              {trackingTimes.length > 0 ? (
-                trackingTimes.map((time) => (
-                  <div key={time} className="flex items-center gap-3 text-sm">
-                    <span className="font-mono font-semibold text-teal-600 dark:text-teal-400 w-16">
-                      {time}
-                    </span>
-                    <div className="flex gap-2">
-                      {basalTempTime === time && (
-                        <span className="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs">
-                          Basal temp
-                        </span>
-                      )}
-                      {medicationTimes.includes(time) && (
-                        <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs">
-                          Medications
-                        </span>
-                      )}
-                    </div>
+            
+            {/* Medications */}
+            {medications.length > 0 && (
+              <div className="p-3 bg-background/50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <span>💊</span>
+                  <span className="font-semibold text-foreground">Medications</span>
+                </div>
+                {medications.map((med, idx) => (
+                  <div key={idx} className="text-sm text-muted-foreground">
+                    {med.name}: {med.times.length} times/day
                   </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Add times above to create your tracking schedule
-                </p>
-              )}
+                ))}
+              </div>
+            )}
+
+            {/* Daily Tracking */}
+            <div className="p-3 bg-background/50 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <span>📊</span>
+                <span className="font-semibold text-foreground">Daily Tracking</span>
+              </div>
+              <div className="text-sm text-muted-foreground space-y-1">
+                <div>Symptoms: {trackingTimes.length} check-ins</div>
+                <div>Mood & Energy tracking</div>
+                <div>Sleep quality logs</div>
+              </div>
             </div>
+
+            {/* Menstrual Tracking */}
+            {tracksMenstrual && basalTempTime && (
+              <div className="p-3 bg-background/50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <span>🌡️</span>
+                  <span className="font-semibold text-foreground">Menstrual Tracking</span>
+                </div>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>Basal temp: {basalTempTime}</div>
+                  <div>Cycle tracking</div>
+                  <div>Symptom correlation</div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </Card>

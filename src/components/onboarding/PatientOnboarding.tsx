@@ -93,7 +93,10 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
       seizureData: false,
       parkinsonData: false,
       medicationData: false,
-      menstrualData: false
+      menstrualData: false,
+      dailyWellness: false,
+      movementData: false,
+      demographics: false
     }
   });
 
@@ -231,6 +234,8 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
             trackingTimes={formData.trackingTimes}
             basalTempTime={formData.trackMenstrual ? formData.basalTempTime : undefined}
             medicationTimes={formData.medications.flatMap(m => m.times)}
+            medications={formData.medications}
+            tracksMenstrual={formData.trackMenstrual}
             onUpdate={(times) => updateFormData({ trackingTimes: times })}
           />
         );
@@ -254,22 +259,65 @@ export default function PatientOnboarding({ onComplete, onBack }: PatientOnboard
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <Activity className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h2 className="text-2xl font-bold">You're All Set!</h2>
+              <Activity className="h-12 w-12 text-teal-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-foreground">Ready for Your First Tracking!</h2>
               <p className="text-muted-foreground">
-                Ready to start tracking your health journey
+                Let's establish your baseline with your first health check-in
               </p>
             </div>
             
-            <Card className="p-6">
-              <div className="text-center space-y-4">
-                <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
-                <p className="text-lg font-semibold">
-                  Your account is ready!
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Click "Complete Setup" to access your dashboard and start tracking.
-                </p>
+            <Card className="p-6 bg-card border-border">
+              <div className="text-center space-y-6">
+                <div>
+                  <span className="text-4xl">⭐</span>
+                  <h3 className="text-xl font-bold text-foreground mt-3">
+                    Your NeuroLoop Profile is Complete!
+                  </h3>
+                  <p className="text-muted-foreground mt-2">
+                    Now let's capture your first health data to establish your personal baseline.
+                  </p>
+                </div>
+
+                {/* Summary Cards */}
+                <div className="space-y-3">
+                  <Card className="p-4 bg-background/50 border-border">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">✓</span>
+                      <div className="text-left flex-1">
+                        <div className="font-semibold text-foreground">Profile Complete</div>
+                        <div className="text-sm text-muted-foreground">Personal & medical info</div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4 bg-background/50 border-border">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl text-purple-500">2</span>
+                      <div className="text-left flex-1">
+                        <div className="font-semibold text-foreground">Daily Check-ins</div>
+                        <div className="text-sm text-muted-foreground">Scheduled tracking times</div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4 bg-background/50 border-border">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl text-teal-500">→</span>
+                      <div className="text-left flex-1">
+                        <div className="font-semibold text-foreground">First Tracking</div>
+                        <div className="text-sm text-muted-foreground">Establish baseline</div>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+
+                <Button
+                  onClick={handleNext}
+                  className="w-full bg-gradient-to-r from-teal-600 to-purple-600 hover:from-teal-700 hover:to-purple-700 text-white text-lg py-6 shadow-lg"
+                >
+                  <span className="mr-2">🚀</span>
+                  Start My Health Journey
+                </Button>
               </div>
             </Card>
           </div>
