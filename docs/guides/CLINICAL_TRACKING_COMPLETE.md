@@ -2,7 +2,13 @@
 
 **Date:** 2025-01-06 02:36 AM  
 **Status:** 🎉 ALL TRACKING TABLES CREATED  
-**Focus:** Epilepsy & Parkinson's Disease Clinical Excellence
+**Focus:** Two Primary Conditions - Epilepsy & Parkinson's Disease
+
+**Clinically Validated For:**
+- ✅ **Epilepsy** - Seizure tracking, brain localization, trigger analysis, medication adherence
+- ✅ **Parkinson's Disease** - Tremor tracking, gait analysis, motor/non-motor symptoms
+
+**NOT Validated For:** MS, Migraine, or other conditions (schema may exist but features are not clinically validated)
 
 ---
 

@@ -1,4 +1,4 @@
-# 📚 NeuroLoop Nexus - Documentation Index
+# 📚 NeuroLoop - Documentation Index
 
 **Complete guide to all project documentation**
 

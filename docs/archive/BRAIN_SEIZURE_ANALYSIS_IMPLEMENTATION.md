@@ -8,7 +8,7 @@
 ## 🎯 What Was Built
 
 ### Interactive Brain Seizure Localization Tool
-A comprehensive educational tool that allows users to select seizure signs and visualize probable brain regions involved, based on research from **11,000+ data points from 4,643 patients across 309 studies**.
+A comprehensive educational tool within NeuroLoop that allows users to select seizure signs and visualize probable brain regions involved, based on research from **11,000+ data points from 4,643 patients across 309 studies**.
 
 ---
 
@@ -341,7 +341,7 @@ A comprehensive educational tool that allows users to select seizure signs and v
 ## 📖 Usage Instructions
 
 ### Accessing the Tool
-1. Log in to NeuroLoop Nexus
+1. Log in to NeuroLoop
 2. Navigate to `/brain-analysis` or find link in navigation
 3. Read disclaimer and educational information
 

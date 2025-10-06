@@ -1,4 +1,4 @@
-# Changelog - NeuroLoop Nexus
+# Changelog - NeuroLoop
 
 All notable changes to this project will be documented in this file.
 
@@ -247,7 +247,7 @@ All notable changes to this project will be documented in this file.
 
 ## Contributors
 
-- **Development Team**: NeuroLoop Nexus Team
+- **Development Team**: NeuroLoop Team
 - **Security Audit**: Internal (2025-10-05)
 - **Database Design**: Research-grade schema based on FHIR standards
 

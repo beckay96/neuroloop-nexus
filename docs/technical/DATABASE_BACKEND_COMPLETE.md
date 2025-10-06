@@ -115,25 +115,13 @@ The **entire database architecture and backend infrastructure** is now productio
 
 ### 5. REFERENCE DATA (Seeded) ✅
 
-#### Conditions (60+ entries)
-- ✅ Epilepsy & seizure disorders (8 types)
-- ✅ Parkinson's disease & related (6 types)
-- ✅ Movement disorders (9 types)
-- ✅ Stroke & vascular (4 types)
-- ✅ Multiple sclerosis (4 types)
-- ✅ Headache & migraine (5 types)
-- ✅ Neuromuscular disorders (5 types)
-- ✅ Cognitive & dementia (4 types)
-- ✅ Other neurological (10+ types)
+#### Conditions
+- ✅ Epilepsy & seizure disorders (primary focus)
+- 🔄 Additional neurological conditions (schema ready, tracking features pending full implementation)
 
-#### Medications (80+ entries)
-- ✅ Anti-epileptic drugs (25+ medications)
-- ✅ Parkinson's medications (12+ medications)
-- ✅ MS disease-modifying therapies (10+ medications)
-- ✅ Migraine preventatives (10+ medications)
-- ✅ Migraine acute treatments (5+ medications)
-- ✅ CGRP inhibitors (6 medications)
-- ✅ Other (muscle relaxants, Botox)
+#### Medications
+- ✅ Anti-epileptic drugs (primary focus)
+- 🔄 Other neurological medications (database structure ready, full catalog pending)
 
 #### Trigger Options (45+ entries)
 - ✅ Sleep-related (3 triggers)

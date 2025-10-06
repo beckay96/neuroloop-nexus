@@ -254,6 +254,7 @@ export default function PatientInvite() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="pl-10"
+                autoComplete="email"
                 required
                 disabled
               />
@@ -271,6 +272,7 @@ export default function PatientInvite() {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 placeholder={mode === 'signup' ? 'Create a password (min 8 characters)' : 'Enter your password'}
                 className="pl-10"
+                autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                 required
               />
             </div>
@@ -288,6 +290,7 @@ export default function PatientInvite() {
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   placeholder="Confirm your password"
                   className="pl-10"
+                  autoComplete="new-password"
                   required
                 />
               </div>

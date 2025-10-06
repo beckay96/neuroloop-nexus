@@ -168,7 +168,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
                     Methodology
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-[600px] sm:w-[700px] overflow-y-auto">
+                <SheetContent className="w-full sm:w-[540px] md:w-[640px] lg:w-[700px] overflow-y-auto">
                   <SheetHeader>
                     <SheetTitle>Research Methodology & Data Sources</SheetTitle>
                     <SheetDescription>

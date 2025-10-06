@@ -1,4 +1,4 @@
-# Database Documentation - NeuroLoop Nexus
+# Database Documentation - NeuroLoop
 
 Complete PostgreSQL database schema documentation.
 
@@ -140,11 +140,31 @@ CREATE TABLE conditions (
 );
 ```
 
-**Pre-populated Data:**
-- Epilepsy → `[seizure, mood, energy, sleep, symptoms]`
-- Parkinson's Disease → `[tremor, gait, mood, energy, sleep, symptoms]`
-- Migraine → `[symptoms, mood, sleep]`
-- Multiple Sclerosis → `[gait, tremor, energy, mood, temperature, symptoms]`
+**Clinically Validated Conditions & Tracking Features:**
+
+**Epilepsy** → `[seizure, mood, energy, sleep, symptoms, menstruation]`
+- Seizure logging with ILAE classification
+- Brain seizure localization tool
+- Medication adherence tracking
+- Trigger identification
+- Menstrual cycle correlation
+
+**Parkinson's Disease** → `[tremor, gait, mood, energy, sleep, symptoms]`
+- Tremor episode tracking (type, severity, body location)
+- Gait analysis (walking speed, balance, freezing episodes)
+- Motor symptom tracking (rigidity, bradykinesia)
+- Non-motor symptom tracking (cognitive, autonomic)
+- Medication timing optimization
+
+**Universal Features** (available for both conditions):
+- Mood tracking (validated scales)
+- Energy level monitoring
+- Sleep quality assessment
+- Daily symptom logging
+- Medication adherence
+- Clinical media uploads
+
+**⚠️ Important:** Other neurological conditions (MS, Migraine) may appear in the schema for future expansion but are **NOT currently validated or fully implemented**. Do not expose these conditions in onboarding or UI without proper clinical validation and feature development.
 
 **RLS:** ✅ Read-only for all users
 

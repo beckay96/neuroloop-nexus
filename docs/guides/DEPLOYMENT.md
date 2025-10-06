@@ -222,7 +222,7 @@ SMTP Port: 587
 SMTP User: apikey
 SMTP Password: <YOUR_SENDGRID_API_KEY>
 Sender Email: noreply@neuroloop.app
-Sender Name: NeuroLoop Nexus
+Sender Name: NeuroLoop
 
 -- Test email
 -- Send yourself a test to verify

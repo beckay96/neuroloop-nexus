@@ -248,6 +248,7 @@ export default function Auth() {
                       value={loginData.email}
                       onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
                       className="pl-10"
+                      autoComplete="email"
                       required
                     />
                   </div>
@@ -264,6 +265,7 @@ export default function Auth() {
                       value={loginData.password}
                       onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
                       className="pl-10"
+                      autoComplete="current-password"
                       required
                     />
                   </div>
@@ -326,6 +328,7 @@ export default function Auth() {
                       value={signupData.email}
                       onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
                       className="pl-10"
+                      autoComplete="email"
                       required
                     />
                   </div>
@@ -342,6 +345,7 @@ export default function Auth() {
                       value={signupData.password}
                       onChange={(e) => setSignupData(prev => ({ ...prev, password: e.target.value }))}
                       className="pl-10"
+                      autoComplete="new-password"
                       required
                     />
                   </div>
