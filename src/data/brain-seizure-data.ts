@@ -436,7 +436,7 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
   immediate_loss_consciousness: {
     name: "Immediate Loss of Consciousness",
     description: "No warning or aura, sudden loss of awareness",
-    type: "Consciousness",
+    type: "Generalized",
     localizations: {
       "Generalized": 85,
       "Thalamus": 55,
