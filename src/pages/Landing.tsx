@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { AccessCodeGate } from "@/components/AccessCodeGate";
 import UserTypeSelector from "@/components/UserTypeSelector";
 import PatientOnboarding from "@/components/onboarding/PatientOnboarding";
 import ClinicianOnboarding from "@/components/onboarding/ClinicianOnboarding";
@@ -84,6 +85,7 @@ function ThemeToggle() {
 
 export default function Landing() {
   const { user, signOut } = useAuth();
+  const [hasAccess, setHasAccess] = useState(false);
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<string>("");
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -168,18 +170,18 @@ export default function Landing() {
 
     try {
       // Save first tracking entry to tracking_entries table
-      // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
-        .schema('private_health_info')
-        .from('tracking_entries')
+        .from('tracking_entries' as any)
         .insert({
           user_id: user.id,
           entry_date: trackingData.log_date,
-          entry_type: 'daily_wellness',
-          mood_rating: trackingData.mood_numeric,
-          energy_level: trackingData.energy_numeric,
-          sleep_quality: trackingData.sleep_numeric,
-          notes: trackingData.notes || null
+          tracking_type: 'mood',
+          value: trackingData.mood_numeric,
+          notes: trackingData.notes || null,
+          metadata: {
+            energy_level: trackingData.energy_numeric,
+            sleep_quality: trackingData.sleep_numeric
+          }
         });
 
       if (error) {
@@ -213,6 +215,11 @@ export default function Landing() {
         />
       </>
     );
+  }
+
+  // Show access code gate first
+  if (!hasAccess) {
+    return <AccessCodeGate onAccessGranted={() => setHasAccess(true)} />;
   }
 
   // Show dashboard if onboarding is completed
