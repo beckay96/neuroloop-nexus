@@ -1,6 +1,4 @@
-Need to install the following packages:
-supabase@2.48.3
-Ok to proceed? (y) export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -989,7 +987,7 @@ export type Database = {
           onboarding_completed: boolean | null
           phone_number: string | null
           updated_at: string | null
-          user_type: Database["public"]["Enums"]["user_type_enum"]
+          user_type: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Insert: {
           created_at?: string | null
@@ -1001,7 +999,7 @@ export type Database = {
           onboarding_completed?: boolean | null
           phone_number?: string | null
           updated_at?: string | null
-          user_type: Database["public"]["Enums"]["user_type_enum"]
+          user_type?: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Update: {
           created_at?: string | null
@@ -1013,7 +1011,7 @@ export type Database = {
           onboarding_completed?: boolean | null
           phone_number?: string | null
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type_enum"]
+          user_type?: Database["public"]["Enums"]["user_type_enum"] | null
         }
         Relationships: []
       }

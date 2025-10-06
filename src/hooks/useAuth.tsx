@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (error || !data) {
         console.error('Error fetching profile:', error);
@@ -58,17 +58,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        // Only synchronous state updates to avoid deadlocks
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
-          await fetchProfile(session.user.id);
+          // Defer Supabase calls outside the callback
+          setTimeout(() => {
+            fetchProfile(session.user!.id);
+          }, 0);
         } else {
           setProfile(null);
           setUserType(null);
         }
-        
+
         setLoading(false);
       }
     );
