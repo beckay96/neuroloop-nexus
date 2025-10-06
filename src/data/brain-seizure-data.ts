@@ -221,6 +221,229 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
     },
     additionalSigns: ["Memory disturbances", "Confusion"]
   },
+
+  clonic_seizures: {
+    name: "Clonic Seizures",
+    description: "Rhythmic jerking movements, repetitive muscle contractions",
+    type: "Motor Signs",
+    localizations: {
+      "Frontal Lobe": 48,
+      "Primary Motor Cortex": 55,
+      "Temporal Lobe": 25,
+      "Parietal Lobe": 18,
+    },
+    additionalSigns: ["Loss of consciousness", "Post-ictal confusion"]
+  },
+
+  myoclonic_jerks: {
+    name: "Myoclonic Jerks",
+    description: "Brief, shock-like muscle jerks",
+    type: "Motor Signs",
+    localizations: {
+      "Frontal Lobe": 42,
+      "Primary Motor Cortex": 38,
+      "Supplementary Motor Area": 32,
+      "Parietal Lobe": 20,
+    },
+    additionalSigns: ["May occur in clusters", "Can be generalized"]
+  },
+
+  absence_seizures: {
+    name: "Absence Seizures",
+    description: "Brief staring spell, sudden behavioral arrest, 3-10 seconds",
+    type: "Consciousness",
+    localizations: {
+      "Temporal Lobe": 35,
+      "Frontal Lobe": 30,
+      "Thalamus": 45,
+    },
+    additionalSigns: ["Eye fluttering", "Automatisms", "No post-ictal confusion"]
+  },
+
+  hypermotor_seizures: {
+    name: "Hypermotor Seizures",
+    description: "Vigorous bilateral movements, thrashing, pelvic thrusting",
+    type: "Motor Signs",
+    localizations: {
+      "Frontal Lobe": 68,
+      "Supplementary Motor Area": 52,
+      "Cingulate": 30,
+      "Insula": 22,
+    },
+    additionalSigns: ["Preserved awareness possible", "Brief duration"]
+  },
+
+  speech_arrest: {
+    name: "Speech Arrest/Dysphasia",
+    description: "Inability to speak or difficulty finding words during seizure",
+    type: "Language",
+    localizations: {
+      "Temporal Lobe": 55,
+      "Frontal Lobe": 45,
+      "Broca's Area": 62,
+      "Lateral Temporal": 40,
+    },
+    additionalSigns: ["Awareness may be preserved", "Stuttering"]
+  },
+
+  auditory_aura: {
+    name: "Auditory Aura",
+    description: "Hearing sounds, music, voices that aren't there",
+    type: "Subjective Sensory",
+    localizations: {
+      "Temporal Lobe": 68,
+      "Lateral Temporal": 72,
+      "Auditory Cortex": 80,
+      "Parietal Lobe": 15,
+    },
+    additionalSigns: ["Tinnitus", "Distorted sounds", "Musical hallucinations"]
+  },
+
+  gustatory_aura: {
+    name: "Gustatory Aura",
+    description: "Abnormal tastes, metallic or bitter flavor",
+    type: "Subjective Sensory",
+    localizations: {
+      "Insula": 52,
+      "Temporal Lobe": 45,
+      "Parietal Lobe": 30,
+    },
+    additionalSigns: ["Often with olfactory aura", "Nausea"]
+  },
+
+  psychic_aura: {
+    name: "Psychic Aura",
+    description: "Out-of-body experience, depersonalization, derealization",
+    type: "Subjective Sensory",
+    localizations: {
+      "Temporal Lobe": 70,
+      "Parietal Lobe": 45,
+      "Occipital Lobe": 25,
+    },
+    additionalSigns: ["Altered perception of reality", "Dissociation"]
+  },
+
+  versive_seizures: {
+    name: "Versive Seizures",
+    description: "Sustained forced turning of head, eyes, and sometimes body",
+    type: "Motor Signs",
+    localizations: {
+      "Frontal Lobe": 58,
+      "Supplementary Motor Area": 48,
+      "Temporal Lobe": 32,
+    },
+    additionalSigns: ["Contralateral to seizure focus", "May progress to tonic-clonic"]
+  },
+
+  atonic_seizures: {
+    name: "Atonic Seizures (Drop Attacks)",
+    description: "Sudden loss of muscle tone, falls or head drops",
+    type: "Motor Signs",
+    localizations: {
+      "Frontal Lobe": 45,
+      "Temporal Lobe": 25,
+      "Thalamus": 35,
+    },
+    additionalSigns: ["Brief duration", "Risk of injury from falls"]
+  },
+
+  // Post-Ictal Symptoms
+  postictal_confusion: {
+    name: "Post-Ictal Confusion",
+    description: "Confusion after seizure, slow recovery, memory fog",
+    type: "Post-Ictal",
+    localizations: {
+      "Temporal Lobe": 58,
+      "Frontal Lobe": 42,
+      "Parietal Lobe": 25,
+    },
+    additionalSigns: ["Disorientation", "Amnesia for event"]
+  },
+
+  postictal_fatigue: {
+    name: "Post-Ictal Fatigue/Weakness",
+    description: "Feeling weak or tired after seizure",
+    type: "Post-Ictal",
+    localizations: {
+      "Frontal Lobe": 48,
+      "Temporal Lobe": 45,
+      "Motor Cortex": 52,
+    },
+    additionalSigns: ["Muscle soreness", "Need to sleep"]
+  },
+
+  postictal_headache: {
+    name: "Post-Ictal Headache",
+    description: "Headache after seizure",
+    type: "Post-Ictal",
+    localizations: {
+      "Temporal Lobe": 45,
+      "Occipital Lobe": 38,
+      "Frontal Lobe": 32,
+    },
+    additionalSigns: ["Throbbing pain", "Light sensitivity"]
+  },
+
+  postictal_agitation: {
+    name: "Post-Ictal Agitation",
+    description: "Restless, irritable, or aggressive after event",
+    type: "Post-Ictal",
+    localizations: {
+      "Frontal Lobe": 55,
+      "Temporal Lobe": 40,
+      "Limbic System": 48,
+    },
+    additionalSigns: ["Emotional dysregulation", "Confusion"]
+  },
+
+  postictal_speech_difficulty: {
+    name: "Post-Ictal Speech Difficulty",
+    description: "Trouble speaking clearly after seizure",
+    type: "Post-Ictal",
+    localizations: {
+      "Temporal Lobe": 62,
+      "Frontal Lobe": 58,
+      "Broca's Area": 70,
+    },
+    additionalSigns: ["Word-finding difficulty", "Slurred speech"]
+  },
+
+  // Generalized/Bilateral Indicators
+  bilateral_motor_activity: {
+    name: "Bilateral Motor Activity",
+    description: "Movements or stiffness affecting both sides equally",
+    type: "Generalized",
+    localizations: {
+      "Bilateral": 90,
+      "Frontal Lobe": 35,
+      "Thalamus": 45,
+    },
+    additionalSigns: ["Suggests generalized seizure", "Both arms/legs involved"]
+  },
+
+  tongue_biting_incontinence: {
+    name: "Tongue Biting/Incontinence",
+    description: "Physical injury (tongue/cheek biting) or urinary loss during event",
+    type: "Associated Features",
+    localizations: {
+      "Generalized": 75,
+      "Temporal Lobe": 35,
+      "Frontal Lobe": 30,
+    },
+    additionalSigns: ["Loss of consciousness", "Tonic-clonic activity"]
+  },
+
+  immediate_loss_consciousness: {
+    name: "Immediate Loss of Consciousness",
+    description: "No warning or aura, sudden loss of awareness",
+    type: "Consciousness",
+    localizations: {
+      "Generalized": 85,
+      "Thalamus": 55,
+      "Frontal Lobe": 28,
+    },
+    additionalSigns: ["No focal onset", "Bilateral involvement"]
+  },
 };
 
 export const BRAIN_REGIONS: Record<string, BrainRegion> = {

@@ -101,7 +101,7 @@ export default function BrainSeizureAnalysis() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       <AppNavbar userName={user?.email || "User"} title="Brain Seizure Analysis" />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-16 my-24">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

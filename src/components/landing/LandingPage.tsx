@@ -430,7 +430,7 @@ export default function LandingPage() {
         }}
       >
         <Brain className="h-10 w-10 text-white" />
-        <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg mx-4">
+        <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg">
           NEW
         </div>
       </div>

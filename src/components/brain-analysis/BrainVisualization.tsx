@@ -30,7 +30,7 @@ export default function BrainVisualization({ highlightedRegions, selectedSigns }
       {/* Brain Regions - Interactive Cards */}
       <div className="space-y-3">
         {sortedRegions.length === 0 ? (
-          <Card className="p-8 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border-purple-200 dark:border-purple-800">
+          <Card className="p-8 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border-purple-200 dark:border-purple-700">
             <div className="text-center space-y-3">
               <BrainIcon className="h-16 w-16 mx-auto text-purple-400 dark:text-purple-600" />
               <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-100">
@@ -71,23 +71,23 @@ export default function BrainVisualization({ highlightedRegions, selectedSigns }
                       </Badge>
                     </div>
                     
-                    <p className="text-sm text-muted-foreground mb-2">
-                      <strong className="text-foreground">🧠 What it does:</strong> {regionData.function}
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      <strong className="text-gray-900 dark:text-gray-100">🧠 What it does:</strong> {regionData.function}
                     </p>
 
                     {regionData.seizureCharacteristics && (
-                      <p className="text-sm text-muted-foreground">
-                        <strong className="text-foreground">⚡ Seizure signs:</strong> {regionData.seizureCharacteristics}
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <strong className="text-gray-900 dark:text-gray-100">⚡ Seizure signs:</strong> {regionData.seizureCharacteristics}
                       </p>
                     )}
 
                     {selectedRegion === region && regionData.subregions && (
-                      <div className="mt-3 pt-3 border-t animate-in slide-in-from-top-2">
-                        <p className="text-xs font-medium text-foreground mb-2">📍 Specific areas:</p>
+                      <div className="mt-3 pt-3 border-t border-gray-300 dark:border-gray-600 animate-in slide-in-from-top-2">
+                        <p className="text-xs font-medium text-gray-900 dark:text-gray-100 mb-2">📍 Specific areas:</p>
                         <div className="grid grid-cols-1 gap-1.5">
                           {Object.entries(regionData.subregions).map(([sub, desc]) => (
-                            <div key={sub} className="text-xs bg-white dark:bg-gray-800 p-2 rounded">
-                              <span className="font-medium">{sub}:</span> {desc}
+                            <div key={sub} className="text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 rounded text-gray-700 dark:text-gray-300">
+                              <span className="font-medium text-gray-900 dark:text-gray-100">{sub}:</span> {desc}
                             </div>
                           ))}
                         </div>
@@ -110,33 +110,33 @@ export default function BrainVisualization({ highlightedRegions, selectedSigns }
 
       {/* Probability Legend */}
       {sortedRegions.length > 0 && (
-        <Card className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-          <h3 className="text-sm font-semibold mb-3">🎨 Color Guide - What the colors mean:</h3>
+        <Card className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-gray-200 dark:border-gray-700">
+          <h3 className="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-100">🎨 Color Guide - What the colors mean:</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950">
+            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
               <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#E8E8E8' }}></div>
-              <span className="font-medium">0-20%</span>
-              <span className="text-muted-foreground">Unlikely</span>
+              <span className="font-medium text-gray-900 dark:text-gray-100">0-20%</span>
+              <span className="text-gray-600 dark:text-gray-400">Unlikely</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950">
+            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
               <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#FFE5B4' }}></div>
-              <span className="font-medium">21-40%</span>
-              <span className="text-muted-foreground">Possible</span>
+              <span className="font-medium text-gray-900 dark:text-gray-100">21-40%</span>
+              <span className="text-gray-600 dark:text-gray-400">Possible</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950">
+            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
               <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#FFB347' }}></div>
-              <span className="font-medium">41-60%</span>
-              <span className="text-muted-foreground">Moderate</span>
+              <span className="font-medium text-gray-900 dark:text-gray-100">41-60%</span>
+              <span className="text-gray-600 dark:text-gray-400">Moderate</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950">
+            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
               <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#FF6B35' }}></div>
-              <span className="font-medium">61-80%</span>
-              <span className="text-muted-foreground">Likely</span>
+              <span className="font-medium text-gray-900 dark:text-gray-100">61-80%</span>
+              <span className="text-gray-600 dark:text-gray-400">Likely</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950">
+            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
               <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#DC143C' }}></div>
-              <span className="font-medium">81-100%</span>
-              <span className="text-muted-foreground">Very Likely</span>
+              <span className="font-medium text-gray-900 dark:text-gray-100">81-100%</span>
+              <span className="text-gray-600 dark:text-gray-400">Very Likely</span>
             </div>
           </div>
         </Card>
