@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DateInput } from "@/components/ui/date-input";
 import { 
   Select,
   SelectContent,
@@ -62,27 +61,33 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
         if (!user) return;
 
         const { error: carerError } = await supabase
-          .from('carer_profiles')
-          .upsert([{
+          .from('carer_onboarding_data')
+          .insert({
             user_id: user.id,
             first_name: formData.firstName,
+            middle_name: formData.middleName,
             last_name: formData.lastName,
-            relationship: formData.relationshipToPatient as any
-          }], { onConflict: 'user_id' });
+            date_of_birth: formData.dateOfBirth,
+            phone_number: formData.phoneNumber,
+            patient_date_of_birth: formData.patientDateOfBirth,
+            relationship_to_patient: formData.relationshipToPatient
+          });
 
         if (carerError) {
           console.error('Error saving carer data:', carerError);
           return;
         }
 
-        // Mark onboarding complete
+        // Update onboarding progress
         const { error: progressError } = await supabase
-          .from('profiles')
-          .upsert([{
-            id: user.id,
-            user_type: 'carer' as const,
-            onboarding_completed: true
-          }]);
+          .from('onboarding_progress')
+          .upsert({
+            user_id: user.id,
+            user_type: 'carer',
+            current_step: 3,
+            completed: true,
+            step_data: formData
+          });
 
         if (progressError) {
           console.error('Error updating progress:', progressError);
@@ -146,14 +151,12 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
               </div>
               
               <div className="space-y-2">
-                <DateInput
+                <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+                <Input
                   id="dateOfBirth"
-                  label="Date of Birth"
+                  type="date"
                   value={formData.dateOfBirth}
-                  onChange={(value) => updateFormData({ dateOfBirth: value })}
-                  required={true}
-                  max={new Date().toISOString().split('T')[0]}
-                  showFormatHint={true}
+                  onChange={(e) => updateFormData({ dateOfBirth: e.target.value })}
                 />
               </div>
               
@@ -201,14 +204,12 @@ export default function CarerOnboarding({ onComplete, onBack }: CarerOnboardingP
               </div>
               
               <div className="space-y-2">
-                <DateInput
+                <Label htmlFor="patientDateOfBirth">Patient's Date of Birth *</Label>
+                <Input
                   id="patientDateOfBirth"
-                  label="Patient's Date of Birth"
+                  type="date"
                   value={formData.patientDateOfBirth}
-                  onChange={(value) => updateFormData({ patientDateOfBirth: value })}
-                  required={true}
-                  max={new Date().toISOString().split('T')[0]}
-                  showFormatHint={true}
+                  onChange={(e) => updateFormData({ patientDateOfBirth: e.target.value })}
                 />
                 <p className="text-sm text-muted-foreground">
                   This helps us verify you're authorized to care for this patient

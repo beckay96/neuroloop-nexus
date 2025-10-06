@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { 
   Dialog,
   DialogContent,
@@ -167,11 +166,11 @@ export default function MedicationModal({ isOpen, onClose, onComplete }: Medicat
             <h3 className="font-semibold mb-3">When was this taken?</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <CustomDatePicker
-                  label="Date"
+                <Label>Date</Label>
+                <Input
+                  type="date"
                   value={medicationLog.date}
-                  onChange={(value) => updateMedicationLog("date", value)}
-                  max={new Date().toISOString().split('T')[0]}
+                  onChange={(e) => updateMedicationLog("date", e.target.value)}
                 />
               </div>
               <div>

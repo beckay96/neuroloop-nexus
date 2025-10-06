@@ -1,27 +1,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { Enums } from '@/integrations/supabase/types';
-
-type UserType = Enums<'user_type_enum'>;
-
-interface UserProfile {
-  id: string;
-  email: string;
-  user_type: UserType;
-  onboarding_completed: boolean;
-  created_at: string | null;
-  updated_at: string | null;
-}
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-  profile: UserProfile | null;
-  userType: UserType | null;
   loading: boolean;
   signOut: () => Promise<void>;
-  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,63 +14,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [userType, setUserType] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const fetchProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error || !data) {
-        console.error('Error fetching profile:', error);
-        return;
-      }
-
-      // Type cast to UserProfile
-      const profileData = data as UserProfile;
-      setProfile(profileData);
-      setUserType(profileData.user_type || null);
-    } catch (error) {
-      console.error('Error in fetchProfile:', error);
-    }
-  };
 
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        // Only synchronous state updates to avoid deadlocks
         setSession(session);
         setUser(session?.user ?? null);
-
-        if (session?.user) {
-          // Defer Supabase calls outside the callback
-          setTimeout(() => {
-            fetchProfile(session.user!.id);
-          }, 0);
-        } else {
-          setProfile(null);
-          setUserType(null);
-        }
-
         setLoading(false);
       }
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        await fetchProfile(session.user.id);
-      }
-      
       setLoading(false);
     });
 
@@ -94,24 +38,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    setProfile(null);
-    setUserType(null);
-  };
-
-  const refreshProfile = async () => {
-    if (user) {
-      await fetchProfile(user.id);
-    }
   };
 
   const value = {
     user,
     session,
-    profile,
-    userType,
     loading,
-    signOut,
-    refreshProfile
+    signOut
   };
 
   return (

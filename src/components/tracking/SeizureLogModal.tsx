@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CustomDatePicker } from "@/components/ui/custom-date-picker";
 import { 
   Dialog,
   DialogContent,
@@ -20,20 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Zap, Clock, AlertTriangle, Brain, Activity, AlertCircle } from "lucide-react";
-import { 
-  SEIZURE_TYPES, 
-  CONSCIOUSNESS_LEVELS, 
-  SEIZURE_TRIGGERS, 
-  SYMPTOM_TYPES,
-  MEDICATION_ADHERENCE 
-} from "@/utils/databaseEnums";
-import { useSeizureLogs } from "@/hooks/useSeizureLogs";
-import { useSeizureResearch } from "@/hooks/useSeizureResearch";
-import { useAuth } from "@/hooks/useAuth";
-import BrainVisualizationImages from "@/components/brain-analysis/BrainVisualizationImages";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Zap, Clock, AlertTriangle, MapPin } from "lucide-react";
 
 interface SeizureLogModalProps {
   isOpen: boolean;
@@ -42,627 +28,107 @@ interface SeizureLogModalProps {
 }
 
 export default function SeizureLogModal({ isOpen, onClose, onComplete }: SeizureLogModalProps) {
-  const { user } = useAuth();
-  const { addSeizureLog } = useSeizureLogs(user?.id);
-  const { 
-    seizureSigns, 
-    brainRegions, 
-    triggers,
-    calculateBrainRegions, 
-    assessGeneralized,
-    saveResearchSeizureLog,
-    loading: researchLoading 
-  } = useSeizureResearch(user?.id);
-  
-  const [currentSection, setCurrentSection] = useState(0);
-  const [selectedSigns, setSelectedSigns] = useState<number[]>([]);
-  const [selectedTriggers, setSelectedTriggers] = useState<number[]>([]);
-  const [triggerStrengths, setTriggerStrengths] = useState<Record<number, string>>({});
-  const [calculatedRegions, setCalculatedRegions] = useState<Record<number, number>>({});
-  const [generalizedAssessment, setGeneralizedAssessment] = useState<any>(null);
-  
   const [seizureData, setSeizureData] = useState({
-    event_date: new Date().toISOString().split('T')[0],
-    event_time: new Date().toTimeString().slice(0, 5),
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toTimeString().slice(0, 5),
     seizure_type: "",
-    duration_seconds: 60,
+    duration_seconds: [60],
+    severity: [5],
     consciousness_level: "",
-    
-    // Pre-ictal (before seizure)
-    aura_present: false,
-    aura_description: "",
-    pre_ictal_symptoms: [] as string[],
-    
-    // Ictal (during seizure)
-    witnessed: false,
-    witness_name: "",
-    video_recorded: false,
-    location_type: "",
-    
-    // Post-ictal (after seizure)
-    post_ictal_confusion_minutes: 0,
+    location: "",
+    triggers: [] as string[],
+    warning_signs: [] as string[],
     post_ictal_symptoms: [] as string[],
-    recovery_time_minutes: 0,
-    
-    // Triggers & Context
-    identified_triggers: [] as string[],
-    sleep_hours_prior: 7,
-    medication_adherence_prior: "taken_on_time" as string,
-    stress_level: 5,
-    
-    // Medical response
-    emergency_services_called: false,
-    rescue_medication_used: false,
-    rescue_medication_name: "",
-    hospitalized: false,
-    
+    witness_present: false,
+    witness_account: "",
+    injuries: [] as string[],
     notes: ""
   });
 
-  const sections = [
-    { title: "Basic Info", icon: Clock },
-    { title: "Pre-Seizure", icon: Brain },
-    { title: "During Seizure", icon: Zap },
-    { title: "Brain Area Mapping", icon: Brain }, // NEW STEP 2.5
-    { title: "After Seizure", icon: Activity },
-    { title: "Context & Response", icon: AlertTriangle }
+  const seizureTypes = [
+    "Focal aware (simple partial)",
+    "Focal impaired awareness (complex partial)",
+    "Focal to bilateral tonic-clonic",
+    "Generalized tonic-clonic",
+    "Absence",
+    "Myoclonic",
+    "Atonic (drop attack)",
+    "Tonic",
+    "Unknown/Unsure"
   ];
-  
-  // Toggle sign selection
-  const toggleSign = (signId: number) => {
-    const newSelected = selectedSigns.includes(signId)
-      ? selectedSigns.filter(id => id !== signId)
-      : [...selectedSigns, signId];
-    
-    setSelectedSigns(newSelected);
-    
-    // Recalculate brain regions
-    const regions = calculateBrainRegions(newSelected);
-    setCalculatedRegions(regions);
-    
-    // Assess if generalized
-    const assessment = assessGeneralized(newSelected);
-    setGeneralizedAssessment(assessment);
-  };
+
+  const consciousnessLevels = [
+    "Fully conscious",
+    "Partially conscious", 
+    "Unconscious",
+    "Unknown"
+  ];
+
+  const commonTriggers = [
+    "Sleep deprivation",
+    "Stress",
+    "Missed medication",
+    "Alcohol",
+    "Flashing lights",
+    "Menstrual cycle",
+    "Illness/fever",
+    "Exercise",
+    "Other"
+  ];
+
+  const commonWarningSigns = [
+    "Aura",
+    "Unusual taste/smell",
+    "Déjà vu feeling",
+    "Anxiety/fear",
+    "Stomach sensation",
+    "Visual changes",
+    "Other"
+  ];
+
+  const commonPostIctalSymptoms = [
+    "Confusion",
+    "Fatigue",
+    "Headache",
+    "Memory problems",
+    "Muscle soreness",
+    "Sleep",
+    "Nausea",
+    "Other"
+  ];
+
+  const commonInjuries = [
+    "Tongue bite",
+    "Head injury",
+    "Bruising",
+    "Cut/scrape",
+    "Muscle strain",
+    "Fall",
+    "Other"
+  ];
 
   const updateSeizureData = (key: string, value: any) => {
     setSeizureData(prev => ({ ...prev, [key]: value }));
   };
 
-  const toggleArrayItem = (array: string[], itemValue: string, key: string) => {
-    const updated = array.includes(itemValue) 
-      ? array.filter(i => i !== itemValue)
-      : [...array, itemValue];
+  const toggleArrayItem = (array: string[], item: string, key: string) => {
+    const updated = array.includes(item) 
+      ? array.filter(i => i !== item)
+      : [...array, item];
     updateSeizureData(key, updated);
   };
 
-  const handleComplete = async () => {
-    if (!user?.id) return;
-    
-    // Map to research-grade enums
-    const mapToEnum = (value: any, prefix: string = '') => {
-      if (typeof value === 'boolean') return value ? 'YES' : 'NO';
-      if (typeof value === 'string') return value.toUpperCase().replace(/\s+/g, '_');
-      return value;
+  const handleComplete = () => {
+    const finalData = {
+      ...seizureData,
+      duration_seconds: seizureData.duration_seconds[0],
+      severity: seizureData.severity[0],
+      logged_at: new Date().toISOString()
     };
     
-    // Prepare research-grade log data (atomic fields only)
-    const researchLogData = {
-      user_id: user.id,
-      log_date: seizureData.event_date,
-      log_time: seizureData.event_time,
-      seizure_type: seizureData.seizure_type.toUpperCase().replace(/\s+/g, '_'),
-      consciousness_level: seizureData.consciousness_level.toUpperCase(),
-      duration_seconds: seizureData.duration_seconds,
-      aura_present: mapToEnum(seizureData.aura_present),
-      aura_description: seizureData.aura_description.slice(0, 255), // Constrain length
-      witnessed: mapToEnum(seizureData.witnessed),
-      witness_role: seizureData.witnessed ? 'FAMILY' : 'SELF', // Default mapping
-      video_recorded: mapToEnum(seizureData.video_recorded),
-      location_type: seizureData.location_type || 'HOME',
-      post_ictal_confusion_minutes: seizureData.post_ictal_confusion_minutes,
-      recovery_time_minutes: seizureData.recovery_time_minutes,
-      sleep_hours_prior: seizureData.sleep_hours_prior,
-      medication_adherence_prior: seizureData.medication_adherence_prior.toUpperCase(),
-      stress_level: String(seizureData.stress_level),
-      emergency_services_called: mapToEnum(seizureData.emergency_services_called),
-      rescue_medication_used: mapToEnum(seizureData.rescue_medication_used),
-      rescue_medication_type: seizureData.rescue_medication_used ? 'OTHER' : 'NONE',
-      hospitalized: mapToEnum(seizureData.hospitalized),
-      research_grade: 'YES',
-      notes: seizureData.notes.slice(0, 255)
-    };
-    
-    // Map post-ictal symptoms to enum format
-    const postIctalSymptoms = seizureData.post_ictal_symptoms.map(symptom => ({
-      symptom: symptom.toUpperCase().replace(/\s+/g, '_'),
-      severity: 5 // Default severity
-    }));
-    
-    // Map triggers (use trigger IDs from reference table)
-    const triggerIds = triggers
-      .filter(t => seizureData.identified_triggers.includes(t.trigger_type.toLowerCase()))
-      .map(t => t.trigger_id);
-    
-    // Save research-grade log with all linking tables
-    const result = await saveResearchSeizureLog(
-      researchLogData,
-      selectedSigns,
-      triggerIds,
-      triggerStrengths,
-      postIctalSymptoms
-    );
-    
-    if (result?.success) {
-      onComplete(seizureData);
-      onClose();
-      
-      // Reset state
-      setSelectedSigns([]);
-      setCalculatedRegions({});
-      setGeneralizedAssessment(null);
-    }
+    onComplete(finalData);
+    onClose();
   };
-
-  const handleNext = () => {
-    if (currentSection < sections.length - 1) {
-      setCurrentSection(prev => prev + 1);
-    } else {
-      handleComplete();
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentSection > 0) {
-      setCurrentSection(prev => prev - 1);
-    }
-  };
-
-  const renderSection = () => {
-    switch (currentSection) {
-      case 0: // Basic Info
-        return (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <CustomDatePicker
-                  label="Date"
-                  value={seizureData.event_date}
-                  onChange={(value) => updateSeizureData("event_date", value)}
-                  max={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-              <div>
-                <Label>Time</Label>
-                <Input
-                  type="time"
-                  value={seizureData.event_time}
-                  onChange={(e) => updateSeizureData("event_time", e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <Label>Seizure Type *</Label>
-              <Select 
-                value={seizureData.seizure_type} 
-                onValueChange={(value) => updateSeizureData("seizure_type", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select seizure type" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border border-border z-50">
-                  {SEIZURE_TYPES.map(type => (
-                    <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label>Duration: {Math.floor(seizureData.duration_seconds / 60)}m {seizureData.duration_seconds % 60}s</Label>
-              <Slider
-                value={[seizureData.duration_seconds]}
-                onValueChange={(value) => updateSeizureData("duration_seconds", value[0])}
-                max={600}
-                min={5}
-                step={5}
-                className="mt-2"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>5s</span>
-                <span>10 min</span>
-              </div>
-            </div>
-
-            <div>
-              <Label>Consciousness Level</Label>
-              <Select 
-                value={seizureData.consciousness_level} 
-                onValueChange={(value) => updateSeizureData("consciousness_level", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select consciousness level" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border border-border z-50">
-                  {CONSCIOUSNESS_LEVELS.map(level => (
-                    <SelectItem key={level.value} value={level.value}>{level.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label>Location</Label>
-              <Input
-                value={seizureData.location_type}
-                onChange={(e) => updateSeizureData("location_type", e.target.value)}
-                placeholder="Where did this occur? (e.g., home, work, outdoors)"
-              />
-            </div>
-          </div>
-        );
-
-      case 1: // Pre-Seizure
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 p-4 bg-accent/50 rounded-lg">
-              <Checkbox
-                checked={seizureData.aura_present}
-                onCheckedChange={(checked) => updateSeizureData("aura_present", checked)}
-              />
-              <Label className="cursor-pointer">I experienced an aura (warning sign) before this seizure</Label>
-            </div>
-
-            {seizureData.aura_present && (
-              <div>
-                <Label>Describe the Aura</Label>
-                <Textarea
-                  value={seizureData.aura_description}
-                  onChange={(e) => updateSeizureData("aura_description", e.target.value)}
-                  placeholder="What did you experience? (e.g., unusual smell, déjà vu, stomach sensation, visual changes)"
-                  rows={3}
-                />
-              </div>
-            )}
-
-            <div>
-              <Label>Pre-Seizure Symptoms</Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                Select any symptoms you experienced before the seizure
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {SYMPTOM_TYPES.slice(0, 10).map(symptom => (
-                  <div key={symptom.value} className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={seizureData.pre_ictal_symptoms.includes(symptom.value)}
-                      onCheckedChange={() => toggleArrayItem(seizureData.pre_ictal_symptoms, symptom.value, "pre_ictal_symptoms")}
-                    />
-                    <label className="text-sm">{symptom.label}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
-      case 2: // During Seizure
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 p-4 bg-accent/50 rounded-lg">
-              <Checkbox
-                checked={seizureData.witnessed}
-                onCheckedChange={(checked) => updateSeizureData("witnessed", checked)}
-              />
-              <Label className="cursor-pointer">Someone witnessed this seizure</Label>
-            </div>
-
-            {seizureData.witnessed && (
-              <div>
-                <Label>Witness Name (Optional)</Label>
-                <Input
-                  value={seizureData.witness_name}
-                  onChange={(e) => updateSeizureData("witness_name", e.target.value)}
-                  placeholder="Who witnessed the seizure?"
-                />
-              </div>
-            )}
-
-            <div className="flex items-center space-x-2 p-4 bg-accent/50 rounded-lg">
-              <Checkbox
-                checked={seizureData.video_recorded}
-                onCheckedChange={(checked) => updateSeizureData("video_recorded", checked)}
-              />
-              <Label className="cursor-pointer">This seizure was recorded on video</Label>
-            </div>
-          </div>
-        );
-
-      case 3: // Brain Area Mapping (NEW STEP!)
-        return (
-          <div className="space-y-4">
-            <Card className="p-4 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
-              <div className="flex items-start gap-3">
-                <Brain className="h-5 w-5 text-purple-600 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold text-purple-900 dark:text-purple-200 mb-1">
-                    Brain Area Mapping
-                  </h4>
-                  <p className="text-sm text-purple-800 dark:text-purple-300">
-                    Select seizure signs to identify probable brain regions involved. This creates research-grade data.
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            {/* Sign Selection */}
-            <div>
-              <Label className="text-base font-semibold mb-3 block">Select Seizure Signs</Label>
-              <p className="text-xs text-muted-foreground mb-3">
-                Check all signs that occurred during this seizure
-              </p>
-              
-              <div className="max-h-96 overflow-y-auto space-y-3 border rounded-lg p-4">
-                {/* Group by category */}
-                {['AURA', 'MOTOR', 'AUTONOMIC', 'CONSCIOUSNESS', 'BEHAVIORAL'].map(category => {
-                  const categorySigns = seizureSigns.filter(s => s.category === category);
-                  if (categorySigns.length === 0) return null;
-                  
-                  return (
-                    <div key={category}>
-                      <h5 className="font-medium text-sm mb-2 text-primary">
-                        {category.charAt(0) + category.slice(1).toLowerCase()} Signs
-                      </h5>
-                      <div className="space-y-2 pl-2">
-                        {categorySigns.map(sign => (
-                          <div key={sign.sign_id} className="flex items-start space-x-2">
-                            <Checkbox
-                              checked={selectedSigns.includes(sign.sign_id)}
-                              onCheckedChange={() => toggleSign(sign.sign_id)}
-                              id={`sign-${sign.sign_id}`}
-                            />
-                            <label htmlFor={`sign-${sign.sign_id}`} className="text-sm cursor-pointer flex-1">
-                              <div className="font-medium">{sign.display_name}</div>
-                              {sign.description && (
-                                <div className="text-xs text-muted-foreground">{sign.description}</div>
-                              )}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {selectedSigns.length > 0 && (
-                <Badge variant="secondary" className="mt-2">
-                  {selectedSigns.length} sign{selectedSigns.length !== 1 ? 's' : ''} selected
-                </Badge>
-              )}
-            </div>
-
-            {/* Brain Visualization */}
-            {selectedSigns.length > 0 && (
-              <div>
-                <Label className="text-base font-semibold mb-3 block">Probable Brain Regions</Label>
-                
-                <BrainVisualizationImages 
-                  highlightedRegions={Object.fromEntries(
-                    Object.entries(calculatedRegions).map(([regionId, prob]) => {
-                      const region = brainRegions.find(r => r.region_id === parseInt(regionId));
-                      return [region?.display_name || 'Unknown', prob];
-                    })
-                  )}
-                  selectedSigns={selectedSigns.map(String)}
-                />
-
-                {/* Region Probabilities List */}
-                <Card className="p-4 bg-accent mt-4">
-                  <h4 className="font-semibold mb-2">Localization Probabilities:</h4>
-                  <div className="space-y-2">
-                    {Object.entries(calculatedRegions)
-                      .sort(([, a], [, b]) => b - a)
-                      .map(([regionId, probability]) => {
-                        const region = brainRegions.find(r => r.region_id === parseInt(regionId));
-                        if (!region) return null;
-                        
-                        return (
-                          <div key={regionId} className="flex items-center justify-between">
-                            <div>
-                              <span className="text-sm font-medium">{region.display_name}</span>
-                              {region.function_description && (
-                                <p className="text-xs text-muted-foreground">{region.function_description}</p>
-                              )}
-                            </div>
-                            <Badge variant={probability > 60 ? "destructive" : probability > 40 ? "default" : "secondary"}>
-                              {probability}%
-                            </Badge>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </Card>
-
-                {/* Generalized Assessment */}
-                {generalizedAssessment && generalizedAssessment.type === 'GENERALIZED' && (
-                  <Alert className="bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
-                    <AlertCircle className="h-4 w-4 text-red-600" />
-                    <AlertTitle className="text-red-900 dark:text-red-200">
-                      Generalized Seizure Pattern Detected
-                    </AlertTitle>
-                    <AlertDescription className="text-red-800 dark:text-red-300">
-                      The selected signs suggest bilateral brain involvement. Confidence: {generalizedAssessment.confidence}%
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-            )}
-          </div>
-        );
-
-      case 4: // After Seizure
-        return (
-          <div className="space-y-4">
-            <div>
-              <Label>Post-Seizure Confusion Duration (minutes)</Label>
-              <Input
-                type="number"
-                value={seizureData.post_ictal_confusion_minutes}
-                onChange={(e) => updateSeizureData("post_ictal_confusion_minutes", parseInt(e.target.value) || 0)}
-                placeholder="How long were you confused after?"
-              />
-            </div>
-
-            <div>
-              <Label>Recovery Time (minutes)</Label>
-              <Input
-                type="number"
-                value={seizureData.recovery_time_minutes}
-                onChange={(e) => updateSeizureData("recovery_time_minutes", parseInt(e.target.value) || 0)}
-                placeholder="How long until you felt back to normal?"
-              />
-            </div>
-
-            <div>
-              <Label>Post-Seizure Symptoms</Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                Select symptoms experienced after the seizure
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {SYMPTOM_TYPES.map(symptom => (
-                  <div key={symptom.value} className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={seizureData.post_ictal_symptoms.includes(symptom.value)}
-                      onCheckedChange={() => toggleArrayItem(seizureData.post_ictal_symptoms, symptom.value, "post_ictal_symptoms")}
-                    />
-                    <label className="text-sm">{symptom.label}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
-      case 5: // Context & Response
-        return (
-          <div className="space-y-4">
-            <div>
-              <Label>Possible Triggers</Label>
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                {SEIZURE_TRIGGERS.map(trigger => (
-                  <div key={trigger.value} className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={seizureData.identified_triggers.includes(trigger.value)}
-                      onCheckedChange={() => toggleArrayItem(seizureData.identified_triggers, trigger.value, "identified_triggers")}
-                    />
-                    <label className="text-sm">{trigger.label}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Sleep Hours (night before)</Label>
-                <Input
-                  type="number"
-                  step="0.5"
-                  value={seizureData.sleep_hours_prior}
-                  onChange={(e) => updateSeizureData("sleep_hours_prior", parseFloat(e.target.value) || 0)}
-                />
-              </div>
-
-              <div>
-                <Label>Medication Adherence</Label>
-                <Select 
-                  value={seizureData.medication_adherence_prior} 
-                  onValueChange={(value) => updateSeizureData("medication_adherence_prior", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border border-border z-50">
-                    {MEDICATION_ADHERENCE.map(option => (
-                      <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div>
-              <Label>Stress Level (1-10): {seizureData.stress_level}</Label>
-              <Slider
-                value={[seizureData.stress_level]}
-                onValueChange={(value) => updateSeizureData("stress_level", value[0])}
-                max={10}
-                min={1}
-                step={1}
-                className="mt-2"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>Very Low</span>
-                <span>Very High</span>
-              </div>
-            </div>
-
-            <Card className="p-4 bg-destructive/5 border-destructive/20">
-              <Label className="font-semibold mb-3 block">Medical Response</Label>
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={seizureData.emergency_services_called}
-                    onCheckedChange={(checked) => updateSeizureData("emergency_services_called", checked)}
-                  />
-                  <label className="text-sm">Emergency services were called</label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={seizureData.rescue_medication_used}
-                    onCheckedChange={(checked) => updateSeizureData("rescue_medication_used", checked)}
-                  />
-                  <label className="text-sm">Rescue medication was used</label>
-                </div>
-
-                {seizureData.rescue_medication_used && (
-                  <Input
-                    value={seizureData.rescue_medication_name}
-                    onChange={(e) => updateSeizureData("rescue_medication_name", e.target.value)}
-                    placeholder="Rescue medication name"
-                    className="ml-6"
-                  />
-                )}
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={seizureData.hospitalized}
-                    onCheckedChange={(checked) => updateSeizureData("hospitalized", checked)}
-                  />
-                  <label className="text-sm">I was hospitalized</label>
-                </div>
-              </div>
-            </Card>
-
-            <div>
-              <Label>Additional Notes</Label>
-              <Textarea
-                value={seizureData.notes}
-                onChange={(e) => updateSeizureData("notes", e.target.value)}
-                placeholder="Any additional details about this seizure..."
-                rows={3}
-              />
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  const SectionIcon = sections[currentSection].icon;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -670,66 +136,232 @@ export default function SeizureLogModal({ isOpen, onClose, onComplete }: Seizure
         <DialogHeader>
           <DialogTitle className="text-center flex items-center justify-center gap-2">
             <Zap className="h-5 w-5 text-status-critical" />
-            Log Seizure Event - Research Grade
+            Log Seizure Event
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Progress Indicator */}
-          <div className="flex justify-center space-x-2">
-            {sections.map((_, index) => (
-              <div
-                key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentSection 
-                    ? "bg-primary" 
-                    : index < currentSection 
-                      ? "bg-success" 
-                      : "bg-muted"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Current Section */}
-          <Card className="p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <SectionIcon className="h-5 w-5 text-primary" />
+          {/* Date and Time */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              When did this occur?
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Date</Label>
+                <Input
+                  type="date"
+                  value={seizureData.date}
+                  onChange={(e) => updateSeizureData("date", e.target.value)}
+                />
               </div>
               <div>
-                <h3 className="font-semibold">{sections[currentSection].title}</h3>
-                <p className="text-xs text-muted-foreground">
-                  Step {currentSection + 1} of {sections.length}
-                </p>
+                <Label>Time</Label>
+                <Input
+                  type="time"
+                  value={seizureData.time}
+                  onChange={(e) => updateSeizureData("time", e.target.value)}
+                />
               </div>
             </div>
-
-            {renderSection()}
           </Card>
 
-          {/* Navigation */}
-          <div className="flex justify-between pt-4">
-            <Button
-              variant="outline"
-              onClick={currentSection === 0 ? onClose : handlePrev}
-            >
-              {currentSection === 0 ? "Cancel" : "Previous"}
-            </Button>
-            
-            <Button
-              variant="hero"
-              onClick={handleNext}
-              disabled={!seizureData.seizure_type && currentSection === 0}
-            >
-              {currentSection === sections.length - 1 ? "Save Seizure Log" : "Next"}
-            </Button>
-          </div>
+          {/* Seizure Details */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">Seizure Details</h3>
+            <div className="space-y-4">
+              <div>
+                <Label>Seizure Type</Label>
+                <Select 
+                  value={seizureData.seizure_type} 
+                  onValueChange={(value) => updateSeizureData("seizure_type", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select seizure type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {seizureTypes.map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-          <div className="bg-accent p-3 rounded-lg text-center">
-            <p className="text-xs text-muted-foreground">
-              🔬 <strong>Research-grade tracking:</strong> Your detailed data helps advance neurological research
-            </p>
+              <div>
+                <Label>Duration (seconds): {seizureData.duration_seconds[0]}s</Label>
+                <Slider
+                  value={seizureData.duration_seconds}
+                  onValueChange={(value) => updateSeizureData("duration_seconds", value)}
+                  max={600}
+                  min={5}
+                  step={5}
+                  className="mt-2"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>5s</span>
+                  <span>10 min</span>
+                </div>
+              </div>
+
+              <div>
+                <Label>Severity (1-10): {seizureData.severity[0]}</Label>
+                <Slider
+                  value={seizureData.severity}
+                  onValueChange={(value) => updateSeizureData("severity", value)}
+                  max={10}
+                  min={1}
+                  step={1}
+                  className="mt-2"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>Mild</span>
+                  <span>Severe</span>
+                </div>
+              </div>
+
+              <div>
+                <Label>Consciousness Level</Label>
+                <Select 
+                  value={seizureData.consciousness_level} 
+                  onValueChange={(value) => updateSeizureData("consciousness_level", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select consciousness level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {consciousnessLevels.map(level => (
+                      <SelectItem key={level} value={level}>{level}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>Location</Label>
+                <Input
+                  value={seizureData.location}
+                  onChange={(e) => updateSeizureData("location", e.target.value)}
+                  placeholder="Where did this occur?"
+                />
+              </div>
+            </div>
+          </Card>
+
+          {/* Triggers */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">Possible Triggers</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {commonTriggers.map(trigger => (
+                <div key={trigger} className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={seizureData.triggers.includes(trigger)}
+                    onCheckedChange={() => toggleArrayItem(seizureData.triggers, trigger, "triggers")}
+                  />
+                  <label className="text-sm">{trigger}</label>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Warning Signs */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">Warning Signs (Aura)</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {commonWarningSigns.map(sign => (
+                <div key={sign} className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={seizureData.warning_signs.includes(sign)}
+                    onCheckedChange={() => toggleArrayItem(seizureData.warning_signs, sign, "warning_signs")}
+                  />
+                  <label className="text-sm">{sign}</label>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Post-ictal Symptoms */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">After Effects (Post-ictal)</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {commonPostIctalSymptoms.map(symptom => (
+                <div key={symptom} className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={seizureData.post_ictal_symptoms.includes(symptom)}
+                    onCheckedChange={() => toggleArrayItem(seizureData.post_ictal_symptoms, symptom, "post_ictal_symptoms")}
+                  />
+                  <label className="text-sm">{symptom}</label>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Witness Information */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">Witness Information</h3>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  checked={seizureData.witness_present}
+                  onCheckedChange={(checked) => updateSeizureData("witness_present", checked)}
+                />
+                <label>Someone witnessed this seizure</label>
+              </div>
+              
+              {seizureData.witness_present && (
+                <Textarea
+                  value={seizureData.witness_account}
+                  onChange={(e) => updateSeizureData("witness_account", e.target.value)}
+                  placeholder="Witness account (what they observed)..."
+                  rows={3}
+                />
+              )}
+            </div>
+          </Card>
+
+          {/* Injuries */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-warning" />
+              Any Injuries?
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              {commonInjuries.map(injury => (
+                <div key={injury} className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={seizureData.injuries.includes(injury)}
+                    onCheckedChange={() => toggleArrayItem(seizureData.injuries, injury, "injuries")}
+                  />
+                  <label className="text-sm">{injury}</label>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Notes */}
+          <Card className="p-4">
+            <Label>Additional Notes</Label>
+            <Textarea
+              value={seizureData.notes}
+              onChange={(e) => updateSeizureData("notes", e.target.value)}
+              placeholder="Any additional details about this seizure..."
+              rows={3}
+              className="mt-2"
+            />
+          </Card>
+
+          {/* Action Buttons */}
+          <div className="flex justify-between pt-4">
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button 
+              variant="hero" 
+              onClick={handleComplete}
+              disabled={!seizureData.seizure_type}
+            >
+              Save Seizure Log
+            </Button>
           </div>
         </div>
       </DialogContent>
