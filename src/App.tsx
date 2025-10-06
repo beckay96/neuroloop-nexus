@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,7 +8,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LandingPage from "@/components/landing/LandingPage";
-import DashboardLanding from "./pages/Landing";
+import DashboardRouter from "./pages/DashboardRouter";
 import Auth from "./pages/Auth";
 import PatientView from "./pages/PatientView";
 import NotFound from "./pages/NotFound";
@@ -16,15 +17,46 @@ import ProfileSettings from "@/components/settings/ProfileSettings";
 import PrivacySettings from "@/pages/settings/PrivacySettings";
 import NotificationSettings from "@/pages/settings/NotificationSettings";
 import AllNotifications from "@/pages/AllNotifications";
+import PatientInvite from "@/pages/invite/PatientInvite";
+import CarerInvite from "@/pages/invite/CarerInvite";
+import PatientOnboardingPage from "@/pages/onboarding/PatientOnboardingPage";
+import ClinicianOnboardingPage from "@/pages/onboarding/ClinicianOnboardingPage";
+import CarerOnboardingPage from "@/pages/onboarding/CarerOnboardingPage";
+import ResearcherOnboardingPage from "@/pages/onboarding/ResearcherOnboardingPage";
+import BrainSeizureAnalysis from "@/pages/BrainSeizureAnalysis";
+import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/react"
+import { MedicationReminderService } from "@/services/medicationReminders";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  // Initialize critical services on app start
+  useEffect(() => {
+    // Initialize medication reminder service
+    MedicationReminderService.getInstance();
+    
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+    
+    // Request notification permission if not already granted
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" storageKey="neuroloop-ui-theme">
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <SpeedInsights />
+        <Analytics />
         <AuthProvider>
           <ErrorBoundary>
             <BrowserRouter>
@@ -35,7 +67,7 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
-                    <DashboardLanding />
+                    <DashboardRouter />
                   </ProtectedRoute>
                 } />
                 <Route path="/patient/:patientId" element={
@@ -63,6 +95,36 @@ const App = () => (
                     <AllNotifications />
                   </ProtectedRoute>
                 } />
+                {/* Onboarding Pages - Protected */}
+                <Route path="/onboarding/patient" element={
+                  <ProtectedRoute>
+                    <PatientOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/onboarding/clinician" element={
+                  <ProtectedRoute>
+                    <ClinicianOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/onboarding/carer" element={
+                  <ProtectedRoute>
+                    <CarerOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/onboarding/researcher" element={
+                  <ProtectedRoute>
+                    <ResearcherOnboardingPage />
+                  </ProtectedRoute>
+                } />
+                {/* Invite Pages - Public (no auth required) */}
+                <Route path="/invite/patient" element={<PatientInvite />} />
+                <Route path="/invite/carer" element={<CarerInvite />} />
+                {/* Brain Seizure Analysis Tool */}
+                <Route path="/brain-analysis" element={
+                  <ProtectedRoute>
+                    <BrainSeizureAnalysis />
+                  </ProtectedRoute>
+                } />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
@@ -72,6 +134,7 @@ const App = () => (
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

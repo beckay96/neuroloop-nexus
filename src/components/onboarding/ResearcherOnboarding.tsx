@@ -39,37 +39,18 @@ export default function ResearcherOnboarding({ onComplete, onBack }: ResearcherO
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Mark researcher onboarding complete (pending approval)
       const { error: requestError } = await supabase
-        .from('researcher_access_requests')
-        .insert({
-          user_id: user.id,
-          email: formData.email,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          institution: formData.institution,
-          research_area: formData.researchArea,
-          request_reason: formData.requestReason,
-          status: 'pending'
-        });
+        .from('profiles')
+        .upsert([{
+          id: user.id,
+          user_type: 'researcher' as const,
+          onboarding_completed: true
+        }]);
 
       if (requestError) {
         console.error('Error saving researcher request:', requestError);
         return;
-      }
-
-      // Update onboarding progress
-      const { error: progressError } = await supabase
-        .from('onboarding_progress')
-        .upsert({
-          user_id: user.id,
-          user_type: 'researcher',
-          current_step: 1,
-          completed: true,
-          step_data: formData
-        });
-
-      if (progressError) {
-        console.error('Error updating progress:', progressError);
       }
 
       // Simulate sending email to bec@elevitaai.com

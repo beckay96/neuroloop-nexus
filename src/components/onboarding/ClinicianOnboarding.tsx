@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   Select,
   SelectContent,
@@ -80,7 +79,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
 
   const handleNext = async () => {
     if (currentStep < 3) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep(currentStep + 1);
     } else {
       setIsSubmitting(true);
       try {
@@ -88,19 +87,14 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
+        // Mark clinician onboarding complete
         const { error: clinicianError } = await supabase
-          .from('clinician_onboarding_data')
-          .insert({
-            user_id: user.id,
-            first_name: formData.firstName,
-            middle_name: formData.middleName,
-            last_name: formData.lastName,
-            clinician_title: formData.clinicianTitle,
-            specialty: formData.specialty,
-            institution: formData.institution,
-            license_number: formData.licenseNumber,
-            patient_invite_emails: formData.patientInviteEmails
-          });
+          .from('profiles')
+          .upsert([{
+            id: user.id,
+            user_type: 'clinician' as const,
+            onboarding_completed: true
+          }]);
 
         if (clinicianError) {
           console.error('Error saving clinician data:', clinicianError);
@@ -122,21 +116,6 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
             clinicianName,
             inviteMessage
           );
-        }
-
-        // Update onboarding progress
-        const { error: progressError } = await supabase
-          .from('onboarding_progress')
-          .upsert({
-            user_id: user.id,
-            user_type: 'clinician',
-            current_step: 3,
-            completed: true,
-            step_data: formData
-          });
-
-        if (progressError) {
-          console.error('Error updating progress:', progressError);
         }
 
         onComplete(formData);
@@ -215,7 +194,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
               
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="specialty">Specialty *</Label>
-                <Select onValueChange={(value) => updateFormData({ specialty: value })}>
+                <Select onValueChange={(value) => updateFormData({ specialty: value })} value={formData.specialty}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your specialty" />
                   </SelectTrigger>

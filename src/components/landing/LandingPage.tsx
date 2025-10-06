@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
 import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun } from "lucide-react";
+import PublicBrainAnalysis from "@/components/brain-analysis/PublicBrainAnalysis";
+
 export default function LandingPage() {
   const navigate = useNavigate();
   const {
@@ -12,6 +14,7 @@ export default function LandingPage() {
     setTheme
   } = useTheme();
   const [showFullWarning, setShowFullWarning] = useState(false);
+  const [showBrainAnalysis, setShowBrainAnalysis] = useState(false);
   const features = [{
     icon: Brain,
     title: "Comprehensive Seizure Tracking",
@@ -70,6 +73,7 @@ export default function LandingPage() {
     text: "Real-time care coordination",
     color: "text-teal-600 dark:text-teal-400"
   }];
+  
   return <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       {/* Theme Toggle - Top Right */}
       <div className="fixed top-4 right-4 z-50">
@@ -139,9 +143,9 @@ export default function LandingPage() {
           </div>
         </div>}
 
-      {/* Hero Section */}
+      {/* Hero Section - Enhanced */}
       <div className="max-w-7xl mx-auto px-4 py-16 sm:py-24">
-        <div className="text-center space-y-6">
+        <div className="text-center space-y-8">
           <Badge variant="secondary" className="text-lg px-6 py-3 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Brain className="h-5 w-5 mr-2 inline" />
             Neurological Health Management Platform
@@ -152,8 +156,35 @@ export default function LandingPage() {
           </h1>
           
           <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Comprehensive health tracking and care coordination for patients with neurological conditions and their care teams
+            Research-grade health tracking for epilepsy, Parkinson's, and neurological conditions
           </p>
+
+          {/* Value Props - Gradient Cards */}
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/40 dark:to-blue-900/40 border-2 border-blue-300 dark:border-blue-700 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6 text-center">
+                <Shield className="h-12 w-12 mx-auto mb-3 text-blue-600 dark:text-blue-400" />
+                <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">HIPAA-Ready Security</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300">End-to-end encryption, secure data storage, and privacy-first design</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/40 dark:to-purple-900/40 border-2 border-purple-300 dark:border-purple-700 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6 text-center">
+                <Database className="h-12 w-12 mx-auto mb-3 text-purple-600 dark:text-purple-400" />
+                <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">Clinical-Grade Data</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300">ILAE-compliant seizure logging, research-ready tracking, structured records</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950/40 dark:to-pink-900/40 border-2 border-pink-300 dark:border-pink-700 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6 text-center">
+                <Users className="h-12 w-12 mx-auto mb-3 text-pink-600 dark:text-pink-400" />
+                <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">Care Team Connected</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300">Patients, carers, and clinicians collaborate in one secure platform</p>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
             <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300" onClick={() => navigate("/signup")}>
@@ -341,47 +372,198 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Who It's For */}
-      <div className="bg-gradient-to-r from-blue-100/50 to-purple-100/50 dark:from-blue-950/20 dark:to-purple-950/20 py-16 border-y border-gray-200 dark:border-gray-800">
+      {/* How It Works */}
+      <div className="bg-white dark:bg-gray-950 py-16 border-y-4 border-gray-200 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">How NeuroLoop Works</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Four simple steps to better neurological health management
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 rounded-full bg-blue-600 dark:bg-blue-500 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">1</div>
+                <h3 className="font-bold text-lg mb-2 text-center text-gray-900 dark:text-gray-100">Sign Up & Profile</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300 text-center">Create your secure account, complete onboarding, and set up your health profile with medical history and preferences</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border-2 hover:border-purple-500 dark:hover:border-purple-400 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 rounded-full bg-purple-600 dark:bg-purple-500 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">2</div>
+                <h3 className="font-bold text-lg mb-2 text-center text-gray-900 dark:text-gray-100">Track Daily Health</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300 text-center">Log seizures with ILAE compliance, record symptoms, track medications, monitor vitals, and upload video evidence</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-pink-50 to-red-50 dark:from-pink-950/30 dark:to-red-950/30 border-2 hover:border-pink-500 dark:hover:border-pink-400 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 rounded-full bg-pink-600 dark:bg-pink-500 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">3</div>
+                <h3 className="font-bold text-lg mb-2 text-center text-gray-900 dark:text-gray-100">Connect Care Team</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300 text-center">Invite carers and clinicians, share data securely, communicate via HIPAA-ready messaging, and coordinate appointments</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-950/30 dark:to-teal-950/30 border-2 hover:border-green-500 dark:hover:border-green-400 hover:shadow-xl hover:shadow-green-500/20 transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="pt-6">
+                <div className="w-12 h-12 rounded-full bg-green-600 dark:bg-green-500 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">4</div>
+                <h3 className="font-bold text-lg mb-2 text-center text-gray-900 dark:text-gray-100">Analyze & Improve</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300 text-center">View insights, identify patterns, generate reports for appointments, and use brain analysis tools for education</p>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Technical Details */}
+          <div className="mt-12 grid md:grid-cols-2 gap-6">
+            <Card className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-2 border-gray-300 dark:border-gray-700">
+              <CardContent className="pt-6">
+                <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <Lock className="h-5 w-5" />
+                  Security & Privacy
+                </h3>
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-green-600 dark:text-green-400" />
+                    <span><strong>End-to-end encryption</strong> for all data in transit and at rest (AES-256)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-green-600 dark:text-green-400" />
+                    <span><strong>Row-level security</strong> ensures users only access their own data</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-green-600 dark:text-green-400" />
+                    <span><strong>Audit logs</strong> track all access and modifications</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-green-600 dark:text-green-400" />
+                    <span><strong>Multi-factor authentication</strong> for enhanced account security</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-2 border-blue-300 dark:border-blue-700">
+              <CardContent className="pt-6">
+                <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <Database className="h-5 w-5" />
+                  Data Standards
+                </h3>
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span><strong>ILAE 2017-2025</strong> seizure classification compliance</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span><strong>Structured data capture</strong> for research-ready records</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span><strong>Clinical-grade tracking</strong> following medical best practices</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span><strong>Export capabilities</strong> for appointments and research</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Who It's For - Enhanced */}
+      <div className="bg-white dark:bg-gray-950 py-16 border-y-4 border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Built For Everyone in the Care Journey</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Patients, carers, and healthcare providers united in one platform
+            </p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2 border-2 hover:border-blue-500 dark:hover:border-blue-400 bg-white dark:bg-gray-900">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 border-2 border-blue-300 dark:border-blue-700 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 hover:-translate-y-2">
               <CardContent className="pt-8">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/50">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Patients</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Track your health, manage medications, record seizures, and communicate with your care team
-                </p>
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 text-center">Patients</h3>
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span>Track seizures, symptoms, and medications</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span>Record videos and document health events</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span>Generate reports for doctor appointments</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                    <span>Use brain analysis tools for education</span>
+                  </li>
+                </ul>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-2 border-2 hover:border-purple-500 dark:hover:border-purple-400 bg-white dark:bg-gray-900">
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 border-2 border-purple-300 dark:border-purple-700 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-2">
               <CardContent className="pt-8">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-600 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/50">
                   <Heart className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Carers</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Monitor loved ones, log observations, coordinate care, and stay connected with the care team
-                </p>
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 text-center">Carers</h3>
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-purple-600 dark:text-purple-400" />
+                    <span>Monitor loved ones' health remotely</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-purple-600 dark:text-purple-400" />
+                    <span>Log observations and witness accounts</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-purple-600 dark:text-purple-400" />
+                    <span>Coordinate care with clinicians</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-purple-600 dark:text-purple-400" />
+                    <span>Receive alerts and stay connected</span>
+                  </li>
+                </ul>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300 hover:-translate-y-2 border-2 hover:border-pink-500 dark:hover:border-pink-400 bg-white dark:bg-gray-900">
+            <Card className="bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950/30 dark:to-pink-900/30 border-2 border-pink-300 dark:border-pink-700 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 hover:-translate-y-2">
               <CardContent className="pt-8">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-600 to-pink-500 flex items-center justify-center shadow-lg shadow-pink-500/50">
                   <Stethoscope className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Healthcare Providers</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Access comprehensive patient data, track outcomes, and provide better coordinated care
-                </p>
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 text-center">Healthcare Providers</h3>
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-pink-600 dark:text-pink-400" />
+                    <span>Access comprehensive patient histories</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-pink-600 dark:text-pink-400" />
+                    <span>Review clinical-grade structured data</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-pink-600 dark:text-pink-400" />
+                    <span>Track outcomes and treatment efficacy</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-pink-600 dark:text-pink-400" />
+                    <span>Communicate securely with patients</span>
+                  </li>
+                </ul>
               </CardContent>
             </Card>
           </div>
@@ -412,18 +594,97 @@ export default function LandingPage() {
         </Card>
       </div>
 
+      {/* Floating Brain Analysis Button - STUNNING! */}
+      <div 
+        className="fixed bottom-8 right-8 z-[9999] bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 h-20 w-20 rounded-full shadow-2xl cursor-pointer hover:scale-110 transition-all duration-300 flex items-center justify-center"
+        onClick={() => {
+          console.log("Button clicked!");
+          setShowBrainAnalysis(true);
+        }}
+        style={{ 
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          zIndex: 99999
+        }}
+      >
+        <Brain className="h-10 w-10 text-white" />
+        <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg">
+          NEW
+        </div>
+      </div>
+
+      {/* Brain Analysis Modal */}
+      {showBrainAnalysis && (
+        <PublicBrainAnalysis 
+          isOpen={showBrainAnalysis}
+          onClose={() => setShowBrainAnalysis(false)}
+        />
+      )}
+
       {/* Footer */}
       <div className="border-t-4 border-gray-200 dark:border-gray-800 mt-16 bg-white dark:bg-gray-950">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Brain className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg text-gray-900 dark:text-white">NeuroLoop</span>
-              <Badge variant="destructive" className="ml-2">DEMO</Badge>
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Brain className="h-6 w-6 text-primary" />
+                <span className="font-bold text-lg text-gray-900 dark:text-white">NeuroLoop</span>
+                <Badge variant="destructive">DEMO</Badge>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Research-grade neurological health tracking for patients and care teams
+              </p>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-              Demo Environment • Not for Real Health Data • HIPAA-Compliant Version Coming Soon
-            </p>
+
+            {/* Compliance */}
+            <div>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-3">Legal & Compliance</h3>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li><a href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><a href="/terms" className="hover:text-primary transition-colors">Terms of Service</a></li>
+                <li><a href="/security" className="hover:text-primary transition-colors">Security Practices</a></li>
+                <li><a href="/hipaa" className="hover:text-primary transition-colors">HIPAA Compliance</a></li>
+              </ul>
+            </div>
+
+            {/* Data Rights */}
+            <div>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-3">Your Rights</h3>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li><a href="/data-rights" className="hover:text-primary transition-colors">Data Access & Rights</a></li>
+                <li><a href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</a></li>
+                <li><a href="/accessibility" className="hover:text-primary transition-colors">Accessibility</a></li>
+                <li><a href="/contact" className="hover:text-primary transition-colors">Contact Us</a></li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-3">Resources</h3>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li><a href="/help" className="hover:text-primary transition-colors">Help Center</a></li>
+                <li><a href="/safety" className="hover:text-primary transition-colors">Safety Guidelines</a></li>
+                <li><a href="/research" className="hover:text-primary transition-colors">Research & Citations</a></li>
+                <li><a href="/clinical-trials" className="hover:text-primary transition-colors">Clinical Trial Info</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+                © 2025 NeuroLoop. Demo Environment • Not for Real Health Data
+              </p>
+              <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+                <span>ILAE-Compliant</span>
+                <span>•</span>
+                <span>Research-Grade</span>
+                <span>•</span>
+                <span>HIPAA-Ready Architecture</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
