@@ -111,10 +111,23 @@ export function MedicationStep({ medications, onUpdate }: MedicationStepProps) {
   };
 
   const addMedication = (medication?: Medication) => {
+    // Parse common_dosages safely - it might be JSON array or plain text
+    let defaultDosage = "";
+    if (medication?.common_dosages) {
+      try {
+        // Try to parse as JSON array
+        const parsed = JSON.parse(medication.common_dosages);
+        defaultDosage = Array.isArray(parsed) ? (parsed[0] || "") : "";
+      } catch {
+        // If not valid JSON, use the value as-is (it's likely plain text)
+        defaultDosage = medication.common_dosages;
+      }
+    }
+    
     const newMed = {
       id: medication?.id || `custom-${Date.now()}`,
       name: medication?.name || "",
-      dosage: medication?.common_dosages ? JSON.parse(medication.common_dosages)[0] || "" : "",
+      dosage: defaultDosage,
       frequency: "once_daily",
       times: ["08:00"]
     };

@@ -81,7 +81,7 @@ export function PersonalInfoStep({
         <div className="space-y-2">
           <Label htmlFor="gender" className="text-foreground font-medium">Gender *</Label>
           <Select onValueChange={(value) => onUpdate({ gender: value })} value={gender}>
-            <SelectTrigger className="text-lg">
+            <SelectTrigger id="gender" className="text-lg">
               <SelectValue placeholder="Select gender" />
             </SelectTrigger>
             <SelectContent className="bg-popover border border-border z-50">
@@ -94,7 +94,7 @@ export function PersonalInfoStep({
         </div>
         
         <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="dob" className="text-foreground font-medium">Date of Birth *</Label>
+          <Label className="text-foreground font-medium">Date of Birth *</Label>
           <BirthDatePicker
             date={dateOfBirth}
             onDateChange={(date) => onUpdate({ dateOfBirth: date })}
