@@ -25,13 +25,9 @@ export const useMedicationLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Use RPC function to access private_health_info schema
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('medication_logs')
-        .select('*')
-        .eq('user_id', userId)
-        .order('log_date', { ascending: false });
+        .rpc('get_medication_logs', { p_user_id: userId });
 
       if (error) throw error;
       setMedicationLogs(data || []);

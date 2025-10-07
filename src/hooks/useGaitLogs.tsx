@@ -32,13 +32,10 @@ export const useGaitLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Use RPC function to access private_health_info schema
+      // @ts-ignore - RPC function not yet in types
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('gait_episodes')
-        .select('*')
-        .eq('patient_id', userId)
-        .order('occurred_at', { ascending: false });
+        .rpc('get_gait_episodes', { p_patient_id: userId });
 
       if (error) throw error;
       setGaitLogs(data || []);

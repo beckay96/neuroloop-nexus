@@ -32,13 +32,9 @@ export const useSymptomLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Use RPC function to access private_health_info schema
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('daily_symptom_logs')
-        .select('*')
-        .eq('patient_id', userId)
-        .order('log_date', { ascending: false});
+        .rpc('get_daily_symptom_logs', { p_patient_id: userId });
 
       if (error) throw error;
       setSymptomLogs(data || []);

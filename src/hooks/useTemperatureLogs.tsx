@@ -28,13 +28,10 @@ export const useTemperatureLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Use RPC function to access private_health_info schema
+      // @ts-ignore - RPC function not yet in types
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('basal_temperature_logs')
-        .select('*')
-        .eq('user_id', userId)
-        .order('log_date', { ascending: false });
+        .rpc('get_basal_temperature_logs', { p_user_id: userId });
 
       if (error) throw error;
       setTemperatureLogs(data || []);

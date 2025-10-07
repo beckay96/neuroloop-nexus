@@ -41,13 +41,9 @@ export const useSeizureLogs = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Use RPC function to access private_health_info schema
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('seizure_events')
-        .select('*')
-        .eq('patient_id', userId)
-        .order('occurred_at', { ascending: false });
+        .rpc('get_seizure_events', { p_patient_id: userId });
 
       if (error) throw error;
       setSeizureLogs(data || []);
