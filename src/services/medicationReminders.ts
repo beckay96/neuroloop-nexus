@@ -51,6 +51,10 @@ export class MedicationReminderService {
     if (!user) return;
 
     try {
+      // TEMPORARY: Skip medication loading until RPC functions are deployed
+      console.warn('Medication reminders temporarily disabled - RPC functions pending deployment');
+      return; // TEMPORARY - Remove after RPC deployment
+      
       // HIPAA-compliant: Use RPC function instead of direct table access
       const { data: medications, error } = await supabase
         .rpc('get_user_medications', { p_user_id: user.id });
