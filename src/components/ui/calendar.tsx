@@ -59,21 +59,21 @@ function Calendar({
       defaultMonth={defaultMonth}
       className={cn(compact ? "p-2" : "p-3", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-3 sm:space-x-4 sm:space-y-0",
-        month: compact ? "space-y-3" : "space-y-4",
-        caption: "flex justify-center pt-2 pb-3 relative items-center gap-2",
+        months: "flex flex-col sm:flex-row space-y-2 sm:space-x-2 sm:space-y-0",
+        month: compact ? "space-y-2" : "space-y-3",
+        caption: "flex justify-center pt-1 pb-2 relative items-center",
         caption_label: "text-sm font-medium hidden", // Hide the duplicate label
-        caption_dropdowns: "flex gap-3 justify-center items-center",
-        dropdown: "px-3 py-2 rounded-lg border-2 bg-background text-sm min-w-[80px] font-medium appearance-none cursor-pointer hover:bg-accent hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm",
-        dropdown_month: "px-4 py-2 rounded-lg border-2 bg-background text-sm min-w-[130px] font-medium appearance-none cursor-pointer hover:bg-accent hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm",
-        dropdown_year: "px-3 py-2 rounded-lg border-2 bg-background text-sm min-w-[90px] font-medium appearance-none cursor-pointer hover:bg-accent hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm",
-        nav: "space-x-2 flex items-center",
+        caption_dropdowns: "flex gap-2 justify-center items-center",
+        dropdown: "px-2.5 py-1.5 rounded-md border bg-background text-sm font-normal appearance-none cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary transition-colors",
+        dropdown_month: "px-2.5 py-1.5 rounded-md border bg-background text-sm font-normal appearance-none cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary transition-colors",
+        dropdown_year: "px-2.5 py-1.5 rounded-md border bg-background text-sm font-normal appearance-none cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary transition-colors",
+        nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          compact ? "h-8 w-8 bg-background border-2 p-0 opacity-70 hover:opacity-100 hover:border-primary/30 hover:bg-accent transition-all duration-200" : "h-9 w-9 bg-background border-2 p-0 opacity-70 hover:opacity-100 hover:border-primary/30 hover:bg-accent transition-all duration-200",
+          compact ? "h-7 w-7 bg-transparent p-0 opacity-60 hover:opacity-100 transition-opacity" : "h-8 w-8 bg-transparent p-0 opacity-60 hover:opacity-100 transition-opacity",
         ),
-        nav_button_previous: "absolute left-2",
-        nav_button_next: "absolute right-2",
+        nav_button_previous: "absolute left-1",
+        nav_button_next: "absolute right-1",
         table: compact ? "w-full border-collapse space-y-0.5" : "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell: compact ? "text-muted-foreground rounded-md w-8 font-normal text-[0.75rem]" : "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
