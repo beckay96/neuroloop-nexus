@@ -2018,6 +2018,178 @@ export type Database = {
           created_at: string | null
         }[]
       }
+      get_tracking_entries: {
+        Args: { p_user_id: string }
+        Returns: {
+          id: string
+          user_id: string
+          entry_date: string
+          mood_level: string | null
+          energy_level: string | null
+          sleep_quality: string | null
+          sleep_hours: number | null
+          symptoms: string[] | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      save_tracking_entry: {
+        Args: {
+          p_user_id: string
+          p_entry_date: string
+          p_mood_level?: string | null
+          p_energy_level?: string | null
+          p_sleep_quality?: string | null
+          p_sleep_hours?: number | null
+          p_symptoms?: string[] | null
+          p_notes?: string | null
+        }
+        Returns: string
+      }
+      get_seizure_logs: {
+        Args: { p_user_id: string }
+        Returns: {
+          log_id: string
+          user_id: string
+          occurred_at: string
+          duration_seconds: number | null
+          seizure_type: string | null
+          consciousness_level: string | null
+          warning_signs: string[] | null
+          post_ictal_symptoms: string[] | null
+          possible_triggers: string[] | null
+          location_during: string | null
+          rescue_medication_given: boolean | null
+          emergency_services_called: boolean | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      save_seizure_log: {
+        Args: {
+          p_user_id: string
+          p_occurred_at: string
+          p_duration_seconds?: number | null
+          p_seizure_type?: string | null
+          p_consciousness_level?: string | null
+          p_warning_signs?: string[] | null
+          p_post_ictal_symptoms?: string[] | null
+          p_possible_triggers?: string[] | null
+          p_location_during?: string | null
+          p_rescue_medication_given?: boolean
+          p_emergency_services_called?: boolean
+          p_notes?: string | null
+        }
+        Returns: string
+      }
+      get_symptom_logs: {
+        Args: { p_patient_id: string }
+        Returns: {
+          id: string
+          patient_id: string
+          log_date: string
+          log_time: string | null
+          symptom_type: string | null
+          severity: number | null
+          duration_minutes: number | null
+          location: string | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      get_tremor_episodes: {
+        Args: { p_patient_id: string }
+        Returns: {
+          id: string
+          patient_id: string
+          episode_date: string
+          episode_time: string | null
+          tremor_type: string | null
+          body_part: string | null
+          severity: number | null
+          duration_minutes: number | null
+          activity_during: string | null
+          medication_taken: boolean | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      get_gait_episodes: {
+        Args: { p_patient_id: string }
+        Returns: {
+          id: string
+          patient_id: string
+          episode_date: string
+          episode_time: string | null
+          gait_type: string | null
+          freezing_episodes: boolean | null
+          falls: boolean | null
+          duration_minutes: number | null
+          distance_meters: number | null
+          assistance_needed: boolean | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      get_menstrual_logs: {
+        Args: { p_user_id: string }
+        Returns: {
+          id: string
+          user_id: string
+          log_date: string
+          is_period_day: boolean | null
+          flow_intensity: string | null
+          symptoms: string[] | null
+          basal_temp: number | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      get_temperature_logs: {
+        Args: { p_user_id: string }
+        Returns: {
+          id: string
+          user_id: string
+          log_date: string
+          log_time: string | null
+          temperature: number | null
+          unit: string | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      get_medication_logs: {
+        Args: { p_user_id: string }
+        Returns: {
+          id: string
+          user_id: string
+          user_medication_id: string | null
+          log_date: string
+          log_time: string | null
+          taken: boolean | null
+          missed_reason: string | null
+          side_effects: string[] | null
+          notes: string | null
+          created_at: string | null
+        }[]
+      }
+      get_patient_onboarding: {
+        Args: { p_user_id: string }
+        Returns: {
+          user_id: string
+          first_name: string | null
+          last_name: string | null
+          middle_name: string | null
+          date_of_birth: string | null
+          gender: string | null
+          phone_number: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
+          created_at: string | null
+          completed_at: string | null
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

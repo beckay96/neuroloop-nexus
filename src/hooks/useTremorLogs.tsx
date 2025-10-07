@@ -25,24 +25,22 @@ export interface TremorLog {
 export const useTremorLogs = (userId?: string) => {
   const [tremorLogs, setTremorLogs] = useState<TremorLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
 
   const fetchTremorLogs = async () => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // HIPAA-compliant: Use RPC function instead of direct table access
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('tremor_episodes')
-        .select('*')
-        .eq('patient_id', userId)
-        .order('occurred_at', { ascending: false });
-
+        .rpc('get_tremor_episodes', { p_patient_id: userId });
       if (error) throw error;
-      setTremorLogs(data || []);
     } catch (error) {
       console.error('Error fetching tremor episodes:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to fetch tremor episodes",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -50,7 +48,8 @@ export const useTremorLogs = (userId?: string) => {
 
   const addTremorLog = async (logData: Omit<TremorLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // For now, still use direct insert as we don't have save_tremor_episode RPC yet
+      // TODO: Create and use save_tremor_episode RPC function
       const { data, error } = await supabase
         .schema('private_health_info')
         .from('tremor_episodes')

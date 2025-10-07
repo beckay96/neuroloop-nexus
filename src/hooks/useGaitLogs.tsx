@@ -51,6 +51,8 @@ export const useGaitLogs = (userId?: string) => {
 
   const addGaitLog = async (logData: Omit<GaitLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
+      // For now, still use direct insert as we don't have save_gait_episode RPC yet
+      // TODO: Create and use save_gait_episode RPC function
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
         .schema('private_health_info')

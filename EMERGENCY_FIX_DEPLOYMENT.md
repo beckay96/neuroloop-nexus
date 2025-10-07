@@ -61,6 +61,13 @@ WHERE routine_name IN ('get_user_medications', 'save_user_medication');
 
 Should return 2 rows.
 
+They did - 
+
+| routine_name         |
+| -------------------- |
+| get_user_medications |
+| save_user_medication |
+
 ---
 
 ## 🟢 STEP 3: RE-ENABLE THE CODE (5 min)
@@ -98,8 +105,8 @@ git push origin main
 
 After the emergency is fixed, systematically migrate all 43 locations:
 
-1. Run COMPLETE_HIPAA_RPC_FUNCTIONS.sql
-2. Update each hook file (see RPC_MIGRATION_GUIDE.md)
+1. Run COMPLETE_HIPAA_RPC_FUNCTIONS.sql - DONE 
+2. Update each hook file (see RPC_MIGRATION_GUIDE.md) - PLEASE DO THIS PART
 3. Test thoroughly
 4. Deploy
 

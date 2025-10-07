@@ -47,18 +47,29 @@ export const useConditions = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // HIPAA-compliant: Use RPC function instead of direct table access
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('user_conditions')
-        .select(`
-          *,
-          conditions (*)
-        `)
-        .eq('user_id', userId);
+        .rpc('get_user_conditions', { p_user_id: userId });
 
       if (error) throw error;
-      setUserConditions(data || []);
+      
+      // Fetch condition details separately if needed
+      if (data && data.length > 0) {
+        const conditionIds = data.map(uc => uc.condition_id).filter(Boolean);
+        const { data: conditionsData } = await supabase
+          .from('conditions')
+          .select('*')
+          .in('id', conditionIds);
+        
+        // Merge conditions data
+        const merged = data.map(uc => ({
+          ...uc,
+          conditions: conditionsData?.find(c => c.id === uc.condition_id)
+        }));
+        setUserConditions(merged || []);
+      } else {
+        setUserConditions(data || []);
+      }
     } catch (error) {
       console.error('Error fetching user conditions:', error);
     } finally {

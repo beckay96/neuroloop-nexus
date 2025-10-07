@@ -51,6 +51,8 @@ export const useSymptomLogs = (userId?: string) => {
 
   const addSymptomLog = async (logData: Omit<SymptomLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
+      // For now, still use direct insert as we don't have save_symptom_log RPC yet
+      // TODO: Create and use save_symptom_log RPC function
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
         .schema('private_health_info')
@@ -82,6 +84,8 @@ export const useSymptomLogs = (userId?: string) => {
 
   const updateSymptomLog = async (id: string, updates: Partial<SymptomLog>) => {
     try {
+      // For now, still use direct update as we don't have update_symptom_log RPC yet
+      // TODO: Create and use update_symptom_log RPC function
       // @ts-ignore - Table exists in private_health_info schema
       const { data, error } = await supabase
         .schema('private_health_info')
@@ -114,6 +118,8 @@ export const useSymptomLogs = (userId?: string) => {
 
   const deleteSymptomLog = async (id: string) => {
     try {
+      // For now, still use direct delete as we don't have delete_symptom_log RPC yet
+      // TODO: Create and use delete_symptom_log RPC function
       // @ts-ignore - Table exists in private_health_info schema
       const { error } = await supabase
         .schema('private_health_info')

@@ -60,11 +60,6 @@ export default function MedicationLogModal({ isOpen, onClose, onComplete }: Medi
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // TEMPORARY: Skip medication loading until RPC functions are deployed
-      console.warn('Medication modal temporarily using empty list - RPC functions pending deployment');
-      setUserMedications([]); // TEMPORARY
-      return; // TEMPORARY - Remove after RPC deployment
-      
       // HIPAA-compliant: Use RPC function instead of direct table access
       const { data, error } = await supabase
         .rpc('get_user_medications', { p_user_id: user.id });

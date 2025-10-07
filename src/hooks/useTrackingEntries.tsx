@@ -30,13 +30,9 @@ export const useTrackingEntries = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // HIPAA-compliant: Use RPC function instead of direct table access
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('tracking_entries')
-        .select('*')
-        .eq('user_id', userId)
-        .order('entry_date', { ascending: false });
+        .rpc('get_tracking_entries', { p_user_id: userId });
 
       if (error) throw error;
       setTrackingEntries(data || []);
@@ -49,13 +45,18 @@ export const useTrackingEntries = (userId?: string) => {
 
   const addTrackingEntry = async (entryData: Omit<TrackingEntry, 'id' | 'created_at'>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('tracking_entries')
-        .insert(entryData)
-        .select()
-        .single();
+      // HIPAA-compliant: Use RPC function for saving
+      const { data: entryId, error } = await supabase
+        .rpc('save_tracking_entry', {
+          p_user_id: entryData.user_id,
+          p_entry_date: entryData.entry_date,
+          p_mood_level: entryData.mood_level,
+          p_energy_level: entryData.energy_level,
+          p_sleep_quality: entryData.sleep_quality,
+          p_sleep_hours: entryData.sleep_hours,
+          p_symptoms: entryData.symptoms,
+          p_notes: entryData.notes
+        });
 
       if (error) throw error;
 
