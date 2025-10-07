@@ -11,8 +11,6 @@ CREATE OR REPLACE FUNCTION save_patient_onboarding_data(
     p_gender TEXT,
     p_selected_conditions UUID[],
     p_track_menstrual_cycle BOOLEAN,
-    p_basal_temp_time TIME,
-    p_tracking_times TEXT[],
     p_emergency_contact_name TEXT,
     p_emergency_contact_phone TEXT
 )
@@ -34,8 +32,6 @@ BEGIN
         gender,
         selected_conditions,
         track_menstrual_cycle,
-        basal_temp_time,
-        tracking_times,
         emergency_contact_name,
         emergency_contact_phone,
         completed_at
@@ -48,8 +44,6 @@ BEGIN
         p_gender::private_health_info.gender_enum,
         p_selected_conditions,
         p_track_menstrual_cycle,
-        p_basal_temp_time,
-        p_tracking_times,
         p_emergency_contact_name,
         p_emergency_contact_phone,
         NOW()
@@ -62,8 +56,6 @@ BEGIN
         gender = EXCLUDED.gender,
         selected_conditions = EXCLUDED.selected_conditions,
         track_menstrual_cycle = EXCLUDED.track_menstrual_cycle,
-        basal_temp_time = EXCLUDED.basal_temp_time,
-        tracking_times = EXCLUDED.tracking_times,
         emergency_contact_name = EXCLUDED.emergency_contact_name,
         emergency_contact_phone = EXCLUDED.emergency_contact_phone,
         completed_at = NOW();
@@ -71,6 +63,48 @@ BEGIN
     v_result := json_build_object(
         'success', true,
         'message', 'Patient onboarding data saved successfully'
+    );
+    
+    RETURN v_result;
+EXCEPTION WHEN OTHERS THEN
+    RETURN json_build_object(
+        'success', false,
+        'error', SQLERRM
+    );
+END;
+$$;
+
+-- Function 4: Save daily tracking preferences (public schema)
+CREATE OR REPLACE FUNCTION save_daily_tracking_preferences(
+    p_user_id UUID,
+    p_tracking_times TIME[],
+    p_basal_temp_time TIME
+)
+RETURNS JSON
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_result JSON;
+BEGIN
+    INSERT INTO public.daily_tracking_preferences (
+        user_id,
+        tracking_times,
+        basal_temp_time
+    ) VALUES (
+        p_user_id,
+        p_tracking_times,
+        p_basal_temp_time
+    )
+    ON CONFLICT (user_id) DO UPDATE SET
+        tracking_times = EXCLUDED.tracking_times,
+        basal_temp_time = EXCLUDED.basal_temp_time,
+        updated_at = NOW();
+
+    v_result := json_build_object(
+        'success', true,
+        'message', 'Daily tracking preferences saved successfully'
     );
     
     RETURN v_result;
@@ -184,6 +218,7 @@ $$;
 GRANT EXECUTE ON FUNCTION save_patient_onboarding_data TO authenticated;
 GRANT EXECUTE ON FUNCTION save_user_condition TO authenticated;
 GRANT EXECUTE ON FUNCTION save_user_medication TO authenticated;
+GRANT EXECUTE ON FUNCTION save_daily_tracking_preferences TO authenticated;
 
 -- Create verification temp table
 CREATE TEMP TABLE function_verification (
@@ -222,6 +257,16 @@ SELECT
         WHERE p.proname = 'save_user_medication'
     ) THEN '✅ CREATED' ELSE '❌ FAILED' END as status,
     'Saves user medication to private_health_info schema' as details;
+
+INSERT INTO function_verification
+SELECT 
+    'save_daily_tracking_preferences' as function_name,
+    CASE WHEN EXISTS (
+        SELECT 1 FROM pg_proc p
+        JOIN pg_namespace n ON p.pronamespace = n.oid
+        WHERE p.proname = 'save_daily_tracking_preferences'
+    ) THEN '✅ CREATED' ELSE '❌ FAILED' END as status,
+    'Saves tracking times & basal temp to public schema' as details;
 
 -- Display verification results
 SELECT * FROM function_verification;

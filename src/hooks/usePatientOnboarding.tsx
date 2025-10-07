@@ -45,8 +45,6 @@ export const usePatientOnboarding = () => {
           p_gender: data.gender,
           p_selected_conditions: data.selectedConditions,
           p_track_menstrual_cycle: data.trackMenstrual,
-          p_basal_temp_time: data.basalTempTime || null,
-          p_tracking_times: data.trackingTimes || [],
           p_emergency_contact_name: data.emergencyContactName,
           p_emergency_contact_phone: data.emergencyContactPhone
         });
@@ -61,7 +59,23 @@ export const usePatientOnboarding = () => {
         throw new Error((onboardingResult as any).error);
       }
 
-      // 2. Save conditions using RPC function
+      // 2. Save daily tracking preferences (tracking times & basal temp)
+      if (data.trackingTimes && data.trackingTimes.length > 0 || data.basalTempTime) {
+        const { data: trackingResult, error: trackingError } = await supabase
+          .rpc('save_daily_tracking_preferences' as any, {
+            p_user_id: userId,
+            p_tracking_times: data.trackingTimes || [],
+            p_basal_temp_time: data.basalTempTime || null
+          });
+
+        if (trackingError) {
+          console.error('Error saving tracking preferences:', trackingError);
+        } else if (trackingResult && !(trackingResult as any).success) {
+          console.error('Tracking preferences RPC error:', (trackingResult as any).error);
+        }
+      }
+
+      // 4. Save conditions using RPC function
       for (const conditionId of data.selectedConditions) {
         const { data: conditionResult, error: conditionError } = await supabase
           .rpc('save_user_condition' as any, {
@@ -77,7 +91,7 @@ export const usePatientOnboarding = () => {
         }
       }
 
-      // 3. Save medications to user_medications
+      // 5. Save medications to user_medications
       for (const med of data.medications) {
         // First, get or create the medication in the medications table
         const { data: existingMed, error: medSearchError } = await supabase
@@ -123,7 +137,7 @@ export const usePatientOnboarding = () => {
         }
       }
 
-      // 4. Save research consent with granular data types
+      // 6. Save research consent with granular data types
       if (data.researchConsent && data.researchDataTypes) {
         const dataTypes = [];
         if (data.researchDataTypes.seizureData) dataTypes.push('seizure_data');
@@ -144,7 +158,7 @@ export const usePatientOnboarding = () => {
         }
       }
 
-      // 5. Update profile to mark onboarding complete
+      // 7. Update profile to mark onboarding complete
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert([{
