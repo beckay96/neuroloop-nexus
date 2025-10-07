@@ -29,6 +29,24 @@ interface EmergencyContact {
   relationship: string;
 }
 
+// Get emergency number based on user's country
+function getEmergencyNumber(countryCode?: string): string {
+  switch (countryCode?.toUpperCase()) {
+    case 'AU': // Australia
+    case 'AUS':
+      return '000';
+    case 'GB': // UK
+    case 'UK':
+      return '999';
+    case 'EU': // Europe (most countries)
+      return '112';
+    case 'NZ': // New Zealand
+      return '111';
+    default: // USA, Canada, and default
+      return '911';
+  }
+}
+
 interface EmergencyButtonProps {
   userId: string;
   className?: string;
@@ -115,10 +133,12 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
     }
   };
 
-  const call911 = () => {
-    window.location.href = 'tel:911';
-    setActionsTaken([...actionsTaken, 'Called 911']);
-    logEmergencyEvent('911_called', {});
+  const callEmergencyServices = () => {
+    // TODO: Get country code from user profile
+    const emergencyNumber = getEmergencyNumber('AU'); // Default to Australia for now
+    window.location.href = `tel:${emergencyNumber}`;
+    setActionsTaken([...actionsTaken, `Called ${emergencyNumber}`]);
+    logEmergencyEvent('emergency_services_called', { number: emergencyNumber });
   };
 
   const startSeizureTimer = () => {
@@ -184,7 +204,7 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
         variant="destructive"
         size="lg"
         onClick={handleEmergencyClick}
-        className={`${className} shadow-lg hover:shadow-xl transition-all animate-pulse`}
+        className={`${className} shadow-lg hover:shadow-xl transition-all`}
       >
         <AlertTriangle className="h-5 w-5 mr-2" />
         EMERGENCY
@@ -217,25 +237,30 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
             {/* Primary Emergency Actions */}
             <div className="grid grid-cols-1 gap-3">
               {emergencyContact && (
-                <Button
-                  size="lg"
-                  variant="destructive"
-                  onClick={callEmergencyContact}
-                  className="w-full h-14 text-lg"
-                >
-                  <Phone className="h-5 w-5 mr-2" />
-                  Call {emergencyContact.name} ({emergencyContact.relationship})
-                </Button>
+                <div>
+                  <Button
+                    size="lg"
+                    variant="destructive"
+                    onClick={callEmergencyContact}
+                    className="w-full h-14 text-lg"
+                  >
+                    <Phone className="h-5 w-5 mr-2" />
+                    Call {emergencyContact.name.split(' ')[0]}
+                  </Button>
+                  <p className="text-xs text-muted-foreground text-center mt-1">
+                    {emergencyContact.relationship}
+                  </p>
+                </div>
               )}
 
               <Button
                 size="lg"
                 variant="destructive"
-                onClick={call911}
+                onClick={callEmergencyServices}
                 className="w-full h-14 text-lg bg-red-700 hover:bg-red-800"
               >
                 <Phone className="h-5 w-5 mr-2" />
-                Call 911 Emergency Services
+                Call {getEmergencyNumber('AU')}
               </Button>
             </div>
 
@@ -253,20 +278,24 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
               <Button
                 variant="outline"
                 onClick={notifyAllCarers}
-                className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                className="border-blue-500 text-blue-600 hover:bg-blue-50 relative"
+                disabled
               >
                 <Users className="h-4 w-4 mr-2" />
                 Alert All Carers
+                <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded-full">
+                  Coming Soon
+                </span>
               </Button>
             </div>
 
             {/* Emergency Protocol Guidance */}
-            <Card className="p-4 bg-yellow-50 dark:bg-yellow-950 border-yellow-500">
-              <h3 className="font-semibold mb-2 flex items-center gap-2">
-                <Shield className="h-4 w-4" />
+            <Card className="p-4 bg-black border-2 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+              <h3 className="font-semibold mb-2 flex items-center gap-2 text-white">
+                <Shield className="h-4 w-4 text-red-500" />
                 Emergency Protocol
               </h3>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start gap-2">
                   <Heart className="h-3 w-3 text-red-500 mt-1" />
                   <span>Stay calm and ensure safety</span>
@@ -277,7 +306,7 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
                 </li>
                 <li className="flex items-start gap-2">
                   <Phone className="h-3 w-3 text-blue-500 mt-1" />
-                  <span>Call 911 if: First seizure, &gt;5 minutes, or injured</span>
+                  <span>Call {getEmergencyNumber('AU')} if: First seizure, &gt;5 minutes, or injured</span>
                 </li>
               </ul>
             </Card>
@@ -324,10 +353,10 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
   );
 }
 
-// Floating Emergency Button for constant access
+// Floating Emergency Button for constant access (bottom LEFT corner)
 export function FloatingEmergencyButton({ userId }: { userId: string }) {
   return (
-    <div className="fixed bottom-24 right-4 z-50">
+    <div className="fixed bottom-4 left-4 z-50">
       <EmergencyButton userId={userId} className="rounded-full h-16 w-16 p-0" />
     </div>
   );

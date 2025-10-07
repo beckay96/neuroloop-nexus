@@ -52,15 +52,15 @@ export const useSymptomLogs = (userId?: string) => {
         .rpc('save_symptom_log', {
           p_patient_id: logData.patient_id,
           p_log_date: logData.log_date,
-          p_overall_feeling: logData.mood_rating || null,
-          p_mood: logData.mood_rating || null,
-          p_energy_level: logData.energy_level || null,
-          p_sleep_hours: logData.sleep_hours || null,
-          p_sleep_quality: logData.sleep_quality || null,
-          p_sleep_disturbances: logData.symptoms ? { symptoms: logData.symptoms } : null,
-          p_other_symptoms: logData.triggers ? { triggers: logData.triggers } : null,
-          p_symptom_notes: logData.notes || null,
-          p_shared_with_clinician: logData.shared_with_clinician || false,
+          p_overall_feeling: logData.mood_rating ?? undefined,
+          p_mood: logData.mood_rating ?? undefined,
+          p_energy_level: logData.energy_level ?? undefined,
+          p_sleep_hours: logData.sleep_hours ?? undefined,
+          p_sleep_quality: logData.sleep_quality ?? undefined,
+          p_sleep_disturbances: logData.symptoms ? { symptoms: logData.symptoms } : undefined,
+          p_other_symptoms: logData.triggers ? { triggers: logData.triggers } : undefined,
+          p_symptom_notes: logData.notes ?? undefined,
+          p_shared_with_clinician: logData.shared_with_clinician ?? false,
           p_visible_to_researchers: false
         });
 

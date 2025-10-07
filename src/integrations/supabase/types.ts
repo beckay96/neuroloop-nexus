@@ -1639,6 +1639,10 @@ export type Database = {
         Args: { p_user_id: string; p_user_type: string }
         Returns: Json
       }
+      delete_symptom_log: {
+        Args: { p_log_id: string }
+        Returns: undefined
+      }
       get_function_stats: {
         Args: { p_function_name?: string }
         Returns: {
@@ -1733,13 +1737,22 @@ export type Database = {
       get_patient_onboarding_data: {
         Args: { p_user_id: string }
         Returns: {
+          completed_at: string
           created_at: string
-          diagnosis_date: string
+          date_of_birth: string
           emergency_contact_name: string
           emergency_contact_phone: string
           emergency_contact_relationship: string
-          other_conditions: string[]
-          primary_diagnosis: string
+          first_name: string
+          gender: string
+          last_name: string
+          middle_name: string
+          onboarding_step: number
+          phone_number: string
+          research_data_types: string[]
+          selected_conditions: string[]
+          share_research_data: boolean
+          track_menstrual_cycle: boolean
           updated_at: string
           user_id: string
         }[]
@@ -2020,6 +2033,23 @@ export type Database = {
         }
         Returns: string
       }
+      save_symptom_log: {
+        Args: {
+          p_energy_level?: number
+          p_log_date: string
+          p_mood?: number
+          p_other_symptoms?: Json
+          p_overall_feeling?: number
+          p_patient_id: string
+          p_shared_with_clinician?: boolean
+          p_sleep_disturbances?: Json
+          p_sleep_hours?: number
+          p_sleep_quality?: number
+          p_symptom_notes?: string
+          p_visible_to_researchers?: boolean
+        }
+        Returns: string
+      }
       save_tracking_entry: {
         Args: {
           p_energy_level?: string
@@ -2092,6 +2122,22 @@ export type Database = {
       test_user_creation: {
         Args: { p_email: string; p_user_type?: string }
         Returns: Json
+      }
+      update_symptom_log: {
+        Args: {
+          p_energy_level?: number
+          p_log_id: string
+          p_mood?: number
+          p_other_symptoms?: Json
+          p_overall_feeling?: number
+          p_shared_with_clinician?: boolean
+          p_sleep_disturbances?: Json
+          p_sleep_hours?: number
+          p_sleep_quality?: number
+          p_symptom_notes?: string
+          p_visible_to_researchers?: boolean
+        }
+        Returns: undefined
       }
     }
     Enums: {
