@@ -41,7 +41,7 @@ BEGIN
         p_middle_name,
         p_last_name,
         p_date_of_birth,
-        p_gender::private_health_info.gender_enum,
+        p_gender::gender_enum,
         p_selected_conditions,
         p_track_menstrual_cycle,
         p_emergency_contact_name,
