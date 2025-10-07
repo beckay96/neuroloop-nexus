@@ -80,8 +80,8 @@
 
 ---
 
-### **5. ⭐ CRITICAL: Private Health Info RPC Functions**
-**File:** `supabase/migrations/20250108_complete_private_health_info_rpc.sql`
+### **5. ⭐ FIX Existing RPC Functions (Column Errors)**
+**File:** `supabase/migrations/20250108_fix_existing_rpc_functions.sql`
 
 ```sql
 -- Copy entire content and run
@@ -89,26 +89,20 @@
 
 **Expected Result:**
 ```
-✅ CREATED | get_seizure_events
-✅ CREATED | get_daily_symptom_logs
-✅ CREATED | get_gait_episodes
-✅ CREATED | get_medication_logs
-✅ CREATED | get_menstrual_cycle_logs
-✅ CREATED | get_basal_temperature_logs
+✅ FIXED | get_gait_episodes (gait_id primary key)
+✅ FIXED | get_medication_logs (removed non-existent column)
 ```
 
 **What it does:**
-- Creates RPC functions for ALL `private_health_info` tables
-- Frontend hooks now use these RPC functions instead of direct schema access
-- Fixes all `406 Not Acceptable` errors
+- Fixes column mismatches in existing RPC functions
+- `get_gait_episodes`: Changes `ge.id` to `ge.gait_id` (correct primary key)
+- `get_medication_logs`: Removes `ml.missed_reason` column (doesn't exist)
 
 **Fixes:**
-- ❌ 406 Not Acceptable → ✅ `seizure_events`
-- ❌ 406 Not Acceptable → ✅ `daily_symptom_logs`
-- ❌ 406 Not Acceptable → ✅ `gait_episodes`
-- ❌ 406 Not Acceptable → ✅ `medication_logs`
-- ❌ 406 Not Acceptable → ✅ `menstrual_cycle_logs`
-- ❌ 406 Not Acceptable → ✅ `basal_temperature_logs`
+- ❌ `column ge.id does not exist` → ✅ Uses `gait_id`
+- ❌ `column ml.missed_reason does not exist` → ✅ Removed from query
+
+**Note:** The other functions (`get_seizure_logs`, `get_symptom_logs`, `get_menstrual_logs`, `get_temperature_logs`) already exist and work correctly!
 
 ---
 
