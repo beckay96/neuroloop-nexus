@@ -45,6 +45,10 @@ function Calendar({
   };
 
   const dateRestrictions = getDateRestrictions();
+  
+  // If we have a selected date, default to that month/year, otherwise use current date
+  const defaultMonth = (props.selected instanceof Date) ? props.selected : new Date();
+  
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -52,23 +56,24 @@ function Calendar({
       fromYear={dateRestrictions.fromYear}
       toYear={dateRestrictions.toYear}
       disabled={dateRestrictions.disabled}
-      className={cn(compact ? "p-1.5" : "p-3", className)}
+      defaultMonth={defaultMonth}
+      className={cn(compact ? "p-2" : "p-3", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-2 sm:space-x-2 sm:space-y-0",
-        month: compact ? "space-y-2" : "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center gap-1",
+        months: "flex flex-col sm:flex-row space-y-3 sm:space-x-4 sm:space-y-0",
+        month: compact ? "space-y-3" : "space-y-4",
+        caption: "flex justify-center pt-2 pb-3 relative items-center gap-2",
         caption_label: "text-sm font-medium hidden", // Hide the duplicate label
-        caption_dropdowns: "flex gap-1.5 justify-center",
-        dropdown: "px-2 py-1.5 rounded-md border bg-background text-sm min-w-[70px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
-        dropdown_month: "px-2 py-1.5 rounded-md border bg-background text-sm min-w-[100px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
-        dropdown_year: "px-2 py-1.5 rounded-md border bg-background text-sm min-w-[70px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
-        nav: "space-x-1 flex items-center",
+        caption_dropdowns: "flex gap-3 justify-center items-center",
+        dropdown: "px-3 py-2 rounded-lg border-2 bg-background text-sm min-w-[80px] font-medium appearance-none cursor-pointer hover:bg-accent hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm",
+        dropdown_month: "px-4 py-2 rounded-lg border-2 bg-background text-sm min-w-[130px] font-medium appearance-none cursor-pointer hover:bg-accent hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm",
+        dropdown_year: "px-3 py-2 rounded-lg border-2 bg-background text-sm min-w-[90px] font-medium appearance-none cursor-pointer hover:bg-accent hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm",
+        nav: "space-x-2 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          compact ? "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100" : "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          compact ? "h-8 w-8 bg-background border-2 p-0 opacity-70 hover:opacity-100 hover:border-primary/30 hover:bg-accent transition-all duration-200" : "h-9 w-9 bg-background border-2 p-0 opacity-70 hover:opacity-100 hover:border-primary/30 hover:bg-accent transition-all duration-200",
         ),
-        nav_button_previous: "absolute left-1",
-        nav_button_next: "absolute right-1",
+        nav_button_previous: "absolute left-2",
+        nav_button_next: "absolute right-2",
         table: compact ? "w-full border-collapse space-y-0.5" : "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell: compact ? "text-muted-foreground rounded-md w-8 font-normal text-[0.75rem]" : "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
