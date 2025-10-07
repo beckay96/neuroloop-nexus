@@ -47,26 +47,34 @@ export const useSymptomLogs = (userId?: string) => {
 
   const addSymptomLog = async (logData: Omit<SymptomLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
-      // For now, still use direct insert as we don't have save_symptom_log RPC yet
-      // TODO: Create and use save_symptom_log RPC function
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('daily_symptom_logs')
-        .insert(logData)
-        .select()
-        .single();
+      // Use RPC function to securely insert into private_health_info schema
+      const { data: logId, error } = await supabase
+        .rpc('save_symptom_log', {
+          p_patient_id: logData.patient_id,
+          p_log_date: logData.log_date,
+          p_overall_feeling: logData.mood_rating || null,
+          p_mood: logData.mood_rating || null,
+          p_energy_level: logData.energy_level || null,
+          p_sleep_hours: logData.sleep_hours || null,
+          p_sleep_quality: logData.sleep_quality || null,
+          p_sleep_disturbances: logData.symptoms ? { symptoms: logData.symptoms } : null,
+          p_other_symptoms: logData.triggers ? { triggers: logData.triggers } : null,
+          p_symptom_notes: logData.notes || null,
+          p_shared_with_clinician: logData.shared_with_clinician || false,
+          p_visible_to_researchers: false
+        });
 
       if (error) throw error;
 
-      setSymptomLogs([data, ...symptomLogs]);
+      // Refresh the list
+      await fetchSymptomLogs();
       
       toast({
         title: "Symptom Logged",
         description: "Your symptom has been recorded successfully.",
       });
 
-      return { success: true, data };
+      return { success: true, data: { id: logId, ...logData } };
     } catch (error: any) {
       console.error('Error adding symptom log:', error);
       toast({
@@ -80,27 +88,33 @@ export const useSymptomLogs = (userId?: string) => {
 
   const updateSymptomLog = async (id: string, updates: Partial<SymptomLog>) => {
     try {
-      // For now, still use direct update as we don't have update_symptom_log RPC yet
-      // TODO: Create and use update_symptom_log RPC function
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('daily_symptom_logs')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
+      // Use RPC function to securely update in private_health_info schema
+      const { error } = await supabase
+        .rpc('update_symptom_log', {
+          p_log_id: id,
+          p_overall_feeling: updates.mood_rating || null,
+          p_mood: updates.mood_rating || null,
+          p_energy_level: updates.energy_level || null,
+          p_sleep_hours: updates.sleep_hours || null,
+          p_sleep_quality: updates.sleep_quality || null,
+          p_sleep_disturbances: updates.symptoms ? { symptoms: updates.symptoms } : null,
+          p_other_symptoms: updates.triggers ? { triggers: updates.triggers } : null,
+          p_symptom_notes: updates.notes || null,
+          p_shared_with_clinician: updates.shared_with_clinician ?? null,
+          p_visible_to_researchers: null
+        });
 
       if (error) throw error;
 
-      setSymptomLogs(symptomLogs.map(log => log.id === id ? data : log));
+      // Refresh the list
+      await fetchSymptomLogs();
       
       toast({
         title: "Log Updated",
         description: "Symptom log has been updated.",
       });
 
-      return { success: true, data };
+      return { success: true };
     } catch (error: any) {
       console.error('Error updating symptom log:', error);
       toast({
@@ -114,14 +128,11 @@ export const useSymptomLogs = (userId?: string) => {
 
   const deleteSymptomLog = async (id: string) => {
     try {
-      // For now, still use direct delete as we don't have delete_symptom_log RPC yet
-      // TODO: Create and use delete_symptom_log RPC function
-      // @ts-ignore - Table exists in private_health_info schema
+      // Use RPC function to securely delete from private_health_info schema
       const { error } = await supabase
-        .schema('private_health_info')
-        .from('daily_symptom_logs')
-        .delete()
-        .eq('id', id);
+        .rpc('delete_symptom_log', {
+          p_log_id: id
+        });
 
       if (error) throw error;
 

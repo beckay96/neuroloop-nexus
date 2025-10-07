@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
@@ -245,6 +246,9 @@ export default function DailyTrackingModal({
           <DialogTitle className="text-center">
             {isFirstTracking ? "🎉 Your First Daily Tracking!" : "Daily Health Check-in"}
           </DialogTitle>
+          <DialogDescription className="text-center">
+            Track your daily health metrics to help identify patterns and improve your care.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
