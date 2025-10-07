@@ -60,13 +60,9 @@ export default function MedicationLogModal({ isOpen, onClose, onComplete }: Medi
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // @ts-ignore - Table exists in private_health_info schema
+      // HIPAA-compliant: Use RPC function instead of direct table access
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('user_medications')
-        .select('*, medications(name, generic_name)')
-        .eq('user_id', user.id)
-        .is('end_date', null); // Only active medications
+        .rpc('get_user_medications', { p_user_id: user.id });
 
       if (error) {
         console.error('Error loading medications:', error);
