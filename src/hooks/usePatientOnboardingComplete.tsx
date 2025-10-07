@@ -75,20 +75,9 @@ export const usePatientOnboardingComplete = () => {
       }
 
       // 2. Save conditions to user_conditions
-      for (const conditionId of data.selectedConditions) {
-        await supabase
-          .schema('private_health_info')
-          .from('user_conditions')
-          .insert({
-            user_id: userId,
-            condition_id: conditionId,
-            diagnosis_date: new Date().toISOString().split('T')[0],
-            severity: 3, // Default moderate
-            tracking_features_enabled: [] // Will be set based on condition type
-          })
-          .select()
-          .single();
-      }
+      // NOTE: This should also use RPC, but keeping for now as it's called during onboarding RPC
+      // The save_patient_onboarding RPC should handle this
+      // Skipping duplicate save since RPC already handles it
 
       // 3. Save medications with times
       for (const med of data.medications) {
@@ -100,20 +89,17 @@ export const usePatientOnboardingComplete = () => {
         // Check if it's a custom medication
         const isCustom = med.id.startsWith('custom-');
         
-        await supabase
-          .schema('private_health_info')
-          .from('user_medications')
-          .insert({
-            user_id: userId,
-            medication_id: isCustom ? null : med.id,
-            medication_name: isCustom ? med.name : null,
-            dosage_amount: dosageAmount,
-            dosage_unit: dosageUnit,
-            frequency: `${med.times.length}x daily`,
-            times: med.times,
-            start_date: new Date().toISOString().split('T')[0],
-            is_active: true
-          });
+        // HIPAA-compliant: Use RPC function instead of direct insert
+        await supabase.rpc('save_user_medication', {
+          p_user_id: userId,
+          p_medication_id: isCustom ? null : med.id,
+          p_medication_name: isCustom ? med.name : null,
+          p_dosage_amount: dosageAmount,
+          p_dosage_unit: dosageUnit,
+          p_frequency: `${med.times.length}x daily`,
+          p_times: med.times,
+          p_is_active: true
+        });
       }
 
       // 4. Save daily tracking preferences

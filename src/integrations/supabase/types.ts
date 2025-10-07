@@ -1976,6 +1976,48 @@ export type Database = {
         Args: { p_data_type: string; p_patient_id: string }
         Returns: boolean
       }
+      get_user_medications: {
+        Args: { p_user_id: string }
+        Returns: {
+          id: string
+          user_id: string
+          medication_id: string | null
+          medication_name: string | null
+          dosage_amount: number | null
+          dosage_unit: string | null
+          frequency: string | null
+          times: string[] | null
+          start_date: string | null
+          end_date: string | null
+          is_active: boolean | null
+          created_at: string | null
+        }[]
+      }
+      save_user_medication: {
+        Args: {
+          p_user_id: string
+          p_medication_id?: string | null
+          p_medication_name?: string | null
+          p_dosage_amount?: number | null
+          p_dosage_unit?: string | null
+          p_frequency?: string | null
+          p_times?: string[] | null
+          p_is_active?: boolean
+        }
+        Returns: string
+      }
+      get_user_conditions: {
+        Args: { p_user_id: string }
+        Returns: {
+          id: string
+          user_id: string
+          condition_id: string
+          diagnosis_date: string | null
+          severity: number | null
+          tracking_features_enabled: string[] | null
+          created_at: string | null
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

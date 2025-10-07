@@ -51,13 +51,9 @@ export class MedicationReminderService {
     if (!user) return;
 
     try {
-      // Get user's medications with times
+      // HIPAA-compliant: Use RPC function instead of direct table access
       const { data: medications, error } = await supabase
-        .schema('private_health_info')
-        .from('user_medications')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true);
+        .rpc('get_user_medications', { p_user_id: user.id });
 
       if (error) throw error;
 
@@ -271,13 +267,9 @@ export class MedicationReminderService {
     const today = now.toISOString().split('T')[0];
 
     try {
-      // Get all medications that should have been taken
+      // HIPAA-compliant: Use RPC function instead of direct table access
       const { data: medications } = await supabase
-        .schema('private_health_info')
-        .from('user_medications')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true);
+        .rpc('get_user_medications', { p_user_id: user.id });
 
       for (const med of medications || []) {
         if (med.times && Array.isArray(med.times)) {
