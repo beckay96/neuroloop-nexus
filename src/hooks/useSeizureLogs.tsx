@@ -2,32 +2,32 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+// Interface matching seizure_logs_research table structure
 export interface SeizureLog {
-  id?: string;
-  patient_id: string;
-  occurred_at: string;
+  log_id?: string;
+  user_id: string;
+  log_date: string;
+  log_time?: string;
   seizure_type: string;
-  duration_seconds: number;
-  severity: string;
-  consciousness_level: string;
+  consciousness_level?: string;
+  duration_seconds?: number;
+  aura_present?: string;
+  aura_description?: string;
+  witnessed?: string;
+  witness_role?: string;
+  video_recorded?: string;
   location_type?: string;
-  location_details?: string;
-  aura_present?: boolean;
-  aura_type?: string;
-  aura_duration_seconds?: number;
-  triggers?: string[];
-  symptoms_before?: string[];
-  symptoms_during?: string[];
-  symptoms_after?: string[];
+  post_ictal_confusion_minutes?: number;
   recovery_time_minutes?: number;
-  injury_occurred?: boolean;
-  injury_details?: string;
-  hospital_visit_required?: boolean;
-  medication_taken?: string;
-  witnessed_by?: string;
+  sleep_hours_prior?: number;
+  medication_adherence_prior?: string;
+  stress_level?: string;
+  emergency_services_called?: string;
+  rescue_medication_used?: string;
+  rescue_medication_type?: string;
+  hospitalized?: string;
+  research_grade?: string;
   notes?: string;
-  shared_with_clinician?: boolean;
-  shared_with_carers?: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -55,25 +55,37 @@ export const useSeizureLogs = (userId?: string) => {
     }
   };
 
-  const addSeizureLog = async (logData: Omit<SeizureLog, 'id' | 'created_at' | 'updated_at'>) => {
+  const addSeizureLog = async (logData: Omit<SeizureLog, 'log_id' | 'created_at' | 'updated_at'>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('seizure_events')
-        .insert(logData)
-        .select()
-        .single();
+      // Parse date and time from log_date if needed
+      const occurredAt = logData.log_date + (logData.log_time ? 'T' + logData.log_time : 'T00:00:00');
+      
+      // Use RPC for secure access to private_health_info schema
+      const { data: logId, error } = await supabase.rpc('save_seizure_log', {
+        p_user_id: logData.user_id,
+        p_occurred_at: occurredAt,
+        p_duration_seconds: logData.duration_seconds || null,
+        p_seizure_type: logData.seizure_type,
+        p_consciousness_level: logData.consciousness_level || null,
+        p_warning_signs: logData.aura_present === 'yes' ? [logData.aura_description || ''] : [],
+        p_post_ictal_symptoms: [],
+        p_possible_triggers: [],
+        p_location_during: logData.location_type || null,
+        p_rescue_medication_given: logData.rescue_medication_used === 'yes',
+        p_emergency_services_called: logData.emergency_services_called === 'yes',
+        p_notes: logData.notes || null
+      });
+
       if (error) throw error;
 
-      setSeizureLogs([data, ...seizureLogs]);
-      
       toast({
         title: "Seizure Logged",
         description: "Your seizure has been recorded successfully.",
       });
 
-      return { success: true, data };
+      // Refetch to get the complete record
+      await fetchSeizureLogs();
+      return { success: true, data: { log_id: logId } };
     } catch (error: any) {
       console.error('Error adding seizure event:', error);
       toast({
@@ -85,20 +97,21 @@ export const useSeizureLogs = (userId?: string) => {
     }
   };
 
-  const updateSeizureLog = async (id: string, updates: Partial<SeizureLog>) => {
+  const updateSeizureLog = async (logId: string, updates: Partial<SeizureLog>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Note: No update RPC exists, using direct table access
+      // TODO: Create update_seizure_log RPC for better security
+      // @ts-ignore - seizure_logs_research exists in private_health_info schema
       const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('seizure_events')
+        .from('seizure_logs_research')
         .update(updates)
-        .eq('id', id)
+        .eq('log_id', logId)
         .select()
         .single();
 
       if (error) throw error;
 
-      setSeizureLogs(seizureLogs.map(log => log.id === id ? data : log));
+      setSeizureLogs(seizureLogs.map(log => log.log_id === logId ? data as SeizureLog : log));
       
       toast({
         title: "Log Updated",
@@ -117,18 +130,19 @@ export const useSeizureLogs = (userId?: string) => {
     }
   };
 
-  const deleteSeizureLog = async (id: string) => {
+  const deleteSeizureLog = async (logId: string) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
+      // Note: No delete RPC exists, using direct table access
+      // TODO: Create delete_seizure_log RPC for soft delete
+      // @ts-ignore - seizure_logs_research exists in private_health_info schema
       const { error } = await supabase
-        .schema('private_health_info')
-        .from('seizure_events')
+        .from('seizure_logs_research')
         .delete()
-        .eq('id', id);
+        .eq('log_id', logId);
 
       if (error) throw error;
 
-      setSeizureLogs(seizureLogs.filter(log => log.id !== id));
+      setSeizureLogs(seizureLogs.filter(log => log.log_id !== logId));
       
       toast({
         title: "Log Deleted",

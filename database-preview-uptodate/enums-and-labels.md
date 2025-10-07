@@ -108,6 +108,570 @@
     "label": "phone_change_token"
   },
   {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 1,
+    "label": "lesion"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 2,
+    "label": "atrophy"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 3,
+    "label": "infarct"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 4,
+    "label": "hemorrhage"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 5,
+    "label": "hyperintensity"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 6,
+    "label": "hypointensity"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 7,
+    "label": "tumor"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 8,
+    "label": "artifact"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 9,
+    "label": "normal"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 10,
+    "label": "calcification"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 11,
+    "label": "impairment"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "annotation_type_enum",
+    "sort_order": 12,
+    "label": "other"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 1,
+    "label": "manual_entry"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 2,
+    "label": "device"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 3,
+    "label": "EHR_import"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 4,
+    "label": "patient_survey"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 5,
+    "label": "proxy_report"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 6,
+    "label": "telehealth"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "collection_method_enum",
+    "sort_order": 7,
+    "label": "other"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 1,
+    "label": "total_score"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 2,
+    "label": "overall_quality"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 3,
+    "label": "emotional_wellbeing"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 4,
+    "label": "physical_wellbeing"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 5,
+    "label": "social_wellbeing"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 6,
+    "label": "cognitive_functioning"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 7,
+    "label": "pain_level"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 8,
+    "label": "fatigue_level"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 9,
+    "label": "sleep_duration"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 10,
+    "label": "sleep_quality"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 11,
+    "label": "motor_score"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 12,
+    "label": "mobility"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 13,
+    "label": "self_care"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 14,
+    "label": "usual_activities"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 15,
+    "label": "anxiety_depression"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 16,
+    "label": "energy_vitality"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_domain_label_enum",
+    "sort_order": 17,
+    "label": "other"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 1,
+    "label": "quality_of_life"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 2,
+    "label": "sleep_quality"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 3,
+    "label": "fatigue_level"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 4,
+    "label": "cognition"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 5,
+    "label": "mood"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 6,
+    "label": "depression"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 7,
+    "label": "anxiety"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 8,
+    "label": "physical_function"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 9,
+    "label": "pain"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 10,
+    "label": "seizure_frequency"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 11,
+    "label": "motor_symptoms"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 12,
+    "label": "adherence_to_medication"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 13,
+    "label": "social_function"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 14,
+    "label": "energy_vitality"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 15,
+    "label": "emotional_wellbeing"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 16,
+    "label": "sexual_function"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 17,
+    "label": "autonomic_symptoms"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "pro_type_enum",
+    "sort_order": 18,
+    "label": "other"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 1,
+    "label": "UPDRS"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 2,
+    "label": "MoCA"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 3,
+    "label": "MMSE"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 4,
+    "label": "HAM-D"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 5,
+    "label": "QOLIE-89"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 6,
+    "label": "QOLIE-31"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 7,
+    "label": "EQ-5D"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 8,
+    "label": "BDI"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 9,
+    "label": "STAI"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 10,
+    "label": "PDQ-39"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 11,
+    "label": "HADS"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 12,
+    "label": "GAD-7"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 13,
+    "label": "PSQI"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_type_enum",
+    "sort_order": 14,
+    "label": "other"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_version_enum",
+    "sort_order": 1,
+    "label": "v1"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_version_enum",
+    "sort_order": 2,
+    "label": "v2"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_version_enum",
+    "sort_order": 3,
+    "label": "v3"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_version_enum",
+    "sort_order": 4,
+    "label": "short"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_version_enum",
+    "sort_order": 5,
+    "label": "long"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "scale_version_enum",
+    "sort_order": 6,
+    "label": "other"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 1,
+    "label": "UPDRS_I"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 2,
+    "label": "UPDRS_II"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 3,
+    "label": "UPDRS_III"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 4,
+    "label": "UPDRS_IV"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 5,
+    "label": "Visuospatial"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 6,
+    "label": "Naming"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 7,
+    "label": "Attention"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 8,
+    "label": "Language"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 9,
+    "label": "Abstraction"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 10,
+    "label": "Delayed_Recall"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 11,
+    "label": "Orientation"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 12,
+    "label": "Seizure_Worry"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 13,
+    "label": "Overall_Quality"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 14,
+    "label": "Emotional_Wellbeing"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 15,
+    "label": "Energy_Fatigue"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 16,
+    "label": "Cognitive_Functioning"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 17,
+    "label": "Medication_Effects"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 18,
+    "label": "Social_Functioning"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 19,
+    "label": "Physical_Functioning"
+  },
+  {
+    "schema_name": "clinical",
+    "enum_name": "subscale_label_enum",
+    "sort_order": 20,
+    "label": "other"
+  },
+  {
     "schema_name": "public",
     "enum_name": "assessment_type_enum",
     "sort_order": 1,
@@ -307,6 +871,42 @@
   },
   {
     "schema_name": "public",
+    "enum_name": "capture_method_enum",
+    "sort_order": 1,
+    "label": "manual"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "capture_method_enum",
+    "sort_order": 2,
+    "label": "wearable"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "capture_method_enum",
+    "sort_order": 3,
+    "label": "EHR"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "capture_method_enum",
+    "sort_order": 4,
+    "label": "proxy"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "capture_method_enum",
+    "sort_order": 5,
+    "label": "survey_auto"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "capture_method_enum",
+    "sort_order": 6,
+    "label": "unknown"
+  },
+  {
+    "schema_name": "public",
     "enum_name": "consciousness_level_enum",
     "sort_order": 1,
     "label": "FULL"
@@ -327,25 +927,85 @@
     "schema_name": "public",
     "enum_name": "consent_status_enum",
     "sort_order": 1,
-    "label": "pending"
+    "label": "granted"
   },
   {
     "schema_name": "public",
     "enum_name": "consent_status_enum",
     "sort_order": 2,
-    "label": "active"
-  },
-  {
-    "schema_name": "public",
-    "enum_name": "consent_status_enum",
-    "sort_order": 3,
     "label": "withdrawn"
   },
   {
     "schema_name": "public",
     "enum_name": "consent_status_enum",
+    "sort_order": 3,
+    "label": "pending"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 1,
+    "label": "symptom"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 2,
+    "label": "activity"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 3,
+    "label": "mood"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
     "sort_order": 4,
-    "label": "expired"
+    "label": "energy"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 5,
+    "label": "sleep_quality"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 6,
+    "label": "pain_level"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 7,
+    "label": "stress_level"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 8,
+    "label": "custom_scale"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 9,
+    "label": "yes_no_question"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 10,
+    "label": "text_note"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "custom_tracking_type_enum",
+    "sort_order": 11,
+    "label": "other"
   },
   {
     "schema_name": "public",
@@ -370,6 +1030,108 @@
     "enum_name": "cycle_phase_enum",
     "sort_order": 4,
     "label": "LUTEAL"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "data_origin_enum",
+    "sort_order": 1,
+    "label": "manual_entry"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "data_origin_enum",
+    "sort_order": 2,
+    "label": "device"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "data_origin_enum",
+    "sort_order": 3,
+    "label": "EHR_import"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "data_origin_enum",
+    "sort_order": 4,
+    "label": "AI_generated"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "data_origin_enum",
+    "sort_order": 5,
+    "label": "clinician_assigned"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "data_origin_enum",
+    "sort_order": 6,
+    "label": "other"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 1,
+    "label": "focal_simple"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 2,
+    "label": "focal_complex"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 3,
+    "label": "generalized"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 4,
+    "label": "status_epilepticus"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 5,
+    "label": "absence"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 6,
+    "label": "myoclonic"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 7,
+    "label": "clonic"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 8,
+    "label": "tonic"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 9,
+    "label": "atonic"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 10,
+    "label": "landau_kleffner"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "epilepsy_subtype_enum",
+    "sort_order": 11,
+    "label": "other"
   },
   {
     "schema_name": "public",
@@ -559,6 +1321,102 @@
   },
   {
     "schema_name": "public",
+    "enum_name": "parkinsons_subtype_enum",
+    "sort_order": 1,
+    "label": "idiopathic"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "parkinsons_subtype_enum",
+    "sort_order": 2,
+    "label": "drug_induced"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "parkinsons_subtype_enum",
+    "sort_order": 3,
+    "label": "vascular"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "parkinsons_subtype_enum",
+    "sort_order": 4,
+    "label": "parkinsonism"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "parkinsons_subtype_enum",
+    "sort_order": 5,
+    "label": "young_onset"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "parkinsons_subtype_enum",
+    "sort_order": 6,
+    "label": "other"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 1,
+    "label": "tremor"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 2,
+    "label": "rigidity"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 3,
+    "label": "bradykinesia"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 4,
+    "label": "postural_instability"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 5,
+    "label": "dyskinesia"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 6,
+    "label": "freezing"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 7,
+    "label": "micrographia"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 8,
+    "label": "speech_disturbance"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 9,
+    "label": "facial_masking"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "pd_motor_symptom_enum",
+    "sort_order": 10,
+    "label": "other"
+  },
+  {
+    "schema_name": "public",
     "enum_name": "post_ictal_symptom_enum",
     "sort_order": 1,
     "label": "CONFUSION"
@@ -687,6 +1545,36 @@
     "schema_name": "public",
     "enum_name": "relationship_enum",
     "sort_order": 8,
+    "label": "other"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "reporter_type_enum",
+    "sort_order": 1,
+    "label": "self"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "reporter_type_enum",
+    "sort_order": 2,
+    "label": "caregiver"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "reporter_type_enum",
+    "sort_order": 3,
+    "label": "clinician"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "reporter_type_enum",
+    "sort_order": 4,
+    "label": "device"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "reporter_type_enum",
+    "sort_order": 5,
     "label": "other"
   },
   {
@@ -1005,61 +1893,55 @@
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 1,
-    "label": "FOCAL_AWARE"
+    "label": "simple_partial"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 2,
-    "label": "FOCAL_IMPAIRED"
+    "label": "complex_partial"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 3,
-    "label": "FOCAL_TO_BILATERAL_TONIC_CLONIC"
+    "label": "generalized_tonic_clonic"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 4,
-    "label": "GENERALIZED_TONIC_CLONIC"
+    "label": "absence"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 5,
-    "label": "GENERALIZED_ABSENCE"
+    "label": "myoclonic"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 6,
-    "label": "GENERALIZED_MYOCLONIC"
+    "label": "clonic"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 7,
-    "label": "GENERALIZED_ATONIC"
+    "label": "tonic"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 8,
-    "label": "GENERALIZED_TONIC"
+    "label": "atonic"
   },
   {
     "schema_name": "public",
     "enum_name": "seizure_type_enum",
     "sort_order": 9,
-    "label": "GENERALIZED_CLONIC"
-  },
-  {
-    "schema_name": "public",
-    "enum_name": "seizure_type_enum",
-    "sort_order": 10,
-    "label": "UNKNOWN"
+    "label": "unknown"
   },
   {
     "schema_name": "public",
@@ -1156,6 +2038,72 @@
     "enum_name": "stress_level_enum",
     "sort_order": 10,
     "label": "10"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 1,
+    "label": "motor"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 2,
+    "label": "cognitive"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 3,
+    "label": "mood"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 4,
+    "label": "sleep"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 5,
+    "label": "autonomic"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 6,
+    "label": "sensory"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 7,
+    "label": "pain"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 8,
+    "label": "gastrointestinal"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 9,
+    "label": "cardiovascular"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 10,
+    "label": "respiratory"
+  },
+  {
+    "schema_name": "public",
+    "enum_name": "symptom_category_enum",
+    "sort_order": 11,
+    "label": "other"
   },
   {
     "schema_name": "public",

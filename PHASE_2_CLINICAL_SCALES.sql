@@ -81,7 +81,7 @@ ALTER TABLE clinical.clinical_scale_results
 
 CREATE INDEX IF NOT EXISTS idx_scale_results_type ON clinical.clinical_scale_results(scale_type);
 CREATE INDEX IF NOT EXISTS idx_scale_results_snomed ON clinical.clinical_scale_results(snomed_ct_code);
-CREATE INDEX IF NOT EXISTS idx_scale_results_patient_date ON clinical.clinical_scale_results(patient_id, assessment_date DESC);
+CREATE INDEX IF NOT EXISTS idx_scale_results_patient_date ON clinical.clinical_scale_results(patient_id, assessed_at DESC);
 
 -- =====================================================
 -- STEP 3: CREATE SUBSCALE RESULTS TABLE
@@ -203,12 +203,13 @@ ALTER TABLE clinical.patient_pro_timeline
 -- STEP 6: CREATE RPC FOR SAVING SCALE RESULTS
 -- =====================================================
 
+DROP FUNCTION IF EXISTS clinical.save_scale_result(UUID, clinical.scale_type_enum, clinical.scale_version_enum, NUMERIC, TIMESTAMPTZ, UUID, UUID, TEXT, TEXT, TEXT, JSONB);
 CREATE OR REPLACE FUNCTION clinical.save_scale_result(
   p_patient_id UUID,
   p_scale_type clinical.scale_type_enum,
   p_scale_version clinical.scale_version_enum,
   p_total_score NUMERIC,
-  p_assessment_date DATE,
+  p_assessed_at TIMESTAMPTZ,
   p_assessed_by UUID,
   p_entered_by UUID,
   p_snomed_ct_code TEXT DEFAULT NULL,
@@ -225,31 +226,34 @@ DECLARE
   v_scale_id UUID;
   v_subscore JSONB;
 BEGIN
+  -- Validate patient_id is not NULL
+  IF p_patient_id IS NULL THEN
+    RAISE EXCEPTION 'patient_id cannot be NULL';
+  END IF;
+  
   -- Insert main scale result
   INSERT INTO clinical.clinical_scale_results (
     patient_id,
     scale_type,
     scale_version,
     total_score,
-    assessment_date,
+    assessed_at,
     assessed_by,
     entered_by,
     snomed_ct_code,
     icd10_code,
-    notes,
-    created_at
+    assessment_notes
   ) VALUES (
     p_patient_id,
     p_scale_type,
     p_scale_version,
     p_total_score,
-    p_assessment_date,
+    p_assessed_at,
     p_assessed_by,
     p_entered_by,
     p_snomed_ct_code,
     p_icd10_code,
-    p_notes,
-    NOW()
+    p_notes
   ) RETURNING scale_id INTO v_scale_id;
   
   -- Insert subscores if provided
@@ -276,12 +280,13 @@ BEGIN
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION clinical.save_scale_result(UUID, clinical.scale_type_enum, clinical.scale_version_enum, NUMERIC, DATE, UUID, UUID, TEXT, TEXT, TEXT, JSONB) TO authenticated;
+GRANT EXECUTE ON FUNCTION clinical.save_scale_result(UUID, clinical.scale_type_enum, clinical.scale_version_enum, NUMERIC, TIMESTAMPTZ, UUID, UUID, TEXT, TEXT, TEXT, JSONB) TO authenticated;
 
 -- =====================================================
 -- STEP 7: CREATE RPC FOR FETCHING SCALE RESULTS
 -- =====================================================
 
+DROP FUNCTION IF EXISTS clinical.get_scale_results_with_subscores(UUID, clinical.scale_type_enum, INTEGER);
 CREATE OR REPLACE FUNCTION clinical.get_scale_results_with_subscores(
   p_patient_id UUID,
   p_scale_type clinical.scale_type_enum DEFAULT NULL,
@@ -293,13 +298,13 @@ RETURNS TABLE (
   scale_type TEXT,
   scale_version TEXT,
   total_score NUMERIC,
-  assessment_date DATE,
+  assessed_at TIMESTAMPTZ,
   assessed_by UUID,
   entered_by UUID,
   snomed_ct_code TEXT,
   icd10_code TEXT,
-  notes TEXT,
-  created_at TIMESTAMPTZ,
+  assessment_notes TEXT,
+  entered_at TIMESTAMPTZ,
   subscores JSONB
 )
 LANGUAGE plpgsql
@@ -314,13 +319,13 @@ BEGIN
     sr.scale_type::TEXT,
     sr.scale_version::TEXT,
     sr.total_score,
-    sr.assessment_date,
+    sr.assessed_at,
     sr.assessed_by,
     sr.entered_by,
     sr.snomed_ct_code,
     sr.icd10_code,
-    sr.notes,
-    sr.created_at,
+    sr.assessment_notes,
+    sr.entered_at,
     COALESCE(
       (
         SELECT jsonb_agg(
@@ -339,8 +344,8 @@ BEGIN
   FROM clinical.clinical_scale_results sr
   WHERE 
     sr.patient_id = p_patient_id
-    AND (p_scale_type IS NULL OR sr.scale_type = p_scale_type)
-  ORDER BY sr.assessment_date DESC, sr.created_at DESC
+    AND (p_scale_type IS NULL OR sr.scale_type::TEXT = p_scale_type::TEXT)
+  ORDER BY sr.assessed_at DESC, sr.entered_at DESC
   LIMIT p_limit;
 END;
 $$;
@@ -366,3 +371,19 @@ SELECT scale_type, full_name, typical_use_case FROM public.clinical_scales_libra
 -- =====================================================
 -- DONE - PHASE 2 COMPLETE!
 -- =====================================================
+
+| scale_type | full_name                                | typical_use_case |
+| ---------- | ---------------------------------------- | ---------------- |
+| UPDRS      | Unified Parkinson's Disease Rating Scale | parkinsons       |
+| MoCA       | Montreal Cognitive Assessment            | cognitive        |
+| MMSE       | Mini-Mental State Exam                   | cognitive        |
+| HAM-D      | Hamilton Depression Scale                | mood             |
+| QOLIE-89   | Quality of Life in Epilepsy Inventory    | epilepsy         |
+| QOLIE-31   | Quality of Life in Epilepsy-31           | epilepsy         |
+| PDQ-39     | Parkinson's Disease Questionnaire        | parkinsons       |
+| HADS       | Hospital Anxiety and Depression Scale    | mood             |
+| GAD-7      | Generalized Anxiety Disorder-7           | mood             |
+| PSQI       | Pittsburgh Sleep Quality Index           | sleep            | 
+
+
+DONE 

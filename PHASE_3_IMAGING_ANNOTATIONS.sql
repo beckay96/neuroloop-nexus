@@ -340,3 +340,17 @@ SELECT finding_name, annotation_type, snomed_ct_code FROM public.imaging_finding
 -- =====================================================
 -- DONE - PHASE 3 COMPLETE!
 -- =====================================================
+
+
+DONE 
+
+| finding_name                | annotation_type | snomed_ct_code |
+| --------------------------- | --------------- | -------------- |
+| Basal ganglia atrophy       | atrophy         | 230284003      |
+| Calcification               | calcification   | 20104002       |
+| Cerebral atrophy            | atrophy         | 13342000       |
+| Cerebral hemorrhage         | hemorrhage      | 230690007      |
+| Cerebral infarct            | infarct         | 432504007      |
+| Cortical lesion             | lesion          | 128608001      |
+| Hippocampal sclerosis       | atrophy         | 21831000       |
+| White matter hyperintensity | hyperintensity  | 418107008      |

@@ -137,6 +137,15 @@
   {
     "schema_name": "clinical",
     "table_name": "clinical_notes_exports",
+    "constraint_name": "clinical_notes_exports_last_modified_by_fkey",
+    "fk_definition": "FOREIGN KEY (last_modified_by) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "a"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_notes_exports",
     "constraint_name": "clinical_notes_exports_patient_id_fkey",
     "fk_definition": "FOREIGN KEY (patient_id) REFERENCES auth.users (id)",
     "confmatchtype": "s",
@@ -173,8 +182,26 @@
   {
     "schema_name": "clinical",
     "table_name": "clinical_scale_results",
+    "constraint_name": "clinical_scale_results_last_modified_by_fkey",
+    "fk_definition": "FOREIGN KEY (last_modified_by) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "a"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_results",
     "constraint_name": "clinical_scale_results_patient_id_fkey",
     "fk_definition": "FOREIGN KEY (patient_id) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_subscore_results",
+    "constraint_name": "clinical_scale_subscore_results_scale_id_fkey",
+    "fk_definition": "FOREIGN KEY (scale_id) REFERENCES clinical.clinical_scale_results (scale_id)",
     "confmatchtype": "s",
     "confupdtype": "a",
     "confdeltype": "c"
@@ -187,6 +214,24 @@
     "confmatchtype": "s",
     "confupdtype": "a",
     "confdeltype": "c"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "constraint_name": "imaging_annotations_image_id_fkey",
+    "fk_definition": "FOREIGN KEY (image_id) REFERENCES clinical.neuro_imaging_results (image_id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "constraint_name": "imaging_annotations_validated_by_fkey",
+    "fk_definition": "FOREIGN KEY (validated_by) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "a"
   },
   {
     "schema_name": "clinical",
@@ -259,6 +304,15 @@
     "confmatchtype": "s",
     "confupdtype": "a",
     "confdeltype": "a"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_value",
+    "constraint_name": "patient_pro_value_pro_id_fkey",
+    "fk_definition": "FOREIGN KEY (pro_id) REFERENCES clinical.patient_pro_timeline (pro_id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
   },
   {
     "schema_name": "clinical",
@@ -424,6 +478,24 @@
   },
   {
     "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "constraint_name": "patient_diagnoses_confirming_clinician_id_fkey",
+    "fk_definition": "FOREIGN KEY (confirming_clinician_id) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "a"
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "constraint_name": "patient_diagnoses_patient_id_fkey",
+    "fk_definition": "FOREIGN KEY (patient_id) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
+  },
+  {
+    "schema_name": "private_health_info",
     "table_name": "patient_onboarding_data",
     "constraint_name": "patient_onboarding_data_user_id_fkey",
     "fk_definition": "FOREIGN KEY (user_id) REFERENCES auth.users (id)",
@@ -520,6 +592,15 @@
     "confmatchtype": "s",
     "confupdtype": "a",
     "confdeltype": "a"
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "seizure_logs",
+    "constraint_name": "seizure_logs_patient_id_fkey",
+    "fk_definition": "FOREIGN KEY (patient_id) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
   },
   {
     "schema_name": "private_health_info",
@@ -660,6 +741,33 @@
     "schema_name": "public",
     "table_name": "clinician_profiles",
     "constraint_name": "clinician_profiles_user_id_fkey",
+    "fk_definition": "FOREIGN KEY (user_id) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "constraint_name": "custom_tracking_items_user_id_fkey",
+    "fk_definition": "FOREIGN KEY (user_id) REFERENCES auth.users (id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "constraint_name": "custom_tracking_values_item_id_fkey",
+    "fk_definition": "FOREIGN KEY (item_id) REFERENCES public.custom_tracking_items (item_id)",
+    "confmatchtype": "s",
+    "confupdtype": "a",
+    "confdeltype": "c"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "constraint_name": "custom_tracking_values_user_id_fkey",
     "fk_definition": "FOREIGN KEY (user_id) REFERENCES auth.users (id)",
     "confmatchtype": "s",
     "confupdtype": "a",

@@ -370,6 +370,96 @@ export type Database = {
         }
         Relationships: []
       }
+      clinical_scales_library: {
+        Row: {
+          abbreviation: string
+          available_versions: string[] | null
+          created_at: string | null
+          description: string | null
+          full_name: string
+          icd10_code: string | null
+          max_score: number | null
+          min_score: number | null
+          scale_library_id: string
+          scale_type:
+            | "UPDRS"
+            | "MoCA"
+            | "MMSE"
+            | "HAM-D"
+            | "QOLIE-89"
+            | "QOLIE-31"
+            | "EQ-5D"
+            | "BDI"
+            | "STAI"
+            | "PDQ-39"
+            | "HADS"
+            | "GAD-7"
+            | "PSQI"
+            | "other"
+          scoring_interpretation: string | null
+          snomed_ct_code: string | null
+          typical_use_case: string | null
+        }
+        Insert: {
+          abbreviation: string
+          available_versions?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          full_name: string
+          icd10_code?: string | null
+          max_score?: number | null
+          min_score?: number | null
+          scale_library_id?: string
+          scale_type:
+            | "UPDRS"
+            | "MoCA"
+            | "MMSE"
+            | "HAM-D"
+            | "QOLIE-89"
+            | "QOLIE-31"
+            | "EQ-5D"
+            | "BDI"
+            | "STAI"
+            | "PDQ-39"
+            | "HADS"
+            | "GAD-7"
+            | "PSQI"
+            | "other"
+          scoring_interpretation?: string | null
+          snomed_ct_code?: string | null
+          typical_use_case?: string | null
+        }
+        Update: {
+          abbreviation?: string
+          available_versions?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          full_name?: string
+          icd10_code?: string | null
+          max_score?: number | null
+          min_score?: number | null
+          scale_library_id?: string
+          scale_type?:
+            | "UPDRS"
+            | "MoCA"
+            | "MMSE"
+            | "HAM-D"
+            | "QOLIE-89"
+            | "QOLIE-31"
+            | "EQ-5D"
+            | "BDI"
+            | "STAI"
+            | "PDQ-39"
+            | "HADS"
+            | "GAD-7"
+            | "PSQI"
+            | "other"
+          scoring_interpretation?: string | null
+          snomed_ct_code?: string | null
+          typical_use_case?: string | null
+        }
+        Relationships: []
+      }
       clinician_profiles: {
         Row: {
           accepting_new_patients: boolean | null
@@ -628,6 +718,39 @@ export type Database = {
         }
         Relationships: []
       }
+      diagnoses_library: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          diagnosis_category: string
+          diagnosis_id: string
+          diagnosis_name: string
+          icd10_code: string
+          snomed_ct_code: string
+          typical_subtypes: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          diagnosis_category: string
+          diagnosis_id?: string
+          diagnosis_name: string
+          icd10_code: string
+          snomed_ct_code: string
+          typical_subtypes?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          diagnosis_category?: string
+          diagnosis_id?: string
+          diagnosis_name?: string
+          icd10_code?: string
+          snomed_ct_code?: string
+          typical_subtypes?: string[] | null
+        }
+        Relationships: []
+      }
       function_execution_logs: {
         Row: {
           completed_at: string | null
@@ -688,6 +811,84 @@ export type Database = {
           started_at?: string
           success?: boolean | null
           triggered_by?: string | null
+        }
+        Relationships: []
+      }
+      imaging_findings_library: {
+        Row: {
+          annotation_type:
+            | "lesion"
+            | "atrophy"
+            | "infarct"
+            | "hemorrhage"
+            | "hyperintensity"
+            | "hypointensity"
+            | "tumor"
+            | "artifact"
+            | "normal"
+            | "calcification"
+            | "impairment"
+            | "other"
+          clinical_significance: string | null
+          created_at: string | null
+          description: string | null
+          finding_id: string
+          finding_name: string
+          icd10_code: string
+          search_keywords: string[] | null
+          snomed_ct_code: string
+          typical_in_epilepsy: boolean | null
+          typical_in_parkinsons: boolean | null
+        }
+        Insert: {
+          annotation_type:
+            | "lesion"
+            | "atrophy"
+            | "infarct"
+            | "hemorrhage"
+            | "hyperintensity"
+            | "hypointensity"
+            | "tumor"
+            | "artifact"
+            | "normal"
+            | "calcification"
+            | "impairment"
+            | "other"
+          clinical_significance?: string | null
+          created_at?: string | null
+          description?: string | null
+          finding_id?: string
+          finding_name: string
+          icd10_code: string
+          search_keywords?: string[] | null
+          snomed_ct_code: string
+          typical_in_epilepsy?: boolean | null
+          typical_in_parkinsons?: boolean | null
+        }
+        Update: {
+          annotation_type?:
+            | "lesion"
+            | "atrophy"
+            | "infarct"
+            | "hemorrhage"
+            | "hyperintensity"
+            | "hypointensity"
+            | "tumor"
+            | "artifact"
+            | "normal"
+            | "calcification"
+            | "impairment"
+            | "other"
+          clinical_significance?: string | null
+          created_at?: string | null
+          description?: string | null
+          finding_id?: string
+          finding_name?: string
+          icd10_code?: string
+          search_keywords?: string[] | null
+          snomed_ct_code?: string
+          typical_in_epilepsy?: boolean | null
+          typical_in_parkinsons?: boolean | null
         }
         Relationships: []
       }
@@ -1045,6 +1246,108 @@ export type Database = {
         }
         Relationships: []
       }
+      pro_measures_library: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          full_name: string
+          icd10_code: string | null
+          interpretation_guide: string | null
+          max_value: number | null
+          min_value: number | null
+          pro_library_id: string
+          pro_type:
+            | "quality_of_life"
+            | "sleep_quality"
+            | "fatigue_level"
+            | "cognition"
+            | "mood"
+            | "depression"
+            | "anxiety"
+            | "physical_function"
+            | "pain"
+            | "seizure_frequency"
+            | "motor_symptoms"
+            | "adherence_to_medication"
+            | "social_function"
+            | "energy_vitality"
+            | "emotional_wellbeing"
+            | "sexual_function"
+            | "autonomic_symptoms"
+            | "other"
+          snomed_ct_code: string | null
+          typical_domains: string[] | null
+          typical_use_case: string | null
+          unit_of_measure: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          full_name: string
+          icd10_code?: string | null
+          interpretation_guide?: string | null
+          max_value?: number | null
+          min_value?: number | null
+          pro_library_id?: string
+          pro_type:
+            | "quality_of_life"
+            | "sleep_quality"
+            | "fatigue_level"
+            | "cognition"
+            | "mood"
+            | "depression"
+            | "anxiety"
+            | "physical_function"
+            | "pain"
+            | "seizure_frequency"
+            | "motor_symptoms"
+            | "adherence_to_medication"
+            | "social_function"
+            | "energy_vitality"
+            | "emotional_wellbeing"
+            | "sexual_function"
+            | "autonomic_symptoms"
+            | "other"
+          snomed_ct_code?: string | null
+          typical_domains?: string[] | null
+          typical_use_case?: string | null
+          unit_of_measure?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          full_name?: string
+          icd10_code?: string | null
+          interpretation_guide?: string | null
+          max_value?: number | null
+          min_value?: number | null
+          pro_library_id?: string
+          pro_type?:
+            | "quality_of_life"
+            | "sleep_quality"
+            | "fatigue_level"
+            | "cognition"
+            | "mood"
+            | "depression"
+            | "anxiety"
+            | "physical_function"
+            | "pain"
+            | "seizure_frequency"
+            | "motor_symptoms"
+            | "adherence_to_medication"
+            | "social_function"
+            | "energy_vitality"
+            | "emotional_wellbeing"
+            | "sexual_function"
+            | "autonomic_symptoms"
+            | "other"
+          snomed_ct_code?: string | null
+          typical_domains?: string[] | null
+          typical_use_case?: string | null
+          unit_of_measure?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -1129,9 +1432,6 @@ export type Database = {
       research_consent: {
         Row: {
           consent_given_at: string | null
-          consent_status:
-            | Database["public"]["Enums"]["consent_status_enum"]
-            | null
           consent_version: string | null
           consent_withdrawn_at: string | null
           created_at: string | null
@@ -1141,9 +1441,6 @@ export type Database = {
         }
         Insert: {
           consent_given_at?: string | null
-          consent_status?:
-            | Database["public"]["Enums"]["consent_status_enum"]
-            | null
           consent_version?: string | null
           consent_withdrawn_at?: string | null
           created_at?: string | null
@@ -1153,9 +1450,6 @@ export type Database = {
         }
         Update: {
           consent_given_at?: string | null
-          consent_status?:
-            | Database["public"]["Enums"]["consent_status_enum"]
-            | null
           consent_version?: string | null
           consent_withdrawn_at?: string | null
           created_at?: string | null
@@ -1449,6 +1743,48 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           id?: string
+          symptom_name?: string
+        }
+        Relationships: []
+      }
+      symptoms_library: {
+        Row: {
+          category: Database["public"]["Enums"]["symptom_category_enum"]
+          coding_system: string | null
+          common_in_epilepsy: boolean | null
+          common_in_parkinsons: boolean | null
+          created_at: string | null
+          description: string | null
+          icd10_code: string | null
+          search_keywords: string[] | null
+          snomed_ct_code: string | null
+          symptom_id: string
+          symptom_name: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["symptom_category_enum"]
+          coding_system?: string | null
+          common_in_epilepsy?: boolean | null
+          common_in_parkinsons?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          icd10_code?: string | null
+          search_keywords?: string[] | null
+          snomed_ct_code?: string | null
+          symptom_id?: string
+          symptom_name: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["symptom_category_enum"]
+          coding_system?: string | null
+          common_in_epilepsy?: boolean | null
+          common_in_parkinsons?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          icd10_code?: string | null
+          search_keywords?: string[] | null
+          snomed_ct_code?: string | null
+          symptom_id?: string
           symptom_name?: string
         }
         Relationships: []
@@ -2177,9 +2513,35 @@ export type Database = {
         | "POSTERIOR_INSULA"
         | "ANTERIOR_CINGULATE"
         | "POSTERIOR_CINGULATE"
+      capture_method_enum:
+        | "manual"
+        | "wearable"
+        | "EHR"
+        | "proxy"
+        | "survey_auto"
+        | "unknown"
       consciousness_level_enum: "FULL" | "PARTIAL" | "NONE"
-      consent_status_enum: "pending" | "active" | "withdrawn" | "expired"
+      consent_status_enum: "granted" | "withdrawn" | "pending"
       cycle_phase_enum: "MENSTRUAL" | "FOLLICULAR" | "OVULATION" | "LUTEAL"
+      data_origin_enum:
+        | "manual_entry"
+        | "device"
+        | "EHR_import"
+        | "AI_generated"
+        | "clinician_assigned"
+        | "other"
+      epilepsy_subtype_enum:
+        | "focal_simple"
+        | "focal_complex"
+        | "generalized"
+        | "status_epilepticus"
+        | "absence"
+        | "myoclonic"
+        | "clonic"
+        | "tonic"
+        | "atonic"
+        | "landau_kleffner"
+        | "other"
       flow_intensity_enum:
         | "SPOTTING"
         | "LIGHT"
@@ -2209,6 +2571,24 @@ export type Database = {
         | "MODERATE"
         | "SEVERE"
         | "VERY_SEVERE"
+      parkinsons_subtype_enum:
+        | "idiopathic"
+        | "drug_induced"
+        | "vascular"
+        | "parkinsonism"
+        | "young_onset"
+        | "other"
+      pd_motor_symptom_enum:
+        | "tremor"
+        | "rigidity"
+        | "bradykinesia"
+        | "postural_instability"
+        | "dyskinesia"
+        | "freezing"
+        | "micrographia"
+        | "speech_disturbance"
+        | "facial_masking"
+        | "other"
       post_ictal_symptom_enum:
         | "CONFUSION"
         | "FATIGUE"
@@ -2233,6 +2613,12 @@ export type Database = {
         | "sibling"
         | "friend"
         | "caregiver"
+        | "other"
+      reporter_type_enum:
+        | "self"
+        | "caregiver"
+        | "clinician"
+        | "device"
         | "other"
       rescue_medication_enum:
         | "MIDAZOLAM"
@@ -2290,16 +2676,15 @@ export type Database = {
         | "INCONTINENCE"
         | "TONGUE_BITING"
       seizure_type_enum:
-        | "FOCAL_AWARE"
-        | "FOCAL_IMPAIRED"
-        | "FOCAL_TO_BILATERAL_TONIC_CLONIC"
-        | "GENERALIZED_TONIC_CLONIC"
-        | "GENERALIZED_ABSENCE"
-        | "GENERALIZED_MYOCLONIC"
-        | "GENERALIZED_ATONIC"
-        | "GENERALIZED_TONIC"
-        | "GENERALIZED_CLONIC"
-        | "UNKNOWN"
+        | "simple_partial"
+        | "complex_partial"
+        | "generalized_tonic_clonic"
+        | "absence"
+        | "myoclonic"
+        | "clonic"
+        | "tonic"
+        | "atonic"
+        | "unknown"
       semiology_category_enum:
         | "AURA"
         | "MOTOR"
@@ -2318,6 +2703,18 @@ export type Database = {
         | "8"
         | "9"
         | "10"
+      symptom_category_enum:
+        | "motor"
+        | "cognitive"
+        | "mood"
+        | "sleep"
+        | "autonomic"
+        | "sensory"
+        | "pain"
+        | "gastrointestinal"
+        | "cardiovascular"
+        | "respiratory"
+        | "other"
       tracking_feature_enum:
         | "seizure"
         | "tremor"
@@ -2521,9 +2918,38 @@ export const Constants = {
         "ANTERIOR_CINGULATE",
         "POSTERIOR_CINGULATE",
       ],
+      capture_method_enum: [
+        "manual",
+        "wearable",
+        "EHR",
+        "proxy",
+        "survey_auto",
+        "unknown",
+      ],
       consciousness_level_enum: ["FULL", "PARTIAL", "NONE"],
-      consent_status_enum: ["pending", "active", "withdrawn", "expired"],
+      consent_status_enum: ["granted", "withdrawn", "pending"],
       cycle_phase_enum: ["MENSTRUAL", "FOLLICULAR", "OVULATION", "LUTEAL"],
+      data_origin_enum: [
+        "manual_entry",
+        "device",
+        "EHR_import",
+        "AI_generated",
+        "clinician_assigned",
+        "other",
+      ],
+      epilepsy_subtype_enum: [
+        "focal_simple",
+        "focal_complex",
+        "generalized",
+        "status_epilepticus",
+        "absence",
+        "myoclonic",
+        "clonic",
+        "tonic",
+        "atonic",
+        "landau_kleffner",
+        "other",
+      ],
       flow_intensity_enum: [
         "SPOTTING",
         "LIGHT",
@@ -2557,6 +2983,26 @@ export const Constants = {
         "SEVERE",
         "VERY_SEVERE",
       ],
+      parkinsons_subtype_enum: [
+        "idiopathic",
+        "drug_induced",
+        "vascular",
+        "parkinsonism",
+        "young_onset",
+        "other",
+      ],
+      pd_motor_symptom_enum: [
+        "tremor",
+        "rigidity",
+        "bradykinesia",
+        "postural_instability",
+        "dyskinesia",
+        "freezing",
+        "micrographia",
+        "speech_disturbance",
+        "facial_masking",
+        "other",
+      ],
       post_ictal_symptom_enum: [
         "CONFUSION",
         "FATIGUE",
@@ -2585,6 +3031,7 @@ export const Constants = {
         "caregiver",
         "other",
       ],
+      reporter_type_enum: ["self", "caregiver", "clinician", "device", "other"],
       rescue_medication_enum: [
         "MIDAZOLAM",
         "DIAZEPAM",
@@ -2644,16 +3091,15 @@ export const Constants = {
         "TONGUE_BITING",
       ],
       seizure_type_enum: [
-        "FOCAL_AWARE",
-        "FOCAL_IMPAIRED",
-        "FOCAL_TO_BILATERAL_TONIC_CLONIC",
-        "GENERALIZED_TONIC_CLONIC",
-        "GENERALIZED_ABSENCE",
-        "GENERALIZED_MYOCLONIC",
-        "GENERALIZED_ATONIC",
-        "GENERALIZED_TONIC",
-        "GENERALIZED_CLONIC",
-        "UNKNOWN",
+        "simple_partial",
+        "complex_partial",
+        "generalized_tonic_clonic",
+        "absence",
+        "myoclonic",
+        "clonic",
+        "tonic",
+        "atonic",
+        "unknown",
       ],
       semiology_category_enum: [
         "AURA",
@@ -2664,6 +3110,19 @@ export const Constants = {
         "SENSORY",
       ],
       stress_level_enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      symptom_category_enum: [
+        "motor",
+        "cognitive",
+        "mood",
+        "sleep",
+        "autonomic",
+        "sensory",
+        "pain",
+        "gastrointestinal",
+        "cardiovascular",
+        "respiratory",
+        "other",
+      ],
       tracking_feature_enum: [
         "seizure",
         "tremor",

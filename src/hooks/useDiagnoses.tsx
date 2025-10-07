@@ -55,13 +55,28 @@ export const useDiagnoses = (patientId: string) => {
     }
   };
 
-  const addDiagnosis = async (diagnosis: Omit<Diagnosis, 'diagnosis_id' | 'created_at' | 'updated_at'>) => {
+  const addDiagnosis = async (
+    diagnosisCode: string,
+    diagnosisType: string,
+    options: {
+      diagnosed_date?: string;
+      diagnosed_by?: string;
+      snomed_ct_code?: string;
+      icd10_code?: string;
+      notes?: string;
+    } = {}
+  ) => {
     try {
-      const { data, error } = await supabase
-        .from('patient_diagnoses')
-        .insert([diagnosis])
-        .select()
-        .single();
+      const { data, error } = await supabase.rpc('save_patient_diagnosis', {
+        p_patient_id: patientId,
+        p_diagnosis_code: diagnosisCode,
+        p_diagnosis_type: diagnosisType,
+        p_diagnosed_date: options.diagnosed_date || new Date().toISOString().split('T')[0],
+        p_diagnosed_by: options.diagnosed_by || null,
+        p_snomed_ct_code: options.snomed_ct_code || null,
+        p_icd10_code: options.icd10_code || null,
+        p_notes: options.notes || null
+      });
 
       if (error) throw error;
 
@@ -130,6 +145,30 @@ export const useDiagnosesLibrary = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
+  const searchDiagnoses = async (searchTerm: string) => {
+    try {
+      setLoading(true);
+      
+      const { data, error } = await supabase.rpc('search_diagnoses', {
+        p_search_term: searchTerm || null
+      });
+
+      if (error) throw error;
+      setLibrary(data || []);
+      return { success: true, data: data as DiagnosisLibraryItem[] };
+    } catch (error: any) {
+      console.error('Error searching diagnoses:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to search diagnoses',
+        variant: 'destructive'
+      });
+      return { success: false, error, data: [] };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchLibrary = async (category?: string) => {
     try {
       setLoading(true);
@@ -146,6 +185,7 @@ export const useDiagnosesLibrary = () => {
 
       if (error) throw error;
       setLibrary(data || []);
+      return { success: true, data: data as DiagnosisLibraryItem[] };
     } catch (error: any) {
       console.error('Error fetching diagnoses library:', error);
       toast({
@@ -153,6 +193,7 @@ export const useDiagnosesLibrary = () => {
         description: 'Failed to load diagnoses library',
         variant: 'destructive'
       });
+      return { success: false, error, data: [] };
     } finally {
       setLoading(false);
     }
@@ -161,6 +202,7 @@ export const useDiagnosesLibrary = () => {
   return {
     library,
     loading,
+    searchDiagnoses,
     fetchLibrary
   };
 };

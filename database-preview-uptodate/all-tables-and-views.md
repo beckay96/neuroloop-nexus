@@ -4,7 +4,7 @@
     "schema_name": "auth",
     "object_name": "audit_log_entries",
     "kind": "r",
-    "total_size": "80 kB"
+    "total_size": "96 kB"
   },
   {
     "rel_oid": 16927,
@@ -67,7 +67,7 @@
     "schema_name": "auth",
     "object_name": "refresh_tokens",
     "kind": "r",
-    "total_size": "128 kB"
+    "total_size": "160 kB"
   },
   {
     "rel_oid": 16856,
@@ -144,7 +144,14 @@
     "schema_name": "clinical",
     "object_name": "clinical_scale_results",
     "kind": "r",
-    "total_size": "48 kB"
+    "total_size": "120 kB"
+  },
+  {
+    "rel_oid": 34818,
+    "schema_name": "clinical",
+    "object_name": "clinical_scale_subscore_results",
+    "kind": "r",
+    "total_size": "64 kB"
   },
   {
     "rel_oid": 20909,
@@ -152,6 +159,13 @@
     "object_name": "clinician_today_view",
     "kind": "r",
     "total_size": "40 kB"
+  },
+  {
+    "rel_oid": 34943,
+    "schema_name": "clinical",
+    "object_name": "imaging_annotations",
+    "kind": "r",
+    "total_size": "48 kB"
   },
   {
     "rel_oid": 20723,
@@ -172,7 +186,14 @@
     "schema_name": "clinical",
     "object_name": "patient_pro_timeline",
     "kind": "r",
-    "total_size": "40 kB"
+    "total_size": "56 kB"
+  },
+  {
+    "rel_oid": 35121,
+    "schema_name": "clinical",
+    "object_name": "patient_pro_value",
+    "kind": "r",
+    "total_size": "32 kB"
   },
   {
     "rel_oid": 20657,
@@ -242,7 +263,7 @@
     "schema_name": "private_health_info",
     "object_name": "daily_symptom_logs",
     "kind": "r",
-    "total_size": "40 kB"
+    "total_size": "80 kB"
   },
   {
     "rel_oid": 21709,
@@ -273,18 +294,25 @@
     "total_size": "24 kB"
   },
   {
+    "rel_oid": 34383,
+    "schema_name": "private_health_info",
+    "object_name": "patient_diagnoses",
+    "kind": "r",
+    "total_size": "48 kB"
+  },
+  {
     "rel_oid": 21304,
     "schema_name": "private_health_info",
     "object_name": "patient_onboarding_data",
     "kind": "r",
-    "total_size": "24 kB"
+    "total_size": "48 kB"
   },
   {
     "rel_oid": 20617,
     "schema_name": "private_health_info",
     "object_name": "patient_phi",
     "kind": "r",
-    "total_size": "64 kB"
+    "total_size": "32 kB"
   },
   {
     "rel_oid": 21639,
@@ -329,11 +357,18 @@
     "total_size": "16 kB"
   },
   {
+    "rel_oid": 34411,
+    "schema_name": "private_health_info",
+    "object_name": "seizure_logs",
+    "kind": "r",
+    "total_size": "40 kB"
+  },
+  {
     "rel_oid": 23421,
     "schema_name": "private_health_info",
     "object_name": "seizure_logs_research",
     "kind": "r",
-    "total_size": "40 kB"
+    "total_size": "32 kB"
   },
   {
     "rel_oid": 21438,
@@ -417,7 +452,7 @@
     "schema_name": "public",
     "object_name": "carer_profiles",
     "kind": "r",
-    "total_size": "32 kB"
+    "total_size": "64 kB"
   },
   {
     "rel_oid": 20987,
@@ -425,6 +460,13 @@
     "object_name": "carer_relationships",
     "kind": "r",
     "total_size": "40 kB"
+  },
+  {
+    "rel_oid": 34835,
+    "schema_name": "public",
+    "object_name": "clinical_scales_library",
+    "kind": "r",
+    "total_size": "48 kB"
   },
   {
     "rel_oid": 21222,
@@ -441,11 +483,25 @@
     "total_size": "80 kB"
   },
   {
+    "rel_oid": 35714,
+    "schema_name": "public",
+    "object_name": "custom_tracking_items",
+    "kind": "r",
+    "total_size": "40 kB"
+  },
+  {
+    "rel_oid": 35776,
+    "schema_name": "public",
+    "object_name": "custom_tracking_values",
+    "kind": "r",
+    "total_size": "48 kB"
+  },
+  {
     "rel_oid": 27985,
     "schema_name": "public",
     "object_name": "daily_tracking_preferences",
     "kind": "r",
-    "total_size": "24 kB"
+    "total_size": "48 kB"
   },
   {
     "rel_oid": 21807,
@@ -462,11 +518,25 @@
     "total_size": "48 kB"
   },
   {
+    "rel_oid": 34435,
+    "schema_name": "public",
+    "object_name": "diagnoses_library",
+    "kind": "r",
+    "total_size": "48 kB"
+  },
+  {
     "rel_oid": 25418,
     "schema_name": "public",
     "object_name": "function_execution_logs",
     "kind": "r",
     "total_size": "88 kB"
+  },
+  {
+    "rel_oid": 34969,
+    "schema_name": "public",
+    "object_name": "imaging_findings_library",
+    "kind": "r",
+    "total_size": "96 kB"
   },
   {
     "rel_oid": 21384,
@@ -523,6 +593,13 @@
     "object_name": "patient_profiles",
     "kind": "r",
     "total_size": "64 kB"
+  },
+  {
+    "rel_oid": 35138,
+    "schema_name": "public",
+    "object_name": "pro_measures_library",
+    "kind": "r",
+    "total_size": "48 kB"
   },
   {
     "rel_oid": 21183,
@@ -600,6 +677,13 @@
     "object_name": "symptom_options",
     "kind": "r",
     "total_size": "32 kB"
+  },
+  {
+    "rel_oid": 34363,
+    "schema_name": "public",
+    "object_name": "symptoms_library",
+    "kind": "r",
+    "total_size": "152 kB"
   },
   {
     "rel_oid": 25400,

@@ -316,6 +316,13 @@
   },
   {
     "schema_name": "clinical",
+    "table_name": "clinical_scale_subscore_results",
+    "constraint_name": "clinical_scale_subscore_results_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (subscore_id)"
+  },
+  {
+    "schema_name": "clinical",
     "table_name": "clinician_today_view",
     "constraint_name": "clinician_today_view_pkey",
     "constraint_type": "p",
@@ -327,6 +334,13 @@
     "constraint_name": "clinician_today_view_clinician_id_date_key",
     "constraint_type": "u",
     "definition": "UNIQUE (clinician_id, date)"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "constraint_name": "imaging_annotations_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (annotation_id)"
   },
   {
     "schema_name": "clinical",
@@ -376,6 +390,13 @@
     "constraint_name": "patient_pro_timeline_pkey",
     "constraint_type": "p",
     "definition": "PRIMARY KEY (pro_id)"
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_value",
+    "constraint_name": "patient_pro_value_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (value_id)"
   },
   {
     "schema_name": "clinical",
@@ -701,6 +722,13 @@
   },
   {
     "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "constraint_name": "patient_diagnoses_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (diagnosis_id)"
+  },
+  {
+    "schema_name": "private_health_info",
     "table_name": "patient_onboarding_data",
     "constraint_name": "patient_onboarding_data_pkey",
     "constraint_type": "p",
@@ -852,6 +880,20 @@
     "constraint_name": "seizure_log_triggers_log_id_trigger_id_key",
     "constraint_type": "u",
     "definition": "UNIQUE (log_id, trigger_id)"
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "seizure_logs",
+    "constraint_name": "seizure_logs_severity_check",
+    "constraint_type": "c",
+    "definition": "CHECK (((severity >= 1) AND (severity <= 10)))"
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "seizure_logs",
+    "constraint_name": "seizure_logs_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (id)"
   },
   {
     "schema_name": "private_health_info",
@@ -1079,6 +1121,20 @@
   },
   {
     "schema_name": "public",
+    "table_name": "clinical_scales_library",
+    "constraint_name": "clinical_scales_library_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (scale_library_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "clinical_scales_library",
+    "constraint_name": "clinical_scales_library_scale_type_key",
+    "constraint_type": "u",
+    "definition": "UNIQUE (scale_type)"
+  },
+  {
+    "schema_name": "public",
     "table_name": "clinician_profiles",
     "constraint_name": "clinician_profiles_pkey",
     "constraint_type": "p",
@@ -1097,6 +1153,34 @@
     "constraint_name": "conditions_pkey",
     "constraint_type": "p",
     "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "constraint_name": "custom_tracking_items_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (item_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "constraint_name": "unique_user_item_name",
+    "constraint_type": "u",
+    "definition": "UNIQUE (user_id, item_name)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "constraint_name": "at_least_one_value",
+    "constraint_type": "c",
+    "definition": "CHECK (((numeric_value IS NOT NULL) OR (text_value IS NOT NULL) OR (boolean_value IS NOT NULL)))"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "constraint_name": "custom_tracking_values_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (value_id)"
   },
   {
     "schema_name": "public",
@@ -1184,6 +1268,20 @@
   },
   {
     "schema_name": "public",
+    "table_name": "diagnoses_library",
+    "constraint_name": "diagnoses_library_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (diagnosis_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "diagnoses_library",
+    "constraint_name": "diagnoses_library_diagnosis_name_key",
+    "constraint_type": "u",
+    "definition": "UNIQUE (diagnosis_name)"
+  },
+  {
+    "schema_name": "public",
     "table_name": "function_execution_logs",
     "constraint_name": "function_execution_logs_execution_status_check",
     "constraint_type": "c",
@@ -1195,6 +1293,20 @@
     "constraint_name": "function_execution_logs_pkey",
     "constraint_type": "p",
     "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "constraint_name": "imaging_findings_library_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (finding_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "constraint_name": "imaging_findings_library_finding_name_key",
+    "constraint_type": "u",
+    "definition": "UNIQUE (finding_name)"
   },
   {
     "schema_name": "public",
@@ -1321,6 +1433,20 @@
     "constraint_name": "patient_profiles_user_id_key",
     "constraint_type": "u",
     "definition": "UNIQUE (user_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "pro_measures_library",
+    "constraint_name": "pro_measures_library_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (pro_library_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "pro_measures_library",
+    "constraint_name": "pro_measures_library_pro_type_key",
+    "constraint_type": "u",
+    "definition": "UNIQUE (pro_type)"
   },
   {
     "schema_name": "public",
@@ -1475,6 +1601,20 @@
     "constraint_name": "symptom_options_pkey",
     "constraint_type": "p",
     "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "constraint_name": "symptoms_library_pkey",
+    "constraint_type": "p",
+    "definition": "PRIMARY KEY (symptom_id)"
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "constraint_name": "symptoms_library_symptom_name_key",
+    "constraint_type": "u",
+    "definition": "UNIQUE (symptom_name)"
   },
   {
     "schema_name": "public",

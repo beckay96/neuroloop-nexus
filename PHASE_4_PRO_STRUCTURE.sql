@@ -307,3 +307,21 @@ SELECT pro_type, full_name, typical_use_case FROM public.pro_measures_library OR
 -- =====================================================
 -- DONE - PHASE 4 COMPLETE!
 -- =====================================================
+
+
+
+DONE!
+
+| pro_type                | full_name                     | typical_use_case |
+| ----------------------- | ----------------------------- | ---------------- |
+| quality_of_life         | Quality of Life Assessment    | general          |
+| sleep_quality           | Sleep Quality Assessment      | general          |
+| fatigue_level           | Fatigue Assessment            | general          |
+| cognition               | Cognitive Function Assessment | general          |
+| depression              | Depression Index              | mood             |
+| anxiety                 | Anxiety Assessment            | mood             |
+| physical_function       | Physical Function Assessment  | general          |
+| pain                    | Pain Assessment               | general          |
+| seizure_frequency       | Seizure Frequency Log         | epilepsy         |
+| motor_symptoms          | Motor Symptoms Assessment     | parkinsons       |
+| adherence_to_medication | Medication Adherence          | general          |

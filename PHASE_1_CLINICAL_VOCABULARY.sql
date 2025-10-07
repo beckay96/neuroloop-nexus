@@ -264,33 +264,62 @@ CREATE POLICY "Users can update own diagnoses"
 GRANT SELECT, INSERT, UPDATE ON private_health_info.patient_diagnoses TO authenticated;
 
 -- =====================================================
--- STEP 7: ADD PROVENANCE TO TRACKING TABLES
+-- STEP 7: ADD PROVENANCE TO TRACKING TABLES (IF EXIST)
 -- =====================================================
+-- Note: These tables are created in RESTRUCTURE_TRACKING_TABLES.sql
+-- This step only runs if those tables already exist
 
--- Add to patient_daily_tracking_logs
-ALTER TABLE private_health_info.patient_daily_tracking_logs
-  ADD COLUMN IF NOT EXISTS capture_method public.capture_method_enum DEFAULT 'manual',
-  ADD COLUMN IF NOT EXISTS reporter_type public.reporter_type_enum DEFAULT 'self',
-  ADD COLUMN IF NOT EXISTS last_modified_by UUID REFERENCES auth.users(id),
-  ADD COLUMN IF NOT EXISTS modification_reason TEXT,
-  ADD COLUMN IF NOT EXISTS data_audit_version INTEGER DEFAULT 1,
-  ADD COLUMN IF NOT EXISTS consent_status public.consent_status_enum DEFAULT 'granted';
+-- Add to patient_daily_tracking_logs (if exists)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables 
+    WHERE table_schema = 'private_health_info' 
+    AND table_name = 'patient_daily_tracking_logs'
+  ) THEN
+    ALTER TABLE private_health_info.patient_daily_tracking_logs
+      ADD COLUMN IF NOT EXISTS capture_method public.capture_method_enum DEFAULT 'manual',
+      ADD COLUMN IF NOT EXISTS reporter_type public.reporter_type_enum DEFAULT 'self',
+      ADD COLUMN IF NOT EXISTS last_modified_by UUID REFERENCES auth.users(id),
+      ADD COLUMN IF NOT EXISTS modification_reason TEXT,
+      ADD COLUMN IF NOT EXISTS data_audit_version INTEGER DEFAULT 1,
+      ADD COLUMN IF NOT EXISTS consent_status public.consent_status_enum DEFAULT 'granted';
+  END IF;
+END $$;
 
--- Add to patient_symptom_logs
-ALTER TABLE private_health_info.patient_symptom_logs
-  ADD COLUMN IF NOT EXISTS capture_method public.capture_method_enum DEFAULT 'manual',
-  ADD COLUMN IF NOT EXISTS reporter_type public.reporter_type_enum DEFAULT 'self',
-  ADD COLUMN IF NOT EXISTS snomed_ct_code TEXT,
-  ADD COLUMN IF NOT EXISTS icd10_code TEXT,
-  ADD COLUMN IF NOT EXISTS last_modified_by UUID REFERENCES auth.users(id),
-  ADD COLUMN IF NOT EXISTS consent_status public.consent_status_enum DEFAULT 'granted';
+-- Add to patient_symptom_logs (if exists)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables 
+    WHERE table_schema = 'private_health_info' 
+    AND table_name = 'patient_symptom_logs'
+  ) THEN
+    ALTER TABLE private_health_info.patient_symptom_logs
+      ADD COLUMN IF NOT EXISTS capture_method public.capture_method_enum DEFAULT 'manual',
+      ADD COLUMN IF NOT EXISTS reporter_type public.reporter_type_enum DEFAULT 'self',
+      ADD COLUMN IF NOT EXISTS snomed_ct_code TEXT,
+      ADD COLUMN IF NOT EXISTS icd10_code TEXT,
+      ADD COLUMN IF NOT EXISTS last_modified_by UUID REFERENCES auth.users(id),
+      ADD COLUMN IF NOT EXISTS consent_status public.consent_status_enum DEFAULT 'granted';
+  END IF;
+END $$;
 
--- Add to parkinsons_motor_logs
-ALTER TABLE private_health_info.parkinsons_motor_logs
-  ADD COLUMN IF NOT EXISTS capture_method public.capture_method_enum DEFAULT 'manual',
-  ADD COLUMN IF NOT EXISTS reporter_type public.reporter_type_enum DEFAULT 'self',
-  ADD COLUMN IF NOT EXISTS last_modified_by UUID REFERENCES auth.users(id),
-  ADD COLUMN IF NOT EXISTS consent_status public.consent_status_enum DEFAULT 'granted';
+-- Add to parkinsons_motor_logs (if exists)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables 
+    WHERE table_schema = 'private_health_info' 
+    AND table_name = 'parkinsons_motor_logs'
+  ) THEN
+    ALTER TABLE private_health_info.parkinsons_motor_logs
+      ADD COLUMN IF NOT EXISTS capture_method public.capture_method_enum DEFAULT 'manual',
+      ADD COLUMN IF NOT EXISTS reporter_type public.reporter_type_enum DEFAULT 'self',
+      ADD COLUMN IF NOT EXISTS last_modified_by UUID REFERENCES auth.users(id),
+      ADD COLUMN IF NOT EXISTS consent_status public.consent_status_enum DEFAULT 'granted';
+  END IF;
+END $$;
 
 -- =====================================================
 -- STEP 8: CREATE ENHANCED SEIZURE LOGS TABLE
@@ -392,4 +421,5 @@ ORDER BY table_name;
 
 
 
-PROBLEM AROSE - ERROR:  42P01: relation "public.symptoms_library" does not exist
+PROBLEM AROSE - ERROR:  42P01: relation "public.symptoms_library" does not exist - FIXED.
+NEW PROBLEM - ERROR:  42P01: relation "private_health_info.patient_daily_tracking_logs" does not exist

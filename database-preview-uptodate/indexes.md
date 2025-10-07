@@ -658,8 +658,48 @@
   {
     "schema_name": "clinical",
     "table_name": "clinical_scale_results",
+    "index_name": "idx_scale_results_patient_date",
+    "index_def": "CREATE INDEX idx_scale_results_patient_date ON clinical.clinical_scale_results USING btree (patient_id, assessed_at DESC)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_results",
+    "index_name": "idx_scale_results_snomed",
+    "index_def": "CREATE INDEX idx_scale_results_snomed ON clinical.clinical_scale_results USING btree (snomed_ct_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_results",
     "index_name": "idx_scale_results_type",
     "index_def": "CREATE INDEX idx_scale_results_type ON clinical.clinical_scale_results USING btree (scale_type)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_subscore_results",
+    "index_name": "clinical_scale_subscore_results_pkey",
+    "index_def": "CREATE UNIQUE INDEX clinical_scale_subscore_results_pkey ON clinical.clinical_scale_subscore_results USING btree (subscore_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_subscore_results",
+    "index_name": "idx_subscores_label",
+    "index_def": "CREATE INDEX idx_subscores_label ON clinical.clinical_scale_subscore_results USING btree (subscale_label)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "clinical_scale_subscore_results",
+    "index_name": "idx_subscores_scale",
+    "index_def": "CREATE INDEX idx_subscores_scale ON clinical.clinical_scale_subscore_results USING btree (scale_id)",
     "is_unique": false,
     "is_primary": false
   },
@@ -694,6 +734,46 @@
     "index_def": "CREATE INDEX idx_today_view_date ON clinical.clinician_today_view USING btree (date DESC)",
     "is_unique": false,
     "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "index_name": "idx_annotations_ai_flagged",
+    "index_def": "CREATE INDEX idx_annotations_ai_flagged ON clinical.imaging_annotations USING btree (ai_flagged) WHERE (ai_flagged = true)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "index_name": "idx_annotations_image",
+    "index_def": "CREATE INDEX idx_annotations_image ON clinical.imaging_annotations USING btree (image_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "index_name": "idx_annotations_snomed",
+    "index_def": "CREATE INDEX idx_annotations_snomed ON clinical.imaging_annotations USING btree (snomed_ct_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "index_name": "idx_annotations_type",
+    "index_def": "CREATE INDEX idx_annotations_type ON clinical.imaging_annotations USING btree (annotation_type)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "imaging_annotations",
+    "index_name": "imaging_annotations_pkey",
+    "index_def": "CREATE UNIQUE INDEX imaging_annotations_pkey ON clinical.imaging_annotations USING btree (annotation_id)",
+    "is_unique": true,
+    "is_primary": true
   },
   {
     "schema_name": "clinical",
@@ -810,6 +890,22 @@
   {
     "schema_name": "clinical",
     "table_name": "patient_pro_timeline",
+    "index_name": "idx_pro_timeline_patient_date",
+    "index_def": "CREATE INDEX idx_pro_timeline_patient_date ON clinical.patient_pro_timeline USING btree (patient_id, reported_at DESC)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_timeline",
+    "index_name": "idx_pro_timeline_type",
+    "index_def": "CREATE INDEX idx_pro_timeline_type ON clinical.patient_pro_timeline USING btree (pro_type)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_timeline",
     "index_name": "idx_pro_type",
     "index_def": "CREATE INDEX idx_pro_type ON clinical.patient_pro_timeline USING btree (pro_type)",
     "is_unique": false,
@@ -820,6 +916,30 @@
     "table_name": "patient_pro_timeline",
     "index_name": "patient_pro_timeline_pkey",
     "index_def": "CREATE UNIQUE INDEX patient_pro_timeline_pkey ON clinical.patient_pro_timeline USING btree (pro_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_value",
+    "index_name": "idx_pro_values_domain",
+    "index_def": "CREATE INDEX idx_pro_values_domain ON clinical.patient_pro_value USING btree (domain_label)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_value",
+    "index_name": "idx_pro_values_pro",
+    "index_def": "CREATE INDEX idx_pro_values_pro ON clinical.patient_pro_value USING btree (pro_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "clinical",
+    "table_name": "patient_pro_value",
+    "index_name": "patient_pro_value_pkey",
+    "index_def": "CREATE UNIQUE INDEX patient_pro_value_pkey ON clinical.patient_pro_value USING btree (value_id)",
     "is_unique": true,
     "is_primary": true
   },
@@ -1161,6 +1281,46 @@
   },
   {
     "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "index_name": "idx_diagnoses_icd10",
+    "index_def": "CREATE INDEX idx_diagnoses_icd10 ON private_health_info.patient_diagnoses USING btree (icd10_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "index_name": "idx_diagnoses_patient",
+    "index_def": "CREATE INDEX idx_diagnoses_patient ON private_health_info.patient_diagnoses USING btree (patient_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "index_name": "idx_diagnoses_snomed",
+    "index_def": "CREATE INDEX idx_diagnoses_snomed ON private_health_info.patient_diagnoses USING btree (snomed_ct_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "index_name": "idx_diagnoses_type",
+    "index_def": "CREATE INDEX idx_diagnoses_type ON private_health_info.patient_diagnoses USING btree (diagnosis_type)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "patient_diagnoses",
+    "index_name": "patient_diagnoses_pkey",
+    "index_def": "CREATE UNIQUE INDEX patient_diagnoses_pkey ON private_health_info.patient_diagnoses USING btree (diagnosis_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "private_health_info",
     "table_name": "patient_onboarding_data",
     "index_name": "patient_onboarding_data_pkey",
     "index_def": "CREATE UNIQUE INDEX patient_onboarding_data_pkey ON private_health_info.patient_onboarding_data USING btree (id)",
@@ -1329,17 +1489,41 @@
   },
   {
     "schema_name": "private_health_info",
-    "table_name": "seizure_logs_research",
-    "index_name": "idx_seizure_logs_research_log_date",
-    "index_def": "CREATE INDEX idx_seizure_logs_research_log_date ON private_health_info.seizure_logs_research USING btree (log_date)",
+    "table_name": "seizure_logs",
+    "index_name": "idx_seizure_logs_date",
+    "index_def": "CREATE INDEX idx_seizure_logs_date ON private_health_info.seizure_logs USING btree (log_date DESC)",
     "is_unique": false,
     "is_primary": false
   },
   {
     "schema_name": "private_health_info",
+    "table_name": "seizure_logs",
+    "index_name": "idx_seizure_logs_patient",
+    "index_def": "CREATE INDEX idx_seizure_logs_patient ON private_health_info.seizure_logs USING btree (patient_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "seizure_logs",
+    "index_name": "idx_seizure_logs_type",
+    "index_def": "CREATE INDEX idx_seizure_logs_type ON private_health_info.seizure_logs USING btree (seizure_type)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "private_health_info",
+    "table_name": "seizure_logs",
+    "index_name": "seizure_logs_pkey",
+    "index_def": "CREATE UNIQUE INDEX seizure_logs_pkey ON private_health_info.seizure_logs USING btree (id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "private_health_info",
     "table_name": "seizure_logs_research",
-    "index_name": "idx_seizure_logs_research_seizure_type",
-    "index_def": "CREATE INDEX idx_seizure_logs_research_seizure_type ON private_health_info.seizure_logs_research USING btree (seizure_type)",
+    "index_name": "idx_seizure_logs_research_log_date",
+    "index_def": "CREATE INDEX idx_seizure_logs_research_log_date ON private_health_info.seizure_logs_research USING btree (log_date)",
     "is_unique": false,
     "is_primary": false
   },
@@ -1665,6 +1849,22 @@
   },
   {
     "schema_name": "public",
+    "table_name": "clinical_scales_library",
+    "index_name": "clinical_scales_library_pkey",
+    "index_def": "CREATE UNIQUE INDEX clinical_scales_library_pkey ON public.clinical_scales_library USING btree (scale_library_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "public",
+    "table_name": "clinical_scales_library",
+    "index_name": "clinical_scales_library_scale_type_key",
+    "index_def": "CREATE UNIQUE INDEX clinical_scales_library_scale_type_key ON public.clinical_scales_library USING btree (scale_type)",
+    "is_unique": true,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
     "table_name": "clinician_profiles",
     "index_name": "clinician_profiles_pkey",
     "index_def": "CREATE UNIQUE INDEX clinician_profiles_pkey ON public.clinician_profiles USING btree (id)",
@@ -1708,6 +1908,78 @@
     "table_name": "conditions",
     "index_name": "idx_conditions_name",
     "index_def": "CREATE INDEX idx_conditions_name ON public.conditions USING btree (name)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "index_name": "custom_tracking_items_pkey",
+    "index_def": "CREATE UNIQUE INDEX custom_tracking_items_pkey ON public.custom_tracking_items USING btree (item_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "index_name": "idx_custom_tracking_items_active",
+    "index_def": "CREATE INDEX idx_custom_tracking_items_active ON public.custom_tracking_items USING btree (user_id, is_active) WHERE (is_active = true)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "index_name": "idx_custom_tracking_items_user",
+    "index_def": "CREATE INDEX idx_custom_tracking_items_user ON public.custom_tracking_items USING btree (user_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_items",
+    "index_name": "unique_user_item_name",
+    "index_def": "CREATE UNIQUE INDEX unique_user_item_name ON public.custom_tracking_items USING btree (user_id, item_name)",
+    "is_unique": true,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "index_name": "custom_tracking_values_pkey",
+    "index_def": "CREATE UNIQUE INDEX custom_tracking_values_pkey ON public.custom_tracking_values USING btree (value_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "index_name": "idx_custom_tracking_values_date",
+    "index_def": "CREATE INDEX idx_custom_tracking_values_date ON public.custom_tracking_values USING btree (log_date DESC)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "index_name": "idx_custom_tracking_values_item",
+    "index_def": "CREATE INDEX idx_custom_tracking_values_item ON public.custom_tracking_values USING btree (item_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "index_name": "idx_custom_tracking_values_user",
+    "index_def": "CREATE INDEX idx_custom_tracking_values_user ON public.custom_tracking_values USING btree (user_id)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "custom_tracking_values",
+    "index_name": "idx_custom_tracking_values_user_date",
+    "index_def": "CREATE INDEX idx_custom_tracking_values_user_date ON public.custom_tracking_values USING btree (user_id, log_date DESC)",
     "is_unique": false,
     "is_primary": false
   },
@@ -1793,6 +2065,22 @@
   },
   {
     "schema_name": "public",
+    "table_name": "diagnoses_library",
+    "index_name": "diagnoses_library_diagnosis_name_key",
+    "index_def": "CREATE UNIQUE INDEX diagnoses_library_diagnosis_name_key ON public.diagnoses_library USING btree (diagnosis_name)",
+    "is_unique": true,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "diagnoses_library",
+    "index_name": "diagnoses_library_pkey",
+    "index_def": "CREATE UNIQUE INDEX diagnoses_library_pkey ON public.diagnoses_library USING btree (diagnosis_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "public",
     "table_name": "function_execution_logs",
     "index_name": "function_execution_logs_pkey",
     "index_def": "CREATE UNIQUE INDEX function_execution_logs_pkey ON public.function_execution_logs USING btree (id)",
@@ -1830,6 +2118,46 @@
     "index_def": "CREATE INDEX idx_function_logs_status ON public.function_execution_logs USING btree (execution_status)",
     "is_unique": false,
     "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "index_name": "idx_findings_epilepsy",
+    "index_def": "CREATE INDEX idx_findings_epilepsy ON public.imaging_findings_library USING btree (typical_in_epilepsy) WHERE (typical_in_epilepsy = true)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "index_name": "idx_findings_parkinsons",
+    "index_def": "CREATE INDEX idx_findings_parkinsons ON public.imaging_findings_library USING btree (typical_in_parkinsons) WHERE (typical_in_parkinsons = true)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "index_name": "idx_findings_snomed",
+    "index_def": "CREATE INDEX idx_findings_snomed ON public.imaging_findings_library USING btree (snomed_ct_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "index_name": "imaging_findings_library_finding_name_key",
+    "index_def": "CREATE UNIQUE INDEX imaging_findings_library_finding_name_key ON public.imaging_findings_library USING btree (finding_name)",
+    "is_unique": true,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "imaging_findings_library",
+    "index_name": "imaging_findings_library_pkey",
+    "index_def": "CREATE UNIQUE INDEX imaging_findings_library_pkey ON public.imaging_findings_library USING btree (finding_id)",
+    "is_unique": true,
+    "is_primary": true
   },
   {
     "schema_name": "public",
@@ -2057,6 +2385,22 @@
   },
   {
     "schema_name": "public",
+    "table_name": "pro_measures_library",
+    "index_name": "pro_measures_library_pkey",
+    "index_def": "CREATE UNIQUE INDEX pro_measures_library_pkey ON public.pro_measures_library USING btree (pro_library_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "public",
+    "table_name": "pro_measures_library",
+    "index_name": "pro_measures_library_pro_type_key",
+    "index_def": "CREATE UNIQUE INDEX pro_measures_library_pro_type_key ON public.pro_measures_library USING btree (pro_type)",
+    "is_unique": true,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
     "table_name": "profiles",
     "index_name": "idx_profiles_user_type",
     "index_def": "CREATE INDEX idx_profiles_user_type ON public.profiles USING btree (user_type)",
@@ -2254,6 +2598,70 @@
     "index_def": "CREATE UNIQUE INDEX symptom_options_pkey ON public.symptom_options USING btree (id)",
     "is_unique": true,
     "is_primary": true
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "idx_symptoms_category",
+    "index_def": "CREATE INDEX idx_symptoms_category ON public.symptoms_library USING btree (category)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "idx_symptoms_epilepsy",
+    "index_def": "CREATE INDEX idx_symptoms_epilepsy ON public.symptoms_library USING btree (common_in_epilepsy) WHERE (common_in_epilepsy = true)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "idx_symptoms_icd10",
+    "index_def": "CREATE INDEX idx_symptoms_icd10 ON public.symptoms_library USING btree (icd10_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "idx_symptoms_parkinsons",
+    "index_def": "CREATE INDEX idx_symptoms_parkinsons ON public.symptoms_library USING btree (common_in_parkinsons) WHERE (common_in_parkinsons = true)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "idx_symptoms_search",
+    "index_def": "CREATE INDEX idx_symptoms_search ON public.symptoms_library USING gin (search_keywords)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "idx_symptoms_snomed",
+    "index_def": "CREATE INDEX idx_symptoms_snomed ON public.symptoms_library USING btree (snomed_ct_code)",
+    "is_unique": false,
+    "is_primary": false
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "symptoms_library_pkey",
+    "index_def": "CREATE UNIQUE INDEX symptoms_library_pkey ON public.symptoms_library USING btree (symptom_id)",
+    "is_unique": true,
+    "is_primary": true
+  },
+  {
+    "schema_name": "public",
+    "table_name": "symptoms_library",
+    "index_name": "symptoms_library_symptom_name_key",
+    "index_def": "CREATE UNIQUE INDEX symptoms_library_symptom_name_key ON public.symptoms_library USING btree (symptom_name)",
+    "is_unique": true,
+    "is_primary": false
   },
   {
     "schema_name": "public",
