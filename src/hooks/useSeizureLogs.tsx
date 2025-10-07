@@ -43,7 +43,7 @@ export const useSeizureLogs = (userId?: string) => {
     try {
       // Use RPC function to access private_health_info schema
       const { data, error } = await supabase
-        .rpc('get_seizure_events', { p_patient_id: userId });
+        .rpc('get_seizure_logs', { p_patient_id: userId });
 
       if (error) throw error;
       setSeizureLogs(data || []);

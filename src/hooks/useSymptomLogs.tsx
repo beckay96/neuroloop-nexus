@@ -34,7 +34,7 @@ export const useSymptomLogs = (userId?: string) => {
     try {
       // Use RPC function to access private_health_info schema
       const { data, error } = await supabase
-        .rpc('get_daily_symptom_logs', { p_patient_id: userId });
+        .rpc('get_symptom_logs', { p_patient_id: userId });
 
       if (error) throw error;
       setSymptomLogs(data || []);

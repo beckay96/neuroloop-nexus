@@ -33,7 +33,7 @@ export const useMenstrualLogs = (userId?: string) => {
       // Use RPC function to access private_health_info schema
       // @ts-ignore - RPC function not yet in types
       const { data, error } = await supabase
-        .rpc('get_menstrual_cycle_logs', { p_user_id: userId });
+        .rpc('get_menstrual_logs', { p_user_id: userId });
 
       if (error) throw error;
       setMenstrualLogs(data || []);
