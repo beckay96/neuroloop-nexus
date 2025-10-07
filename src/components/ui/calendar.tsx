@@ -5,38 +5,76 @@ import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = Omit<React.ComponentProps<typeof DayPicker>, 'mode'> & {
+  mode?: "past" | "future" | "all";
+  compact?: boolean;
+};
 
-function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+function Calendar({ 
+  className, 
+  classNames, 
+  showOutsideDays = true, 
+  mode = "all",
+  compact = false,
+  ...props 
+}: CalendarProps) {
+  // Calculate date restrictions based on mode
+  const getDateRestrictions = () => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    
+    switch (mode) {
+      case "past":
+        return {
+          disabled: (date: Date) => date > today,
+          fromYear: 1900,
+          toYear: currentYear,
+        };
+      case "future":
+        return {
+          disabled: (date: Date) => date < today,
+          fromYear: currentYear,
+          toYear: currentYear + 10,
+        };
+      default:
+        return {
+          fromYear: 1900,
+          toYear: currentYear + 10,
+        };
+    }
+  };
+
+  const dateRestrictions = getDateRestrictions();
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
       captionLayout="dropdown-buttons"
-      fromYear={1900}
-      toYear={new Date().getFullYear()}
-      className={cn("p-3", className)}
+      fromYear={dateRestrictions.fromYear}
+      toYear={dateRestrictions.toYear}
+      disabled={dateRestrictions.disabled}
+      className={cn(compact ? "p-1.5" : "p-3", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
+        months: "flex flex-col sm:flex-row space-y-2 sm:space-x-2 sm:space-y-0",
+        month: compact ? "space-y-2" : "space-y-4",
         caption: "flex justify-center pt-1 relative items-center gap-1",
         caption_label: "text-sm font-medium hidden", // Hide the duplicate label
-        caption_dropdowns: "flex gap-2 justify-center",
-        dropdown: "px-3 py-2 rounded-md border bg-background text-sm min-w-[80px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
-        dropdown_month: "px-3 py-2 rounded-md border bg-background text-sm min-w-[120px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
-        dropdown_year: "px-3 py-2 rounded-md border bg-background text-sm min-w-[80px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
+        caption_dropdowns: "flex gap-1.5 justify-center",
+        dropdown: "px-2 py-1.5 rounded-md border bg-background text-sm min-w-[70px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
+        dropdown_month: "px-2 py-1.5 rounded-md border bg-background text-sm min-w-[100px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
+        dropdown_year: "px-2 py-1.5 rounded-md border bg-background text-sm min-w-[70px] appearance-none cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          compact ? "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100" : "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
+        table: compact ? "w-full border-collapse space-y-0.5" : "w-full border-collapse space-y-1",
         head_row: "flex",
-        head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-        row: "flex w-full mt-2",
-        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-        day: cn(buttonVariants({ variant: "ghost" }), "h-9 w-9 p-0 font-normal aria-selected:opacity-100"),
+        head_cell: compact ? "text-muted-foreground rounded-md w-8 font-normal text-[0.75rem]" : "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+        row: compact ? "flex w-full mt-1" : "flex w-full mt-2",
+        cell: compact ? "h-8 w-8 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20" : "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+        day: cn(buttonVariants({ variant: "ghost" }), compact ? "h-8 w-8 p-0 font-normal aria-selected:opacity-100" : "h-9 w-9 p-0 font-normal aria-selected:opacity-100"),
         day_range_end: "day-range-end",
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
