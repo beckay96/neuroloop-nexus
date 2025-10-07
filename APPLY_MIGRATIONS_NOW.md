@@ -80,8 +80,8 @@
 
 ---
 
-### **5. ⭐ FIX Existing RPC Functions (Column Errors)**
-**File:** `supabase/migrations/20250108_fix_existing_rpc_functions.sql`
+### **5. ⭐ FIX ALL RPC Functions (Complete Column Name Corrections)**
+**File:** `supabase/migrations/20250108_fix_all_rpc_column_names.sql`
 
 ```sql
 -- Copy entire content and run
@@ -89,20 +89,24 @@
 
 **Expected Result:**
 ```
-✅ FIXED | get_gait_episodes (gait_id primary key)
-✅ FIXED | get_medication_logs (removed non-existent column)
+✅ FIXED | get_seizure_logs (seizure_logs_research, log_id, user_id)
+✅ FIXED | get_symptom_logs (daily_symptom_logs, log_id, patient_id)
+✅ FIXED | get_menstrual_logs (cycle_start_date instead of log_date)
+✅ FIXED | get_temperature_logs (temperature_celsius)
+✅ FIXED | get_medication_logs (removed non-existent columns)
 ```
 
 **What it does:**
-- Fixes column mismatches in existing RPC functions
-- `get_gait_episodes`: Changes `ge.id` to `ge.gait_id` (correct primary key)
-- `get_medication_logs`: Removes `ml.missed_reason` column (doesn't exist)
+- **COMPLETELY REWRITES** all RPC functions to match actual database schema
+- Based on `database-preview-uptodate/the-tables-that-matter.md`
+- Fixes ALL column name mismatches
 
 **Fixes:**
-- ❌ `column ge.id does not exist` → ✅ Uses `gait_id`
-- ❌ `column ml.missed_reason does not exist` → ✅ Removed from query
-
-**Note:** The other functions (`get_seizure_logs`, `get_symptom_logs`, `get_menstrual_logs`, `get_temperature_logs`) already exist and work correctly!
+1. `get_seizure_logs`: Uses `seizure_logs_research` table, `log_id` primary key, `user_id` foreign key
+2. `get_symptom_logs`: Uses `daily_symptom_logs` table, `log_id` primary key (not `id`)
+3. `get_menstrual_logs`: Uses `cycle_start_date`, `cycle_end_date` (NO `log_date` column!)
+4. `get_temperature_logs`: Uses `temperature_celsius` (not `temperature`)
+5. `get_medication_logs`: Removed `dosage_taken` and `side_effects` columns (don't exist)
 
 ---
 
