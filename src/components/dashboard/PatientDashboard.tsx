@@ -15,6 +15,7 @@ import { FloatingEmergencyButton } from "@/components/emergency/EmergencyButton"
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { MedicationReminderService } from "@/services/medicationReminders";
 import { useConditions } from "@/hooks/useConditions";
 import { useSeizureLogs } from "@/hooks/useSeizureLogs";
 import { useMedicationLogs } from "@/hooks/useMedicationLogs";
@@ -168,6 +169,13 @@ const upcomingReminders = [{
 export default function PatientDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
+  
+  // Initialize medication reminder service ONLY for authenticated users
+  useEffect(() => {
+    if (user) {
+      MedicationReminderService.getInstance();
+    }
+  }, [user]);
   
   // Load user's conditions and tracking preferences
   const { userConditions, loading: conditionsLoading } = useConditions(user?.id);

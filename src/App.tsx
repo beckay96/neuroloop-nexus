@@ -36,8 +36,8 @@ const queryClient = new QueryClient();
 const App = () => {
   // Initialize critical services on app start
   useEffect(() => {
-    // Initialize medication reminder service
-    MedicationReminderService.getInstance();
+    // DON'T initialize medication reminder service here - it will be initialized after login
+    // MedicationReminderService should only run for authenticated users
     
     // Register service worker for PWA
     if ('serviceWorker' in navigator) {
