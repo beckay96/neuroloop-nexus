@@ -231,14 +231,11 @@ export class MedicationReminderService {
 
   private async alertEmergencyContact(reminder: MedicationReminder) {
     try {
-      // Get emergency contact
+      // Use RPC function to access private_health_info schema
       const { data: contactData } = await supabase
-        .from('patient_onboarding_data')
-        .select('emergency_contact_name, emergency_contact_phone')
-        .eq('user_id', reminder.userId)
-        .single();
+        .rpc('get_patient_onboarding_data', { p_user_id: reminder.userId });
 
-      if (contactData) {
+      if (contactData && contactData.length > 0) {
         // In production, this would send SMS via Twilio
         console.error(`ALERT: Patient missed critical medication ${reminder.medicationName}`);
         

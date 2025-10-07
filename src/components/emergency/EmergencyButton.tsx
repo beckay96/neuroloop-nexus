@@ -49,14 +49,12 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
 
   const loadEmergencyContact = async () => {
     try {
+      // Use RPC function to access private_health_info schema
       const { data, error } = await supabase
-        .from('patient_onboarding_data' as any)
-        .select('emergency_contact_name, emergency_contact_phone, emergency_contact_relationship')
-        .eq('user_id', userId)
-        .single();
+        .rpc('get_patient_onboarding_data', { p_user_id: userId });
 
-      if (data && !error) {
-        const contactData = data as any;
+      if (data && !error && data.length > 0) {
+        const contactData = data[0];
         setEmergencyContact({
           name: contactData.emergency_contact_name,
           phone: contactData.emergency_contact_phone,

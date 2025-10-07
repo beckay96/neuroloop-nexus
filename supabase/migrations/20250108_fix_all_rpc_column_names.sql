@@ -1,4 +1,16 @@
 -- =====================================================
+-- FIX EXISTING RPC FUNCTIONS (Column Errors)
+-- =====================================================
+-- Based on actual database schema, fixing column mismatches
+-- =====================================================
+
+DROP FUNCTION IF EXISTS public.get_seizure_logs(uuid) CASCADE;
+DROP FUNCTION IF EXISTS public.get_symptom_logs(uuid) CASCADE;
+DROP FUNCTION IF EXISTS public.get_menstrual_logs(uuid) CASCADE;
+DROP FUNCTION IF EXISTS public.get_temperature_logs(uuid) CASCADE;
+DROP FUNCTION IF EXISTS public.get_medication_logs(uuid) CASCADE;
+
+-- =====================================================
 -- FIX ALL RPC FUNCTIONS - COMPLETE COLUMN NAME CORRECTIONS
 -- =====================================================
 -- Based on ACTUAL database schema from the-tables-that-matter.md
@@ -323,16 +335,26 @@ $$;
 
 GRANT EXECUTE ON FUNCTION get_medication_logs(UUID) TO authenticated;
 REVOKE EXECUTE ON FUNCTION get_medication_logs(UUID) FROM anon;
+-- ===========================================
+-- DROP existing RPC functions (by signature)
+-- ===========================================
+BEGIN;
+-- =====================================================
+-- Replace RAISE NOTICE with a temp table you can SELECT
+-- =====================================================
+CREATE TEMP TABLE tmp_verification_notices (
+  message TEXT
+);
 
--- ============================================================================
--- VERIFICATION
--- ============================================================================
-DO $$
-BEGIN
-  RAISE NOTICE '✅ ALL RPC FUNCTIONS FIXED:';
-  RAISE NOTICE '  - get_seizure_logs: Uses seizure_logs_research, log_id, user_id';
-  RAISE NOTICE '  - get_symptom_logs: Uses daily_symptom_logs, log_id, patient_id';
-  RAISE NOTICE '  - get_menstrual_logs: Uses cycle_start_date (not log_date)';
-  RAISE NOTICE '  - get_temperature_logs: Uses temperature_celsius';
-  RAISE NOTICE '  - get_medication_logs: Removed non-existent columns';
-END $$;
+INSERT INTO tmp_verification_notices (message) VALUES
+  ('✅ ALL RPC FUNCTIONS FIXED:'),
+  ('  - get_seizure_logs: Uses seizure_logs_research, log_id, user_id'),
+  ('  - get_symptom_logs: Uses daily_symptom_logs, log_id, patient_id'),
+  ('  - get_menstrual_logs: Uses cycle_start_date (not log_date)'),
+  ('  - get_temperature_logs: Uses temperature_celsius'),
+  ('  - get_medication_logs: Removed non-existent columns');
+
+COMMIT;
+
+-- View the verification results in the Supabase editor:
+SELECT * FROM tmp_verification_notices;

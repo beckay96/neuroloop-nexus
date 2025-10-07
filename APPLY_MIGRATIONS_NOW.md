@@ -110,6 +110,41 @@
 
 ---
 
+### **6. ⭐ FIX Reference Tables & Patient Onboarding**
+**File:** `supabase/migrations/20250108_fix_reference_tables_rls.sql`
+
+```sql
+-- Copy entire content and run
+```
+
+**Expected Result:**
+```
+✅ REFERENCE TABLES RLS ENABLED:
+  - seizure_signs_reference: Read access for authenticated
+  - brain_regions_reference: Read access for authenticated
+  - seizure_triggers_reference: Read access for authenticated
+  - sign_brain_region_mapping: Read access for authenticated
+  - daily_tracking_preferences: User-specific access
+✅ RPC FUNCTION CREATED:
+  - get_patient_onboarding_data: Secure access to private_health_info
+```
+
+**What it does:**
+- Adds **RLS policies** to public reference/lookup tables
+- Creates `get_patient_onboarding_data()` RPC function
+- Reference tables are read-only for all authenticated users (no PHI)
+- Patient onboarding data uses RPC for secure access
+
+**Fixes:**
+- ❌ `403 Forbidden: seizure_signs_reference` → ✅ Readable by authenticated
+- ❌ `403 Forbidden: brain_regions_reference` → ✅ Readable by authenticated
+- ❌ `403 Forbidden: seizure_triggers_reference` → ✅ Readable by authenticated
+- ❌ `403 Forbidden: sign_brain_region_mapping` → ✅ Readable by authenticated
+- ❌ `403 Forbidden: daily_tracking_preferences` → ✅ User-specific RLS
+- ❌ `404 Not Found: patient_onboarding_data` → ✅ RPC function created
+
+---
+
 ## ✅ AFTER RUNNING ALL MIGRATIONS:
 
 1. **Hard refresh browser:** `Cmd + Shift + R` (Mac)
