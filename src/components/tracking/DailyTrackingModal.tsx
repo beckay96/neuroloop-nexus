@@ -18,11 +18,6 @@ import {
   Moon,
   Activity
 } from "lucide-react";
-import { 
-  numericToMoodEnum,
-  numericToEnergyEnum,
-  numericToSleepEnum
-} from "@/utils/databaseEnums";
 
 interface DailyTrackingModalProps {
   isOpen: boolean;
@@ -107,12 +102,12 @@ export default function DailyTrackingModal({
   };
 
   const handleComplete = () => {
-    // Convert numeric values to database enums
+    // Send NUMERIC values (not enums) - database columns are INTEGER not ENUM
     const finalData = {
       log_date: trackingData.log_date,
-      mood: numericToMoodEnum(trackingData.mood_numeric),
-      energy_level: numericToEnergyEnum(trackingData.energy_numeric),
-      sleep_quality: numericToSleepEnum(trackingData.sleep_numeric),
+      mood_numeric: trackingData.mood_numeric,
+      energy_numeric: trackingData.energy_numeric,
+      sleep_numeric: trackingData.sleep_numeric,
       sleep_hours: trackingData.sleep_hours,
       sleep_interruptions: trackingData.sleep_interruptions,
       exercise_minutes: trackingData.exercise_minutes || null,
