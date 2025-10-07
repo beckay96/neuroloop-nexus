@@ -43,17 +43,32 @@ export function MedicationStep({ medications, onUpdate }: MedicationStepProps) {
   }, []);
 
   const loadMedications = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('medications')
       .select('*')
       .order('name');
-    if (data) setAvailableMedications(data);
+    
+    if (error) {
+      console.error('Error loading medications:', error);
+      // Fallback to common neurological medications if database fails
+      setAvailableMedications([
+        { id: '1', name: 'Keppra', generic_name: 'Levetiracetam', category: 'Antiepileptic', common_dosages: '["500mg", "750mg", "1000mg"]' },
+        { id: '2', name: 'Dilantin', generic_name: 'Phenytoin', category: 'Antiepileptic', common_dosages: '["100mg", "200mg", "300mg"]' },
+        { id: '3', name: 'Tegretol', generic_name: 'Carbamazepine', category: 'Antiepileptic', common_dosages: '["200mg", "400mg"]' },
+        { id: '4', name: 'Sinemet', generic_name: 'Carbidopa-Levodopa', category: "Parkinson's Medication", common_dosages: '["25/100mg", "25/250mg"]' },
+        { id: '5', name: 'Requip', generic_name: 'Ropinirole', category: "Parkinson's Medication", common_dosages: '["0.25mg", "0.5mg", "1mg"]' },
+      ]);
+    } else if (data) {
+      setAvailableMedications(data);
+    }
   };
 
-  const filteredMedications = availableMedications.filter(med =>
-    med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (med.generic_name && med.generic_name.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredMedications = searchTerm
+    ? availableMedications.filter(med =>
+        med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (med.generic_name && med.generic_name.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+    : availableMedications.slice(0, 10); // Show top 10 by default
 
   // Helper to get labeled times based on frequency
   const getDefaultTimesForFrequency = (frequency: string) => {
@@ -160,9 +175,10 @@ export function MedicationStep({ medications, onUpdate }: MedicationStepProps) {
             className="bg-background border-2 focus-visible:border-teal-500 focus-visible:ring-teal-500"
           />
 
-          {searchTerm && (
-            <div className="max-h-[200px] overflow-y-auto space-y-2">
-              {filteredMedications.slice(0, 20).map((med) => (
+          {/* Show medications list */}
+          {filteredMedications.length > 0 && (
+            <div className="max-h-[280px] overflow-y-auto space-y-2 border-t pt-3">
+              {filteredMedications.map((med) => (
                 <Card
                   key={med.id}
                   className="p-3 cursor-pointer hover:bg-accent transition-all hover:scale-[1.02] border-border"
@@ -177,6 +193,12 @@ export function MedicationStep({ medications, onUpdate }: MedicationStepProps) {
                   )}
                 </Card>
               ))}
+            </div>
+          )}
+          
+          {filteredMedications.length === 0 && searchTerm && (
+            <div className="text-center py-4 text-muted-foreground text-sm">
+              No medications found. Try a different search or add a custom medication below.
             </div>
           )}
 
