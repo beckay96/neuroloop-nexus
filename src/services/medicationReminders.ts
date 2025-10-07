@@ -53,6 +53,7 @@ export class MedicationReminderService {
     try {
       // Get user's medications with times
       const { data: medications, error } = await supabase
+        .schema('private_health_info')
         .from('user_medications')
         .select('*')
         .eq('user_id', user.id)
@@ -272,6 +273,7 @@ export class MedicationReminderService {
     try {
       // Get all medications that should have been taken
       const { data: medications } = await supabase
+        .schema('private_health_info')
         .from('user_medications')
         .select('*')
         .eq('user_id', user.id)

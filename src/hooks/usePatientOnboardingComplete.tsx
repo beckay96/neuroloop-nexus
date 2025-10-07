@@ -100,6 +100,7 @@ export const usePatientOnboardingComplete = () => {
         const isCustom = med.id.startsWith('custom-');
         
         await supabase
+          .schema('private_health_info')
           .from('user_medications')
           .insert({
             user_id: userId,
