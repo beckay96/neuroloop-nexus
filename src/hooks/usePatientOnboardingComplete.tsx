@@ -77,6 +77,7 @@ export const usePatientOnboardingComplete = () => {
       // 2. Save conditions to user_conditions
       for (const conditionId of data.selectedConditions) {
         await supabase
+          .schema('private_health_info')
           .from('user_conditions')
           .insert({
             user_id: userId,
@@ -186,7 +187,7 @@ export const usePatientOnboardingComplete = () => {
       await supabase
         .from('notification_preferences')
         .insert({
-          patient_id: userId,
+          user_id: userId,
           medication_reminders: true,
           tracking_reminders: true,
           appointment_reminders: true,
