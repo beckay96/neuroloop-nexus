@@ -43,13 +43,17 @@ export function MedicationStep({ medications, onUpdate }: MedicationStepProps) {
   }, []);
 
   const loadMedications = async () => {
+    console.log('🔍 Loading medications from database...');
     const { data, error } = await supabase
       .from('medications')
-      .select('*')
+      .select('id, name, generic_name, category, common_dosages')
       .order('name');
     
+    console.log('📊 Medications query result:', { data, error, count: data?.length });
+    
     if (error) {
-      console.error('Error loading medications:', error);
+      console.error('❌ Error loading medications:', error);
+      console.error('Error details:', error.message, error.code, error.details);
       // Fallback to common neurological medications if database fails
       setAvailableMedications([
         { id: '1', name: 'Keppra', generic_name: 'Levetiracetam', category: 'Antiepileptic', common_dosages: '["500mg", "750mg", "1000mg"]' },
@@ -59,7 +63,10 @@ export function MedicationStep({ medications, onUpdate }: MedicationStepProps) {
         { id: '5', name: 'Requip', generic_name: 'Ropinirole', category: "Parkinson's Medication", common_dosages: '["0.25mg", "0.5mg", "1mg"]' },
       ]);
     } else if (data) {
+      console.log('✅ Successfully loaded medications:', data.length);
       setAvailableMedications(data);
+    } else {
+      console.warn('⚠️ No data returned from medications query');
     }
   };
 
