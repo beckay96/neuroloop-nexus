@@ -77,6 +77,7 @@ const quickActions = [{
 }, {
   id: "menstrual-cycle",
   title: "Menstrual Cycle",
+  icon: Calendar,
   color: "text-pink-500",
   bg: "bg-pink-100 dark:bg-pink-950/20",
   description: "Track cycle & seizure patterns"
