@@ -61,7 +61,7 @@ function Calendar({
       classNames={{
         months: "flex flex-col sm:flex-row space-y-2 sm:space-x-2 sm:space-y-0",
         month: compact ? "space-y-2" : "space-y-3",
-        caption: "flex flex-col items-center pt-1 pb-2 space-y-2",
+        caption: "flex flex-col-reverse items-center pt-1 pb-2 space-y-reverse space-y-2",
         caption_label: "text-sm font-medium hidden", // Hide the duplicate label
         nav: "flex justify-between w-full px-1",
         nav_button: cn(
