@@ -35,11 +35,10 @@ export const useDiagnoses = (patientId: string) => {
   const fetchDiagnoses = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('patient_diagnoses')
-        .select('*')
-        .eq('patient_id', patientId)
-        .order('diagnosis_date', { ascending: false });
+      // Use RPC for secure access with authentication
+      const { data, error } = await supabase.rpc('get_patient_diagnoses', {
+        p_patient_id: patientId
+      });
 
       if (error) throw error;
       setDiagnoses(data || []);
@@ -100,10 +99,16 @@ export const useDiagnoses = (patientId: string) => {
 
   const updateDiagnosis = async (diagnosisId: string, updates: Partial<Diagnosis>) => {
     try {
-      const { error } = await supabase
-        .from('patient_diagnoses')
-        .update(updates)
-        .eq('diagnosis_id', diagnosisId);
+      // Use RPC for secure update with authentication
+      const { data, error } = await supabase.rpc('update_patient_diagnosis', {
+        p_diagnosis_id: diagnosisId,
+        p_diagnosis_date: updates.diagnosis_date,
+        p_diagnosis_type: updates.diagnosis_type,
+        p_diagnosis_subtype: updates.diagnosis_subtype,
+        p_snomed_ct_code: updates.snomed_ct_code,
+        p_icd10_code: updates.icd10_code,
+        p_notes: updates.notes
+      });
 
       if (error) throw error;
 
@@ -113,7 +118,7 @@ export const useDiagnoses = (patientId: string) => {
       });
 
       await fetchDiagnoses();
-      return { success: true };
+      return { success: true, data };
     } catch (error: any) {
       console.error('Error updating diagnosis:', error);
       toast({
@@ -131,12 +136,40 @@ export const useDiagnoses = (patientId: string) => {
     }
   }, [patientId]);
 
+  const deleteDiagnosis = async (diagnosisId: string) => {
+    try {
+      // Use RPC for secure soft delete with authentication
+      const { data, error } = await supabase.rpc('delete_patient_diagnosis', {
+        p_diagnosis_id: diagnosisId
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Diagnosis Deleted',
+        description: 'Your diagnosis has been removed successfully'
+      });
+
+      await fetchDiagnoses();
+      return { success: true };
+    } catch (error: any) {
+      console.error('Error deleting diagnosis:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete diagnosis',
+        variant: 'destructive'
+      });
+      return { success: false, error };
+    }
+  };
+
   return {
     diagnoses,
     loading,
     refetch: fetchDiagnoses,
     addDiagnosis,
-    updateDiagnosis
+    updateDiagnosis,
+    deleteDiagnosis
   };
 };
 

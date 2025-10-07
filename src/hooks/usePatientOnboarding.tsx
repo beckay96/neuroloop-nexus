@@ -158,25 +158,32 @@ export const usePatientOnboarding = () => {
         }
       }
 
-      // 7. Update profile to mark onboarding complete
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert([{
-          id: userId,
-          user_type: 'patient',
-          onboarding_completed: true
-        }]);
+      // 7. Complete onboarding and create research_id if consent given
+      const { data: completionResult, error: completionError } = await supabase
+        .rpc('complete_onboarding', {
+          p_user_id: userId,
+          p_user_type: 'patient',
+          p_research_consent: data.researchConsent || false
+        });
 
-      if (profileError) {
-        console.error('Error updating profile:', profileError);
+      if (completionError) {
+        console.error('Error completing onboarding:', completionError);
+        throw completionError;
+      }
+
+      // Log research_id creation if applicable
+      if (completionResult?.research_id_created) {
+        console.log('✅ Research ID created for user:', completionResult.research_id);
       }
 
       toast({
         title: "Onboarding Complete!",
-        description: "Your profile has been set up successfully.",
+        description: data.researchConsent 
+          ? "Your profile has been set up and you're enrolled in research."
+          : "Your profile has been set up successfully.",
       });
 
-      return { success: true };
+      return { success: true, researchIdCreated: completionResult?.research_id_created };
     } catch (error) {
       console.error('Error in patient onboarding:', error);
       toast({

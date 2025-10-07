@@ -99,26 +99,41 @@ export const useSeizureLogs = (userId?: string) => {
 
   const updateSeizureLog = async (logId: string, updates: Partial<SeizureLog>) => {
     try {
-      // Note: No update RPC exists, using direct table access
-      // TODO: Create update_seizure_log RPC for better security
-      // @ts-ignore - seizure_logs_research exists in private_health_info schema
-      const { data, error } = await supabase
-        .from('seizure_logs_research')
-        .update(updates)
-        .eq('log_id', logId)
-        .select()
-        .single();
+      // Use RPC for secure update with authentication
+      const { data, error } = await supabase.rpc('update_seizure_log', {
+        p_log_id: logId,
+        p_duration_seconds: updates.duration_seconds,
+        p_seizure_type: updates.seizure_type,
+        p_consciousness_level: updates.consciousness_level,
+        p_aura_present: updates.aura_present,
+        p_aura_description: updates.aura_description,
+        p_witnessed: updates.witnessed,
+        p_witness_role: updates.witness_role,
+        p_video_recorded: updates.video_recorded,
+        p_location_type: updates.location_type,
+        p_post_ictal_confusion_minutes: updates.post_ictal_confusion_minutes,
+        p_recovery_time_minutes: updates.recovery_time_minutes,
+        p_sleep_hours_prior: updates.sleep_hours_prior,
+        p_medication_adherence_prior: updates.medication_adherence_prior,
+        p_stress_level: updates.stress_level,
+        p_emergency_services_called: updates.emergency_services_called,
+        p_rescue_medication_used: updates.rescue_medication_used,
+        p_rescue_medication_type: updates.rescue_medication_type,
+        p_hospitalized: updates.hospitalized,
+        p_notes: updates.notes
+      });
 
       if (error) throw error;
 
-      setSeizureLogs(seizureLogs.map(log => log.log_id === logId ? data as SeizureLog : log));
+      // Refetch to get updated data
+      await fetchSeizureLogs();
       
       toast({
         title: "Log Updated",
         description: "Seizure log has been updated.",
       });
 
-      return { success: true, data };
+      return { success: true, data: { log_id: data } };
     } catch (error: any) {
       console.error('Error updating seizure log:', error);
       toast({
@@ -132,17 +147,15 @@ export const useSeizureLogs = (userId?: string) => {
 
   const deleteSeizureLog = async (logId: string) => {
     try {
-      // Note: No delete RPC exists, using direct table access
-      // TODO: Create delete_seizure_log RPC for soft delete
-      // @ts-ignore - seizure_logs_research exists in private_health_info schema
-      const { error } = await supabase
-        .from('seizure_logs_research')
-        .delete()
-        .eq('log_id', logId);
+      // Use RPC for secure soft delete with authentication
+      const { data, error } = await supabase.rpc('delete_seizure_log', {
+        p_log_id: logId
+      });
 
       if (error) throw error;
 
-      setSeizureLogs(seizureLogs.filter(log => log.log_id !== logId));
+      // Refetch to update list (soft delete may just hide the record)
+      await fetchSeizureLogs();
       
       toast({
         title: "Log Deleted",

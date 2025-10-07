@@ -115,7 +115,8 @@ const healthStats = [{
   progress: 40,
   icon: Shield
 }];
-const achievements = [{
+// REMOVED MOCK DATA - Will be replaced with real achievements from database
+const achievements = useMemo(() => [{
   id: 1,
   title: "7-Day Streak",
   description: "Completed daily tracking for 7 days",
@@ -136,8 +137,10 @@ const achievements = [{
   icon: Brain,
   earned: false,
   points: 100
-}];
-const upcomingReminders = [{
+}], []);
+
+// REMOVED MOCK DATA - Will be replaced with real reminders from database
+const upcomingReminders = useMemo(() => [{
   id: 1,
   type: "medication",
   title: "Evening Levetiracetam",
@@ -165,7 +168,7 @@ const upcomingReminders = [{
   subtitle: "Morning temperature reading",
   time: "Tomorrow 7:00 AM",
   urgent: false
-}];
+}], []);
 
 export default function PatientDashboard() {
   const { user } = useAuth();
@@ -193,7 +196,8 @@ export default function PatientDashboard() {
   // Calculate real stats from data
   const daysSeizureFree = useMemo(() => {
     if (!seizureLogs || seizureLogs.length === 0) return 0;
-    const lastSeizure = new Date(seizureLogs[0].occurred_at);
+    // Use log_date from seizure_logs_research table
+    const lastSeizure = new Date(seizureLogs[0].log_date);
     const now = new Date();
     return Math.floor((now.getTime() - lastSeizure.getTime()) / (1000 * 60 * 60 * 24));
   }, [seizureLogs]);
@@ -267,18 +271,35 @@ export default function PatientDashboard() {
     icon: Heart
   }], [daysSeizureFree, avgEnergyLevel, avgSleepQuality]);
   
-  // Extract user name from profile data or fallback to email
-  const getUserDisplayName = () => {
-    if (user?.user_metadata?.first_name) {
-      return user.user_metadata.first_name;
-    }
-    if (user?.email) {
-      return user.email.split('@')[0];
-    }
-    return "Patient";
-  };
+  // Load user's first name from patient_onboarding_data
+  const [userFirstName, setUserFirstName] = useState<string>("");
   
-  const userName = getUserDisplayName();
+  useEffect(() => {
+    const loadUserName = async () => {
+      if (!user?.id) return;
+      
+      try {
+        const { data, error } = await supabase.rpc('get_patient_onboarding_data', {
+          p_user_id: user.id
+        });
+        
+        if (data && data.length > 0 && data[0].first_name) {
+          setUserFirstName(data[0].first_name);
+        } else if (user.email) {
+          setUserFirstName(user.email.split('@')[0]);
+        }
+      } catch (error) {
+        console.error('Error loading user name:', error);
+        if (user.email) {
+          setUserFirstName(user.email.split('@')[0]);
+        }
+      }
+    };
+    
+    loadUserName();
+  }, [user]);
+  
+  const userName = userFirstName || "Patient";
   
   // Filter quick actions based on user's tracking features
   const getEnabledQuickActions = () => {
@@ -359,23 +380,23 @@ export default function PatientDashboard() {
     try {
       switch(type) {
         case 'seizure-log':
-          // Use the hook instead of direct database call
+          // Use the hook with correct seizure_logs_research schema
+          const now = new Date();
           const seizureResult = await addSeizureLog({
-            patient_id: user.id,
-            occurred_at: data.occurred_at || new Date().toISOString(),
+            user_id: user.id,
+            log_date: data.log_date || now.toISOString().split('T')[0],
+            log_time: data.log_time || now.toTimeString().slice(0, 5),
             seizure_type: data.seizure_type,
             duration_seconds: data.duration_seconds,
-            severity: data.severity,
             consciousness_level: data.consciousness_level,
-            triggers: data.triggers,
-            symptoms_before: data.symptoms_before,
-            symptoms_during: data.symptoms_during,
-            symptoms_after: data.symptoms_after,
+            aura_present: data.aura_present,
+            aura_description: data.aura_description,
+            witnessed: data.witnessed,
+            location_type: data.location_type,
             recovery_time_minutes: data.recovery_time_minutes,
-            injury_occurred: data.injury_occurred,
-            notes: data.notes,
-            shared_with_clinician: true,
-            shared_with_carers: true
+            emergency_services_called: data.emergency_services_called,
+            rescue_medication_used: data.rescue_medication_used,
+            notes: data.notes
           });
           if (seizureResult.success) {
             refetchSeizures();

@@ -355,9 +355,40 @@ export function EmergencyButton({ userId, className = "" }: EmergencyButtonProps
 
 // Floating Emergency Button for constant access (bottom LEFT corner)
 export function FloatingEmergencyButton({ userId }: { userId: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isEmergencyMode, setIsEmergencyMode] = useState(false);
+  
   return (
-    <div className="fixed bottom-4 left-4 z-50">
-      <EmergencyButton userId={userId} className="rounded-full h-16 w-16 p-0" />
-    </div>
+    <>
+      <div 
+        className="fixed bottom-4 left-4 z-50"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <Button
+          onClick={() => setIsEmergencyMode(true)}
+          className={`
+            rounded-full h-16 w-16 p-0 
+            border-4 border-red-500 
+            ${isHovered ? 'bg-red-600 opacity-100' : 'bg-red-600/50 opacity-50'}
+            hover:bg-red-700 hover:opacity-100
+            shadow-[0_0_20px_rgba(239,68,68,0.6)]
+            hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]
+            transition-all duration-300
+            font-bold text-white text-sm
+          `}
+        >
+          Help!
+        </Button>
+      </div>
+      {isEmergencyMode && (
+        <div className="fixed inset-0 z-[100]">
+          <EmergencyButton 
+            userId={userId} 
+            className="hidden" 
+          />
+        </div>
+      )}
+    </>
   );
 }

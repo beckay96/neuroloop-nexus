@@ -93,8 +93,8 @@ export function DailyTrackingStep({
           </div>
         </div>
 
-        {/* Suggested Time Cards */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Suggested Time Cards - Show all times */}
+        <div className="grid grid-cols-2 gap-3 max-h-[400px] overflow-y-auto pr-2">
           {smartSchedule.map((item) => (
             <Card
               key={item.time}
@@ -179,7 +179,17 @@ export function DailyTrackingStep({
                 </div>
                 {medications.map((med, idx) => (
                   <div key={idx} className="text-sm text-muted-foreground">
-                    {med.name}: {med.times.length} times/day
+                    <div className="font-medium">{med.name}</div>
+                    <div className="text-xs">{med.frequency || `${med.times.length} times/day`}</div>
+                    {med.times.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {med.times.map((time, tidx) => (
+                          <span key={tidx} className="inline-block px-1.5 py-0.5 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded text-xs font-mono">
+                            {time}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
