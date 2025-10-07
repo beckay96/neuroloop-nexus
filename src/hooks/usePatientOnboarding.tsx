@@ -34,24 +34,21 @@ export const usePatientOnboarding = () => {
 
   const saveOnboarding = async (userId: string, data: PatientOnboardingData) => {
     try {
-      // 1. Save to patient_onboarding_data in private_health_info schema
-      const { error: onboardingError} = await supabase
-        .schema('private_health_info')
-        .from('patient_onboarding_data')
-        .upsert({
-          user_id: userId,
-          first_name: data.firstName,
-          middle_name: data.middleName,
-          last_name: data.lastName,
-          date_of_birth: data.dateOfBirth,
-          gender: data.gender as any,
-          selected_conditions: data.selectedConditions,
-          track_menstrual_cycle: data.trackMenstrual,
-          basal_temp_time: data.basalTempTime,
-          tracking_times: data.trackingTimes || [],
-          emergency_contact_name: data.emergencyContactName,
-          emergency_contact_phone: data.emergencyContactPhone,
-          completed_at: new Date().toISOString()
+      // 1. Save to patient_onboarding_data using RPC function (accesses private_health_info schema)
+      const { data: onboardingResult, error: onboardingError } = await supabase
+        .rpc('save_patient_onboarding_data' as any, {
+          p_user_id: userId,
+          p_first_name: data.firstName,
+          p_middle_name: data.middleName || null,
+          p_last_name: data.lastName,
+          p_date_of_birth: data.dateOfBirth,
+          p_gender: data.gender,
+          p_selected_conditions: data.selectedConditions,
+          p_track_menstrual_cycle: data.trackMenstrual,
+          p_basal_temp_time: data.basalTempTime || null,
+          p_tracking_times: data.trackingTimes || [],
+          p_emergency_contact_name: data.emergencyContactName,
+          p_emergency_contact_phone: data.emergencyContactPhone
         });
 
       if (onboardingError) {
@@ -59,19 +56,24 @@ export const usePatientOnboarding = () => {
         throw onboardingError;
       }
 
-      // 2. Save conditions to user_conditions (triggers will auto-create tracking preferences)
+      if (onboardingResult && !(onboardingResult as any).success) {
+        console.error('Onboarding RPC error:', (onboardingResult as any).error);
+        throw new Error((onboardingResult as any).error);
+      }
+
+      // 2. Save conditions using RPC function
       for (const conditionId of data.selectedConditions) {
-        const { error: conditionError } = await supabase
-          .schema('private_health_info')
-          .from('user_conditions')
-          .insert({
-            user_id: userId,
-            condition_id: conditionId,
-            diagnosis_date: new Date().toISOString()
+        const { data: conditionResult, error: conditionError } = await supabase
+          .rpc('save_user_condition' as any, {
+            p_user_id: userId,
+            p_condition_id: conditionId,
+            p_diagnosis_date: new Date().toISOString().split('T')[0]
           });
 
-        if (conditionError && conditionError.code !== '23505') { // Ignore duplicate errors
+        if (conditionError) {
           console.error('Error saving condition:', conditionError);
+        } else if (conditionResult && !(conditionResult as any).success) {
+          console.error('Condition RPC error:', (conditionResult as any).error);
         }
       }
 
@@ -103,19 +105,22 @@ export const usePatientOnboarding = () => {
           medicationId = newMed.id;
         }
 
-        // Add to user_medications with times array
-        await supabase
-          .schema('private_health_info')
-          .from('user_medications')
-          .insert({
-            user_id: userId,
-            medication_id: medicationId,
-            medication_name: med.name,
-            dosage_amount: parseFloat(med.dosage) || null,
-            dosage_unit: med.dosage.replace(/[0-9.]/g, '').trim() || 'mg',
-            times: med.times,
-            is_active: true
+        // Add to user_medications using RPC function
+        const { data: medicationResult, error: medicationError } = await supabase
+          .rpc('save_user_medication' as any, {
+            p_user_id: userId,
+            p_medication_id: medicationId,
+            p_medication_name: med.name,
+            p_dosage_amount: parseFloat(med.dosage) || null,
+            p_dosage_unit: med.dosage.replace(/[0-9.]/g, '').trim() || 'mg',
+            p_times: med.times
           });
+
+        if (medicationError) {
+          console.error('Error saving medication:', medicationError);
+        } else if (medicationResult && !(medicationResult as any).success) {
+          console.error('Medication RPC error:', (medicationResult as any).error);
+        }
       }
 
       // 4. Save research consent with granular data types

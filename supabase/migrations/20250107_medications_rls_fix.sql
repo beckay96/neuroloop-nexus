@@ -39,33 +39,60 @@ CREATE POLICY "conditions_readable_by_all"
     TO anon, authenticated
     USING (true);
 
--- Verify everything is set up correctly
-DO $$
-BEGIN
-    -- Check if policy exists
-    IF EXISTS (
-        SELECT 1 
-        FROM pg_policies 
+-- Verify everything is set up correctly with a temp table
+CREATE TEMP TABLE verification_results (
+    check_name TEXT,
+    status TEXT,
+    details TEXT
+);
+
+-- Check medications RLS policy
+INSERT INTO verification_results
+SELECT 
+    'Medications RLS Policy' as check_name,
+    CASE WHEN EXISTS (
+        SELECT 1 FROM pg_policies 
         WHERE schemaname = 'public' 
         AND tablename = 'medications'
         AND policyname = 'medications_readable_by_all'
-    ) THEN
-        RAISE NOTICE '✅ RLS policy created successfully';
-    ELSE
-        RAISE WARNING '❌ Failed to create RLS policy';
-    END IF;
-    
-    -- Check if grants exist
-    IF EXISTS (
-        SELECT 1 
-        FROM information_schema.role_table_grants 
-        WHERE table_name = 'medications' 
-        AND table_schema = 'public'
-        AND grantee IN ('anon', 'authenticated')
-        AND privilege_type = 'SELECT'
-    ) THEN
-        RAISE NOTICE '✅ SELECT grants applied successfully';
-    ELSE
-        RAISE WARNING '❌ SELECT grants may not be applied';
-    END IF;
-END $$;
+    ) THEN '✅ SUCCESS' ELSE '❌ FAILED' END as status,
+    'Policy allows SELECT for anon and authenticated' as details;
+
+-- Check conditions RLS policy
+INSERT INTO verification_results
+SELECT 
+    'Conditions RLS Policy' as check_name,
+    CASE WHEN EXISTS (
+        SELECT 1 FROM pg_policies 
+        WHERE schemaname = 'public' 
+        AND tablename = 'conditions'
+        AND policyname = 'conditions_readable_by_all'
+    ) THEN '✅ SUCCESS' ELSE '❌ FAILED' END as status,
+    'Policy allows SELECT for anon and authenticated' as details;
+
+-- Check medications grants
+INSERT INTO verification_results
+SELECT 
+    'Medications GRANT Permissions' as check_name,
+    CASE WHEN COUNT(*) >= 2 THEN '✅ SUCCESS' ELSE '❌ FAILED' END as status,
+    'Granted to: ' || string_agg(grantee, ', ') as details
+FROM information_schema.role_table_grants 
+WHERE table_name = 'medications' 
+AND table_schema = 'public'
+AND grantee IN ('anon', 'authenticated')
+AND privilege_type = 'SELECT';
+
+-- Check conditions grants
+INSERT INTO verification_results
+SELECT 
+    'Conditions GRANT Permissions' as check_name,
+    CASE WHEN COUNT(*) >= 2 THEN '✅ SUCCESS' ELSE '❌ FAILED' END as status,
+    'Granted to: ' || string_agg(grantee, ', ') as details
+FROM information_schema.role_table_grants 
+WHERE table_name = 'conditions' 
+AND table_schema = 'public'
+AND grantee IN ('anon', 'authenticated')
+AND privilege_type = 'SELECT';
+
+-- Display results
+SELECT * FROM verification_results;
