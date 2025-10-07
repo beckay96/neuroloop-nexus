@@ -36,7 +36,8 @@ export const usePatientOnboarding = () => {
     try {
       // 1. Save to patient_onboarding_data in private_health_info schema
       const { error: onboardingError} = await supabase
-        .from('patient_onboarding_data' as any)
+        .schema('private_health_info')
+        .from('patient_onboarding_data')
         .upsert({
           user_id: userId,
           first_name: data.firstName,
@@ -46,6 +47,8 @@ export const usePatientOnboarding = () => {
           gender: data.gender as any,
           selected_conditions: data.selectedConditions,
           track_menstrual_cycle: data.trackMenstrual,
+          basal_temp_time: data.basalTempTime,
+          tracking_times: data.trackingTimes || [],
           emergency_contact_name: data.emergencyContactName,
           emergency_contact_phone: data.emergencyContactPhone,
           completed_at: new Date().toISOString()
@@ -59,7 +62,8 @@ export const usePatientOnboarding = () => {
       // 2. Save conditions to user_conditions (triggers will auto-create tracking preferences)
       for (const conditionId of data.selectedConditions) {
         const { error: conditionError } = await supabase
-          .from('user_conditions' as any)
+          .schema('private_health_info')
+          .from('user_conditions')
           .insert({
             user_id: userId,
             condition_id: conditionId,
@@ -101,7 +105,8 @@ export const usePatientOnboarding = () => {
 
         // Add to user_medications with times array
         await supabase
-          .from('user_medications' as any)
+          .schema('private_health_info')
+          .from('user_medications')
           .insert({
             user_id: userId,
             medication_id: medicationId,

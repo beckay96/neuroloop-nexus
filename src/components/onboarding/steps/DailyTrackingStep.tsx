@@ -193,6 +193,15 @@ export function DailyTrackingStep({
               </div>
               <div className="text-sm text-muted-foreground space-y-1">
                 <div>Symptoms: {trackingTimes.length} check-ins</div>
+                {trackingTimes.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {trackingTimes.map(time => (
+                      <span key={time} className="inline-block px-2 py-0.5 bg-teal-500/10 text-teal-600 dark:text-teal-400 rounded text-xs font-mono">
+                        {time}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 <div>Mood & Energy tracking</div>
                 <div>Sleep quality logs</div>
               </div>
