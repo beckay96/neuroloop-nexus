@@ -3,12 +3,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 // Interface matching seizure_logs_research table structure
+// NOTE: seizure_logs_research does NOT have seizure_type column
 export interface SeizureLog {
   log_id?: string;
   user_id: string;
   log_date: string;
   log_time?: string;
-  seizure_type: string;
   consciousness_level?: string;
   duration_seconds?: number;
   aura_present?: string;
@@ -65,7 +65,6 @@ export const useSeizureLogs = (userId?: string) => {
         p_user_id: logData.user_id,
         p_occurred_at: occurredAt,
         p_duration_seconds: logData.duration_seconds || null,
-        p_seizure_type: logData.seizure_type,
         p_consciousness_level: logData.consciousness_level || null,
         p_warning_signs: logData.aura_present === 'yes' ? [logData.aura_description || ''] : [],
         p_post_ictal_symptoms: [],
@@ -103,7 +102,6 @@ export const useSeizureLogs = (userId?: string) => {
       const { data, error } = await supabase.rpc('update_seizure_log', {
         p_log_id: logId,
         p_duration_seconds: updates.duration_seconds,
-        p_seizure_type: updates.seizure_type,
         p_consciousness_level: updates.consciousness_level,
         p_aura_present: updates.aura_present,
         p_aura_description: updates.aura_description,

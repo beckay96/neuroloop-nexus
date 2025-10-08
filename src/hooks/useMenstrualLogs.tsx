@@ -17,6 +17,8 @@ export interface MenstrualLog {
   seizure_clustered_around_menstruation?: boolean;
   catamenial_pattern_suspected?: boolean;
   seizure_correlation?: Record<string, any>; // JSONB
+  is_pregnant?: boolean;
+  is_breastfeeding?: boolean;
   notes?: string;
   created_at?: string;
 }
@@ -46,24 +48,32 @@ export const useMenstrualLogs = (userId?: string) => {
 
   const addMenstrualLog = async (logData: Omit<MenstrualLog, 'id' | 'created_at'>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('menstrual_cycle_logs')
-        .insert(logData)
-        .select()
-        .single();
+      const { data: logId, error } = await supabase.rpc('save_menstrual_log', {
+        p_user_id: logData.user_id,
+        p_cycle_start_date: logData.cycle_start_date,
+        p_cycle_end_date: logData.cycle_end_date || null,
+        p_cycle_length_days: logData.cycle_length_days || null,
+        p_flow_intensity: logData.flow_intensity || null,
+        p_cycle_phase: logData.cycle_phase || null,
+        p_overall_symptom_severity: logData.symptom_severity || null,
+        p_seizure_count_during_cycle: logData.seizure_count_during_cycle || 0,
+        p_seizure_clustered_around_menstruation: logData.seizure_clustered_around_menstruation || false,
+        p_catamenial_pattern_suspected: logData.catamenial_pattern_suspected || false,
+        p_is_pregnant: (logData as any).is_pregnant || false,
+        p_is_breastfeeding: (logData as any).is_breastfeeding || false,
+        p_notes: logData.notes || null
+      });
 
       if (error) throw error;
 
-      setMenstrualLogs([data, ...menstrualLogs]);
+      await fetchMenstrualLogs();
       
       toast({
         title: "Cycle Logged",
         description: "Your menstrual cycle has been recorded successfully.",
       });
 
-      return { success: true, data };
+      return { success: true, data: { id: logId } };
     } catch (error: any) {
       console.error('Error adding menstrual log:', error);
       toast({
@@ -77,18 +87,24 @@ export const useMenstrualLogs = (userId?: string) => {
 
   const updateMenstrualLog = async (id: string, updates: Partial<MenstrualLog>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('menstrual_cycle_logs')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
+      const { data, error } = await supabase.rpc('update_menstrual_log', {
+        p_log_id: id,
+        p_cycle_end_date: updates.cycle_end_date || null,
+        p_cycle_length_days: updates.cycle_length_days || null,
+        p_flow_intensity: updates.flow_intensity || null,
+        p_cycle_phase: updates.cycle_phase || null,
+        p_overall_symptom_severity: updates.symptom_severity || null,
+        p_seizure_count_during_cycle: updates.seizure_count_during_cycle || null,
+        p_seizure_clustered_around_menstruation: updates.seizure_clustered_around_menstruation || null,
+        p_catamenial_pattern_suspected: updates.catamenial_pattern_suspected || null,
+        p_is_pregnant: (updates as any).is_pregnant || null,
+        p_is_breastfeeding: (updates as any).is_breastfeeding || null,
+        p_notes: updates.notes || null
+      });
 
       if (error) throw error;
 
-      setMenstrualLogs(menstrualLogs.map(log => log.id === id ? data : log));
+      await fetchMenstrualLogs();
       
       toast({
         title: "Log Updated",
@@ -109,12 +125,9 @@ export const useMenstrualLogs = (userId?: string) => {
 
   const deleteMenstrualLog = async (id: string) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { error } = await supabase
-        .schema('private_health_info')
-        .from('menstrual_cycle_logs')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.rpc('delete_menstrual_log', {
+        p_log_id: id
+      });
 
       if (error) throw error;
 

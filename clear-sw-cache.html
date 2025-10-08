@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clear Service Worker Cache</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #4F46E5;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #4338CA;
+    }
+    .success {
+      color: #059669;
+      margin-top: 20px;
+    }
+    .error {
+      color: #DC2626;
+      margin-top: 20px;
+    }
+    .info {
+      background: #EFF6FF;
+      border-left: 4px solid #3B82F6;
+      padding: 12px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔧 Clear Service Worker Cache</h1>
+    <p>This tool will help you clear the service worker cache and fix React errors.</p>
+    
+    <div class="info">
+      <strong>Why do I need this?</strong><br>
+      When JavaScript bundles are updated, the service worker might serve old cached versions causing React errors.
+    </div>
+
+    <button onclick="clearCache()">Clear All Caches</button>
+    <button onclick="unregisterSW()">Unregister Service Worker</button>
+    <button onclick="doEverything()">Do Everything & Reload</button>
+    
+    <div id="status"></div>
+  </div>
+
+  <script>
+    const status = document.getElementById('status');
+
+    async function clearCache() {
+      try {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        status.innerHTML = '<p class="success">✅ All caches cleared!</p>';
+      } catch (error) {
+        status.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+      }
+    }
+
+    async function unregisterSW() {
+      try {
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map(reg => reg.unregister()));
+          status.innerHTML = '<p class="success">✅ Service worker unregistered!</p>';
+        } else {
+          status.innerHTML = '<p class="error">❌ Service workers not supported</p>';
+        }
+      } catch (error) {
+        status.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+      }
+    }
+
+    async function doEverything() {
+      try {
+        // Clear caches
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        
+        // Unregister service workers
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map(reg => reg.unregister()));
+        }
+        
+        status.innerHTML = '<p class="success">✅ Everything cleared! Reloading in 2 seconds...</p>';
+        
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      } catch (error) {
+        status.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

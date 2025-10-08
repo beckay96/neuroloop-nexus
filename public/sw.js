@@ -5,7 +5,7 @@
 // HIPAA Compliant: NO PHI stored in cache or service worker
 // ============================================================================
 
-const CACHE_NAME = 'neuroloop-v1';
+const CACHE_NAME = 'neuroloop-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -56,6 +56,7 @@ self.addEventListener('activate', (event) => {
 // ============================================================================
 // CRITICAL: We NEVER cache PHI. Always fetch from network.
 // Only cache static assets for offline shell.
+// NEVER cache JavaScript bundles - they change with each build.
 // ============================================================================
 self.addEventListener('fetch', (event) => {
   const { request } = event;
@@ -76,6 +77,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
+  // NEVER cache JavaScript or CSS bundles (they have hashed names and change frequently)
+  if (url.pathname.includes('/assets/') && (url.pathname.endsWith('.js') || url.pathname.endsWith('.css'))) {
+    event.respondWith(fetch(request));
+    return;
+  }
+  
   // Network-first for everything else
   event.respondWith(
     fetch(request)
@@ -83,7 +90,7 @@ self.addEventListener('fetch', (event) => {
         // Clone response for cache
         const responseClone = response.clone();
         
-        // Only cache successful responses for static assets
+        // Only cache successful responses for static assets (NOT JS bundles)
         if (response.status === 200 && STATIC_ASSETS.includes(url.pathname)) {
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, responseClone);

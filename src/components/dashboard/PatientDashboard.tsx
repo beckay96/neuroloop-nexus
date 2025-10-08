@@ -116,7 +116,7 @@ const healthStats = [{
   icon: Shield
 }];
 // REMOVED MOCK DATA - Will be replaced with real achievements from database
-const achievements = useMemo(() => [{
+const achievements = [{
   id: 1,
   title: "7-Day Streak",
   description: "Completed daily tracking for 7 days",
@@ -137,10 +137,10 @@ const achievements = useMemo(() => [{
   icon: Brain,
   earned: false,
   points: 100
-}], []);
+}];
 
 // REMOVED MOCK DATA - Will be replaced with real reminders from database
-const upcomingReminders = useMemo(() => [{
+const upcomingReminders = [{
   id: 1,
   type: "medication",
   title: "Evening Levetiracetam",
@@ -168,7 +168,7 @@ const upcomingReminders = useMemo(() => [{
   subtitle: "Morning temperature reading",
   time: "Tomorrow 7:00 AM",
   urgent: false
-}], []);
+}];
 
 export default function PatientDashboard() {
   const { user } = useAuth();

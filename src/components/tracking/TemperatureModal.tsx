@@ -9,7 +9,8 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { 
   Select,
@@ -37,7 +38,7 @@ export default function TemperatureModal({ isOpen, onClose, onComplete }: Temper
     measurement_location: "oral",
     menstrual_cycle_day: "",
     sleep_quality: "",
-    time_awake: "",
+    time_after_waking: "unknown",
     notes: ""
   });
 
@@ -129,6 +130,9 @@ export default function TemperatureModal({ isOpen, onClose, onComplete }: Temper
             <Thermometer className="h-5 w-5 text-status-monitoring" />
             Temperature Logging
           </DialogTitle>
+          <DialogDescription className="text-center text-sm text-muted-foreground">
+            Track your basal body temperature for cycle phase detection
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -312,24 +316,27 @@ export default function TemperatureModal({ isOpen, onClose, onComplete }: Temper
                 </div>
 
                 <div>
-                  <Label>Time Since Waking</Label>
+                  <Label>Time After Waking</Label>
                   <Select 
-                    value={temperatureData.time_awake} 
-                    onValueChange={(value) => updateTemperatureData("time_awake", value)}
+                    value={temperatureData.time_after_waking} 
+                    onValueChange={(value) => updateTemperatureData("time_after_waking", value)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="How long have you been awake?" />
+                      <SelectValue placeholder="How long after waking?" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="immediately">Immediately upon waking</SelectItem>
-                      <SelectItem value="1-5min">1-5 minutes</SelectItem>
-                      <SelectItem value="5-15min">5-15 minutes</SelectItem>
-                      <SelectItem value="15-30min">15-30 minutes</SelectItem>
-                      <SelectItem value="30min+">More than 30 minutes</SelectItem>
+                    <SelectContent className="bg-popover border border-border z-50">
+                      <SelectItem value="under_10_min">Under 10 minutes ✅ (Most accurate)</SelectItem>
+                      <SelectItem value="10_20_min">10-20 minutes (Good)</SelectItem>
+                      <SelectItem value="20_30_min">20-30 minutes (Acceptable)</SelectItem>
+                      <SelectItem value="30_60_min">30-60 minutes (Less accurate)</SelectItem>
+                      <SelectItem value="1_2_hours">1-2 hours (Poor)</SelectItem>
+                      <SelectItem value="2_3_hours">2-3 hours (Not ideal)</SelectItem>
+                      <SelectItem value="over_3_hours">Over 3 hours (Not useful)</SelectItem>
+                      <SelectItem value="unknown">Unknown</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground mt-1">
-                    For accurate basal temperature, measure immediately upon waking.
+                    For accurate basal temperature, measure within 10 minutes of waking.
                   </p>
                 </div>
               </div>

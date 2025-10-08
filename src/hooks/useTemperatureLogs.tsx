@@ -13,7 +13,7 @@ export interface TemperatureLog {
   measurement_location?: string;
   menstrual_cycle_day?: number;
   sleep_quality?: string;
-  time_awake?: string;
+  time_after_waking?: string; // NEW: How long after waking
   notes?: string;
   created_at?: string;
   updated_at?: string;
@@ -44,24 +44,30 @@ export const useTemperatureLogs = (userId?: string) => {
 
   const addTemperatureLog = async (logData: Omit<TemperatureLog, 'id' | 'created_at' | 'updated_at'>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('basal_temperature_logs')
-        .insert(logData)
-        .select()
-        .single();
+      const { data: logId, error } = await supabase.rpc('save_basal_temperature_log', {
+        p_user_id: logData.user_id,
+        p_log_date: logData.log_date,
+        p_log_time: logData.log_time,
+        p_temperature: logData.temperature,
+        p_temperature_unit: logData.temperature_unit,
+        p_measurement_type: logData.measurement_type || 'basal',
+        p_measurement_location: logData.measurement_location || null,
+        p_menstrual_cycle_day: logData.menstrual_cycle_day || null,
+        p_sleep_quality: logData.sleep_quality || null,
+        p_time_after_waking: logData.time_after_waking || 'unknown',
+        p_notes: logData.notes || null
+      });
 
       if (error) throw error;
 
-      setTemperatureLogs([data, ...temperatureLogs]);
+      await fetchTemperatureLogs();
       
       toast({
         title: "Temperature Logged",
         description: "Your temperature has been recorded successfully.",
       });
 
-      return { success: true, data };
+      return { success: true, data: { id: logId } };
     } catch (error: any) {
       console.error('Error adding temperature log:', error);
       toast({
@@ -75,18 +81,21 @@ export const useTemperatureLogs = (userId?: string) => {
 
   const updateTemperatureLog = async (id: string, updates: Partial<TemperatureLog>) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { data, error } = await supabase
-        .schema('private_health_info')
-        .from('basal_temperature_logs')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
+      const { data, error } = await supabase.rpc('update_basal_temperature_log', {
+        p_log_id: id,
+        p_temperature: updates.temperature || null,
+        p_temperature_unit: updates.temperature_unit || null,
+        p_measurement_type: updates.measurement_type || null,
+        p_measurement_location: updates.measurement_location || null,
+        p_menstrual_cycle_day: updates.menstrual_cycle_day || null,
+        p_sleep_quality: updates.sleep_quality || null,
+        p_time_after_waking: updates.time_after_waking || null,
+        p_notes: updates.notes || null
+      });
 
       if (error) throw error;
 
-      setTemperatureLogs(temperatureLogs.map(log => log.id === id ? data : log));
+      await fetchTemperatureLogs();
       
       toast({
         title: "Log Updated",
@@ -107,12 +116,9 @@ export const useTemperatureLogs = (userId?: string) => {
 
   const deleteTemperatureLog = async (id: string) => {
     try {
-      // @ts-ignore - Table exists in private_health_info schema
-      const { error } = await supabase
-        .schema('private_health_info')
-        .from('basal_temperature_logs')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.rpc('delete_basal_temperature_log', {
+        p_log_id: id
+      });
 
       if (error) throw error;
 
