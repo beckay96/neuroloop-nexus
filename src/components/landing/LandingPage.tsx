@@ -223,29 +223,52 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Features Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Powerful Features</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
-            Everything you need for comprehensive neurological health management
-          </p>
-        </div>
+      {/* Features Grid - Enhanced WOW Factor */}
+      <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950/40 dark:via-purple-950/40 dark:to-pink-950/40 py-20 border-y-4 border-purple-200 dark:border-purple-800">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="text-lg px-6 py-3 mb-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-xl animate-pulse">
+              <Zap className="h-5 w-5 mr-2 inline" />
+              Clinical-Grade Innovation
+            </Badge>
+            <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-teal-600 bg-clip-text text-transparent">Powerful Features</h2>
+            <p className="text-2xl text-gray-700 dark:text-gray-200 font-semibold">
+              Everything you need for comprehensive neurological health management
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => <Card key={index} className="hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 border-2 hover:border-primary/50 hover:-translate-y-1 bg-white dark:bg-gray-900 group">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-200 dark:border-gray-700 group-hover:border-primary/50 transition-all duration-300 group-hover:shadow-lg">
-                    <feature.icon className={`h-6 w-6 ${feature.color}`} />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => <Card key={index} className="hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 border-4 border-transparent hover:border-purple-400 dark:hover:border-purple-600 hover:-translate-y-2 bg-white dark:bg-gray-900 group relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <CardContent className="pt-8 pb-6 relative z-10">
+                  <div className="flex flex-col items-center text-center gap-4">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/50 dark:to-pink-900/50 border-4 border-purple-200 dark:border-purple-700 group-hover:border-purple-400 dark:group-hover:border-purple-500 transition-all duration-500 group-hover:shadow-2xl group-hover:scale-110">
+                      <feature.icon className={`h-8 w-8 ${feature.color} group-hover:scale-110 transition-transform duration-300`} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-xl mb-3 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{feature.title}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{feature.description}</p>
+                    </div>
+                    <div className="w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-teal-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{feature.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{feature.description}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>)}
+                </CardContent>
+              </Card>)}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button 
+              size="lg"
+              className="relative overflow-hidden text-xl px-12 py-8 bg-gradient-to-r from-purple-600 via-pink-600 to-teal-600 hover:from-purple-700 hover:via-pink-700 hover:to-teal-700 shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all duration-500 group"
+              onClick={() => setShowWaitlist(true)}
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                <Sparkles className="h-6 w-6" />
+                Experience the Future of Neuro Care
+                <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -307,15 +330,15 @@ export default function LandingPage() {
                   <strong>Seeing myself convulse and lose control was deeply confronting</strong> in a way I'd never experienced before.
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  As my family scrambled to help, I realized what was missing wasn't just real-time safety or reassurance—
-                  <strong className="text-purple-600 dark:text-purple-400"> it was the data</strong>.
+                  As my family scrambled to help, I realised what was missing wasn't just real-time safety or reassurance
+                  <strong className="text-purple-600 dark:text-purple-400">—it was the data</strong>.
                 </p>
               </div>
 
               <div className="bg-gradient-to-r from-teal-500 to-purple-600 rounded-xl p-6 text-white shadow-xl">
                 <p className="font-semibold mb-3 text-lg">The Hard Truth:</p>
                 <p className="leading-relaxed">
-                  There was no simple, unified way to gather, standardize, and use medical events like this for research, care, or prevention. 
+                  There was no simple, unified way to gather, standardise, and use medical events like this for research, care, or prevention. 
                   Every system was fragmented. Every crisis isolated.
                 </p>
               </div>
@@ -323,7 +346,7 @@ export default function LandingPage() {
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-2 border-purple-500">
                 <p className="font-bold text-lg text-purple-600 dark:text-purple-400 mb-3">The Catalyst</p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  If we can create a platform that unifies patient events, clinical histories, wearable data, and emergency responses—
+                  If we can create a platform that unifies patient events, clinical histories, wearable data, and emergency responses,
                   we can move neurology forward from piecemeal anecdotes to <strong>actionable, research-grade data</strong>, 
                   saving lives, finding new patterns, and giving hope for better outcomes.
                 </p>
@@ -360,7 +383,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-2xl font-semibold text-pink-800 dark:text-pink-200 max-w-4xl mx-auto leading-relaxed">
               40% of women with epilepsy have catamenial epilepsy, yet it represents only 0.19% of all epilepsy research. 
-              <span className="block mt-4 text-red-700 dark:text-red-300">No standardized tracking exists. No specific treatments available.</span>
+              <span className="block mt-4 text-red-700 dark:text-red-300">No standardised tracking exists. No specific treatments available.</span>
             </p>
           </div>
 
@@ -587,7 +610,7 @@ export default function LandingPage() {
                 <div className="text-center mb-6">
                   <AlertTriangle className="h-12 w-12 mx-auto mb-3 text-red-600 dark:text-red-400" />
                   <h3 className="font-bold text-2xl mb-2 text-red-900 dark:text-red-100">Epilepsy Deaths (Yearly)</h3>
-                  <p className="text-sm text-red-800 dark:text-red-200">Age-standardized death rate: 1.74 per 100,000</p>
+                  <p className="text-sm text-red-800 dark:text-red-200">Age-standardised death rate: 1.74 per 100,000</p>
                 </div>
                 <div className="space-y-3 text-base">
                   <div className="flex justify-between items-center text-red-900 dark:text-red-100 bg-red-100 dark:bg-red-900/30 p-3 rounded-lg">
@@ -634,21 +657,28 @@ export default function LandingPage() {
               </CardContent>
             </Card>
             
-            <Card className="bg-gray-100 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 hover:shadow-xl hover:shadow-gray-500/20 transition-all duration-300">
-              <CardContent className="pt-6">
-                <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-gray-100">All Neurological Deaths (Yearly)</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between text-gray-900 dark:text-gray-100">
-                    <span>Globally:</span>
-                    <span className="font-bold">~9 Million</span>
+            <Card className="bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 dark:from-cyan-950/60 dark:via-blue-950/60 dark:to-indigo-950/60 border-4 border-cyan-400 dark:border-cyan-600 shadow-2xl shadow-cyan-500/40 hover:shadow-cyan-500/60 transition-all duration-500 hover:scale-105">
+              <CardContent className="pt-8 pb-8">
+                <div className="text-center mb-6">
+                  <TrendingDown className="h-12 w-12 mx-auto mb-3 text-cyan-600 dark:text-cyan-400" />
+                  <h3 className="font-bold text-2xl mb-2 text-cyan-900 dark:text-cyan-100">Global Neurological Deaths</h3>
+                  <p className="text-sm text-cyan-800 dark:text-cyan-200">Leading cause of disability worldwide</p>
+                </div>
+                <div className="space-y-3 text-base">
+                  <div className="flex justify-between items-center text-cyan-900 dark:text-cyan-100 bg-cyan-100 dark:bg-cyan-900/30 p-3 rounded-lg">
+                    <span className="font-semibold">Annual Global Deaths:</span>
+                    <span className="font-bold text-2xl">~9 Million</span>
                   </div>
-                  <div className="flex justify-between text-gray-900 dark:text-gray-100">
-                    <span>India:</span>
+                  <div className="flex justify-between text-cyan-900 dark:text-cyan-100">
+                    <span>India (yearly):</span>
                     <span className="font-bold">~1 Million</span>
                   </div>
-                  <div className="flex justify-between text-gray-900 dark:text-gray-100">
-                    <span>Australia:</span>
+                  <div className="flex justify-between text-cyan-900 dark:text-cyan-100">
+                    <span>Australia (yearly):</span>
                     <span className="font-bold">~5,400</span>
+                  </div>
+                  <div className="text-xs text-cyan-800 dark:text-cyan-200 mt-4 pt-3 border-t border-cyan-300 dark:border-cyan-700">
+                    <p>Neurological conditions remain the <strong>#1 cause of disability</strong> and <strong>#2 cause of death globally</strong></p>
                   </div>
                 </div>
               </CardContent>

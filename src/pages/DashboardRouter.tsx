@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import PatientDashboard from '@/components/dashboard/PatientDashboard';
+import PatientDashboard from '@/components/patient/PatientDashboard';
 import ClinicianDashboard from '@/components/dashboard/ClinicianDashboard';
 
 /**

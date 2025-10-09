@@ -9,7 +9,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Users, AlertTriangle, UserCheck, Calendar, TrendingUp, TrendingDown, Filter, Search, Download, Plus, Activity, Brain, Stethoscope, FileText, BarChart3, ChevronDown, UserPlus, MessageSquare } from "lucide-react";
 import { MobileTabDropdown } from "@/components/ui/mobile-tab-dropdown";
 import ClinicianHeader from "@/components/navigation/ClinicianHeader";
-import PatternsIdentified from "@/components/patterns/PatternsIdentified";
+import PatternsIdentified from "@/components/clinician/patterns/PatternsIdentified";
 import PatientAlertDialog from "./PatientAlertDialog";
 import PatientInviteStatus from "./PatientInviteStatus";
 import ConnectionRequests from "./ConnectionRequests";

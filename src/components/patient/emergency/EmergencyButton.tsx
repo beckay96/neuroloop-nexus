@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { SeizureTimer } from "@/components/tracking/SeizureTimer";
+import { SeizureTimer } from "@/components/patient/tracking/SeizureTimer";
 
 interface EmergencyContact {
   name: string;

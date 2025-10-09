@@ -13,7 +13,7 @@ import Auth from "./pages/Auth";
 import PatientView from "./pages/PatientView";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import ProfileSettings from "@/components/settings/ProfileSettings";
+import ProfileSettings from "@/components/clinician/settings/ProfileSettings";
 import PrivacySettings from "@/pages/settings/PrivacySettings";
 import NotificationSettings from "@/pages/settings/NotificationSettings";
 import AllNotifications from "@/pages/AllNotifications";
