@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
-import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun, Bell, TrendingDown, AlertOctagon, AlertCircle, Sparkles } from "lucide-react";
+import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun, Bell, TrendingDown, AlertOctagon, AlertCircle, Sparkles, Crown, Linkedin } from "lucide-react";
 import PublicBrainAnalysis from "@/components/brain-analysis/PublicBrainAnalysis";
 import WaitlistModal from "./WaitlistModal";
 
@@ -246,6 +246,110 @@ export default function LandingPage() {
                 </div>
               </CardContent>
             </Card>)}
+        </div>
+      </div>
+
+      {/* Origin Story - The Seizure That Changed Everything */}
+      <div className="bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-900 dark:to-black py-20 border-y-4 border-gray-300 dark:border-gray-700">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              The Moment That Changed Everything
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              From lived experience to lifesaving innovation
+            </p>
+          </div>
+
+          {/* Trigger Warning Banner */}
+          <div className="bg-yellow-100 dark:bg-yellow-900/30 border-4 border-yellow-500 rounded-xl p-6 mb-8 max-w-2xl mx-auto">
+            <div className="flex items-center gap-4">
+              <AlertTriangle className="h-12 w-12 text-yellow-600 dark:text-yellow-400 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">⚠️ Content Warning</h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  The video below contains footage of a tonic-clonic seizure. Viewer discretion is advised.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Video Section */}
+            <div className="relative group">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-teal-500/30 group-hover:border-teal-500 transition-all duration-300">
+                <video
+                  className="w-full h-auto"
+                  controls
+                  preload="metadata"
+                  poster="/src/assets/neon-teal-brain-effect.png"
+                  onMouseEnter={(e) => e.currentTarget.play()}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.pause();
+                    e.currentTarget.currentTime = 0;
+                  }}
+                >
+                  <source src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/seizurevideo.MOV" type="video/quicktime" />
+                  <source src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/seizurevideo.MOV" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
+                  <p className="text-white text-sm font-medium">Hover to preview • Click to play</p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center italic">
+                Security camera footage • June 2024
+              </p>
+            </div>
+
+            {/* Story Text */}
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-2 border-gray-200 dark:border-gray-700">
+                <h3 className="font-bold text-xl text-teal-600 dark:text-teal-400 mb-4">The Week NeuroLoop Was Born</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Less than an hour after my Elevita pitch to a major health research group, I had a seizure at home. 
+                  For the first time in six years, the security camera caught the whole event.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  <strong>Seeing myself convulse and lose control was deeply confronting</strong> in a way I'd never experienced before.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  As my family scrambled to help, I realized what was missing wasn't just real-time safety or reassurance—
+                  <strong className="text-purple-600 dark:text-purple-400"> it was the data</strong>.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-r from-teal-500 to-purple-600 rounded-xl p-6 text-white shadow-xl">
+                <p className="font-semibold mb-3 text-lg">The Hard Truth:</p>
+                <p className="leading-relaxed">
+                  There was no simple, unified way to gather, standardize, and use medical events like this for research, care, or prevention. 
+                  Every system was fragmented. Every crisis isolated.
+                </p>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-2 border-purple-500">
+                <p className="font-bold text-lg text-purple-600 dark:text-purple-400 mb-3">The Catalyst</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  If we can create a platform that unifies patient events, clinical histories, wearable data, and emergency responses—
+                  we can move neurology forward from piecemeal anecdotes to <strong>actionable, research-grade data</strong>, 
+                  saving lives, finding new patterns, and giving hope for better outcomes.
+                </p>
+              </div>
+
+              {/* CTA */}
+              <Button 
+                size="lg"
+                className="w-full relative overflow-hidden text-lg px-8 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all duration-300 group"
+                onClick={() => setShowWaitlist(true)}
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <Heart className="h-5 w-5" />
+                  Join Our Mission
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -820,6 +924,212 @@ export default function LandingPage() {
         isOpen={showWaitlist}
         onClose={() => setShowWaitlist(false)}
       />
+
+      {/* Team & Advisory Board */}
+      <div className="bg-gradient-to-br from-teal-50 via-purple-50 to-white dark:from-teal-950/20 dark:via-purple-950/20 dark:to-black py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Meet Our Team
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Led by lived experience, backed by world-class expertise
+            </p>
+          </div>
+
+          {/* Founder */}
+          <div className="max-w-4xl mx-auto mb-20">
+            <Card className="bg-gradient-to-br from-teal-500 to-purple-600 border-0 shadow-2xl overflow-hidden">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                  <div className="relative flex-shrink-0">
+                    <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                      <img 
+                        src="/src/assets/RebeccaFrancis.jpeg" 
+                        alt="Rebecca Francis" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="absolute -bottom-2 -right-2 bg-white dark:bg-gray-900 rounded-full p-3 shadow-xl">
+                      <Crown className="h-8 w-8 text-yellow-500" />
+                    </div>
+                  </div>
+                  <div className="text-white flex-1">
+                    <h3 className="text-3xl font-bold mb-2">Rebecca Francis</h3>
+                    <p className="text-xl text-teal-100 mb-4">Founder & CEO</p>
+                    <div className="space-y-3 text-white/90">
+                      <p className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                        <span>Award-winning innovator with 10+ years entrepreneurial experience</span>
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                        <span><strong>$42M USD valuation</strong> on CommuniKids (EQVista 409a, 2024)</span>
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                        <span>Alumni of CSIRO Innovate to Grow, TRW Investment Ready Program & Impact10x Accelerator</span>
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                        <span>Backed by TIF Sponsorship (2025) and recognized by industry leaders globally</span>
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <Heart className="h-5 w-5 mt-0.5 flex-shrink-0 text-pink-300" />
+                        <span className="font-semibold">Driven by lived experience with epilepsy, shaping patient-focused solutions</span>
+                      </p>
+                    </div>
+                    <a 
+                      href="https://www.linkedin.com/in/rebecca-francis-neuroloop" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold shadow-lg"
+                    >
+                      <Linkedin className="h-5 w-5" />
+                      Connect on LinkedIn
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Advisory Board */}
+          <div>
+            <div className="text-center mb-12">
+              <Badge className="text-xl px-8 py-4 mb-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-xl">
+                <Users className="h-6 w-6 mr-2 inline" />
+                Advisory Board
+              </Badge>
+              <p className="text-lg text-gray-600 dark:text-gray-300">
+                Global experts ensuring clinical excellence, cybersecurity, and ethical governance
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Dr Peyman Obeidy */}
+              <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-teal-500 bg-white dark:bg-gray-900">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-teal-500 shadow-lg">
+                    <img 
+                      src="/src/assets/PeymanObeidy.jpg" 
+                      alt="Dr Peyman Obeidy" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Dr Peyman Obeidy</h3>
+                  <p className="text-sm text-teal-600 dark:text-teal-400 mb-3 font-semibold">Founding Biomedical Advisor</p>
+                  <div className="text-xs text-gray-600 dark:text-gray-300 space-y-2 text-left">
+                    <p><strong>Education:</strong> Sydney University & Harvard Graduate</p>
+                    <p><strong>Awards:</strong> REDI Fellowship Recipient</p>
+                    <p>Co-author on various biomedical research papers published in leading medical journals</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Dr Michael Visser */}
+              <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-purple-500 bg-white dark:bg-gray-900">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
+                    <img 
+                      src="/src/assets/michaelVisser.JPEG" 
+                      alt="Dr Michael Visser" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Dr Michael Visser</h3>
+                  <p className="text-sm text-purple-600 dark:text-purple-400 mb-3 font-semibold">Clinical Education Advisor</p>
+                  <div className="text-xs text-gray-600 dark:text-gray-300 space-y-2 text-left">
+                    <p><strong>Role:</strong> Associate Lecturer at UQ</p>
+                    <p><strong>Founder:</strong> The Project Love App</p>
+                    <p>Award-winning educator, co-authored Australia's first wellbeing guideline for perioperative nurses</p>
+                    <p>Led UN/WHO lobbying for end-of-life care</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Liz Keen */}
+              <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-pink-500 bg-white dark:bg-gray-900">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-pink-500 shadow-lg">
+                    <img 
+                      src="/src/assets/lizKeen.jpg" 
+                      alt="Liz Keen" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Liz Keen, RN</h3>
+                  <p className="text-sm text-pink-600 dark:text-pink-400 mb-3 font-semibold">Clinical Governance Advisor</p>
+                  <div className="text-xs text-gray-600 dark:text-gray-300 space-y-2 text-left">
+                    <p><strong>Current:</strong> Head of Clinical Governance at InfoSys (AU)</p>
+                    <p><strong>Previous:</strong> Director at Bupa (AU)</p>
+                    <p>Delivered Australia's first Clinical Governance Framework for Digital Health</p>
+                    <p>Global executive nurse leader</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Tiago Ferreira */}
+              <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-blue-500 bg-white dark:bg-gray-900">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
+                    <img 
+                      src="/src/assets/tiago.JPEG" 
+                      alt="Tiago Ferreira" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Tiago Ferreira</h3>
+                  <p className="text-sm text-blue-600 dark:text-blue-400 mb-3 font-semibold">Cybersecurity & Certified Lead</p>
+                  <div className="text-xs text-gray-600 dark:text-gray-300 space-y-2 text-left">
+                    <p><strong>Background:</strong> 20+ years with AFP, INTERPOL</p>
+                    <p><strong>Founder:</strong> North Star Strategies</p>
+                    <p>Global advisor to governments and private sectors on cybersecurity and smart infrastructure</p>
+                    <p>Spearheaded global "Smart Cities" initiatives</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Rita Sadhvani - Adding placeholder since no bio was provided */}
+              <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-orange-500 bg-white dark:bg-gray-900 md:col-span-2 lg:col-span-1 mx-auto w-full max-w-sm lg:max-w-none">
+                <CardContent className="pt-6 text-center">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-500 shadow-lg">
+                    <img 
+                      src="/src/assets/rita.JPEG" 
+                      alt="Rita Sadhvani" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Rita Sadhvani</h3>
+                  <p className="text-sm text-orange-600 dark:text-orange-400 mb-3 font-semibold">Advisory Board Member</p>
+                  <div className="text-xs text-gray-600 dark:text-gray-300 space-y-2 text-left">
+                    <p>Strategic advisor bringing expertise in healthcare innovation and patient-centered solutions</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-16">
+            <Button 
+              size="lg"
+              className="relative overflow-hidden text-xl px-12 py-8 bg-gradient-to-r from-teal-500 via-purple-600 to-pink-600 hover:from-teal-600 hover:via-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-pink-500/50 hover:scale-105 transition-all duration-500 group"
+              onClick={() => setShowWaitlist(true)}
+            >
+              <span className="relative z-10 flex items-center gap-3">
+                <Sparkles className="h-6 w-6" />
+                Join This Team's Mission
+                <Sparkles className="h-6 w-6" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            </Button>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-4 italic">
+              Be part of the neurological health revolution
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Footer */}
       <div className="border-t-4 border-gray-200 dark:border-gray-800 mt-16 bg-white dark:bg-gray-950">
