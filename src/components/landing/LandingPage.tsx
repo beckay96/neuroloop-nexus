@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
 import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun, Bell, TrendingDown, AlertOctagon, AlertCircle, Sparkles, Crown, Linkedin } from "lucide-react";
-import PublicBrainAnalysis from "@/components/brain-analysis/PublicBrainAnalysis";
+import PublicBrainAnalysis from "./brain-analysis/PublicBrainAnalysis";
 import WaitlistModal from "./WaitlistModal";
 
 export default function LandingPage() {

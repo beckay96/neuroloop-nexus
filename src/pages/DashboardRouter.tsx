@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import PatientDashboard from '@/components/patient/PatientDashboard';
-import ClinicianDashboard from '@/components/dashboard/ClinicianDashboard';
+import ClinicianDashboard from '@/components/clinician/ClinicianDashboard';
 
 /**
  * DashboardRouter - Routes users to appropriate dashboard or onboarding
