@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Brain, Search, RotateCcw, Info, AlertCircle } from "lucide-react";
 import AppNavbar from "@/components/navigation/AppNavbar";
 import { useAuth } from "@/hooks/useAuth";
-import BrainVisualization from "@/components/brain-analysis/BrainVisualization";
+import BrainVisualization from "@/components/landing/brain-analysis/BrainVisualization";
 import { SEIZURE_SEMIOLOGY, BRAIN_REGIONS, GENERALIZED_SEIZURES } from "@/data/brain-seizure-data";
 
 export default function BrainSeizureAnalysis() {

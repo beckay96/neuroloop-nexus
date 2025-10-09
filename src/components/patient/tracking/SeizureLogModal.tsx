@@ -31,7 +31,7 @@ import {
 import { useSeizureLogs } from "@/hooks/useSeizureLogs";
 import { useSeizureResearch } from "@/hooks/useSeizureResearch";
 import { useAuth } from "@/hooks/useAuth";
-import BrainVisualizationImages from "@/components/brain-analysis/BrainVisualizationImages";
+import BrainVisualizationImages from "@/components/landing/brain-analysis/BrainVisualizationImages";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 

@@ -20,7 +20,7 @@ import {
   SheetTrigger
 } from "@/components/ui/sheet";
 import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check, EyeOff } from "lucide-react";
-import BrainVisualizationImages from "@/components/brain-analysis/BrainVisualizationImages";
+import BrainVisualizationImages from "./BrainVisualizationImages";
 import { SEIZURE_SEMIOLOGY, BRAIN_REGIONS } from "@/data/brain-seizure-data";
 import { useToast } from "@/hooks/use-toast";
 
