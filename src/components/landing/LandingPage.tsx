@@ -110,17 +110,33 @@ export default function LandingPage() {
       </div>
 
 
-      {/* Hero Section - Enhanced */}
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:py-24">
-        <div className="text-center space-y-8 animate-fade-in">
+      {/* Hero Section - Enhanced with Neural Background */}
+      <div className="relative overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/src/assets/hero-neural.jpg" 
+            alt="" 
+            className="w-full h-full object-cover opacity-30 dark:opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/90 to-white dark:from-black/80 dark:via-black/90 dark:to-black"></div>
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 sm:py-24">
+          <div className="text-center space-y-8 animate-fade-in">
           <Badge className="text-lg px-6 py-3 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-500 bg-gradient-to-r from-teal-500 to-purple-600 text-white border-0 animate-scale-in">
-            <Brain className="h-5 w-5 mr-2 inline" />
+            <img src="/src/assets/NeuroLoop(Logo-darkmode).png" alt="NeuroLoop" className="h-6 w-6 mr-2 inline" />
             Neurological Health Management Platform
           </Badge>
           
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-teal-500 via-purple-600 to-purple-800 bg-clip-text text-transparent animate-slide-up">
-            NeuroLoop
-          </h1>
+          <div className="relative">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-teal-500 via-purple-600 to-purple-800 bg-clip-text text-transparent animate-slide-up">
+              NeuroLoop
+            </h1>
+            <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 -z-10 opacity-20">
+              <img src="/src/assets/neon-teal-brain-effect.png" alt="" className="w-64 h-64 blur-sm" />
+            </div>
+          </div>
           
           <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.1s'}}>
             Research-grade health tracking for epilepsy, Parkinson's, and neurological conditions
@@ -172,6 +188,26 @@ export default function LandingPage() {
           <p className="text-sm text-gray-600 dark:text-gray-400 italic">
             Join thousands advancing neurological health research • Coming very soon!
           </p>
+          </div>
+        </div>
+      </div>
+
+      {/* App Preview - Visual of different views */}
+      <div className="bg-gradient-to-br from-teal-50 via-purple-50 to-pink-50 dark:from-teal-950/30 dark:via-purple-950/30 dark:to-pink-950/30 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">See NeuroLoop in Action</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Track symptoms, earn achievements, and contribute to groundbreaking research
+            </p>
+          </div>
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-teal-500/20 border-4 border-teal-500/30">
+            <img 
+              src="/src/assets/Visual-of-app-in-diff-views+tracking-stickers.png" 
+              alt="NeuroLoop App Preview - Different Views and Tracking Stickers" 
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       </div>
 
@@ -765,7 +801,7 @@ export default function LandingPage() {
           zIndex: 99999
         }}
       >
-        <Brain className="h-10 w-10 text-white" />
+        <img src="/src/assets/NeuroLoop(Logo-darkmode).png" alt="Brain Analysis" className="h-12 w-12" />
         <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg">
           NEW
         </div>
@@ -792,7 +828,8 @@ export default function LandingPage() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Brain className="h-6 w-6 text-primary" />
+                <img src="/src/assets/NeuroLoop(Logo-lightmode).png" alt="NeuroLoop Logo" className="h-8 w-8 dark:hidden" />
+                <img src="/src/assets/NeuroLoop(Logo-darkmode).png" alt="NeuroLoop Logo" className="h-8 w-8 hidden dark:block" />
                 <span className="font-bold text-lg text-gray-900 dark:text-white">NeuroLoop</span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">

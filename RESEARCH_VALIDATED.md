@@ -1,6 +1,6 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
+# Research-Validated Statistics: Parkinson's Disease & Epilepsy
 
-# Give me hard hitting stats for parkinson and epilepsy about the death rates, \#of people living with it, etc - VALIDATED with sources
+## Hard-hitting statistics for death rates, prevalence, and global impact - VALIDATED with sources
 
 Here are the latest, validated global statistics for Parkinson's disease and epilepsy—covering prevalence, death rates, and hard-hitting trends, with up-to-date sources:
 
