@@ -89,7 +89,7 @@ export default function LandingPage() {
     color: "text-teal-600 dark:text-teal-400"
   }];
   
-  return <div className="min-h-screen bg-white dark:bg-black">
+  return <div className="min-h-screen w-full overflow-x-hidden bg-white dark:bg-black">
       {/* Top Right Buttons */}
       <div className="fixed top-4 right-4 z-50 flex gap-2 animate-slide-in-right">
         <Button 

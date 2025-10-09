@@ -143,9 +143,11 @@
     @apply border-border;
   }
 
-  body {
+  html, body {
     @apply bg-background text-foreground transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   /* Medical app specific base styles */
