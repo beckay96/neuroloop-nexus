@@ -83,17 +83,17 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto border-2 border-teal-500/50 rounded-2xl shadow-2xl shadow-teal-500/30">
+      <DialogContent className="max-w-lg max-h-[85vh] sm:max-h-[90vh] overflow-y-auto border-2 border-teal-500/50 rounded-2xl shadow-2xl shadow-teal-500/30 p-4 sm:p-6">
         {success ? (
-          <div className="text-center py-8 animate-scale-in">
-            <div className="flex justify-center mb-6">
+          <div className="text-center py-6 sm:py-8 animate-scale-in">
+            <div className="flex justify-center mb-4 sm:mb-6">
               <div className="relative">
-                <CheckCircle className="h-24 w-24 text-teal-500 animate-scale-in" />
-                <Sparkles className="h-10 w-10 text-purple-500 absolute -top-2 -right-2 animate-pulse" />
-                <Sparkles className="h-8 w-8 text-teal-400 absolute -bottom-2 -left-2 animate-pulse" style={{animationDelay: '0.3s'}} />
+                <CheckCircle className="h-16 w-16 sm:h-24 sm:w-24 text-teal-500 animate-scale-in" />
+                <Sparkles className="h-8 w-8 sm:h-10 sm:w-10 text-purple-500 absolute -top-2 -right-2 animate-pulse" />
+                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-teal-400 absolute -bottom-2 -left-2 animate-pulse" style={{animationDelay: '0.3s'}} />
               </div>
             </div>
-            <DialogTitle className="text-3xl mb-4 bg-gradient-to-r from-teal-500 to-purple-600 bg-clip-text text-transparent font-bold">You're on the list! 🎉</DialogTitle>
+            <DialogTitle className="text-2xl sm:text-3xl mb-3 sm:mb-4 bg-gradient-to-r from-teal-500 to-purple-600 bg-clip-text text-transparent font-bold">You're on the list! 🎉</DialogTitle>
             <DialogDescription className="text-lg mb-4">
               Thank you for joining the NeuroLoop waitlist. We'll notify you as soon as we launch!
             </DialogDescription>
@@ -112,22 +112,22 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
           </div>
         ) : (
           <>
-            <DialogHeader>
-              <div className="flex items-center justify-center mb-3">
+            <DialogHeader className="space-y-2 sm:space-y-3">
+              <div className="flex items-center justify-center mb-2 sm:mb-3">
                 <div className="relative">
-                  <Bell className="h-10 w-10 text-teal-500 animate-pulse" />
-                  <Sparkles className="h-5 w-5 text-purple-500 absolute -top-1 -right-1 animate-pulse" style={{animationDelay: '0.5s'}} />
+                  <Bell className="h-8 w-8 sm:h-10 sm:w-10 text-teal-500 animate-pulse" />
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500 absolute -top-1 -right-1 animate-pulse" style={{animationDelay: '0.5s'}} />
                 </div>
               </div>
-              <DialogTitle className="text-3xl text-center bg-gradient-to-r from-teal-500 to-purple-600 bg-clip-text text-transparent font-bold">
+              <DialogTitle className="text-2xl sm:text-3xl text-center bg-gradient-to-r from-teal-500 to-purple-600 bg-clip-text text-transparent font-bold">
                 Join the Waitlist ✨
               </DialogTitle>
-              <DialogDescription className="text-center text-base">
+              <DialogDescription className="text-center text-sm sm:text-base">
                 Be the first to know when NeuroLoop launches. Help us change women's neurological health forever!
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
               {error && (
                 <Alert className="border-destructive">
                   <AlertCircle className="h-4 w-4 text-destructive" />
