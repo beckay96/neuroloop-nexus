@@ -2,17 +2,33 @@
 // HIPAA Compliant - No PHI logged or exposed
 // Must be called with authenticated patient JWT
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from 'jsr:@supabase/supabase-js@2'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// Dynamic CORS allow-list
+const allowedOrigins = new Set([
+  'https://neuroloop.app',
+  'https://staging.neuroloop.app',
+  'http://localhost:5173', // optional for local dev
+  'http://10.0.0.34:8002', // local dev
+])
+
+function buildCorsHeaders(req) {
+  const origin = req.headers.get('Origin') ?? ''
+  const allowed = allowedOrigins.has(origin)
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': allowed ? origin : 'https://neuroloop.app',
+    'Vary': 'Origin',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  }
+  return { corsHeaders, allowed }
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
+  const { corsHeaders, allowed } = buildCorsHeaders(req)
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
+    if (!allowed) return new Response('Forbidden', { status: 403, headers: corsHeaders })
     return new Response('ok', { headers: corsHeaders })
   }
 
@@ -120,7 +136,7 @@ serve(async (req) => {
       .eq('patient_user_id', user.id)
       .eq('carer_email_hash', emailHash)
       .in('status', ['pending', 'verification_required'])
-      .single()
+      .maybeSingle()
 
     if (existingInvite) {
       return new Response(
@@ -129,11 +145,42 @@ serve(async (req) => {
       )
     }
 
-    // Check if carer already exists in auth.users
-    const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers()
-    const carerUser = existingUser.users.find(u => u.email?.toLowerCase() === email.toLowerCase())
+    // Invite or send magic link (ensures email is delivered and user can sign in)
+    const emailLower = email.toLowerCase().trim()
+    const redirect = (Deno.env.get('APP_URL') || 'https://neuroloop-nexus.vercel.app') + '/auth/callback'
+    try {
+      const { error: inviteErr } = await supabaseAdmin.auth.admin.inviteUserByEmail(emailLower, { redirectTo: redirect })
+      if (inviteErr) {
+        try {
+          await supabaseAdmin.auth.admin.generateLink({
+            type: 'magiclink',
+            email: emailLower,
+            options: { redirectTo: redirect }
+          })
+        } catch {
+          const supabaseAnon = createClient(
+            Deno.env.get('SUPABASE_URL') ?? '',
+            Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+          )
+          await supabaseAnon.auth.signInWithOtp({
+            email: emailLower,
+            options: { emailRedirectTo: redirect }
+          })
+        }
+      }
+    } catch (_e) {
+      // Continue regardless; we will still link when user signs in
+    }
 
-    let carerUserId = carerUser?.id || null
+    // Fetch (or re-fetch) the user so we can upsert profile rows
+    const { data: usersAfterInvite } = await supabaseAdmin.auth.admin.listUsers()
+    const carerUser = usersAfterInvite.users.find(u => u.email?.toLowerCase() === emailLower)
+    const carerUserId = carerUser?.id || null
+
+    if (carerUserId) {
+      await supabaseAdmin.from('profiles').upsert({ id: carerUserId, user_type: 'carer' })
+      await supabaseAdmin.from('carer_profiles').upsert({ user_id: carerUserId })
+    }
 
     // Pre-create the carer relationship (verification_required status)
     const { data: relationship, error: relationshipError } = await supabaseAdmin
@@ -212,7 +259,7 @@ serve(async (req) => {
 })
 
 // Helper function to hash email using SHA-256
-async function hashEmail(email: string): Promise<string> {
+async function hashEmail(email) {
   const msgBuffer = new TextEncoder().encode(email)
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
   const hashArray = Array.from(new Uint8Array(hashBuffer))

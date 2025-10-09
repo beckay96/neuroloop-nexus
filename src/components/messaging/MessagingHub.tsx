@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,11 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { 
-  MessageSquare, Search, Filter, Star, AlertCircle, Clock, 
-  CheckCircle, Archive, Plus, Sparkles 
+  MessageSquare, Search, Filter, AlertCircle, Clock, 
+  Archive, Sparkles 
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import ConversationThread from "./ConversationThread";
 
 interface Conversation {
@@ -36,97 +36,38 @@ interface Conversation {
 
 export default function MessagingHub() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPriority, setFilterPriority] = useState<string>("all");
   const [activeTab, setActiveTab] = useState("all");
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data - replace with real API
-  const mockConversations: Conversation[] = [
-    {
-      conversation_id: '1',
-      patient_id: 'P001',
-      patient_name: 'Sarah Johnson',
-      patient_avatar: 'SJ',
-      clinician_id: 'C001',
-      subject: 'Seizure Questions',
-      status: 'active',
-      priority: 'urgent',
-      last_message: 'I had another seizure this morning. Should I increase my medication?',
-      last_message_at: '5 min ago',
-      unread_count_clinician: 2,
-      unread_count_patient: 0,
-      ai_priority_score: 92.5,
-      ai_summary: 'Patient reports breakthrough seizure. Medication adjustment may be needed.',
-      ai_urgency_reason: 'Seizure breakthrough + medication inquiry',
-      tags: ['seizure', 'medication'],
-      is_urgent: true,
-      ai_requires_action: true
-    },
-    {
-      conversation_id: '2',
-      patient_id: 'P002',
-      patient_name: 'Michael Chen',
-      patient_avatar: 'MC',
-      clinician_id: 'C001',
-      subject: 'Medication Side Effects',
-      status: 'active',
-      priority: 'high',
-      last_message: 'The new dosage is causing some dizziness. Is this normal?',
-      last_message_at: '1 hour ago',
-      unread_count_clinician: 1,
-      unread_count_patient: 0,
-      ai_priority_score: 75.0,
-      ai_summary: 'Side effect inquiry: dizziness from recent dose change. Requires clinician guidance.',
-      ai_urgency_reason: 'Side effect report',
-      tags: ['side_effects', 'medication'],
-      is_urgent: false,
-      ai_requires_action: true
-    },
-    {
-      conversation_id: '3',
-      patient_id: 'P003',
-      patient_name: 'Emily Rodriguez',
-      patient_avatar: 'ER',
-      clinician_id: 'C001',
-      subject: 'General Update',
-      status: 'active',
-      priority: 'normal',
-      last_message: 'Thank you for the care plan. I\'m feeling much better!',
-      last_message_at: '2 days ago',
-      unread_count_clinician: 0,
-      unread_count_patient: 1,
-      ai_priority_score: 25.0,
-      ai_summary: 'Positive update. No action required.',
-      tags: ['update'],
-      is_urgent: false,
-      ai_requires_action: false
-    },
-    {
-      conversation_id: '4',
-      patient_id: 'P004',
-      patient_name: 'Lisa Parker',
-      patient_avatar: 'LP',
-      clinician_id: 'C001',
-      subject: 'Test Results Question',
-      status: 'active',
-      priority: 'high',
-      last_message: 'Can you explain what my EEG results mean?',
-      last_message_at: '3 hours ago',
-      unread_count_clinician: 1,
-      unread_count_patient: 0,
-      ai_priority_score: 68.0,
-      ai_summary: 'Patient requesting explanation of recent EEG results.',
-      ai_urgency_reason: 'Test result inquiry',
-      tags: ['test_results', 'eeg'],
-      is_urgent: false,
-      ai_requires_action: true
-    }
-  ];
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        if (!user?.id) { setConversations([]); return; }
+        const { data, error } = await supabase.rpc('get_clinician_message_conversations', {
+          p_clinician_id: user.id
+        });
+        if (error) throw error;
+        setConversations(Array.isArray(data) ? (data as Conversation[]) : (data ? [data as Conversation] : []));
+      } catch (err: any) {
+        console.error('Failed to load conversations:', err);
+        setError('Failed to load conversations');
+        setConversations([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [user?.id]);
 
   const getFilteredConversations = () => {
-    let filtered = mockConversations;
+    let filtered = conversations;
 
     // Filter by search term
     if (searchTerm) {
@@ -205,20 +146,20 @@ export default function MessagingHub() {
               <TabsTrigger value="all" className="text-xs">
                 All
                 <Badge variant="outline" className="ml-1 text-xs">
-                  {mockConversations.length}
+                  {conversations.length}
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="urgent" className="text-xs">
                 <AlertCircle className="h-3 w-3 mr-1" />
                 Urgent
                 <Badge variant="destructive" className="ml-1 text-xs">
-                  {mockConversations.filter(c => c.is_urgent || c.ai_requires_action).length}
+                  {conversations.filter(c => c.is_urgent || c.ai_requires_action).length}
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="unread" className="text-xs">
                 Unread
                 <Badge variant="secondary" className="ml-1 text-xs">
-                  {mockConversations.filter(c => c.unread_count_clinician > 0).length}
+                  {conversations.filter(c => c.unread_count_clinician > 0).length}
                 </Badge>
               </TabsTrigger>
               <TabsTrigger value="archived" className="text-xs">
@@ -230,6 +171,12 @@ export default function MessagingHub() {
         </CardHeader>
 
         <CardContent className="flex-1 overflow-y-auto">
+          {loading && (
+            <div className="text-sm text-muted-foreground">Loading conversations...</div>
+          )}
+          {error && (
+            <div className="text-sm text-destructive mb-2">{error}</div>
+          )}
           {/* AI Priority Section */}
           {activeTab === 'all' && filteredConversations.some(c => c.ai_requires_action) && (
             <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">

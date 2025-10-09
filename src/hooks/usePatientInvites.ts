@@ -29,12 +29,10 @@ export const usePatientInvites = () => {
         throw new Error('User not authenticated')
       }
 
-      const { data: result, error } = await supabase.functions.invoke('send-patient-invite', {
+      const { data: result, error } = await supabase.functions.invoke('invite_patient', {
         body: {
           email: data.email,
-          clinicianId: user.id,
-          clinicianName: data.clinicianName,
-          inviteMessage: data.inviteMessage
+          message: data.inviteMessage ?? undefined
         }
       })
 
@@ -42,16 +40,16 @@ export const usePatientInvites = () => {
         throw error
       }
 
-      if (result.success) {
+      if ((result as any)?.success) {
         toast({
           title: "Invite sent successfully",
-          description: `Patient invite sent to ${data.email}`,
+          description: `Patient invite created for ${data.email}`,
         })
       }
 
       return result
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send invite'
+      const errorMessage = (error as any)?.message || (error instanceof Error ? error.message : 'Failed to send invite')
       
       toast({
         title: "Failed to send invite",
@@ -74,24 +72,24 @@ export const usePatientInvites = () => {
     inviteMessage?: string
   ): Promise<InviteResult[]> => {
     setIsLoading(true)
-    
-    try {
-      const results = await Promise.allSettled(
-        emails.map(email => 
-          sendPatientInvite({ email, clinicianName, inviteMessage })
-        )
-      )
 
-      const inviteResults = results.map((result, index) => {
-        if (result.status === 'fulfilled') {
-          return result.value
-        } else {
-          return {
-            success: false,
-            message: `Failed to invite ${emails[index]}: ${result.reason}`
-          }
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+    const delayMsEnv = (import.meta as any)?.env?.VITE_INVITE_BATCH_DELAY_MS
+    const delayMs = Number(delayMsEnv) > 0 ? Number(delayMsEnv) : 30000 // default 30s
+
+    try {
+      const inviteResults: InviteResult[] = []
+
+      for (let i = 0; i < emails.length; i++) {
+        const email = emails[i]
+        const result = await sendPatientInvite({ email, clinicianName, inviteMessage })
+        inviteResults.push(result)
+
+        // Delay between invites (except after the last one)
+        if (i < emails.length - 1) {
+          await sleep(delayMs)
         }
-      })
+      }
 
       const successCount = inviteResults.filter(r => r.success).length
       const failCount = inviteResults.length - successCount
@@ -113,26 +111,22 @@ export const usePatientInvites = () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return []
 
-      // Mock data for demonstration - avoiding problematic table queries for now
-      const mockInvites = [
-        {
-          id: '1',
-          email: 'patient1@example.com',
-          status: 'sent',
-          invited_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          expires_at: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: '2',
-          email: 'patient2@example.com',
-          status: 'accepted',
-          invited_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          accepted_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
-          expires_at: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      ]
+      // Use RPC to fetch clinician's invites (RLS-safe)
+      const { data, error } = await supabase.rpc('get_clinician_connection_requests', {
+        p_clinician_id: user.id
+      })
+      if (error) throw error
 
-      return mockInvites
+      const invites = (Array.isArray(data) ? data : (data ? [data] : [])).map((row: any) => ({
+        id: row.id,
+        email: row.patient_email,
+        status: row.status === 'pending' ? 'sent' : row.status,
+        invited_at: row.invited_at,
+        accepted_at: row.accepted_at,
+        expires_at: row.expires_at
+      }))
+
+      return invites
     } catch (error) {
       console.error('Error fetching invites:', error)
       return []
@@ -141,14 +135,24 @@ export const usePatientInvites = () => {
 
   const cancelInvite = async (inviteId: string): Promise<boolean> => {
     try {
-      // Mock implementation for demonstration
-      toast({
-        title: "Invite cancelled",
-        description: "Patient invite has been cancelled",
-      })
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const now = new Date().toISOString()
+      const { error } = await supabase
+        .from('patient_invitations')
+        .update({ status: 'cancelled', cancelled_at: now })
+        .eq('id', inviteId)
+        .eq('clinician_id', user.id)
+        .eq('status', 'pending')
+
+      if (error) throw error
+
+      toast({ title: 'Invite cancelled', description: 'Patient invite has been cancelled' })
       return true
     } catch (error) {
       console.error('Error cancelling invite:', error)
+      toast({ title: 'Cancel failed', description: 'Unable to cancel invite', variant: 'destructive' })
       return false
     }
   }

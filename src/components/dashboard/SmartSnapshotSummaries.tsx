@@ -47,81 +47,8 @@ export default function SmartSnapshotSummaries({ maxVisible = 6 }: SmartSnapshot
     setExpandedSnapshots(newExpanded);
   };
 
-  // Mock data - replace with real API
-  const mockSnapshots: PatientSnapshot[] = [
-    {
-      snapshot_id: '1',
-      patient_id: 'P001',
-      patient_name: 'Sarah Johnson',
-      patient_avatar: 'SJ',
-      summary: 'Critical seizure activity with medication adherence issues',
-      highlight_events: [
-        { type: 'seizure', description: '3 GTCs in 24h', timestamp: '2h ago', severity: 'critical' },
-        { type: 'medication', description: 'Missed PM dose', timestamp: '5d ago', severity: 'moderate' },
-        { type: 'alert', description: 'Blood level subtherapeutic', timestamp: '1w ago', severity: 'moderate' },
-      ],
-      adherence_rate: 87,
-      med_changes: 0,
-      ai_note: '⚠️ Missed PM dose 5 days ago may have contributed to cluster. Consider medication reminder system.',
-      generated_at: '2 minutes ago',
-      author: 'ai',
-      status: 'urgent'
-    },
-    {
-      snapshot_id: '2',
-      patient_id: 'P002',
-      patient_name: 'Michael Chen',
-      patient_avatar: 'MC',
-      summary: 'Progressive motor symptoms with medication timing concerns',
-      highlight_events: [
-        { type: 'medication', description: 'Missed 2 consecutive days', timestamp: '4h ago', severity: 'moderate' },
-        { type: 'alert', description: 'Tremor worsening', timestamp: '12h ago', severity: 'moderate' },
-        { type: 'visit', description: 'Last seen 2 weeks ago', timestamp: '14d ago' },
-      ],
-      adherence_rate: 72,
-      med_changes: 1,
-      ai_note: '💡 Adherence pattern suggests morning dose confusion. Recommend simplified dosing schedule.',
-      generated_at: '15 minutes ago',
-      author: 'ai',
-      status: 'monitoring'
-    },
-    {
-      snapshot_id: '3',
-      patient_id: 'P003',
-      patient_name: 'Emily Rodriguez',
-      patient_avatar: 'ER',
-      summary: 'Stable condition with excellent adherence',
-      highlight_events: [
-        { type: 'medication', description: 'Consistent dosing', timestamp: 'ongoing' },
-        { type: 'test', description: 'Blood level therapeutic', timestamp: '1w ago' },
-        { type: 'visit', description: 'Routine follow-up', timestamp: '3w ago' },
-      ],
-      adherence_rate: 95,
-      med_changes: 0,
-      ai_note: '✅ Excellent compliance and stable symptoms. Continue current regimen.',
-      generated_at: '1 hour ago',
-      author: 'ai',
-      status: 'stable'
-    },
-    {
-      snapshot_id: '4',
-      patient_id: 'P004',
-      patient_name: 'Lisa Parker',
-      patient_avatar: 'LP',
-      summary: 'Breakthrough seizures with stress triggers',
-      highlight_events: [
-        { type: 'seizure', description: 'Myoclonic jerks', timestamp: '6h ago', severity: 'moderate' },
-        { type: 'alert', description: 'Sleep deprivation', timestamp: '8h ago', severity: 'moderate' },
-        { type: 'medication', description: 'Good adherence', timestamp: 'ongoing' },
-      ],
-      adherence_rate: 91,
-      med_changes: 0,
-      ai_note: '⚡ Stress and poor sleep may be lowering seizure threshold. Consider stress management referral.',
-      generated_at: '30 minutes ago',
-      author: 'ai',
-      status: 'monitoring'
-    },
-  ];
+  // ALL MOCK DATA REMOVED - Will be replaced with real patient snapshots
+  const mockSnapshots: PatientSnapshot[] = [];
 
   const snapshots = mockSnapshots.slice(0, maxVisible);
 

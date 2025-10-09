@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,9 +34,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { usePatientConnections } from "@/hooks/usePatientConnections";
+import { useClinicianProfile } from "@/hooks/useClinicianProfile";
+import { supabase } from "@/integrations/supabase/client";
 
-// Comprehensive mock data for demonstration
-const patientAlerts: Array<{
+// Critical patient alerts state (loaded via RPC)
+type DashboardPatientAlert = {
   id: string;
   patientName: string;
   patientId: string;
@@ -51,269 +53,62 @@ const patientAlerts: Array<{
   lastActivity?: string;
   medicationAdherence: number;
   recentEvents: string[];
-}> = [{
-  id: '1',
-  patientName: 'Sarah Johnson',
-  patientId: 'P001',
-  age: 34,
-  condition: 'Temporal Lobe Epilepsy',
-  severity: 'critical',
-  message: 'Seizure cluster detected - 3 generalized tonic-clonic seizures in 24 hours',
-  timestamp: '2 hours ago',
-  action: 'Emergency contact required',
-  lastSeizure: '2 hours ago',
-  medicationAdherence: 87,
-  recentEvents: ['Seizure (Tonic-Clonic)', 'Missed PM medication', 'Aura reported']
-}, {
-  id: '2',
-  patientName: 'Michael Chen',
-  patientId: 'P002',
-  age: 68,
-  condition: "Parkinson's Disease",
-  severity: 'moderate',
-  message: 'Missed levodopa doses for 2 consecutive days, tremor worsening',
-  timestamp: '4 hours ago',
-  action: 'Schedule urgent medication review',
-  lastMedication: '36 hours ago',
-  medicationAdherence: 72,
-  recentEvents: ['Missed medication', 'Increased tremor', 'Freezing episode']
-}, {
-  id: '3',
-  patientName: 'Emily Rodriguez',
-  patientId: 'P003',
-  age: 45,
-  condition: 'Essential Tremor',
-  severity: 'low',
-  message: 'Tremor intensity increasing progressively over past week',
-  timestamp: '1 day ago',
-  action: 'Monitor and consider dose adjustment',
-  lastActivity: '6 hours ago',
-  medicationAdherence: 95,
-  recentEvents: ['Tremor worsening', 'Sleep disturbance', 'Stress reported']
-}, {
-  id: '4',
-  patientName: 'Lisa Parker',
-  patientId: 'P004',
-  age: 29,
-  condition: 'Juvenile Myoclonic Epilepsy',
-  severity: 'moderate',
-  message: 'Breakthrough myoclonic jerks reported, possible stress trigger',
-  timestamp: '6 hours ago',
-  action: 'Review stress management and medication timing',
-  lastSeizure: '8 hours ago',
-  medicationAdherence: 91,
-  recentEvents: ['Myoclonic jerks', 'Work stress', 'Sleep deprivation']
-}, {
-  id: '5',
-  patientName: 'Robert Kim',
-  patientId: 'P005',
-  age: 72,
-  condition: "Parkinson's Disease",
-  severity: 'critical',
-  message: 'Fall reported with injury, possible medication timing issue',
-  timestamp: '30 minutes ago',
-  action: 'Immediate assessment required',
-  lastActivity: '30 minutes ago',
-  medicationAdherence: 89,
-  recentEvents: ['Fall with injury', 'Off period prolonged', 'Balance issues']
-}];
-const recentPatients = [{
-  id: 'P001',
-  name: 'Sarah Johnson',
-  age: 34,
-  condition: 'Temporal Lobe Epilepsy',
-  diagnosisDate: '2019-03-15',
-  lastActivity: '2 hours ago',
-  status: 'critical',
-  avatar: 'SJ',
-  nextAppt: '2024-01-15',
-  primaryMedication: 'Levetiracetam 1000mg BID',
-  adherence: 87,
-  recentVitals: {
-    seizureFreq: '3/week',
-    lastSeizure: '2 hours ago'
-  }
-}, {
-  id: 'P002',
-  name: 'Michael Chen',
-  age: 68,
-  condition: "Parkinson's Disease",
-  diagnosisDate: '2020-07-22',
-  lastActivity: '4 hours ago',
-  status: 'moderate',
-  avatar: 'MC',
-  nextAppt: '2024-01-18',
-  primaryMedication: 'Levodopa/Carbidopa 25/100mg TID',
-  adherence: 72,
-  recentVitals: {
-    tremor: 'Moderate',
-    lastDose: '36 hours ago'
-  }
-}, {
-  id: 'P003',
-  name: 'Emily Rodriguez',
-  age: 45,
-  condition: 'Essential Tremor',
-  diagnosisDate: '2018-11-10',
-  lastActivity: '6 hours ago',
-  status: 'stable',
-  avatar: 'ER',
-  nextAppt: '2024-02-01',
-  primaryMedication: 'Propranolol 80mg BID',
-  adherence: 95,
-  recentVitals: {
-    tremor: 'Mild-Moderate',
-    mood: 'Good'
-  }
-}, {
-  id: 'P004',
-  name: 'David Thompson',
-  age: 22,
-  condition: 'Juvenile Myoclonic Epilepsy',
-  diagnosisDate: '2021-05-03',
-  lastActivity: '1 day ago',
-  status: 'stable',
-  avatar: 'DT',
-  nextAppt: '2024-01-25',
-  primaryMedication: 'Valproate 500mg BID',
-  adherence: 98,
-  recentVitals: {
-    seizureFreq: '0/month',
-    mood: 'Excellent'
-  }
-}, {
-  id: 'P005',
-  name: 'Lisa Parker',
-  age: 29,
-  condition: 'Focal Epilepsy',
-  diagnosisDate: '2022-01-12',
-  lastActivity: '8 hours ago',
-  status: 'moderate',
-  avatar: 'LP',
-  nextAppt: '2024-01-20',
-  primaryMedication: 'Lamotrigine 200mg BID',
-  adherence: 91,
-  recentVitals: {
-    seizureFreq: '1/week',
-    auras: 'Frequent'
-  }
-}, {
-  id: 'P006',
-  name: 'Robert Kim',
-  age: 72,
-  condition: "Parkinson's Disease",
-  diagnosisDate: '2019-09-18',
-  lastActivity: '30 minutes ago',
-  status: 'critical',
-  avatar: 'RK',
-  nextAppt: '2024-01-16',
-  primaryMedication: 'Levodopa/Carbidopa 25/250mg QID',
-  adherence: 89,
-  recentVitals: {
-    tremor: 'Severe',
-    falls: '2 this week'
-  }
-}, {
-  id: 'P007',
-  name: 'Maria Santos',
-  age: 56,
-  condition: 'Multiple Sclerosis',
-  diagnosisDate: '2017-04-25',
-  lastActivity: '12 hours ago',
-  status: 'stable',
-  avatar: 'MS',
-  nextAppt: '2024-02-05',
-  primaryMedication: 'Glatiramer Acetate 20mg daily',
-  adherence: 94,
-  recentVitals: {
-    mobility: 'Good',
-    fatigue: 'Mild'
-  }
-}, {
-  id: 'P008',
-  name: 'James Wilson',
-  age: 41,
-  condition: 'Huntington Disease',
-  diagnosisDate: '2023-02-14',
-  lastActivity: '2 days ago',
-  status: 'stable',
-  avatar: 'JW',
-  nextAppt: '2024-01-30',
-  primaryMedication: 'Tetrabenazine 25mg TID',
-  adherence: 92,
-  recentVitals: {
-    chorea: 'Mild',
-    cognition: 'Stable',
-    mood: 'Fair'
-  }
-}];
+};
+
+const recentPatients: Array<{
+  id: string;
+  name: string;
+  age: number;
+  condition: string;
+  diagnosisDate: string;
+  lastActivity: string;
+  status: string;
+  avatar: string;
+  nextAppt: string;
+  primaryMedication: string;
+  adherence: number;
+  recentVitals: any;
+}> = [];
+
+// Mock stats removed - will calculate from real connected patients
 const cohortStats = [{
   label: "Total Patients",
-  value: "287",
-  change: "+12 this week",
-  trend: "up",
+  value: "0",
+  change: "Connect patients to see data",
+  trend: "neutral",
   icon: Users,
   color: "text-primary"
 }, {
   label: "Active Alerts",
-  value: "5",
-  change: "-2 from yesterday",
-  trend: "down",
+  value: "0",
+  change: "No alerts",
+  trend: "neutral",
   icon: AlertTriangle,
   color: "text-warning"
 }, {
   label: "Average Adherence",
-  value: "89.7%",
-  change: "+3.2% this month",
-  trend: "up",
+  value: "0%",
+  change: "No data yet",
+  trend: "neutral",
   icon: UserCheck,
   color: "text-status-stable"
 }, {
   label: "Upcoming Appointments",
-  value: "34",
-  change: "Next 7 days",
+  value: "0",
+  change: "No appointments",
   trend: "neutral",
   icon: Calendar,
   color: "text-secondary"
 }];
+
 const analyticsData = {
-  seizureReduction: [{
-    month: 'Jul',
-    reduction: -8.2
-  }, {
-    month: 'Aug',
-    reduction: -12.1
-  }, {
-    month: 'Sep',
-    reduction: -15.3
-  }, {
-    month: 'Oct',
-    reduction: -18.7
-  }, {
-    month: 'Nov',
-    reduction: -22.1
-  }, {
-    month: 'Dec',
-    reduction: -25.4
-  }],
-  adherenceRates: [{
-    condition: 'Epilepsy',
-    rate: 87.3,
-    patients: 156
-  }, {
-    condition: 'Parkinson\'s',
-    rate: 91.2,
-    patients: 89
-  }, {
-    condition: 'Essential Tremor',
-    rate: 94.1,
-    patients: 42
-  }],
+  seizureReduction: [],
+  adherenceRates: [],
   qualityMetrics: {
-    patientSatisfaction: 94.2,
-    treatmentEffectiveness: 88.7,
-    sideEffectReports: 12.3,
-    emergencyVisits: -34.2
+    patientSatisfaction: 0,
+    treatmentEffectiveness: 0,
+    sideEffectReports: 0,
+    emergencyVisits: 0
   }
 };
 const getSeverityColor = (severity: string) => {
@@ -345,26 +140,71 @@ const getStatusColor = (status: string) => {
 export default function ClinicianDashboard() {
   const { user } = useAuth();
   const { connections, invitations, loading } = usePatientConnections(user?.id);
+  const { getDisplayName } = useClinicianProfile(user?.id);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("overview");
   const [showFilterMenu, setShowFilterMenu] = useState(false);
-
-  // Extract user name from profile data or fallback to email
-  const getUserDisplayName = () => {
-    if (user?.user_metadata?.first_name && user?.user_metadata?.last_name) {
-      return `Dr. ${user.user_metadata.first_name} ${user.user_metadata.last_name}`;
-    }
-    if (user?.user_metadata?.first_name) {
-      return `Dr. ${user.user_metadata.first_name}`;
-    }
-    if (user?.email) {
-      return `Dr. ${user.email.split('@')[0]}`;
-    }
-    return "Dr. Clinician";
-  };
   const filteredPatients = recentPatients.filter(patient => patient.name.toLowerCase().includes(searchTerm.toLowerCase()) || patient.condition.toLowerCase().includes(searchTerm.toLowerCase()));
+  const [criticalAlerts, setCriticalAlerts] = useState<DashboardPatientAlert[]>([]);
+  const [alertsLoading, setAlertsLoading] = useState(true);
+  const [alertsError, setAlertsError] = useState<string | null>(null);
+  const [appointmentsCount, setAppointmentsCount] = useState(0);
+  const [todayLoading, setTodayLoading] = useState(false);
+
+  useEffect(() => {
+    const loadAlerts = async () => {
+      try {
+        setAlertsLoading(true);
+        setAlertsError(null);
+        if (!user?.id) { setCriticalAlerts([]); return; }
+        const { data, error } = await supabase.rpc('get_critical_patient_alerts', { p_clinician_id: user.id });
+        if (error) throw error;
+        const rows = Array.isArray(data) ? data : (data ? [data] : []);
+        const mapped: DashboardPatientAlert[] = rows.map((r: any) => ({
+          id: r.alert_id,
+          patientName: r.patient_name || 'Patient',
+          patientId: r.patient_id,
+          age: 0,
+          condition: r.risk_type || 'Alert',
+          severity: 'critical',
+          message: r.reason || 'Critical alert',
+          timestamp: new Date(r.created_at).toLocaleString(),
+          action: 'Review now',
+          medicationAdherence: 0,
+          recentEvents: [],
+        }));
+        setCriticalAlerts(mapped);
+      } catch (err: any) {
+        console.error('Failed to load critical alerts:', err);
+        setAlertsError('Failed to load critical alerts');
+        setCriticalAlerts([]);
+      } finally {
+        setAlertsLoading(false);
+      }
+    };
+    loadAlerts();
+  }, [user?.id]);
+
+  useEffect(() => {
+    const loadTodayCount = async () => {
+      try {
+        setTodayLoading(true);
+        if (!user?.id) { setAppointmentsCount(0); return; }
+        const { data, error } = await supabase.rpc('get_clinician_today_view', { p_clinician_id: user.id });
+        if (error) throw error;
+        const row = Array.isArray(data) ? data[0] : data;
+        const appts = row?.appointments ?? [];
+        setAppointmentsCount(Array.isArray(appts) ? appts.length : 0);
+      } catch (_e) {
+        setAppointmentsCount(0);
+      } finally {
+        setTodayLoading(false);
+      }
+    };
+    loadTodayCount();
+  }, [user?.id]);
   
   const tabOptions = [
     { value: "overview", label: "Overview", icon: <Activity className="h-4 w-4" /> },
@@ -378,7 +218,7 @@ export default function ClinicianDashboard() {
   ];
 
   return <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-      <ClinicianHeader userName={getUserDisplayName()} currentSection="Dashboard" />
+      <ClinicianHeader userName={getDisplayName()} currentSection="Dashboard" />
 
       <div className="container mx-auto p-4 lg:p-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
@@ -472,22 +312,54 @@ export default function ClinicianDashboard() {
             <section>
               <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Key Metrics</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {cohortStats.map((stat, index) => {
-                const IconComponent = stat.icon;
-                return <Card key={index} className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
+                {[
+                  {
+                    label: 'Total Patients',
+                    value: String((connections || []).filter(c => c.status === 'active').length),
+                    change: 'Active connections',
+                    trend: 'neutral',
+                    icon: Users,
+                    color: 'text-primary'
+                  },
+                  {
+                    label: 'Active Alerts',
+                    value: String(criticalAlerts.length),
+                    change: alertsLoading ? 'Loading...' : (criticalAlerts.length > 0 ? 'Needs attention' : 'No alerts'),
+                    trend: 'neutral',
+                    icon: AlertTriangle,
+                    color: 'text-warning'
+                  },
+                  {
+                    label: 'Pending Invites',
+                    value: String((invitations || []).filter(i => i.status === 'pending').length),
+                    change: 'Awaiting acceptance',
+                    trend: 'neutral',
+                    icon: UserCheck,
+                    color: 'text-status-stable'
+                  },
+                  {
+                    label: 'Appointments Today',
+                    value: String(appointmentsCount),
+                    change: todayLoading ? 'Loading...' : (appointmentsCount > 0 ? 'Scheduled' : 'None'),
+                    trend: 'neutral',
+                    icon: Calendar,
+                    color: 'text-secondary'
+                  }
+                ].map((stat, index) => {
+                  const IconComponent = stat.icon as any;
+                  return (
+                    <Card key={index} className="medical-card p-6 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                       <div className="flex items-center justify-between mb-3">
                         <IconComponent className={`h-5 w-5 ${stat.color}`} />
-                        {stat.trend !== "neutral" && <div className="flex items-center">
-                            {stat.trend === "up" ? <TrendingUp className="h-4 w-4 text-status-stable" /> : <TrendingDown className="h-4 w-4 text-status-critical" />}
-                          </div>}
                       </div>
                       <div className="space-y-1">
                         <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">{stat.label}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">{stat.change}</p>
                       </div>
-                    </Card>;
-              })}
+                    </Card>
+                  );
+                })}
               </div>
             </section>
 
@@ -497,8 +369,15 @@ export default function ClinicianDashboard() {
                 <AlertTriangle className="h-5 w-5 text-warning" />
                 Critical Patient Alerts
               </h2>
+              {alertsLoading && (
+                <div className="text-sm text-muted-foreground">Loading alerts...</div>
+              )}
+              {alertsError && (
+                <div className="text-sm text-destructive mb-2">{alertsError}</div>
+              )}
               <div className="space-y-3">
-                {patientAlerts.slice(0, 3).map(alert => <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
+                {criticalAlerts.slice(0, 3).map(alert => (
+                  <Card key={alert.id} className="medical-card p-4 border-l-4 border-l-warning bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -521,14 +400,20 @@ export default function ClinicianDashboard() {
                         </Button>
                       </PatientAlertDialog>
                     </div>
-                  </Card>)}
+                  </Card>
+                ))}
+                {!alertsLoading && criticalAlerts.length === 0 && !alertsError && (
+                  <Card className="medical-card p-4">
+                    <CardContent className="p-0 text-sm text-muted-foreground">No critical alerts.</CardContent>
+                  </Card>
+                )}
               </div>
             </section>
 
             {/* Case-Driven Data Panels for High Priority */}
             <section>
               <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Patient Case Analysis</h2>
-              <CaseDataPanels patientId="P001" />
+              <CaseDataPanels patientId={connections?.find(c => c.status === 'active')?.patient_id || connections[0]?.patient_id || ''} />
             </section>
 
             {/* Recent Patient Activity */}
@@ -835,23 +720,23 @@ export default function ClinicianDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Card className="p-4 bg-gray-50 dark:bg-gray-800 border dark:border-gray-700">
                       <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Seizure Freedom Rate</h4>
-                      <p className="text-2xl font-bold text-status-stable">67.3%</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">+8.1% from last quarter</p>
+                      <p className="text-2xl font-bold text-muted-foreground">—</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">No data available</p>
                     </Card>
                     <Card className="p-4">
                       <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Medication Adherence</h4>
-                      <p className="text-2xl font-bold text-primary">84.7%</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">+3.2% improvement</p>
+                      <p className="text-2xl font-bold text-muted-foreground">—</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">No data available</p>
                     </Card>
                     <Card className="p-4">
                       <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Fall Prevention</h4>
-                      <p className="text-2xl font-bold text-status-stable">-42.1%</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Reduction in falls</p>
+                      <p className="text-2xl font-bold text-muted-foreground">—</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">No data available</p>
                     </Card>
                     <Card className="p-4">
                       <h4 className="font-semibold mb-2 text-sm text-gray-900 dark:text-white">Quality of Life</h4>
-                      <p className="text-2xl font-bold text-primary">7.8/10</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Average patient score</p>
+                      <p className="text-2xl font-bold text-muted-foreground">—</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">No data available</p>
                     </Card>
                   </div>
                 </CardContent>
@@ -871,19 +756,19 @@ export default function ClinicianDashboard() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">High-Risk Patients</span>
-                      <Badge variant="destructive">12 patients</Badge>
+                      <Badge variant="secondary">No data</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Medication Reviews Due</span>
-                      <Badge variant="outline">8 patients</Badge>
+                      <Badge variant="outline">No data</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Clinical Scales Overdue</span>
-                      <Badge variant="secondary">5 patients</Badge>
+                      <Badge variant="secondary">No data</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Pending Test Results</span>
-                      <Badge variant="outline">3 patients</Badge>
+                      <Badge variant="outline">No data</Badge>
                     </div>
                   </div>
                   <div className="mt-6">

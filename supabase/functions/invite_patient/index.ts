@@ -2,17 +2,33 @@
 // HIPAA Compliant - No PHI logged or exposed
 // Must be called with authenticated clinician JWT
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from 'jsr:@supabase/supabase-js@2'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// Dynamic CORS allow-list
+const allowedOrigins = new Set([
+  'https://neuroloop.app',
+  'https://staging.neuroloop.app',
+  'http://localhost:5173', // optional for local dev
+  'http://10.0.0.34:8002', // your local dev IP/port
+])
+
+function buildCorsHeaders(req) {
+  const origin = req.headers.get('Origin') ?? ''
+  const allowed = allowedOrigins.has(origin)
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': allowed ? origin : 'https://neuroloop.app',
+    'Vary': 'Origin',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  }
+  return { corsHeaders, allowed }
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
+  const { corsHeaders, allowed } = buildCorsHeaders(req)
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
+    if (!allowed) return new Response('Forbidden', { status: 403, headers: corsHeaders })
     return new Response('ok', { headers: corsHeaders })
   }
 
@@ -101,7 +117,7 @@ serve(async (req) => {
       .eq('clinician_id', user.id)
       .eq('patient_email_hash', emailHash)
       .eq('status', 'pending')
-      .single()
+      .maybeSingle()
 
     if (existingInvite) {
       return new Response(
@@ -110,18 +126,60 @@ serve(async (req) => {
       )
     }
 
-    // Check if patient already exists in auth.users
-    const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers()
-    const patientUser = existingUser.users.find(u => u.email?.toLowerCase() === email.toLowerCase())
-
-    let patientId = patientUser?.id || null
-
-    // If user doesn't exist, create invitation for them to sign up
-    // They'll use Supabase Auth's built-in invite flow
-    if (!patientUser) {
-      // We'll create the user when they accept the invitation
-      // For now, just create the invitation record
+    // Invite or send magic link so the account exists and receives email
+    const emailLower = email.toLowerCase().trim()
+    const redirect = (Deno.env.get('APP_URL') || 'https://neuroloop-nexus.vercel.app') + '/auth/callback'
+    try {
+      const { error: inviteErr } = await supabaseAdmin.auth.admin.inviteUserByEmail(emailLower, { redirectTo: redirect })
+      if (inviteErr) {
+        // If invite fails (e.g., user already exists), fallback to generate a magic link or send OTP email
+        try {
+          // Try generating a magic link (may require you to deliver it)
+          await supabaseAdmin.auth.admin.generateLink({
+            type: 'magiclink',
+            email: emailLower,
+            options: { redirectTo: redirect }
+          })
+        } catch {
+          // Final fallback: send OTP email using anon client (sends email)
+          const supabaseAnon = createClient(
+            Deno.env.get('SUPABASE_URL') ?? '',
+            Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+          )
+          await supabaseAnon.auth.signInWithOtp({
+            email: emailLower,
+            options: { emailRedirectTo: redirect }
+          })
+        }
+      }
+    } catch (_e) {
+      // Continue; we will still link if user exists or will be created later
     }
+
+    // Fetch (or re-fetch) the user so we can upsert profile and connection rows
+    const { data: usersAfterInvite } = await supabaseAdmin.auth.admin.listUsers()
+    const patientUser = usersAfterInvite.users.find(u => u.email?.toLowerCase() === emailLower)
+    const patientId = patientUser?.id ?? null
+
+    // Pre-create minimal profile rows
+    if (patientId) {
+      await supabaseAdmin.from('profiles').upsert({ id: patientId, user_type: 'patient' })
+      await supabaseAdmin.from('patient_profiles').upsert({ user_id: patientId })
+    }
+
+    // Ensure a connection row exists between clinician and patient
+    if (patientId) {
+      await supabaseAdmin
+        .from('patient_clinician_connections')
+        .upsert({
+          patient_id: patientId,
+          clinician_id: user.id,
+          status: 'pending',
+          access_level: 'full'
+        }, { onConflict: 'patient_id,clinician_id' })
+    }
+
+    // Create or refresh invitation record (idempotent by hash+clinician+status pending)
 
     // Create invitation record
     const { data: invitation, error: inviteError } = await supabaseAdmin
@@ -130,7 +188,7 @@ serve(async (req) => {
         clinician_id: user.id,
         patient_email: email.toLowerCase().trim(),
         patient_email_hash: emailHash,
-        invitation_message: message || null,
+        message: message || null,
         patient_id: patientId,
         status: 'pending',
         expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
@@ -174,7 +232,7 @@ serve(async (req) => {
 })
 
 // Helper function to hash email using SHA-256
-async function hashEmail(email: string): Promise<string> {
+async function hashEmail(email) {
   const msgBuffer = new TextEncoder().encode(email)
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
   const hashArray = Array.from(new Uint8Array(hashBuffer))

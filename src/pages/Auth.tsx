@@ -8,11 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
-import { Brain, Mail, Lock, User, AlertCircle, CheckCircle, Stethoscope, Heart, FlaskConical } from 'lucide-react';
+import { Brain, Mail, Lock, User, AlertCircle, CheckCircle, Stethoscope, Heart, FlaskConical, KeyRound, Sparkles } from 'lucide-react';
 import { z } from 'zod';
-import { Enums } from '@/integrations/supabase/types';
 
-type UserType = Enums<'user_type_enum'>;
+type UserType = 'patient' | 'clinician' | 'carer' | 'researcher';
 
 const signupSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -67,8 +66,20 @@ export default function Auth() {
     password: ''
   });
   
+  // Coming Soon lock state
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [accessPassword, setAccessPassword] = useState('');
+  const [accessError, setAccessError] = useState('');
+  const UNLOCK_PASSWORD = 'NeuroLoopy96';
+  
   // Determine default tab based on route
   const defaultTab = location.pathname === '/signup' ? 'signup' : 'login';
+  
+  // Check localStorage for unlock status on mount
+  useEffect(() => {
+    const unlocked = localStorage.getItem('neuroloop_dev_access') === 'true';
+    setIsUnlocked(unlocked);
+  }, []);
 
   useEffect(() => {
     // Check if user is already logged in
@@ -140,6 +151,19 @@ export default function Auth() {
     }
   };
 
+  const handleUnlock = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAccessError('');
+    
+    if (accessPassword === UNLOCK_PASSWORD) {
+      setIsUnlocked(true);
+      localStorage.setItem('neuroloop_dev_access', 'true');
+      setAccessPassword('');
+    } else {
+      setAccessError('Incorrect password. Please try again.');
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -175,6 +199,92 @@ export default function Auth() {
       setLoading(false);
     }
   };
+
+  // Show Coming Soon lock if not unlocked
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <Brain className="h-16 w-16 text-primary animate-pulse" />
+            </div>
+            <h1 className="text-4xl font-bold text-primary">NeuroLoop</h1>
+            <p className="text-muted-foreground mt-2">
+              Advanced neurological health tracking and research platform
+            </p>
+          </div>
+
+          {/* Coming Soon Lock */}
+          <Card className="medical-card p-8 border-2 border-primary/20 shadow-xl">
+            <div className="text-center space-y-6">
+              <div className="flex justify-center">
+                <div className="relative">
+                  <Sparkles className="h-20 w-20 text-primary" />
+                  <KeyRound className="h-10 w-10 text-primary absolute -bottom-2 -right-2 bg-background rounded-full p-1" />
+                </div>
+              </div>
+              
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Coming Soon</h2>
+                <p className="text-muted-foreground">
+                  We're working hard to bring you the most advanced neurological health platform.
+                </p>
+              </div>
+
+              <div className="bg-primary/5 rounded-lg p-4 space-y-2">
+                <p className="text-sm font-semibold text-primary">What to expect:</p>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>✓ Comprehensive symptom tracking</li>
+                  <li>✓ AI-powered insights</li>
+                  <li>✓ Secure clinician collaboration</li>
+                  <li>✓ Research-grade data collection</li>
+                </ul>
+              </div>
+
+              {/* Developer Access */}
+              <form onSubmit={handleUnlock} className="pt-4 border-t border-border">
+                <Label htmlFor="access-password" className="text-xs text-muted-foreground block mb-2">
+                  Developer Access
+                </Label>
+                <div className="space-y-3">
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="access-password"
+                      type="password"
+                      placeholder="Enter development password"
+                      value={accessPassword}
+                      onChange={(e) => setAccessPassword(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  {accessError && (
+                    <p className="text-xs text-destructive">{accessError}</p>
+                  )}
+                  <Button type="submit" variant="outline" size="sm" className="w-full">
+                    <KeyRound className="h-4 w-4 mr-2" />
+                    Unlock Access
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </Card>
+
+          <div className="text-center mt-6 text-sm text-muted-foreground">
+            <Button
+              variant="link"
+              onClick={() => navigate('/')}
+              className="mt-2"
+            >
+              ← Back to Home
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">

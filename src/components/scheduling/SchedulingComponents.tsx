@@ -84,6 +84,7 @@ export function AppointmentBooking({ onClose, onBooked, patientId }: Appointment
                 <SelectItem value="test_review">Test Results Review</SelectItem>
                 <SelectItem value="urgent_visit">Urgent Visit</SelectItem>
                 <SelectItem value="routine_checkup">Routine Checkup</SelectItem>
+                <SelectItem value="custom">Custom</SelectItem>
               </SelectContent>
             </Select>
           </div>

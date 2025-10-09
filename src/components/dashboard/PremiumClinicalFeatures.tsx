@@ -3,7 +3,7 @@
 // 3. Clinical Scales, 4. Neuroimaging, 5. Case Panels, 6. Note Generation,
 // 7. Chat, 8. PRO Timeline, 9. Today View, 10. AI Insights
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 // ============= 3. Clinical Scales Entry/Trend =============
 interface ClinicalScale {
@@ -37,39 +39,8 @@ export function ClinicalScalesWidget() {
   const [showEntryModal, setShowEntryModal] = useState(false);
   const [selectedScale, setSelectedScale] = useState<ClinicalScale | null>(null);
 
-  const scales: ClinicalScale[] = [
-    {
-      scale_id: '1',
-      patient_id: 'P001',
-      patient_name: 'Sarah Johnson',
-      scale_type: 'MDS-UPDRS',
-      score: 42,
-      assessed_at: '2025-09-15',
-      due_at: '2025-10-15',
-      change_alert: true,
-      trend: [
-        { date: '2025-06-15', score: 35 },
-        { date: '2025-07-15', score: 38 },
-        { date: '2025-08-15', score: 40 },
-        { date: '2025-09-15', score: 42 }
-      ]
-    },
-    {
-      scale_id: '2',
-      patient_id: 'P002',
-      patient_name: 'Michael Chen',
-      scale_type: 'MoCA',
-      score: 26,
-      assessed_at: '2025-09-20',
-      due_at: '2025-12-20',
-      change_alert: false,
-      trend: [
-        { date: '2025-03-20', score: 27 },
-        { date: '2025-06-20', score: 27 },
-        { date: '2025-09-20', score: 26 }
-      ]
-    }
-  ];
+  // ALL MOCK DATA REMOVED - Will fetch from clinical.clinical_scale_results
+  const scales: ClinicalScale[] = [];
 
   return (
     <Card className="medical-card">
@@ -160,26 +131,8 @@ interface NeuroscanImage {
 export function NeuroimagingViewer() {
   const [selectedImage, setSelectedImage] = useState<NeuroscanImage | null>(null);
 
-  const images: NeuroscanImage[] = [
-    {
-      image_id: '1',
-      patient_id: 'P001',
-      patient_name: 'Sarah Johnson',
-      study_type: 'MRI Brain',
-      findings_summary: 'Mesial temporal sclerosis, left hippocampus. Consistent with focal epilepsy.',
-      uploaded_at: '2025-09-25',
-      study_date: '2025-09-24'
-    },
-    {
-      image_id: '2',
-      patient_id: 'P002',
-      patient_name: 'Michael Chen',
-      study_type: 'DaTscan',
-      findings_summary: 'Reduced uptake in bilateral putamen, consistent with Parkinsons disease.',
-      uploaded_at: '2025-09-20',
-      study_date: '2025-09-19'
-    }
-  ];
+  // ALL MOCK DATA REMOVED - Will fetch from clinical.neuro_imaging_results
+  const images: NeuroscanImage[] = [];
 
   return (
     <Card className="medical-card">
@@ -290,22 +243,7 @@ interface ChatMessage {
 }
 
 export function SecureConsultChat({ patientId }: { patientId: string }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      message_id: '1',
-      sender_name: 'Dr. Smith',
-      message: 'Patient showing progressive symptoms. Recommend MRI follow-up.',
-      sent_at: '10:30 AM',
-      is_urgent: false
-    },
-    {
-      message_id: '2',
-      sender_name: 'Dr. Johnson',
-      message: 'Agreed. Also consider increasing levetiracetam dose.',
-      sent_at: '11:45 AM',
-      is_urgent: true
-    }
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
 
   const sendMessage = () => {
@@ -332,18 +270,22 @@ export function SecureConsultChat({ patientId }: { patientId: string }) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
-          {messages.map((msg) => (
-            <div key={msg.message_id} className="p-3 rounded-lg bg-muted">
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold text-sm">{msg.sender_name}</span>
-                <div className="flex items-center gap-2">
-                  {msg.is_urgent && <Badge variant="destructive" className="text-xs">Urgent</Badge>}
-                  <span className="text-xs text-muted-foreground">{msg.sent_at}</span>
+          {messages.length === 0 ? (
+            <div className="text-sm text-muted-foreground">No messages yet.</div>
+          ) : (
+            messages.map((msg) => (
+              <div key={msg.message_id} className="p-3 rounded-lg bg-muted">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-semibold text-sm">{msg.sender_name}</span>
+                  <div className="flex items-center gap-2">
+                    {msg.is_urgent && <Badge variant="destructive" className="text-xs">Urgent</Badge>}
+                    <span className="text-xs text-muted-foreground">{msg.sent_at}</span>
+                  </div>
                 </div>
+                <p className="text-sm">{msg.message}</p>
               </div>
-              <p className="text-sm">{msg.message}</p>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         <div className="flex gap-2">
           <Input
@@ -363,12 +305,7 @@ export function SecureConsultChat({ patientId }: { patientId: string }) {
 
 // ============= 8. Patient-Reported Outcomes Timeline =============
 export function PROTimeline({ patientId }: { patientId: string }) {
-  const proData = [
-    { date: '09-15', sleep: 6, mood: 7, pain: 3 },
-    { date: '09-20', sleep: 5, mood: 5, pain: 4 },
-    { date: '09-25', sleep: 7, mood: 8, pain: 2 },
-    { date: '09-30', sleep: 6, mood: 7, pain: 3 }
-  ];
+  const [proData] = useState<any[]>([]);
 
   return (
     <Card className="medical-card">
@@ -379,31 +316,37 @@ export function PROTimeline({ patientId }: { patientId: string }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={proData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis domain={[0, 10]} />
-            <Tooltip />
-            <Line type="monotone" dataKey="sleep" stroke="#8884d8" name="Sleep" />
-            <Line type="monotone" dataKey="mood" stroke="#82ca9d" name="Mood" />
-            <Line type="monotone" dataKey="pain" stroke="#ffc658" name="Pain" />
-          </LineChart>
-        </ResponsiveContainer>
-        <div className="grid grid-cols-3 gap-2 mt-4">
-          <div className="text-center p-2 bg-blue-500/10 rounded">
-            <Moon className="h-4 w-4 mx-auto mb-1 text-blue-600" />
-            <div className="text-xs text-muted-foreground">Sleep</div>
-          </div>
-          <div className="text-center p-2 bg-green-500/10 rounded">
-            <Smile className="h-4 w-4 mx-auto mb-1 text-green-600" />
-            <div className="text-xs text-muted-foreground">Mood</div>
-          </div>
-          <div className="text-center p-2 bg-yellow-500/10 rounded">
-            <Zap className="h-4 w-4 mx-auto mb-1 text-yellow-600" />
-            <div className="text-xs text-muted-foreground">Pain</div>
-          </div>
-        </div>
+        {proData.length === 0 ? (
+          <div className="text-sm text-muted-foreground">No patient-reported outcomes yet.</div>
+        ) : (
+          <>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={proData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis domain={[0, 10]} />
+                <Tooltip />
+                <Line type="monotone" dataKey="sleep" stroke="#8884d8" name="Sleep" />
+                <Line type="monotone" dataKey="mood" stroke="#82ca9d" name="Mood" />
+                <Line type="monotone" dataKey="pain" stroke="#ffc658" name="Pain" />
+              </LineChart>
+            </ResponsiveContainer>
+            <div className="grid grid-cols-3 gap-2 mt-4">
+              <div className="text-center p-2 bg-blue-500/10 rounded">
+                <Moon className="h-4 w-4 mx-auto mb-1 text-blue-600" />
+                <div className="text-xs text-muted-foreground">Sleep</div>
+              </div>
+              <div className="text-center p-2 bg-green-500/10 rounded">
+                <Smile className="h-4 w-4 mx-auto mb-1 text-green-600" />
+                <div className="text-xs text-muted-foreground">Mood</div>
+              </div>
+              <div className="text-center p-2 bg-yellow-500/10 rounded">
+                <Zap className="h-4 w-4 mx-auto mb-1 text-yellow-600" />
+                <div className="text-xs text-muted-foreground">Pain</div>
+              </div>
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );
@@ -413,23 +356,44 @@ export function PROTimeline({ patientId }: { patientId: string }) {
 export function TodayView() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  const todayData = {
-    appointments: [
-      { time: '09:00 AM', patient: 'Sarah Johnson', type: 'Follow-up', patientId: 'P001' },
-      { time: '10:30 AM', patient: 'Michael Chen', type: 'New Patient', patientId: 'P002' },
-      { time: '02:00 PM', patient: 'Emily Rodriguez', type: 'Medication Review', patientId: 'P003' }
-    ],
-    high_priority: [
-      { text: 'Sarah Johnson (Seizure cluster)', patientId: 'P001' },
-      { text: 'Robert Kim (Fall risk)', patientId: 'P005' }
-    ],
-    pending_tasks: [
-      'Review MRI for Lisa Parker',
-      'Sign off on 3 clinical notes',
-      'Respond to 2 consultation requests'
-    ]
-  };
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [todayData, setTodayData] = useState<{
+    appointments: any[];
+    high_priority: any[];
+    pending_tasks: any[];
+  }>({ appointments: [], high_priority: [], pending_tasks: [] });
+
+  useEffect(() => {
+    const loadToday = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        if (!user?.id) {
+          setTodayData({ appointments: [], high_priority: [], pending_tasks: [] });
+          return;
+        }
+        const { data, error } = await supabase.rpc('get_clinician_today_view', {
+          p_clinician_id: user.id
+        });
+        if (error) throw error;
+        const row = Array.isArray(data) ? data[0] : data;
+        setTodayData({
+          appointments: row?.appointments ?? [],
+          high_priority: row?.high_priority_patients ?? row?.high_priority ?? [],
+          pending_tasks: row?.pending_tasks ?? []
+        });
+      } catch (err: any) {
+        console.error('Failed to load today view:', err);
+        setError('Failed to load Today view');
+        setTodayData({ appointments: [], high_priority: [], pending_tasks: [] });
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadToday();
+  }, [user?.id]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -472,21 +436,24 @@ export function TodayView() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {todayData.high_priority.map((item, idx) => (
+            {Array.isArray(todayData.high_priority) && todayData.high_priority.length > 0 ? todayData.high_priority.map((item: any, idx: number) => (
               <div 
                 key={idx} 
                 className="p-2 bg-red-500/10 rounded text-sm border border-red-500/20 cursor-pointer hover:bg-red-500/20 transition-colors"
                 onClick={() => {
-                  navigate(`/patient/${item.patientId}`);
+                  const pid = item.patientId || item.patient_id || '';
+                  if (pid) navigate(`/patient/${pid}`);
                   toast({
                     title: "High Priority Patient",
                     description: "Opening patient record",
                   });
                 }}
               >
-                {item.text}
+                {item.text || item.reason || item.patient || 'High priority item'}
               </div>
-            ))}
+            )) : (
+              <div className="text-sm text-muted-foreground">No high priority alerts.</div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -500,7 +467,7 @@ export function TodayView() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {todayData.pending_tasks.map((task, idx) => (
+            {Array.isArray(todayData.pending_tasks) && todayData.pending_tasks.length > 0 ? todayData.pending_tasks.map((task: any, idx: number) => (
               <div key={idx} className="p-2 bg-muted rounded text-sm flex items-start gap-2 hover:bg-muted/80 transition-colors">
                 <input 
                   type="checkbox" 
@@ -509,14 +476,16 @@ export function TodayView() {
                     if (e.target.checked) {
                       toast({
                         title: "Task Completed",
-                        description: task,
+                        description: typeof task === 'string' ? task : (task?.title || 'Task completed'),
                       });
                     }
                   }}
                 />
-                <span>{task}</span>
+                <span>{typeof task === 'string' ? task : (task?.title || 'Task')}</span>
               </div>
-            ))}
+            )) : (
+              <div className="text-sm text-muted-foreground">No pending tasks.</div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -527,7 +496,11 @@ export function TodayView() {
 // ============= 10. AI Insights Feed =============
 export function AIInsightsFeed() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [dismissedInsights, setDismissedInsights] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [insights, setInsights] = useState<any[]>([]);
 
   const handleDismissInsight = (insightId: string) => {
     setDismissedInsights(prev => [...prev, insightId]);
@@ -537,38 +510,50 @@ export function AIInsightsFeed() {
     });
   };
 
-  const insights = [
-    {
-      insight_id: '1',
-      type: 'did_you_know',
-      content: 'Patients with >90% adherence have 45% fewer breakthrough seizures in your cohort',
-    },
-    {
-      insight_id: '2',
-      type: 'recommendation',
-      content: '3 patients may benefit from medication timing optimization based on ON/OFF patterns',
-      impact: 'Potential 30% improvement in motor function'
-    },
-    {
-      insight_id: '3',
-      type: 'trend',
-      content: 'Falls incidents decreased 42% since implementing fall risk protocol',
-      impact: '12 fewer falls this quarter'
-    }
-  ];
+  useEffect(() => {
+    const loadInsights = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        if (!user?.id) { setInsights([]); return; }
+        const { data, error } = await supabase.rpc('get_ai_insights_for_clinician', {
+          p_clinician_id: user.id
+        });
+        if (error) throw error;
+        setInsights(Array.isArray(data) ? data : (data ? [data] : []));
+      } catch (err: any) {
+        console.error('Failed to load insights:', err);
+        setError('Failed to load insights');
+        setInsights([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadInsights();
+  }, [user?.id]);
 
   const visibleInsights = insights.filter(i => !dismissedInsights.includes(i.insight_id));
 
   return (
     <div className="space-y-3">
-      {visibleInsights.map((insight) => (
+      {loading ? (
+        <div className="text-sm text-muted-foreground">Loading...</div>
+      ) : error ? (
+        <div className="text-sm text-destructive">{error}</div>
+      ) : visibleInsights.length === 0 ? (
+        <div className="text-sm text-muted-foreground">No insights yet.</div>
+      ) : visibleInsights.map((insight) => (
         <Card key={insight.insight_id} className="medical-card border-l-4 border-l-blue-500 bg-blue-500/5">
           <CardContent className="pt-4">
             <div className="flex items-start gap-3">
               <Lightbulb className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm font-medium mb-1">{insight.content}</p>
-                <p className="text-xs text-muted-foreground">{insight.impact}</p>
+                <p className="text-sm font-medium mb-1">{insight.content || insight.title}</p>
+                {insight.impact_metric && (
+                  <p className="text-xs text-muted-foreground">
+                    {typeof insight.impact_metric === 'string' ? insight.impact_metric : JSON.stringify(insight.impact_metric)}
+                  </p>
+                )}
               </div>
               <Button variant="ghost" size="sm" onClick={() => handleDismissInsight(insight.insight_id)}>✕</Button>
             </div>
@@ -581,39 +566,74 @@ export function AIInsightsFeed() {
 
 // ============= 5. Case-Driven Data Panels =============
 export function CaseDataPanels({ patientId }: { patientId: string }) {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [panels, setPanels] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadPanels = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        if (!patientId) { setPanels([]); return; }
+        const { data, error } = await supabase.rpc('get_case_panels_for_patient', {
+          p_patient_id: patientId
+        });
+        if (error) throw error;
+        setPanels(Array.isArray(data) ? data : (data ? [data] : []));
+      } catch (err: any) {
+        console.error('Failed to load case panels:', err);
+        setError('Failed to load case panels');
+        setPanels([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadPanels();
+  }, [patientId]);
+
+  const borderClass = (panelType?: string) => {
+    switch ((panelType || '').toLowerCase()) {
+      case 'urgency': return 'border-l-4 border-l-red-500';
+      case 'trends': return 'border-l-4 border-l-yellow-500';
+      default: return '';
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <Card className="medical-card border-l-4 border-l-red-500">
-        <CardHeader>
-          <CardTitle className="text-base">Why Urgent Today?</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm space-y-2">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
-            <span>3 seizures in 24h (baseline: 1/week)</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <Activity className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
-            <span>Missed medication × 2 consecutive days</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="medical-card border-l-4 border-l-yellow-500">
-        <CardHeader>
-          <CardTitle className="text-base">Key Trends</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm space-y-2">
-          <div className="flex justify-between">
-            <span>Adherence</span>
-            <Badge variant="outline">87% ↓ from 95%</Badge>
-          </div>
-          <div className="flex justify-between">
-            <span>Seizure Frequency</span>
-            <Badge variant="destructive">↑ 200%</Badge>
-          </div>
-        </CardContent>
-      </Card>
+      {loading ? (
+        <Card className="medical-card"><CardContent className="p-4 text-sm text-muted-foreground">Loading panels...</CardContent></Card>
+      ) : error ? (
+        <Card className="medical-card"><CardContent className="p-4 text-sm text-destructive">{error}</CardContent></Card>
+      ) : panels.length === 0 ? (
+        <Card className="medical-card"><CardContent className="p-4 text-sm text-muted-foreground">No case panels yet.</CardContent></Card>
+      ) : (
+        panels.map((panel) => (
+          <Card key={panel.panel_id} className={`medical-card ${borderClass(panel.panel_type)}`}>
+            <CardHeader>
+              <CardTitle className="text-base">{panel.title || panel.custom_panel_name || panel.panel_type || 'Panel'}</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm space-y-2">
+              {panel.content ? (
+                typeof panel.content === 'string' ? (
+                  <div>{panel.content}</div>
+                ) : (
+                  Object.entries(panel.content).map(([k, v]: any) => (
+                    <div key={k} className="flex items-start gap-2">
+                      <span className="font-medium capitalize">{k.replace(/_/g, ' ')}:</span>
+                      <span className="text-muted-foreground">{typeof v === 'string' ? v : JSON.stringify(v)}</span>
+                    </div>
+                  ))
+                )
+              ) : (
+                <div className="text-muted-foreground">No content.</div>
+              )}
+            </CardContent>
+          </Card>
+        ))
+      )}
     </div>
   );
 }

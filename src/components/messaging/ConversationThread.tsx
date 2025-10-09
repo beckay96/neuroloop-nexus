@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 // Note: FormBuilder and AttachmentManager are imported dynamically when needed
 // MessageComposer functionality is integrated directly in this component
 
@@ -51,91 +53,95 @@ interface ConversationThreadProps {
 export default function ConversationThread({ conversation, onBack }: ConversationThreadProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [messageText, setMessageText] = useState("");
   const [showFormBuilder, setShowFormBuilder] = useState(false);
   const [showAttachmentManager, setShowAttachmentManager] = useState(false);
   const [attachmentType, setAttachmentType] = useState<'photo' | 'file' | 'test_result' | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock messages - replace with real API
-  const mockMessages: Message[] = [
-    {
-      message_id: '1',
-      sender_type: 'system',
-      sender_name: 'System',
-      content: 'Conversation started',
-      sent_at: '2025-09-28 10:00 AM',
-      is_read: true,
-      is_urgent: false,
-      message_type: 'system'
-    },
-    {
-      message_id: '2',
-      sender_type: 'clinician',
-      sender_name: 'Dr. Wilson',
-      content: 'Hi Sarah, how have you been feeling since your last visit? Any changes in your symptoms?',
-      sent_at: '2025-09-28 10:05 AM',
-      is_read: true,
-      is_urgent: false,
-      message_type: 'text'
-    },
-    {
-      message_id: '3',
-      sender_type: 'patient',
-      sender_name: conversation.patient_name,
-      content: 'Hi Doctor, I\'ve been mostly okay but had a seizure yesterday morning. It was shorter than usual though.',
-      sent_at: '2025-09-28 2:30 PM',
-      is_read: true,
-      is_urgent: false,
-      message_type: 'text',
-      ai_summary: 'Patient reports breakthrough seizure, shorter duration than baseline',
-      ai_sentiment: 'concerning',
-      ai_requires_action: true,
-      ai_action_items: ['Review medication adherence', 'Check blood levels', 'Consider dose adjustment']
-    },
-    {
-      message_id: '4',
-      sender_type: 'ai',
-      sender_name: 'AI Assistant',
-      content: '🤖 AI Analysis: Patient reported a breakthrough seizure. Consider reviewing recent medication adherence and blood levels. Recommended actions have been flagged.',
-      sent_at: '2025-09-28 2:31 PM',
-      is_read: true,
-      is_urgent: false,
-      message_type: 'system'
-    },
-    {
-      message_id: '5',
-      sender_type: 'clinician',
-      sender_name: 'Dr. Wilson',
-      content: 'Thank you for letting me know. I see from your tracking that you\'ve been very consistent with your medication. Let\'s check your recent blood levels and I may need to adjust your dosage.',
-      sent_at: '2025-09-28 4:15 PM',
-      is_read: true,
-      is_urgent: false,
-      message_type: 'text'
-    },
-    {
-      message_id: '6',
-      sender_type: 'patient',
-      sender_name: conversation.patient_name,
-      content: 'I had another seizure this morning. Should I increase my medication?',
-      sent_at: '5 min ago',
-      is_read: false,
-      is_urgent: true,
-      message_type: 'text',
-      ai_summary: 'URGENT: Second seizure in short timeframe. Patient asking about medication adjustment.',
-      ai_sentiment: 'concerning',
-      ai_requires_action: true,
-      ai_action_items: ['Immediate response required', 'Assess seizure cluster risk', 'Emergency protocol if needed']
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        if (!user?.id) { setMessages([]); return; }
+        const { data, error } = await supabase.rpc('get_conversation_messages', {
+          p_clinician_id: user.id,
+          p_thread_id: conversation.conversation_id
+        });
+        if (error) throw error;
+        const rows = Array.isArray(data) ? data : (data ? [data] : []);
+        // Normalize to Message shape
+        const normalized: Message[] = rows.map((r: any) => ({
+          message_id: r.message_id,
+          sender_type: r.sender_type,
+          sender_name: r.sender_name || 'User',
+          content: r.content,
+          sent_at: new Date(r.sent_at).toLocaleString(),
+          is_read: !!r.is_read,
+          is_urgent: !!r.is_urgent,
+          message_type: (r.message_type || 'text') as Message['message_type'],
+          ai_summary: r.ai_summary || undefined,
+          ai_sentiment: r.ai_sentiment || undefined,
+          ai_requires_action: !!r.ai_requires_action,
+          ai_action_items: Array.isArray(r.ai_action_items) ? r.ai_action_items : undefined,
+          attachments: r.attachments || undefined,
+        }));
+        setMessages(normalized);
+      } catch (err: any) {
+        console.error('Failed to load messages:', err);
+        setError('Failed to load messages');
+        setMessages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadMessages();
+  }, [user?.id, conversation.conversation_id]);
+
+  const handleSendMessage = async () => {
+    if (!messageText.trim() || !user?.id) return;
+    try {
+      const { error } = await supabase.rpc('send_chat_message', {
+        p_thread_id: conversation.conversation_id,
+        p_patient_id: conversation.patient_id,
+        p_sender_id: user.id,
+        p_content: messageText,
+        p_is_urgent: false,
+        p_requires_response: false,
+      });
+      if (error) throw error;
+      setMessageText("");
+      toast({ title: "Message Sent", description: "Delivered to patient." });
+      // Reload
+      const { data } = await supabase.rpc('get_conversation_messages', {
+        p_clinician_id: user.id,
+        p_thread_id: conversation.conversation_id
+      });
+      const rows = Array.isArray(data) ? data : (data ? [data] : []);
+      const normalized: Message[] = rows.map((r: any) => ({
+        message_id: r.message_id,
+        sender_type: r.sender_type,
+        sender_name: r.sender_name || 'User',
+        content: r.content,
+        sent_at: new Date(r.sent_at).toLocaleString(),
+        is_read: !!r.is_read,
+        is_urgent: !!r.is_urgent,
+        message_type: (r.message_type || 'text') as Message['message_type'],
+        ai_summary: r.ai_summary || undefined,
+        ai_sentiment: r.ai_sentiment || undefined,
+        ai_requires_action: !!r.ai_requires_action,
+        ai_action_items: Array.isArray(r.ai_action_items) ? r.ai_action_items : undefined,
+        attachments: r.attachments || undefined,
+      }));
+      setMessages(normalized);
+    } catch (err: any) {
+      console.error('Failed to send message:', err);
+      toast({ title: 'Send Failed', description: err.message || 'Try again', variant: 'destructive' });
     }
-  ];
-
-  const handleSendMessage = () => {
-    if (!messageText.trim()) return;
-
-    toast({
-      title: "Message Sent",
-      description: "Your message has been delivered to the patient.",
-    });
-    setMessageText("");
   };
 
   const handleSendForm = () => {
@@ -277,7 +283,9 @@ export default function ConversationThread({ conversation, onBack }: Conversatio
 
         {/* Messages */}
         <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-          {mockMessages.map((message) => (
+          {loading && <div className="text-sm text-muted-foreground">Loading messages...</div>}
+          {error && <div className="text-sm text-destructive">{error}</div>}
+          {messages.map((message) => (
             <div key={message.message_id}>
               {/* Regular Message */}
               <div

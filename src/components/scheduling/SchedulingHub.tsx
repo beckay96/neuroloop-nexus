@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,8 +9,9 @@ import {
   Settings, Users, List, CalendarDays
 } from "lucide-react";
 import AppointmentCalendar from "./AppointmentCalendar";
-import { AppointmentBooking, AvailabilityManager, CalendarSyncManager } from "./SchedulingComponents";
+import { AppointmentBooking, AvailabilityManager } from "./SchedulingComponents";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Appointment {
   appointment_id: string;
@@ -30,48 +31,48 @@ export default function SchedulingHub() {
   const { toast } = useToast();
   const [selectedTab, setSelectedTab] = useState("calendar");
   const [showBooking, setShowBooking] = useState(false);
-  const [showSyncCalendar, setShowSyncCalendar] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [_selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock upcoming appointments - replace with real API
-  const upcomingAppointments: Appointment[] = [
-    {
-      appointment_id: '1',
-      patient_id: 'P001',
-      patient_name: 'Sarah Johnson',
-      appointment_type: 'follow_up',
-      title: 'Follow-up: Seizure Management',
-      scheduled_start: '2025-09-30T14:00:00',
-      scheduled_end: '2025-09-30T14:30:00',
-      status: 'confirmed',
-      location_type: 'video',
-      video_call_link: 'https://meet.google.com/abc-defg-hij'
-    },
-    {
-      appointment_id: '2',
-      patient_id: 'P002',
-      patient_name: 'Michael Chen',
-      appointment_type: 'medication_review',
-      title: 'Medication Review',
-      scheduled_start: '2025-09-30T15:00:00',
-      scheduled_end: '2025-09-30T15:45:00',
-      status: 'confirmed',
-      location_type: 'in_person',
-    },
-    {
-      appointment_id: '3',
-      patient_id: 'P003',
-      patient_name: 'Emily Rodriguez',
-      appointment_type: 'initial_consultation',
-      title: 'New Patient Consultation',
-      scheduled_start: '2025-10-01T10:00:00',
-      scheduled_end: '2025-10-01T11:00:00',
-      status: 'confirmed',
-      location_type: 'in_person',
-    }
-  ];
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        if (!user?.id) { setAppointments([]); return; }
+        const { data, error } = await supabase.rpc('get_clinician_today_view', {
+          p_clinician_id: user.id
+        });
+        if (error) throw error;
+        const row = Array.isArray(data) ? data[0] : data;
+        const list = Array.isArray(row?.appointments) ? row.appointments : [];
+        const mapped: Appointment[] = list.map((apt: any, idx: number) => ({
+          appointment_id: apt.appointment_id || apt.id || `${apt.patient_id || 'apt'}-${apt.start || apt.scheduled_start || idx}`,
+          patient_id: apt.patient_id || apt.patient || '',
+          patient_name: apt.patient_name || apt.name || 'Patient',
+          appointment_type: apt.appointment_type || apt.type || 'appointment',
+          title: apt.title || `${apt.appointment_type || apt.type || 'Appointment'}`,
+          scheduled_start: apt.scheduled_start || apt.start || new Date().toISOString(),
+          scheduled_end: apt.scheduled_end || apt.end || new Date().toISOString(),
+          status: apt.status || 'confirmed',
+          location_type: apt.location_type || 'in_person',
+          video_call_link: apt.video_call_link || undefined,
+        }));
+        setAppointments(mapped);
+      } catch (err: any) {
+        console.error('Failed to load appointments:', err);
+        setError('Failed to load appointments');
+        setAppointments([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [user?.id]);
 
-  const todayAppointments = upcomingAppointments.filter(apt => {
+  const todayAppointments = appointments.filter(apt => {
     const aptDate = new Date(apt.scheduled_start);
     const today = new Date();
     return aptDate.toDateString() === today.toDateString();
@@ -121,15 +122,11 @@ export default function SchedulingHub() {
                 variant="outline" 
                 size="sm"
                 onClick={() => {
-                  setShowSyncCalendar(true);
-                  toast({
-                    title: "Calendar Sync",
-                    description: "Opening calendar synchronization settings",
-                  });
+                  toast({ title: "Coming soon", description: "Calendar sync is coming soon." });
                 }}
               >
                 <Settings className="h-4 w-4 mr-2" />
-                Sync Calendars
+                Coming soon
               </Button>
               <Button size="sm" onClick={() => setShowBooking(true)}>
                 <Plus className="h-4 w-4 mr-2" />
@@ -153,7 +150,7 @@ export default function SchedulingHub() {
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary" />
                 <div>
-                  <div className="text-2xl font-bold">{upcomingAppointments.length}</div>
+                  <div className="text-2xl font-bold">{appointments.length}</div>
                   <div className="text-xs text-muted-foreground">Upcoming This Week</div>
                 </div>
               </div>
@@ -163,7 +160,7 @@ export default function SchedulingHub() {
                 <Video className="h-4 w-4 text-primary" />
                 <div>
                   <div className="text-2xl font-bold">
-                    {upcomingAppointments.filter(a => a.location_type === 'video').length}
+                    {appointments.filter(a => a.location_type === 'video').length}
                   </div>
                   <div className="text-xs text-muted-foreground">Video Consultations</div>
                 </div>
@@ -188,13 +185,13 @@ export default function SchedulingHub() {
             </TabsTrigger>
             <TabsTrigger value="sync">
               <Settings className="h-4 w-4 mr-2" />
-              Calendar Sync
+              Calendar Sync (Coming soon)
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="calendar" className="flex-1 p-6">
             <AppointmentCalendar
-              appointments={upcomingAppointments}
+              appointments={appointments}
               onAppointmentClick={(apt) => setSelectedAppointment(apt)}
               onCreateAppointment={() => setShowBooking(true)}
             />
@@ -203,7 +200,7 @@ export default function SchedulingHub() {
           <TabsContent value="list" className="flex-1 p-6 overflow-y-auto">
             <div className="space-y-3">
               <h3 className="font-semibold mb-4">Upcoming Appointments</h3>
-              {upcomingAppointments.map((appointment) => (
+              {appointments.map((appointment) => (
                 <Card
                   key={appointment.appointment_id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
@@ -255,7 +252,10 @@ export default function SchedulingHub() {
           </TabsContent>
 
           <TabsContent value="sync" className="flex-1 p-6 overflow-y-auto">
-            <CalendarSyncManager />
+            <Card className="p-6">
+              <CardTitle className="text-base mb-2">Calendar Sync</CardTitle>
+              <p className="text-sm text-muted-foreground">Coming soon.</p>
+            </Card>
           </TabsContent>
         </Tabs>
       </Card>

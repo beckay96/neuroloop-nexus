@@ -27,6 +27,7 @@ import BrainSeizureAnalysis from "@/pages/BrainSeizureAnalysis";
 import PrivacyPolicy from "@/pages/legal/PrivacyPolicy";
 import TermsOfService from "@/pages/legal/TermsOfService";
 import HIPAACompliance from "@/pages/legal/HIPAACompliance";
+import CarerRequests from "@/pages/carer/Requests";
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 import { MedicationReminderService } from "@/services/medicationReminders";
@@ -132,6 +133,12 @@ const App = () => {
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/hipaa" element={<HIPAACompliance />} />
+                {/* Carer Requests - Protected */}
+                <Route path="/carer/requests" element={
+                  <ProtectedRoute>
+                    <CarerRequests />
+                  </ProtectedRoute>
+                } />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

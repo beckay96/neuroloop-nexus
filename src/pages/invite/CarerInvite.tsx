@@ -195,8 +195,8 @@ export default function CarerInvite() {
         description: 'You are now connected as a carer',
       });
       
-      // Redirect to carer dashboard
-      navigate('/carer/dashboard');
+      // Redirect to main dashboard (carer users are routed accordingly)
+      navigate('/dashboard');
     } else {
       if (result.error === 'dob_mismatch') {
         setAttemptsRemaining(result.attempts_remaining || 0);

@@ -17,50 +17,61 @@ export const useClinicianOnboarding = () => {
 
   const saveOnboarding = async (userId: string, data: ClinicianOnboardingData) => {
     try {
-      // 1. Save to clinician_onboarding_data in private_health_info schema
-      // @ts-ignore - Table exists in private_health_info schema
-      const { error: onboardingError } = await supabase
-        .schema('private_health_info')
-        .from('clinician_onboarding_data')
-        .upsert([{
-          user_id: userId,
-          first_name: data.firstName,
-          last_name: data.lastName,
-          middle_name: data.middleName,
-          clinician_title: data.title,
-          specialty: data.specialty,
-          institution: data.institution,
-          license_number: data.licenseNumber,
-          patient_invite_emails: data.patientEmails,
-          completed_at: new Date().toISOString()
-        }]);
+      // 1. Save onboarding via secure RPC (writes to private schema server-side)
+      const { error: onboardingError } = await supabase.rpc('save_clinician_onboarding', {
+        p_user_id: userId,
+        p_first_name: data.firstName,
+        p_last_name: data.lastName,
+        p_middle_name: data.middleName ?? null,
+        p_clinician_title: data.title,
+        p_specialty: data.specialty,
+        p_institution: data.institution,
+        p_license_number: data.licenseNumber,
+        p_patient_invite_emails: data.patientEmails
+      });
 
       if (onboardingError) {
         console.error('Error saving clinician onboarding:', onboardingError);
         throw onboardingError;
       }
 
-      // 2. Create patient invitations
+      // 2. Create patient invitations via Edge Function (service-role, PHI-safe)
       for (const email of data.patientEmails) {
-        // Hash the email
-        const emailHash = await hashEmail(email);
-        
-        const { error: inviteError } = await supabase
-          .from('patient_invitations')
-          .insert({
-            clinician_id: userId,
-            patient_email: email,
-            patient_email_hash: emailHash,
-            status: 'pending',
-            expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
+        try {
+          const { error } = await supabase.functions.invoke('invite_patient', {
+            body: { email, message: undefined }
           });
-
-        if (inviteError && inviteError.code !== '23505') { // Ignore duplicates
-          console.error('Error creating invitation:', inviteError);
+          if (error) {
+            // Allow 409 (already invited) to pass
+            const status = (error as any)?.context?.response?.status;
+            if (status !== 409) {
+              console.error('Error creating invitation:', error);
+            }
+          }
+        } catch (e) {
+          console.error('Error invoking invite_patient:', e);
         }
       }
 
-      // 3. Update profile to mark onboarding complete
+      // 3. Create clinician_profile in public schema
+      const { error: clinicianProfileError } = await supabase
+        .from('clinician_profiles')
+        .upsert([{
+          user_id: userId,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          clinician_title: data.title,
+          specialty: data.specialty,
+          license_number: data.licenseNumber,
+          institution: data.institution
+        }], { onConflict: 'user_id' });
+
+      if (clinicianProfileError) {
+        console.error('Error creating clinician profile:', clinicianProfileError);
+        throw clinicianProfileError;
+      }
+
+      // 4. Update profile to mark onboarding complete
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert([{
@@ -90,14 +101,8 @@ export const useClinicianOnboarding = () => {
     }
   };
 
-  const hashEmail = async (email: string): Promise<string> => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(email.toLowerCase().trim());
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  };
+  // No longer needed here (hashing happens in Edge Function)
+  const hashEmail = async (email: string): Promise<string> => email;
 
   return { saveOnboarding };
 };

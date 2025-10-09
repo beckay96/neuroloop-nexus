@@ -12,6 +12,7 @@ import TemperatureModal from "@/components/tracking/TemperatureModal";
 import SymptomLogModalEnhanced from "@/components/tracking/SymptomLogModalEnhanced";
 import MenstrualCycleLogModal from "@/components/tracking/MenstrualCycleLogModal";
 import { FloatingEmergencyButton } from "@/components/emergency/EmergencyButton";
+import type { LucideIcon } from "lucide-react";
 import { Activity, Heart, Pill, Calendar, TrendingUp, AlertCircle, Plus, Brain, Zap, Award, Target, Clock, FileText, Users, BarChart3, Shield, Camera, Thermometer, MessageSquare, Phone, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -27,6 +28,7 @@ import { useTemperatureLogs } from "@/hooks/useTemperatureLogs";
 import { useTrackingEntries } from "@/hooks/useTrackingEntries";
 import { useTrackingPreferences } from "@/hooks/useTrackingPreferences";
 import { supabase } from "@/integrations/supabase/client";
+import { useAchievements } from "@/hooks/useAchievements";
 import { 
   numericToMoodEnum,
   numericToEnergyEnum,
@@ -115,29 +117,29 @@ const healthStats = [{
   progress: 40,
   icon: Shield
 }];
-// REMOVED MOCK DATA - Will be replaced with real achievements from database
-const achievements = [{
-  id: 1,
-  title: "7-Day Streak",
-  description: "Completed daily tracking for 7 days",
-  icon: Award,
-  earned: true,
-  points: 50
-}, {
-  id: 2,
-  title: "Medication Master",
-  description: "100% adherence for 2 weeks",
-  icon: Target,
-  earned: true,
-  points: 75
-}, {
-  id: 3,
-  title: "Data Contributor",
-  description: "Shared data for research",
-  icon: Brain,
-  earned: false,
-  points: 100
-}];
+const achievementIconMap: Record<string, LucideIcon> = {
+  award: Award,
+  trophy: Award,
+  medal: Award,
+  streak: Zap,
+  zap: Zap,
+  target: Target,
+  goal: Target,
+  brain: Brain,
+  research: Brain,
+  pill: Pill,
+  medication: Pill,
+  shield: Shield,
+};
+
+interface AchievementCard {
+  id: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  earned: boolean;
+  points: number;
+}
 
 // REMOVED MOCK DATA - Will be replaced with real reminders from database
 const upcomingReminders = [{
@@ -192,6 +194,7 @@ export default function PatientDashboard() {
   const { tremorLogs } = useTremorLogs(user?.id);
   const { gaitLogs } = useGaitLogs(user?.id);
   const { trackingEntries } = useTrackingEntries(user?.id);
+  const { userAchievements, availableAchievements, loading: achievementsLoading } = useAchievements(user?.id);
   
   // Calculate real stats from data
   const daysSeizureFree = useMemo(() => {
@@ -300,6 +303,29 @@ export default function PatientDashboard() {
   }, [user]);
   
   const userName = userFirstName || "Patient";
+
+  const achievementCards = useMemo<AchievementCard[]>(() => {
+    if (!availableAchievements || availableAchievements.length === 0) {
+      return [];
+    }
+
+    return availableAchievements.map(template => {
+      const normalizedIcon = template.icon
+        ? template.icon.toLowerCase().replace(/[^a-z0-9]/g, "")
+        : "";
+      const IconComponent = achievementIconMap[normalizedIcon] ?? Award;
+      const earned = userAchievements.some(achievement => achievement.achievement_name === template.name);
+
+      return {
+        id: template.id || template.name,
+        title: template.name,
+        description: template.description || "Keep tracking to unlock this achievement.",
+        icon: IconComponent,
+        earned,
+        points: template.points ?? 0,
+      };
+    });
+  }, [availableAchievements, userAchievements]);
   
   // Filter quick actions based on user's tracking features
   const getEnabledQuickActions = () => {
@@ -386,7 +412,6 @@ export default function PatientDashboard() {
             user_id: user.id,
             log_date: data.log_date || now.toISOString().split('T')[0],
             log_time: data.log_time || now.toTimeString().slice(0, 5),
-            seizure_type: data.seizure_type,
             duration_seconds: data.duration_seconds,
             consciousness_level: data.consciousness_level,
             aura_present: data.aura_present,
@@ -470,7 +495,7 @@ export default function PatientDashboard() {
             measurement_location: data.measurement_location,
             menstrual_cycle_day: data.menstrual_cycle_day,
             sleep_quality: data.sleep_quality,
-            time_awake: data.time_awake,
+            time_after_waking: data.time_awake,
             notes: data.notes
           });
           if (tempResult.success) {
@@ -639,7 +664,21 @@ export default function PatientDashboard() {
             <Button variant="ghost" size="sm" onClick={() => toast({ title: "All Achievements", description: "Viewing complete achievement history" })}>View All</Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {achievements.map(achievement => {
+            {achievementsLoading && (
+              <Card className="medical-card p-4 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Loading achievements...</p>
+              </Card>
+            )}
+
+            {!achievementsLoading && achievementCards.length === 0 && (
+              <Card className="medical-card p-4 bg-white dark:bg-gray-900 border-2 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Start logging your health data to unlock achievements and earn points.
+                </p>
+              </Card>
+            )}
+
+            {!achievementsLoading && achievementCards.map(achievement => {
               const IconComponent = achievement.icon;
               return <Card key={achievement.id} className={`medical-card p-4 ${achievement.earned ? 'bg-gradient-to-br from-warning/5 to-primary/5 dark:from-warning/10 dark:to-primary/10 border-warning/20 dark:border-warning/30' : 'opacity-60'} bg-white dark:bg-gray-900 border-2 dark:border-gray-700`}>
                   <div className="flex items-center gap-3">

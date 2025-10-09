@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { usePatientInvites } from "@/hooks/usePatientInvites";
+import { useClinicianOnboarding } from "@/hooks/useClinicianOnboarding";
 import { useToast } from "@/hooks/use-toast";
 
 interface ClinicianOnboardingProps {
@@ -56,6 +57,7 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
   const [newEmail, setNewEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { sendMultipleInvites } = usePatientInvites();
+  const { saveOnboarding } = useClinicianOnboarding();
   const { toast } = useToast();
 
   const updateFormData = (updates: Partial<typeof formData>) => {
@@ -83,39 +85,36 @@ export default function ClinicianOnboarding({ onComplete, onBack }: ClinicianOnb
     } else {
       setIsSubmitting(true);
       try {
-        // Save clinician onboarding data
+        // Get current user
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        if (!user) {
+          toast({
+            title: "Authentication Error",
+            description: "Please log in again.",
+            variant: "destructive",
+          });
+          return;
+        }
 
-        // Mark clinician onboarding complete
-        const { error: clinicianError } = await supabase
-          .from('profiles')
-          .upsert([{
-            id: user.id,
-            user_type: 'clinician' as const,
-            onboarding_completed: true
-          }]);
+        // Save ALL clinician data using the hook
+        const result = await saveOnboarding(user.id, {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          middleName: formData.middleName,
+          title: formData.clinicianTitle,
+          specialty: formData.specialty,
+          institution: formData.institution,
+          licenseNumber: formData.licenseNumber,
+          patientEmails: formData.patientInviteEmails
+        });
 
-        if (clinicianError) {
-          console.error('Error saving clinician data:', clinicianError);
+        if (!result.success) {
           toast({
             title: "Error saving data",
             description: "Failed to save your information. Please try again.",
             variant: "destructive",
           });
           return;
-        }
-
-        // Send patient invites if any emails were provided
-        if (formData.patientInviteEmails.length > 0) {
-          const clinicianName = `${formData.clinicianTitle} ${formData.firstName} ${formData.lastName}`.trim();
-          const inviteMessage = `You've been invited to join NeuroLoop by ${clinicianName} from ${formData.institution}. This secure platform will help track your neurological health and connect you with your care team.`;
-          
-          await sendMultipleInvites(
-            formData.patientInviteEmails,
-            clinicianName,
-            inviteMessage
-          );
         }
 
         onComplete(formData);
