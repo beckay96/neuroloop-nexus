@@ -115,7 +115,7 @@ export default function LandingPage() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="/src/assets/hero-neural.jpg" 
+            src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/hero-neural.jpg" 
             alt="" 
             className="w-full h-full object-cover opacity-30 dark:opacity-20"
           />
@@ -125,7 +125,7 @@ export default function LandingPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 sm:py-24">
           <div className="text-center space-y-8 animate-fade-in">
           <Badge className="text-lg px-6 py-3 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-500 bg-gradient-to-r from-teal-500 to-purple-600 text-white border-0 animate-scale-in">
-            <img src="/src/assets/NeuroLoop(Logo-darkmode).png" alt="NeuroLoop" className="h-6 w-6 mr-2 inline" />
+            <img src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png" alt="NeuroLoop" className="h-6 w-6 mr-2 inline" />
             Neurological Health Management Platform
           </Badge>
           
@@ -134,7 +134,7 @@ export default function LandingPage() {
               NeuroLoop
             </h1>
             <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 -z-10 opacity-20">
-              <img src="/src/assets/neon-teal-brain-effect.png" alt="" className="w-64 h-64 blur-sm" />
+              <img src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/neon-teal-brain-effect.png" alt="" className="w-64 h-64 blur-sm" />
             </div>
           </div>
           
@@ -203,7 +203,7 @@ export default function LandingPage() {
           </div>
           <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-teal-500/20 border-4 border-teal-500/30">
             <img 
-              src="/src/assets/Visual-of-app-in-diff-views+tracking-stickers.png" 
+              src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/Visual-of-app-in-diff-views+tracking-stickers.png" 
               alt="NeuroLoop App Preview - Different Views and Tracking Stickers" 
               className="w-full h-auto"
             />
@@ -282,7 +282,7 @@ export default function LandingPage() {
                   className="w-full h-auto"
                   controls
                   preload="metadata"
-                  poster="/src/assets/neon-teal-brain-effect.png"
+                  poster="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/neon-teal-brain-effect.png"
                   onMouseEnter={(e) => e.currentTarget.play()}
                   onMouseLeave={(e) => {
                     e.currentTarget.pause();
@@ -905,7 +905,7 @@ export default function LandingPage() {
           zIndex: 99999
         }}
       >
-        <img src="/src/assets/NeuroLoop(Logo-darkmode).png" alt="Brain Analysis" className="h-12 w-12" />
+        <img src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png" alt="Brain Analysis" className="h-12 w-12" />
         <div className="absolute -top-2 -right-2 h-7 w-7 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold text-white animate-bounce shadow-lg">
           NEW
         </div>
@@ -943,9 +943,9 @@ export default function LandingPage() {
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-center gap-8">
                   <div className="relative flex-shrink-0">
-                    <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                    <div className="w-48 h-64 rounded-2xl overflow-hidden border-4 border-white shadow-2xl">
                       <img 
-                        src="/src/assets/RebeccaFrancis.jpeg" 
+                        src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/RebeccaFrancis.jpeg" 
                         alt="Rebecca Francis" 
                         className="w-full h-full object-cover"
                       />
@@ -1010,9 +1010,9 @@ export default function LandingPage() {
               {/* Dr Peyman Obeidy */}
               <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-teal-500 bg-white dark:bg-gray-900">
                 <CardContent className="pt-6 text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-teal-500 shadow-lg">
+                  <div className="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-teal-500 shadow-lg">
                     <img 
-                      src="/src/assets/PeymanObeidy.jpg" 
+                      src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/PeymanObeidy.jpg" 
                       alt="Dr Peyman Obeidy" 
                       className="w-full h-full object-cover"
                     />
@@ -1030,9 +1030,9 @@ export default function LandingPage() {
               {/* Dr Michael Visser */}
               <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-purple-500 bg-white dark:bg-gray-900">
                 <CardContent className="pt-6 text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
+                  <div className="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
                     <img 
-                      src="/src/assets/michaelVisser.JPEG" 
+                      src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/michaelVisser.JPEG" 
                       alt="Dr Michael Visser" 
                       className="w-full h-full object-cover"
                     />
@@ -1051,9 +1051,9 @@ export default function LandingPage() {
               {/* Liz Keen */}
               <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-pink-500 bg-white dark:bg-gray-900">
                 <CardContent className="pt-6 text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-pink-500 shadow-lg">
+                  <div className="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-pink-500 shadow-lg">
                     <img 
-                      src="/src/assets/lizKeen.jpg" 
+                      src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/lizKeen.jpg" 
                       alt="Liz Keen" 
                       className="w-full h-full object-cover"
                     />
@@ -1072,9 +1072,9 @@ export default function LandingPage() {
               {/* Tiago Ferreira */}
               <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-blue-500 bg-white dark:bg-gray-900">
                 <CardContent className="pt-6 text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
+                  <div className="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg">
                     <img 
-                      src="/src/assets/tiago.JPEG" 
+                      src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/tiago.JPEG" 
                       alt="Tiago Ferreira" 
                       className="w-full h-full object-cover"
                     />
@@ -1093,9 +1093,9 @@ export default function LandingPage() {
               {/* Rita Sadhvani - Adding placeholder since no bio was provided */}
               <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-orange-500 bg-white dark:bg-gray-900 md:col-span-2 lg:col-span-1 mx-auto w-full max-w-sm lg:max-w-none">
                 <CardContent className="pt-6 text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-500 shadow-lg">
+                  <div className="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-500 shadow-lg">
                     <img 
-                      src="/src/assets/rita.JPEG" 
+                      src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/rita.JPEG" 
                       alt="Rita Sadhvani" 
                       className="w-full h-full object-cover"
                     />
@@ -1138,8 +1138,8 @@ export default function LandingPage() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src="/src/assets/NeuroLoop(Logo-lightmode).png" alt="NeuroLoop Logo" className="h-8 w-8 dark:hidden" />
-                <img src="/src/assets/NeuroLoop(Logo-darkmode).png" alt="NeuroLoop Logo" className="h-8 w-8 hidden dark:block" />
+                <img src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/lightmodelogo-neuroloop.png" alt="NeuroLoop Logo" className="h-8 w-8 dark:hidden" />
+                <img src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png" alt="NeuroLoop Logo" className="h-8 w-8 hidden dark:block" />
                 <span className="font-bold text-lg text-gray-900 dark:text-white">NeuroLoop</span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">

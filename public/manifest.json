@@ -10,13 +10,13 @@
   "categories": ["health", "medical"],
   "icons": [
     {
-      "src": "/src/assets/black-bg-logo-favicon-type.png",
+      "src": "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/black-bg-logo-favicon-type.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/src/assets/black-bg-logo-favicon-type.png",
+      "src": "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/black-bg-logo-favicon-type.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
