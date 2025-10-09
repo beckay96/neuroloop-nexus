@@ -274,36 +274,29 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            {/* Video Section */}
-            <div className="relative group">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-teal-500/30 group-hover:border-teal-500 transition-all duration-300">
+          {/* Video Section - Full Width for Better Visibility */}
+          <div className="mb-12">
+            <div className="relative max-w-5xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-teal-500/50">
                 <video
                   className="w-full h-auto"
                   controls
                   preload="metadata"
                   poster="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/neon-teal-brain-effect.png"
-                  onMouseEnter={(e) => e.currentTarget.play()}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.pause();
-                    e.currentTarget.currentTime = 0;
-                  }}
                 >
                   <source src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/seizurevideo.MOV" type="video/quicktime" />
                   <source src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/seizurevideo.MOV" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
-                  <p className="text-white text-sm font-medium">Hover to preview • Click to play</p>
-                </div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center italic">
-                Security camera footage • June 2024
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 text-center italic">
+                Security camera footage • June 2024 • Click play button to view
               </p>
             </div>
+          </div>
 
-            {/* Story Text */}
-            <div className="space-y-6">
+          {/* Story Text - Grid Layout Below Video */}
+          <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-2 border-gray-200 dark:border-gray-700">
                 <h3 className="font-bold text-xl text-teal-600 dark:text-teal-400 mb-4">The Week NeuroLoop Was Born</h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
@@ -335,20 +328,21 @@ export default function LandingPage() {
                   saving lives, finding new patterns, and giving hope for better outcomes.
                 </p>
               </div>
+          </div>
 
-              {/* CTA */}
-              <Button 
-                size="lg"
-                className="w-full relative overflow-hidden text-lg px-8 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all duration-300 group"
-                onClick={() => setShowWaitlist(true)}
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <Heart className="h-5 w-5" />
-                  Join Our Mission
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </Button>
-            </div>
+          {/* CTA */}
+          <div className="mt-8 max-w-2xl mx-auto">
+            <Button 
+              size="lg"
+              className="w-full relative overflow-hidden text-lg px-8 py-7 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-xl hover:shadow-2xl transition-all duration-300 group"
+              onClick={() => setShowWaitlist(true)}
+            >
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <Heart className="h-5 w-5" />
+                Join Our Mission
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Button>
           </div>
         </div>
       </div>
@@ -980,7 +974,7 @@ export default function LandingPage() {
                       </p>
                     </div>
                     <a 
-                      href="https://www.linkedin.com/in/rebecca-francis-neuroloop" 
+                      href="https://www.linkedin.com/in/becfrancis" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold shadow-lg"
@@ -1006,7 +1000,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {/* Dr Peyman Obeidy */}
               <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-teal-500 bg-white dark:bg-gray-900">
                 <CardContent className="pt-6 text-center">
@@ -1090,23 +1084,6 @@ export default function LandingPage() {
                 </CardContent>
               </Card>
 
-              {/* Rita Sadhvani - Adding placeholder since no bio was provided */}
-              <Card className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-orange-500 bg-white dark:bg-gray-900 md:col-span-2 lg:col-span-1 mx-auto w-full max-w-sm lg:max-w-none">
-                <CardContent className="pt-6 text-center">
-                  <div className="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-500 shadow-lg">
-                    <img 
-                      src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/rita.JPEG" 
-                      alt="Rita Sadhvani" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Rita Sadhvani</h3>
-                  <p className="text-sm text-orange-600 dark:text-orange-400 mb-3 font-semibold">Advisory Board Member</p>
-                  <div className="text-xs text-gray-600 dark:text-gray-300 space-y-2 text-left">
-                    <p>Strategic advisor bringing expertise in healthcare innovation and patient-centered solutions</p>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
 
