@@ -29,7 +29,7 @@ export default function ResearchAndCitations() {
               <strong>Last Updated:</strong> January 10, 2025
             </p>
 
-            <div className="p-6 bg-gradient-to-r from-teal-50 to-purple-50 dark:from-teal-950/30 dark:to-purple-950/30 border-2 border-teal-300 dark:border-teal-700 rounded-lg mb-8">
+            <div className="p-6 bg-gradient-to-r from-purple-50 to-teal-50 dark:from-purple-950/30 dark:to-teal-950/30 border-2 border-purple-300 dark:border-purple-700 rounded-lg mb-8">
               <h2 className="text-2xl font-bold mb-4">Why This Research Matters</h2>
               <p className="text-lg leading-relaxed mb-4">
                 Neurological conditions affect <strong>over 77 million people worldwide</strong>, yet critical gaps in 
@@ -47,15 +47,15 @@ export default function ResearchAndCitations() {
             <h2 className="text-3xl font-bold mt-12 mb-6">Global Burden of Neurological Conditions</h2>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <Card className="p-6 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
-                <h3 className="text-2xl font-bold mb-4 text-purple-900 dark:text-purple-100">Parkinson's Disease</h3>
+              <Card className="p-6 bg-teal-50 dark:bg-teal-950/20 border-teal-200 dark:border-teal-800">
+                <h3 className="text-2xl font-bold mb-4 text-teal-900 dark:text-teal-100">Parkinson's Disease</h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">12 Million</p>
+                    <p className="text-3xl font-bold text-teal-700 dark:text-teal-300">12 Million</p>
                     <p className="text-sm text-muted-foreground">People living with Parkinson's globally (2021)</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">25.2 Million</p>
+                    <p className="text-3xl font-bold text-teal-700 dark:text-teal-300">25.2 Million</p>
                     <p className="text-sm text-muted-foreground">Projected cases by 2050 (112% increase)</p>
                   </div>
                   <div>
@@ -65,15 +65,15 @@ export default function ResearchAndCitations() {
                 </div>
               </Card>
 
-              <Card className="p-6 bg-teal-50 dark:bg-teal-950/20 border-teal-200 dark:border-teal-800">
-                <h3 className="text-2xl font-bold mb-4 text-teal-900 dark:text-teal-100">Epilepsy</h3>
+              <Card className="p-6 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
+                <h3 className="text-2xl font-bold mb-4 text-purple-900 dark:text-purple-100">Epilepsy</h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-3xl font-bold text-teal-700 dark:text-teal-300">65 Million</p>
+                    <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">65 Million</p>
                     <p className="text-sm text-muted-foreground">People living with epilepsy worldwide</p>
                   </div>
                   <div>
-                    <p className="text-3xl font-bold text-teal-700 dark:text-teal-300">3.27 Million</p>
+                    <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">3.27 Million</p>
                     <p className="text-sm text-muted-foreground">New cases annually (2021)</p>
                   </div>
                   <div>
@@ -87,7 +87,7 @@ export default function ResearchAndCitations() {
             <h2 className="text-2xl font-bold mt-12 mb-4">Parkinson's Disease: Key Statistics</h2>
             
             <h3 className="text-xl font-semibold mt-6 mb-3">Global Prevalence & Trends</h3>
-            <div className="p-4 bg-purple-50/50 dark:bg-purple-950/10 rounded-lg mb-4">
+            <div className="p-4 bg-teal-50/50 dark:bg-teal-950/10 rounded-lg mb-4">
               <p className="text-base leading-relaxed mb-3">
                 Parkinson's disease is experiencing explosive growth worldwide. What started as 8.5 million cases in 2021 
                 is projected to more than double to <strong>25.2 million by 2050</strong>—making it the fastest-growing 
@@ -133,7 +133,7 @@ export default function ResearchAndCitations() {
 
             <h2 className="text-2xl font-bold mt-12 mb-4">Epilepsy: Key Statistics</h2>
 
-            <div className="p-4 bg-teal-50/50 dark:bg-teal-950/10 rounded-lg mb-4">
+            <div className="p-4 bg-purple-50/50 dark:bg-purple-950/10 rounded-lg mb-4">
               <p className="text-base leading-relaxed">
                 Epilepsy affects <strong>65 million people globally</strong>—more than Parkinson's and multiple sclerosis combined. 
                 Yet tracking tools remain outdated, with most patients relying on paper diaries that research shows miss up to 
@@ -330,8 +330,8 @@ export default function ResearchAndCitations() {
 
             <h2 className="text-3xl font-bold mt-16 mb-6 text-center">Why NeuroLoop Is Critically Needed</h2>
 
-            <div className="p-8 bg-gradient-to-br from-blue-50 via-teal-50 to-purple-50 dark:from-blue-950/20 dark:via-teal-950/20 dark:to-purple-950/20 border-2 border-teal-400 dark:border-teal-600 rounded-lg mb-8 shadow-lg">
-              <h3 className="text-2xl font-bold mb-4 text-center text-blue-900 dark:text-blue-100">Turning Research Gaps Into Solutions</h3>
+            <div className="p-8 bg-gradient-to-br from-purple-50 via-teal-50 to-blue-50 dark:from-purple-950/20 dark:via-teal-950/20 dark:to-blue-950/20 border-2 border-purple-400 dark:border-purple-600 rounded-lg mb-8 shadow-lg">
+              <h3 className="text-2xl font-bold mb-4 text-center text-purple-900 dark:text-purple-100">Turning Research Gaps Into Solutions</h3>
               <p className="text-lg text-center mb-6 leading-relaxed">
                 Every statistic on this page represents a gap NeuroLoop was specifically designed to fill. 
                 Here's how research evidence directly informs what we've built:
@@ -381,7 +381,7 @@ export default function ResearchAndCitations() {
                 </div>
               </div>
 
-              <div className="mt-8 p-6 bg-gradient-to-r from-teal-100 to-purple-100 dark:from-teal-900/30 dark:to-purple-900/30 rounded-lg border-2 border-teal-500">
+              <div className="mt-8 p-6 bg-gradient-to-r from-purple-100 to-teal-100 dark:from-purple-900/30 dark:to-teal-900/30 rounded-lg border-2 border-purple-500">
                 <h4 className="font-bold text-xl mb-3 text-center">The Bottom Line</h4>
                 <p className="text-base leading-relaxed text-center">
                   NeuroLoop isn't just another health app—it's a <strong>research-driven response to documented failures</strong> in 
