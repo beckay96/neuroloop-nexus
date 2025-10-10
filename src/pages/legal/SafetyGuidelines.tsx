@@ -43,28 +43,166 @@ export default function SafetyGuidelines() {
             </div>
 
             <h2 className="text-2xl font-bold mt-8 mb-4">Emergency Contacts</h2>
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
+            
+            <h3 className="text-xl font-semibold mt-6 mb-4">🌏 International Emergency Numbers</h3>
+            <p className="mb-4 text-muted-foreground">
+              Always call your local emergency number immediately if you or someone else is having a medical emergency.
+            </p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {/* Australia */}
               <Card className="p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
                 <div className="flex items-center gap-3 mb-2">
                   <Phone className="h-5 w-5 text-red-600" />
-                  <h3 className="font-bold">Australia</h3>
+                  <h4 className="font-bold">Australia 🇦🇺</h4>
                 </div>
                 <p className="text-2xl font-bold">000</p>
                 <p className="text-sm text-muted-foreground">Emergency Services</p>
               </Card>
+
+              {/* United States */}
+              <Card className="p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-red-600" />
+                  <h4 className="font-bold">United States 🇺🇸</h4>
+                </div>
+                <p className="text-2xl font-bold">911</p>
+                <p className="text-sm text-muted-foreground">Emergency Services</p>
+              </Card>
+
+              {/* Canada */}
+              <Card className="p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-red-600" />
+                  <h4 className="font-bold">Canada 🇨🇦</h4>
+                </div>
+                <p className="text-2xl font-bold">911</p>
+                <p className="text-sm text-muted-foreground">Emergency Services</p>
+              </Card>
+
+              {/* India */}
+              <Card className="p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-red-600" />
+                  <h4 className="font-bold">India 🇮🇳</h4>
+                </div>
+                <p className="text-2xl font-bold">112</p>
+                <p className="text-sm text-muted-foreground">National Emergency Number</p>
+                <p className="text-lg font-semibold mt-2">108</p>
+                <p className="text-xs text-muted-foreground">Ambulance (in some states)</p>
+              </Card>
+
+              {/* UK */}
+              <Card className="p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-red-600" />
+                  <h4 className="font-bold">United Kingdom 🇬🇧</h4>
+                </div>
+                <p className="text-2xl font-bold">999</p>
+                <p className="text-sm text-muted-foreground">Emergency Services</p>
+                <p className="text-lg font-semibold mt-2">112</p>
+                <p className="text-xs text-muted-foreground">Alternative Emergency Number</p>
+              </Card>
+
+              {/* New Zealand */}
+              <Card className="p-4 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-red-600" />
+                  <h4 className="font-bold">New Zealand 🇳🇿</h4>
+                </div>
+                <p className="text-2xl font-bold">111</p>
+                <p className="text-sm text-muted-foreground">Emergency Services</p>
+              </Card>
+            </div>
+
+            <h3 className="text-xl font-semibold mt-8 mb-4">📞 Epilepsy & Neurological Support Helplines</h3>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              {/* Australia Support */}
               <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
                 <div className="flex items-center gap-3 mb-2">
                   <Phone className="h-5 w-5 text-blue-600" />
-                  <h3 className="font-bold">Epilepsy Support</h3>
+                  <h4 className="font-bold">Australia 🇦🇺</h4>
                 </div>
                 <p className="text-xl font-bold">1300 852 853</p>
-                <p className="text-sm text-muted-foreground">Epilepsy Action Australia</p>
+                <p className="text-sm text-muted-foreground mb-2">Epilepsy Action Australia</p>
+                <p className="text-lg font-semibold mt-2">1800 644 189</p>
+                <p className="text-sm text-muted-foreground">Parkinson's Australia InfoLine</p>
               </Card>
+
+              {/* United States Support */}
+              <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-bold">United States 🇺🇸</h4>
+                </div>
+                <p className="text-xl font-bold">1-800-332-1000</p>
+                <p className="text-sm text-muted-foreground mb-2">Epilepsy Foundation Helpline</p>
+                <p className="text-lg font-semibold mt-2">1-800-4PD-INFO</p>
+                <p className="text-xs text-muted-foreground">(1-800-473-4636)</p>
+                <p className="text-sm text-muted-foreground">Parkinson's Foundation Helpline</p>
+              </Card>
+
+              {/* Canada Support */}
+              <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-bold">Canada 🇨🇦</h4>
+                </div>
+                <p className="text-xl font-bold">1-877-734-0873</p>
+                <p className="text-sm text-muted-foreground mb-2">Epilepsy Canada</p>
+                <p className="text-lg font-semibold mt-2">1-800-565-3000</p>
+                <p className="text-sm text-muted-foreground">Parkinson Canada InfoLine</p>
+              </Card>
+
+              {/* India Support */}
+              <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-bold">India 🇮🇳</h4>
+                </div>
+                <p className="text-xl font-bold">+91-80-2699-4444</p>
+                <p className="text-sm text-muted-foreground mb-2">Indian Epilepsy Association (Bangalore)</p>
+                <p className="text-lg font-semibold mt-2">+91-22-2445-1348</p>
+                <p className="text-sm text-muted-foreground">Parkinson's Disease & Movement Disorder Society (Mumbai)</p>
+                <p className="text-xs text-muted-foreground mt-2 italic">Note: Support varies by region in India</p>
+              </Card>
+
+              {/* UK Support */}
+              <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-bold">United Kingdom 🇬🇧</h4>
+                </div>
+                <p className="text-xl font-bold">0808 800 5050</p>
+                <p className="text-sm text-muted-foreground mb-2">Epilepsy Action Helpline</p>
+                <p className="text-lg font-semibold mt-2">0808 800 0303</p>
+                <p className="text-sm text-muted-foreground">Parkinson's UK Helpline</p>
+              </Card>
+
+              {/* New Zealand Support */}
+              <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-bold">New Zealand 🇳🇿</h4>
+                </div>
+                <p className="text-xl font-bold">0800 37 45 37</p>
+                <p className="text-sm text-muted-foreground mb-2">Epilepsy New Zealand</p>
+                <p className="text-lg font-semibold mt-2">0800 473 4636</p>
+                <p className="text-sm text-muted-foreground">Parkinson's New Zealand</p>
+              </Card>
+            </div>
+
+            <div className="p-4 bg-purple-50 dark:bg-purple-950/20 border-2 border-purple-300 dark:border-purple-700 rounded-lg mb-6">
+              <p className="text-sm">
+                <strong>Important:</strong> If your country is not listed, search for "[your country] epilepsy support" 
+                or "[your country] Parkinson's support" online to find local resources and helplines.
+              </p>
             </div>
 
             <h2 className="text-2xl font-bold mt-8 mb-4">When to Call Emergency Services</h2>
             <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg mb-6">
-              <h3 className="font-bold mb-3">Call 000 immediately if:</h3>
+              <h3 className="font-bold mb-3">Call your local emergency number immediately if:</h3>
               <ul className="list-disc pl-6 space-y-2">
                 <li>A seizure lasts longer than 5 minutes</li>
                 <li>A second seizure follows quickly after the first</li>

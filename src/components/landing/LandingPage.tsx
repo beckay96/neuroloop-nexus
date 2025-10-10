@@ -1161,7 +1161,6 @@ export default function LandingPage() {
                 <li><a href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</a></li>
                 <li><a href="/terms" className="hover:text-primary transition-colors">Terms of Service</a></li>
                 <li><a href="/security" className="hover:text-primary transition-colors">Security Practices</a></li>
-                <li><a href="/hipaa" className="hover:text-primary transition-colors">HIPAA Compliance</a></li>
               </ul>
             </div>
 
@@ -1180,7 +1179,6 @@ export default function LandingPage() {
             <div>
               <h3 className="font-bold text-gray-900 dark:text-white mb-3">Resources</h3>
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li><a href="/help" className="hover:text-primary transition-colors">Help Center</a></li>
                 <li><a href="/safety" className="hover:text-primary transition-colors">Safety Guidelines</a></li>
                 <li><a href="/research" className="hover:text-primary transition-colors">Research & Citations</a></li>
                 <li>
