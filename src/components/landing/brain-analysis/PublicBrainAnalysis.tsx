@@ -216,7 +216,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
                     <div>
                       <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Last Reviewed</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        October 2025 | Data current as of Q4 2024
+                        October 2025 | Data current as of October 2025
                       </p>
                     </div>
 

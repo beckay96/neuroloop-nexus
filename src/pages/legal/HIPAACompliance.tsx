@@ -26,7 +26,7 @@ export default function HIPAACompliance() {
         <Card className="p-8">
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-6">
-              <strong>Last Updated:</strong> October 7, 2025
+              <strong>Last Updated:</strong> October 10, 2025
             </p>
 
             <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg my-6">
