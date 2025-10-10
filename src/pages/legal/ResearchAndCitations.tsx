@@ -29,11 +29,20 @@ export default function ResearchAndCitations() {
               <strong>Last Updated:</strong> January 10, 2025
             </p>
 
-            <p className="lead text-lg mb-6">
-              NeuroLoop is built on evidence-based research and clinical best practices. This page documents 
-              the key statistics and research that inform our platform's development and the critical need for 
-              improved neurological health tracking.
-            </p>
+            <div className="p-6 bg-gradient-to-r from-teal-50 to-purple-50 dark:from-teal-950/30 dark:to-purple-950/30 border-2 border-teal-300 dark:border-teal-700 rounded-lg mb-8">
+              <h2 className="text-2xl font-bold mb-4">Why This Research Matters</h2>
+              <p className="text-lg leading-relaxed mb-4">
+                Neurological conditions affect <strong>over 77 million people worldwide</strong>, yet critical gaps in 
+                tracking, research, and treatment persist. Women with catamenial epilepsy—representing 40% of all women 
+                with epilepsy—have virtually <strong>no standardized way to track their condition</strong>, despite it 
+                representing a massive health burden.
+              </p>
+              <p className="text-lg leading-relaxed">
+                NeuroLoop was created to fill these gaps. Every statistic on this page represents real people whose 
+                lives could be transformed by better data, better tracking, and better research. This isn't just about 
+                numbers—it's about giving patients the tools they deserve.
+              </p>
+            </div>
 
             <h2 className="text-3xl font-bold mt-12 mb-6">Global Burden of Neurological Conditions</h2>
 
@@ -78,20 +87,34 @@ export default function ResearchAndCitations() {
             <h2 className="text-2xl font-bold mt-12 mb-4">Parkinson's Disease: Key Statistics</h2>
             
             <h3 className="text-xl font-semibold mt-6 mb-3">Global Prevalence & Trends</h3>
+            <div className="p-4 bg-purple-50/50 dark:bg-purple-950/10 rounded-lg mb-4">
+              <p className="text-base leading-relaxed mb-3">
+                Parkinson's disease is experiencing explosive growth worldwide. What started as 8.5 million cases in 2021 
+                is projected to more than double to <strong>25.2 million by 2050</strong>—making it the fastest-growing 
+                neurological disorder on the planet.<sup className="text-blue-600">1,2,3</sup>
+              </p>
+            </div>
             <ul className="list-disc pl-6 space-y-3">
               <li>
                 <strong>8.5 million people worldwide</strong> currently live with Parkinson's disease, with projections 
                 indicating this will rise to <strong>25.2 million by 2050</strong>—a 112% increase driven primarily by 
-                population aging.<sup>1,2,3</sup>
+                population aging.<sup className="text-blue-600">1,2,3</sup>
               </li>
               <li>
                 Parkinson's is now the <strong>world's fastest-growing neurological disorder</strong>, with prevalence 
-                doubling over the past 25 years.<sup>3,7</sup>
+                doubling over the past 25 years.<sup className="text-blue-600">3,7</sup>
               </li>
               <li>
-                In the United States, approximately <strong>1.1 million Americans</strong> live with Parkinson's today.<sup>13</sup>
+                In the United States, approximately <strong>1.1 million Americans</strong> live with Parkinson's today.<sup className="text-blue-600">13</sup>
               </li>
             </ul>
+            
+            <div className="p-4 bg-red-50 dark:bg-red-950/20 border-l-4 border-red-500 rounded mt-4">
+              <p className="text-sm font-semibold text-red-900 dark:text-red-100">
+                💡 <strong>Why This Matters:</strong> The dramatic increase means existing tracking and care systems will be 
+                overwhelmed. Digital health tools like NeuroLoop are essential to scale care for millions of new patients.
+              </p>
+            </div>
 
             <h3 className="text-xl font-semibold mt-6 mb-3">Mortality Rates</h3>
             <ul className="list-disc pl-6 space-y-3">
@@ -110,14 +133,22 @@ export default function ResearchAndCitations() {
 
             <h2 className="text-2xl font-bold mt-12 mb-4">Epilepsy: Key Statistics</h2>
 
+            <div className="p-4 bg-teal-50/50 dark:bg-teal-950/10 rounded-lg mb-4">
+              <p className="text-base leading-relaxed">
+                Epilepsy affects <strong>65 million people globally</strong>—more than Parkinson's and multiple sclerosis combined. 
+                Yet tracking tools remain outdated, with most patients relying on paper diaries that research shows miss up to 
+                50% of seizures.
+              </p>
+            </div>
+
             <h3 className="text-xl font-semibold mt-6 mb-3">Global Prevalence</h3>
             <ul className="list-disc pl-6 space-y-3">
               <li>
-                Current estimates indicate approximately <strong>65 million people worldwide</strong> live with epilepsy.<sup>8,9</sup>
+                Current estimates indicate approximately <strong>65 million people worldwide</strong> live with epilepsy.<sup className="text-blue-600">8,9</sup>
               </li>
               <li>
                 In 2021, there were <strong>3.27 million new cases</strong> of epilepsy of unknown cause globally, with an 
-                incidence rate of <strong>42.8 per 100,000 people</strong>.<sup>8</sup>
+                incidence rate of <strong>42.8 per 100,000 people</strong>.<sup className="text-blue-600">8</sup>
               </li>
             </ul>
 
@@ -135,23 +166,34 @@ export default function ResearchAndCitations() {
                 the decade.<sup>10</sup>
               </li>
               <li>
-                Global mortality data show that older adults (>50, especially >75) are driving a rise in epilepsy-related deaths 
-                in high-income countries, even as general elderly mortality declines.<sup>11</sup>
+                Global mortality data show that older adults (over 50, especially over 75) are driving a rise in epilepsy-related deaths 
+                in high-income countries, even as general elderly mortality declines.<sup className="text-blue-600">11</sup>
               </li>
             </ul>
 
-            <h2 className="text-2xl font-bold mt-12 mb-4">Catamenial Epilepsy: Critical Research Gap</h2>
+            <h2 className="text-2xl font-bold mt-12 mb-4">Catamenial Epilepsy: A Neglected Crisis</h2>
 
             <div className="p-6 bg-pink-50 dark:bg-pink-950/20 border-2 border-pink-300 dark:border-pink-700 rounded-lg mb-6">
-              <h3 className="text-xl font-bold mb-3 text-pink-900 dark:text-pink-100">The Research Crisis</h3>
-              <p className="mb-3">
-                <strong>40% of women with epilepsy</strong> experience catamenial epilepsy—seizures that worsen 
-                during specific phases of the menstrual cycle. Yet this condition represents only <strong>0.19% of 
-                all epilepsy research</strong>, despite affecting millions of women worldwide.
-              </p>
-              <p className="font-semibold">
-                No standardized tracking exists. No specific treatments are available.
-              </p>
+              <h3 className="text-xl font-bold mb-3 text-pink-900 dark:text-pink-100">🚨 The Research Crisis</h3>
+              <div className="space-y-4">
+                <p className="text-base leading-relaxed">
+                  <strong>40% of women with epilepsy</strong> experience catamenial epilepsy—seizures that significantly worsen 
+                  during specific phases of the menstrual cycle. This affects <strong>approximately 13 million women worldwide</strong>.
+                </p>
+                <div className="p-4 bg-white dark:bg-pink-950/40 rounded border-l-4 border-red-500">
+                  <p className="text-sm font-bold text-red-900 dark:text-red-100 mb-2">The Shocking Gap:</p>
+                  <ul className="list-disc pl-5 space-y-1 text-sm">
+                    <li>Catamenial epilepsy represents only <strong>0.19% of all epilepsy research</strong></li>
+                    <li><strong>No standardized tracking method exists</strong> despite decades of recognition</li>
+                    <li><strong>No specific FDA-approved treatments</strong> are available</li>
+                    <li>Women struggle to identify patterns without proper tools</li>
+                    <li>Clinicians lack data to optimize treatment timing</li>
+                  </ul>
+                </div>
+                <p className="text-base font-semibold text-pink-900 dark:text-pink-100">
+                  This is exactly why NeuroLoop was created—to give women the tracking tools researchers have failed to provide.
+                </p>
+              </div>
             </div>
 
             <h3 className="text-xl font-semibold mt-6 mb-3">Treatment Challenges</h3>
@@ -212,6 +254,14 @@ export default function ResearchAndCitations() {
             </p>
 
             <h2 className="text-2xl font-bold mt-12 mb-4">Treatment Gaps & Challenges</h2>
+
+            <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 border-l-4 border-yellow-500 rounded mb-4">
+              <p className="text-sm font-semibold text-yellow-900 dark:text-yellow-100">
+                📊 <strong>Critical Insight:</strong> Treatment success drops off a cliff after the first medication fails. 
+                This makes <strong>detailed tracking absolutely essential</strong> to identify triggers, patterns, and optimize 
+                the limited treatment options available. Yet most patients have no systematic way to track this data.
+              </p>
+            </div>
 
             <h3 className="text-xl font-semibold mt-6 mb-3">Drug-Resistant Epilepsy</h3>
             <ul className="list-disc pl-6 space-y-3">
@@ -278,21 +328,67 @@ export default function ResearchAndCitations() {
               </li>
             </ul>
 
-            <h2 className="text-2xl font-bold mt-12 mb-4">Why NeuroLoop Matters</h2>
+            <h2 className="text-3xl font-bold mt-16 mb-6 text-center">Why NeuroLoop Is Critically Needed</h2>
 
-            <div className="p-6 bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-300 dark:border-blue-700 rounded-lg mb-6">
-              <h3 className="text-xl font-bold mb-3 text-blue-900 dark:text-blue-100">Evidence-Based Development</h3>
-              <p className="mb-3">
-                NeuroLoop is designed to address critical gaps identified in research:
+            <div className="p-8 bg-gradient-to-br from-blue-50 via-teal-50 to-purple-50 dark:from-blue-950/20 dark:via-teal-950/20 dark:to-purple-950/20 border-2 border-teal-400 dark:border-teal-600 rounded-lg mb-8 shadow-lg">
+              <h3 className="text-2xl font-bold mb-4 text-center text-blue-900 dark:text-blue-100">Turning Research Gaps Into Solutions</h3>
+              <p className="text-lg text-center mb-6 leading-relaxed">
+                Every statistic on this page represents a gap NeuroLoop was specifically designed to fill. 
+                Here's how research evidence directly informs what we've built:
               </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Standardized tracking for catamenial epilepsy patterns</li>
-                <li>Research-grade data capture following medical best practices</li>
-                <li>Objective biomarker development through consistent tracking</li>
-                <li>Patient-reported outcomes integration with clinical data</li>
-                <li>SUDEP risk assessment and monitoring support</li>
-                <li>Precision medicine approaches through detailed phenotyping</li>
-              </ul>
+
+              <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-pink-300 dark:border-pink-700">
+                  <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                  <p className="text-sm mb-4">13 million women with catamenial epilepsy have <strong>no standardized tracking</strong></p>
+                  <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                  <p className="text-sm">Menstrual cycle integration with seizure tracking, automated pattern recognition, and research-grade data export</p>
+                </div>
+
+                <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-blue-300 dark:border-blue-700">
+                  <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                  <p className="text-sm mb-4">30-40% of patients have drug-resistant epilepsy with <strong>declining treatment success</strong></p>
+                  <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                  <p className="text-sm">Detailed tracking of medication responses, trigger patterns, and symptoms to inform precision medicine approaches</p>
+                </div>
+
+                <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-purple-300 dark:border-purple-700">
+                  <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                  <p className="text-sm mb-4">SUDEP causes <strong>50,000+ preventable deaths</strong> annually, many during sleep</p>
+                  <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                  <p className="text-sm">SUDEP risk assessment, seizure logging for pattern analysis, and care team alerts for high-risk patients</p>
+                </div>
+
+                <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-green-300 dark:border-green-700">
+                  <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                  <p className="text-sm mb-4">Patients <strong>underreport up to 50% of seizures</strong>, compromising treatment decisions</p>
+                  <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                  <p className="text-sm">Easy mobile logging, video documentation, carer involvement, and automated reminders to capture all events</p>
+                </div>
+
+                <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-orange-300 dark:border-orange-700">
+                  <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                  <p className="text-sm mb-4">25.2 million Parkinson's patients by 2050 will <strong>overwhelm traditional care systems</strong></p>
+                  <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                  <p className="text-sm">Scalable digital platform for tremor, gait, and motor symptom tracking without constant clinic visits</p>
+                </div>
+
+                <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-red-300 dark:border-red-700">
+                  <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                  <p className="text-sm mb-4">80% of people with epilepsy in low/middle-income countries <strong>lack access to specialists</strong></p>
+                  <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                  <p className="text-sm">Remote monitoring, telemedicine integration, and data sharing that extends specialist reach globally</p>
+                </div>
+              </div>
+
+              <div className="mt-8 p-6 bg-gradient-to-r from-teal-100 to-purple-100 dark:from-teal-900/30 dark:to-purple-900/30 rounded-lg border-2 border-teal-500">
+                <h4 className="font-bold text-xl mb-3 text-center">The Bottom Line</h4>
+                <p className="text-base leading-relaxed text-center">
+                  NeuroLoop isn't just another health app—it's a <strong>research-driven response to documented failures</strong> in 
+                  neurological care. Every feature addresses a specific gap identified in peer-reviewed research. We're building 
+                  the tools that should have existed decades ago.
+                </p>
+              </div>
             </div>
 
             <h2 className="text-2xl font-bold mt-12 mb-4">Citations & References</h2>
