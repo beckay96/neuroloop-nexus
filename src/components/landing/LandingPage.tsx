@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/components/ThemeProvider";
-import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun, Bell, TrendingDown, AlertOctagon, AlertCircle, Sparkles, Crown, Linkedin } from "lucide-react";
+import { Brain, Shield, Users, Activity, Calendar, MessageSquare, Video, AlertTriangle, Clock, FileText, Heart, Zap, CheckCircle, ArrowRight, Lock, Stethoscope, Database, Moon, Sun, Bell, TrendingDown, AlertOctagon, AlertCircle, Sparkles, Crown, Linkedin, BookOpen } from "lucide-react";
 import PublicBrainAnalysis from "./brain-analysis/PublicBrainAnalysis";
 import WaitlistModal from "./WaitlistModal";
 
@@ -267,6 +267,88 @@ export default function LandingPage() {
                 <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Why NeuroLoop Is Critically Needed */}
+      <div className="bg-white dark:bg-black py-20 border-y-4 border-purple-300 dark:border-purple-700">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-teal-600 bg-clip-text text-transparent">
+            Why NeuroLoop Is Critically Needed
+          </h2>
+
+          <div className="p-8 bg-gradient-to-br from-purple-50 via-teal-50 to-blue-50 dark:from-purple-950/20 dark:via-teal-950/20 dark:to-blue-950/20 border-2 border-purple-400 dark:border-purple-600 rounded-lg shadow-lg">
+            <h3 className="text-2xl font-bold mb-4 text-center text-purple-900 dark:text-purple-100">Turning Research Gaps Into Solutions</h3>
+            <p className="text-lg text-center mb-6 leading-relaxed text-gray-800 dark:text-gray-200">
+              Every statistic in our research represents a gap NeuroLoop was specifically designed to fill. 
+              Here's how research evidence directly informs what we've built:
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-pink-300 dark:border-pink-700">
+                <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                <p className="text-sm mb-4">13 million women with catamenial epilepsy have <strong>no standardized tracking</strong></p>
+                <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                <p className="text-sm">Menstrual cycle integration with seizure tracking, automated pattern recognition, and research-grade data export</p>
+              </div>
+
+              <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-blue-300 dark:border-blue-700">
+                <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                <p className="text-sm mb-4">30-40% of patients have drug-resistant epilepsy with <strong>declining treatment success</strong></p>
+                <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                <p className="text-sm">Detailed tracking of medication responses, trigger patterns, and symptoms to inform precision medicine approaches</p>
+              </div>
+
+              <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-purple-300 dark:border-purple-700">
+                <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                <p className="text-sm mb-4">SUDEP causes <strong>50,000+ preventable deaths</strong> annually, many during sleep</p>
+                <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                <p className="text-sm">SUDEP risk assessment, seizure logging for pattern analysis, and care team alerts for high-risk patients</p>
+              </div>
+
+              <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-green-300 dark:border-green-700">
+                <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                <p className="text-sm mb-4">Patients <strong>underreport up to 50% of seizures</strong>, compromising treatment decisions</p>
+                <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                <p className="text-sm">Easy mobile logging, video documentation, carer involvement, and automated reminders to capture all events</p>
+              </div>
+
+              <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-orange-300 dark:border-orange-700">
+                <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                <p className="text-sm mb-4">25.2 million Parkinson's patients by 2050 will <strong>overwhelm traditional care systems</strong></p>
+                <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                <p className="text-sm">Scalable digital platform for tremor, gait, and motor symptom tracking without constant clinic visits</p>
+              </div>
+
+              <div className="p-5 bg-white dark:bg-gray-900 rounded-lg border-2 border-red-300 dark:border-red-700">
+                <h4 className="font-bold text-lg mb-3 text-pink-700 dark:text-pink-300">🔬 Research Gap:</h4>
+                <p className="text-sm mb-4">80% of people with epilepsy in low/middle-income countries <strong>lack access to specialists</strong></p>
+                <h4 className="font-bold text-lg mb-2 text-teal-700 dark:text-teal-300">✅ NeuroLoop Solution:</h4>
+                <p className="text-sm">Remote monitoring, telemedicine integration, and data sharing that extends specialist reach globally</p>
+              </div>
+            </div>
+
+            <div className="mt-8 p-6 bg-gradient-to-r from-purple-100 to-teal-100 dark:from-purple-900/30 dark:to-teal-900/30 rounded-lg border-2 border-purple-500">
+              <h4 className="font-bold text-xl mb-3 text-center">The Bottom Line</h4>
+              <p className="text-base leading-relaxed text-center">
+                NeuroLoop isn't just another health app—it's a <strong>research-driven response to documented failures</strong> in 
+                neurological care. Every feature addresses a specific gap identified in peer-reviewed research. We're building 
+                the tools that should have existed decades ago.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <Button 
+              size="lg"
+              variant="outline"
+              className="text-lg px-8 py-6 border-2 border-purple-500 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/20"
+              onClick={() => window.location.href = '/research'}
+            >
+              <BookOpen className="h-5 w-5 mr-2" />
+              View Full Research & Citations
             </Button>
           </div>
         </div>
