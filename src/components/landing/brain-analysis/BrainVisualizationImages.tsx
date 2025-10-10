@@ -77,8 +77,11 @@ export default function BrainVisualizationImages({
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-bold text-lg">{region}</h3>
                       <Badge 
-                        className="text-white font-bold"
-                        style={{ backgroundColor: getProbabilityColor(probability) }}
+                        className="font-bold"
+                        style={{ 
+                          backgroundColor: getProbabilityColor(probability),
+                          color: probability <= 40 ? '#000000' : '#FFFFFF'
+                        }}
                       >
                         {probability}%
                       </Badge>

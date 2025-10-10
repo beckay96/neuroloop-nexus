@@ -93,6 +93,14 @@ export interface SeizureSign {
    */
   localizations: Record<string, number>;
   additionalSigns?: string[];
+  /**
+   * Localizing confidence based on research odds ratios
+   * - very_high: OR > 5.0 (e.g., gelastic seizures, somatosensory aura)
+   * - high: OR 3.0-5.0 (e.g., tonic seizures for frontal)
+   * - moderate: OR 2.0-3.0 (e.g., epigastric aura)
+   * - low: OR < 2.0 or non-significant
+   */
+  confidence?: "very_high" | "high" | "moderate" | "low";
 }
 
 export interface BrainRegion {
@@ -123,6 +131,7 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
       "Insula": 10,
       "Frontal Lobe": 8,
     },
+    confidence: "moderate",
     additionalSigns: ["Fear", "Déjà vu", "Jamais vu", "Autonomic changes"]
   },
   
@@ -153,6 +162,7 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
       "Temporal Lobe": 20,        // [95% CI: 15-24%] (bias-corrected)
       "Cingulate": 7,
     },
+    confidence: "high",
     additionalSigns: ["Loss of consciousness", "Cyanosis", "Incontinence"]
   },
   
@@ -215,6 +225,7 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
       "Frontal Lobe": 23,         // [95% CI: 15-32%]
       "Insula": 15,               // Non-significant
     },
+    confidence: "very_high",
     additionalSigns: ["Paresthesias", "Motor symptoms", "Jacksonian march"]
   },
   
@@ -279,6 +290,7 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
       "Mesial Temporal": 25,
       "Frontal Lobe": 11,         // [95% CI: 5-17%]
     },
+    confidence: "very_high",
     additionalSigns: ["Emotional changes", "Autonomic features", "Precocious puberty (if hamartoma)"]
   },
   
@@ -560,6 +572,126 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
     },
     additionalSigns: ["No focal onset", "Bilateral involvement"]
   },
+  
+  // NEW SIGNS - High-value localizers from Alim-Marvasti et al.
+  
+  fear_anxiety_aura: {
+    name: "Fear/Anxiety Aura",
+    description: "Intense feeling of fear, dread, panic without external cause",
+    type: "Subjective Sensory",
+    // Research: Temporal OR 2.1 [1.5-3.0], Amygdala involvement high
+    // Classic temporal lobe/amygdala activation
+    localizations: {
+      "Temporal Lobe": 71,       // [95% CI: 61-80%]
+      "Mesial Temporal": 58,     // Amygdala-hippocampal complex
+      "Amygdala": 52,
+      "Frontal Lobe": 18,
+      "Insula": 12,
+    },
+    additionalSigns: ["Epigastric aura", "Déjà vu", "Autonomic changes", "Tachycardia"]
+  },
+  
+  jacksonian_march: {
+    name: "Jacksonian March",
+    description: "Progressive spreading of motor activity (e.g., hand → arm → face)",
+    type: "Motor Signs",
+    // Research: Primary Motor Cortex - classic localizing sign
+    // Indicates seizure spreading along motor homunculus
+    localizations: {
+      "Primary Motor Cortex": 78, // Very specific for primary motor cortex
+      "Frontal Lobe": 72,         // Precentral gyrus
+      "Parietal Lobe": 15,        // Can spread to sensory cortex
+    },
+    additionalSigns: ["Clonic movements", "Somatosensory march", "Todd's paralysis post-ictal"]
+  },
+  
+  deja_vu_jamais_vu: {
+    name: "Déjà Vu / Jamais Vu",
+    description: "Feeling of familiarity (déjà vu) or unfamiliarity (jamais vu) with current situation",
+    type: "Subjective Sensory",
+    // Research: Temporal OR 2.7 [1.9-3.8]
+    // Classic temporal lobe, mesial temporal structures
+    localizations: {
+      "Temporal Lobe": 74,       // [95% CI: 64-83%] OR 2.7
+      "Mesial Temporal": 56,     // Hippocampus-parahippocampal involvement
+      "Lateral Temporal": 35,
+      "Frontal Lobe": 12,
+    },
+    additionalSigns: ["Epigastric aura", "Fear", "Automatisms", "Memory dysfunction"]
+  },
+  
+  ictal_speech: {
+    name: "Ictal Speech (Preserved)",
+    description: "Ability to speak during seizure (unusual, suggests specific localization)",
+    type: "Language",
+    // Research: Non-dominant hemisphere - strong lateralizing value
+    // Suggests seizure NOT in dominant hemisphere language areas
+    localizations: {
+      "Temporal Lobe": 58,       // Non-dominant temporal
+      "Frontal Lobe": 42,        // Non-dominant frontal
+      "Parietal Lobe": 15,
+    },
+    additionalSigns: ["⚠️ Suggests NON-dominant hemisphere", "Preserved awareness", "Lateralizing sign"]
+  },
+  
+  postictal_aphasia: {
+    name: "Post-Ictal Aphasia",
+    description: "Difficulty speaking or understanding language after seizure",
+    type: "Post-Ictal",
+    // Research: Strong lateralizing value - dominant hemisphere
+    // Indicates language cortex involvement (usually left)
+    localizations: {
+      "Temporal Lobe": 67,       // Dominant hemisphere temporal
+      "Frontal Lobe": 55,        // Broca's area (dominant frontal)
+      "Broca's Area": 48,
+      "Parietal Lobe": 18,
+    },
+    additionalSigns: ["⚠️ Suggests DOMINANT hemisphere", "Wernicke's or Broca's area", "Lateralizing sign"]
+  },
+  
+  bipedal_automatisms: {
+    name: "Bipedal Automatisms",
+    description: "Walking, running, or complex leg movements during seizure",
+    type: "Motor Signs",
+    // Research: Frontal OR 3.1 [2.0-4.9]
+    // More common in frontal than temporal lobe epilepsy
+    localizations: {
+      "Frontal Lobe": 64,        // [95% CI: 52-75%] OR 3.1
+      "Supplementary Motor Area": 38,
+      "Temporal Lobe": 28,       // [95% CI: 19-38%]
+      "Cingulate": 15,
+    },
+    additionalSigns: ["Hypermotor activity", "Preserved awareness possible", "Brief duration"]
+  },
+  
+  ictal_vomiting: {
+    name: "Ictal Vomiting",
+    description: "Vomiting during or immediately after seizure onset",
+    type: "Autonomic Signs",
+    // Research: Insula OR 6.8 [3.2-14.5], Temporal OR 2.4 [1.4-4.1]
+    // Highly specific for insular or temporal involvement
+    localizations: {
+      "Insula": 58,              // [95% CI: 41-74%] OR 6.8 VERY STRONG
+      "Temporal Lobe": 45,       // [95% CI: 32-59%] OR 2.4
+      "Parietal Lobe": 18,
+      "Occipital Lobe": 12,
+    },
+    additionalSigns: ["Nausea", "Autonomic features", "Epigastric aura"]
+  },
+  
+  postictal_nose_wiping: {
+    name: "Post-Ictal Nose Wiping",
+    description: "Characteristic nose wiping gesture immediately after seizure",
+    type: "Post-Ictal",
+    // Research: Temporal lobe epilepsy - specific behavioral marker
+    // Ipsilateral to seizure focus (lateralizing value)
+    localizations: {
+      "Temporal Lobe": 72,       // Highly characteristic of TLE
+      "Mesial Temporal": 58,
+      "Frontal Lobe": 15,
+    },
+    additionalSigns: ["⚠️ Lateralizing - ipsilateral hand used", "Temporal lobe epilepsy marker"]
+  },
 };
 
 export const BRAIN_REGIONS: Record<string, BrainRegion> = {
@@ -656,6 +788,59 @@ export const BRAIN_REGIONS: Record<string, BrainRegion> = {
     // Pathognomonic for hypothalamic hamartoma when gelastic seizures present
     // May present with precocious puberty due to hormonal effects
     seizureCharacteristics: "Gelastic/dacrystic (OR 13.7 STRONGEST), autonomic features (OR 2.8), hypothalamic hamartoma"
+  },
+  
+  "Thalamus": {
+    name: "Thalamus",
+    function: "Relay station for sensory and motor signals, consciousness regulation, sleep-wake cycles",
+    subregions: {
+      "Anterior Nucleus": "Limbic connections, memory",
+      "Mediodorsal Nucleus": "Executive functions, emotion",
+      "Ventral Posterior Nucleus": "Sensory relay"
+    },
+    // Research: Central role in absence seizures and generalized epilepsies
+    // Thalamo-cortical circuits generate 3Hz spike-wave patterns
+    // Loss of consciousness without warning suggests thalamic involvement
+    seizureCharacteristics: "Absence seizures, immediate loss of consciousness, 3Hz spike-wave, thalamo-cortical networks"
+  },
+  
+  "Generalized": {
+    name: "Generalized (Bilateral Networks)",
+    function: "Not a single anatomical region - represents bilateral brain network involvement from seizure onset",
+    // Research: Clinical descriptor for seizures involving both hemispheres simultaneously
+    // Indicates generalized epilepsy syndromes rather than focal onset
+    // Associated with genetic epilepsies, metabolic disorders, or widespread cortical involvement
+    seizureCharacteristics: "Bilateral involvement from onset, no focal features, suggests generalized epilepsy syndrome (genetic, absence, myoclonic, tonic-clonic)"
+  },
+  
+  "Amygdala": {
+    name: "Amygdala",
+    function: "Emotional processing, fear response, memory consolidation, autonomic regulation",
+    // Research: Part of mesial temporal structures
+    // Key role in fear/anxiety auras, emotional seizures
+    // Deep temporal lobe structure, part of limbic system
+    seizureCharacteristics: "Fear/anxiety auras, emotional changes, autonomic features, part of mesial temporal epilepsy"
+  },
+  
+  "Auditory Cortex": {
+    name: "Auditory Cortex",
+    function: "Processing and interpretation of sounds, music, speech comprehension",
+    // Research: Superior temporal gyrus, lateral temporal
+    // Highly specific for auditory hallucinations/auras
+    seizureCharacteristics: "Auditory auras (voices, music, buzzing), superior temporal gyrus involvement"
+  },
+  
+  "Primary Motor Cortex": {
+    name: "Primary Motor Cortex",
+    function: "Direct control of voluntary muscle movements, motor homunculus organization",
+    subregions: {
+      "Precentral Gyrus": "Primary motor strip",
+      "Motor Hand Area": "Hand and finger control",
+      "Motor Face Area": "Facial movement control"
+    },
+    // Research: Precentral gyrus, Brodmann area 4
+    // Jacksonian march is pathognomonic for primary motor cortex seizures
+    seizureCharacteristics: "Jacksonian march, clonic movements, Todd's paralysis, organized somatotopic spread"
   }
 };
 

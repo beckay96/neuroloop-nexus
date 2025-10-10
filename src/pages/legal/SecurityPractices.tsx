@@ -37,11 +37,12 @@ export default function SecurityPractices() {
             <div className="p-6 bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-300 dark:border-blue-700 rounded-lg mb-8">
               <h3 className="text-xl font-bold mb-3 text-blue-900 dark:text-blue-100">
                 <CheckCircle className="inline h-6 w-6 mr-2" />
-                HIPAA-Compliant Infrastructure
+                HIPAA-Ready Infrastructure
               </h3>
               <p className="text-blue-800 dark:text-blue-200">
-                NeuroLoop is built on HIPAA-compliant infrastructure through Supabase (BAA in place) and deployed 
-                on secure, encrypted platforms. We follow industry best practices for protected health information (PHI).
+                NeuroLoop is built on HIPAA-compliant infrastructure through Supabase (BAA in place) and follows 
+                HIPAA security guidelines and industry best practices for protected health information (PHI). 
+                <strong>We are currently undergoing formal HIPAA certification and expect completion in the coming months.</strong>
               </p>
             </div>
 
@@ -271,7 +272,7 @@ export default function SecurityPractices() {
                 <h4 className="font-bold mb-2">Supabase (Database)</h4>
                 <ul className="text-sm space-y-1">
                   <li>✓ SOC 2 Type II Certified</li>
-                  <li>✓ HIPAA Compliant (BAA in place)</li>
+                  <li>✓ HIPAA-Compliant (BAA signed)</li>
                   <li>✓ ISO 27001 Certified</li>
                   <li>✓ GDPR Compliant</li>
                 </ul>
@@ -315,23 +316,38 @@ export default function SecurityPractices() {
               </ul>
             </div>
 
-            <h2 className="text-2xl font-bold mt-12 mb-4">Security Certifications & Compliance</h2>
+            <h2 className="text-2xl font-bold mt-12 mb-4">Security Standards & Compliance</h2>
 
+            <div className="p-6 bg-purple-50 dark:bg-purple-950/20 border-2 border-purple-300 dark:border-purple-700 rounded-lg mb-6">
+              <h3 className="text-xl font-bold mb-3 text-purple-900 dark:text-purple-100">Certification Status</h3>
+              <p className="text-purple-800 dark:text-purple-200 mb-4">
+                NeuroLoop is actively pursuing formal certifications and compliance verification. We are currently in the 
+                certification process for HIPAA compliance and expect completion in the coming months.
+              </p>
+              <p className="text-purple-800 dark:text-purple-200">
+                <strong>Current Status:</strong> Our infrastructure partners (Supabase, Vercel) are already certified (SOC 2, ISO 27001, HIPAA-compliant). 
+                We follow all HIPAA security and privacy guidelines and implement industry best practices, with formal organizational 
+                certification pending completion.
+              </p>
+            </div>
+
+            <h3 className="text-xl font-semibold mt-6 mb-4">Standards We Follow:</h3>
             <div className="grid md:grid-cols-3 gap-4 mt-6">
               <Card className="p-4 text-center bg-blue-50 dark:bg-blue-950/20 border-blue-200">
                 <Shield className="h-12 w-12 mx-auto text-blue-600 mb-2" />
-                <h4 className="font-bold">HIPAA Compliant</h4>
-                <p className="text-xs mt-1">Health Insurance Portability and Accountability Act</p>
+                <h4 className="font-bold">HIPAA Guidelines</h4>
+                <p className="text-xs mt-1">Following all security & privacy requirements</p>
+                <p className="text-xs mt-1 italic text-blue-700 dark:text-blue-300">Certification in progress</p>
               </Card>
               <Card className="p-4 text-center bg-purple-50 dark:bg-purple-950/20 border-purple-200">
                 <CheckCircle className="h-12 w-12 mx-auto text-purple-600 mb-2" />
                 <h4 className="font-bold">SOC 2 Type II</h4>
-                <p className="text-xs mt-1">Service Organization Control</p>
+                <p className="text-xs mt-1">Infrastructure partners certified</p>
               </Card>
               <Card className="p-4 text-center bg-teal-50 dark:bg-teal-950/20 border-teal-200">
                 <Lock className="h-12 w-12 mx-auto text-teal-600 mb-2" />
                 <h4 className="font-bold">ISO 27001</h4>
-                <p className="text-xs mt-1">Information Security Management</p>
+                <p className="text-xs mt-1">Infrastructure partners certified</p>
               </Card>
             </div>
 

@@ -46,7 +46,7 @@ export default function BrainSeizureAnalysis() {
   // Check if signs suggest generalized seizures
   const checkGeneralizedSeizures = () => {
     const bilateralSigns = selectedSigns.filter(id => 
-      SEIZURE_SEMIOLOGY[id]?.category === "Bilateral Motor"
+      SEIZURE_SEMIOLOGY[id]?.type === "Bilateral Motor"
     ).length;
     
     const consciousnessSigns = selectedSigns.filter(id =>

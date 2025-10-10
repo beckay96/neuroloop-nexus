@@ -227,7 +227,7 @@ export default function LandingPage() {
       <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950/40 dark:via-purple-950/40 dark:to-pink-950/40 py-20 border-y-4 border-purple-200 dark:border-purple-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <Badge className="text-lg px-6 py-3 mb-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-xl animate-pulse">
+            <Badge className="text-lg px-6 py-3 mb-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 shadow-xl">
               <Zap className="h-5 w-5 mr-2 inline" />
               Clinical-Grade Innovation
             </Badge>
@@ -1253,7 +1253,7 @@ export default function LandingPage() {
                 <li><a href="/data-rights" className="hover:text-primary transition-colors">Data Access & Rights</a></li>
                 <li><a href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</a></li>
                 <li><a href="/accessibility" className="hover:text-primary transition-colors">Accessibility</a></li>
-                <li><a href="/contact" className="hover:text-primary transition-colors">Contact Us</a></li>
+                <li><a href="mailto:rebeccafrancis@elevita.ai" className="hover:text-primary transition-colors">Contact Us</a></li>
               </ul>
             </div>
 

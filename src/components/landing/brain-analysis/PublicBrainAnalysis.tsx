@@ -147,20 +147,20 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-        <DialogHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Brain className="h-8 w-8 text-primary" />
+      <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pt-12 sm:pt-6">
+        <DialogHeader className="space-y-4 pb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-primary mt-1 flex-shrink-0" />
               <div>
-                <DialogTitle className="text-2xl">Brain Seizure Localization Tool</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-xl sm:text-2xl leading-tight">Brain Seizure Localization Tool</DialogTitle>
+                <DialogDescription className="mt-1 text-sm">
                   Research-grade educational tool. Select signs to explore likely brain regions (population estimates).
                 </DialogDescription>
               </div>
               
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <Sheet open={methodologyOpen} onOpenChange={setMethodologyOpen}>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="sm">
