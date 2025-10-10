@@ -122,8 +122,7 @@ export default function TermsOfService() {
 
             <h2 className="text-2xl font-bold mt-8 mb-4">9. Payment and Subscriptions</h2>
             <p>
-              <strong>Demo Version:</strong> Currently free for testing purposes.<br />
-              <strong>Production Version:</strong> Pricing to be announced. Subscriptions will be billed in advance and are non-refundable unless otherwise stated.
+              Pricing to be announced. Subscriptions will be billed in advance and are non-refundable unless otherwise stated. We will provide notice before implementing any charges.
             </p>
 
             <h2 className="text-2xl font-bold mt-8 mb-4">10. Service Availability</h2>
@@ -175,15 +174,8 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-bold mt-8 mb-4">17. Contact Information</h2>
             <p>
               For questions about these Terms:<br />
-              <strong>Email:</strong> legal@elevita.ai<br />
-              <strong>Address:</strong> Elevita AI, [Address to be provided]
+              <strong>Email:</strong> bec@elevitaai.com
             </p>
-
-            <div className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-              <p className="text-sm">
-                <strong>DEMO NOTICE:</strong> This is a demonstration environment. These Terms apply to the production version. Demo data may be deleted without notice.
-              </p>
-            </div>
           </div>
         </Card>
       </div>

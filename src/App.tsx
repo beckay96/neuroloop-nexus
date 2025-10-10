@@ -26,7 +26,12 @@ import ResearcherOnboardingPage from "@/pages/onboarding/ResearcherOnboardingPag
 import BrainSeizureAnalysis from "@/pages/BrainSeizureAnalysis";
 import PrivacyPolicy from "@/pages/legal/PrivacyPolicy";
 import TermsOfService from "@/pages/legal/TermsOfService";
-import HIPAACompliance from "@/pages/legal/HIPAACompliance";
+import SafetyGuidelines from "@/pages/legal/SafetyGuidelines";
+import ResearchAndCitations from "@/pages/legal/ResearchAndCitations";
+import Accessibility from "@/pages/legal/Accessibility";
+import CookiePolicy from "@/pages/legal/CookiePolicy";
+import DataAccessRights from "@/pages/legal/DataAccessRights";
+import SecurityPractices from "@/pages/legal/SecurityPractices";
 import CarerRequests from "@/pages/carer/Requests";
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
@@ -132,7 +137,12 @@ const App = () => {
                 {/* Legal & Compliance Pages - Public */}
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/hipaa" element={<HIPAACompliance />} />
+                <Route path="/safety" element={<SafetyGuidelines />} />
+                <Route path="/research" element={<ResearchAndCitations />} />
+                <Route path="/accessibility" element={<Accessibility />} />
+                <Route path="/cookies" element={<CookiePolicy />} />
+                <Route path="/data-rights" element={<DataAccessRights />} />
+                <Route path="/security" element={<SecurityPractices />} />
                 {/* Carer Requests - Protected */}
                 <Route path="/carer/requests" element={
                   <ProtectedRoute>

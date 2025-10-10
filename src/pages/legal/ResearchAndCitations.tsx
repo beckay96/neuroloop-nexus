@@ -1,0 +1,440 @@
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Brain, ArrowLeft, BookOpen, ExternalLink } from "lucide-react";
+
+export default function ResearchAndCitations() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate("/")}
+          className="mb-6"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Home
+        </Button>
+
+        <div className="flex items-center gap-3 mb-8">
+          <BookOpen className="h-8 w-8 text-primary" />
+          <h1 className="text-4xl font-bold">Research & Citations</h1>
+        </div>
+
+        <Card className="p-8">
+          <div className="prose prose-gray dark:prose-invert max-w-none">
+            <p className="text-sm text-muted-foreground mb-6">
+              <strong>Last Updated:</strong> January 10, 2025
+            </p>
+
+            <p className="lead text-lg mb-6">
+              NeuroLoop is built on evidence-based research and clinical best practices. This page documents 
+              the key statistics and research that inform our platform's development and the critical need for 
+              improved neurological health tracking.
+            </p>
+
+            <h2 className="text-3xl font-bold mt-12 mb-6">Global Burden of Neurological Conditions</h2>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <Card className="p-6 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
+                <h3 className="text-2xl font-bold mb-4 text-purple-900 dark:text-purple-100">Parkinson's Disease</h3>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">12 Million</p>
+                    <p className="text-sm text-muted-foreground">People living with Parkinson's globally (2021)</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">25.2 Million</p>
+                    <p className="text-sm text-muted-foreground">Projected cases by 2050 (112% increase)</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-red-600 dark:text-red-400">5.67 per 100,000</p>
+                    <p className="text-sm text-muted-foreground">Global mortality rate (2019)</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-teal-50 dark:bg-teal-950/20 border-teal-200 dark:border-teal-800">
+                <h3 className="text-2xl font-bold mb-4 text-teal-900 dark:text-teal-100">Epilepsy</h3>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-3xl font-bold text-teal-700 dark:text-teal-300">65 Million</p>
+                    <p className="text-sm text-muted-foreground">People living with epilepsy worldwide</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-teal-700 dark:text-teal-300">3.27 Million</p>
+                    <p className="text-sm text-muted-foreground">New cases annually (2021)</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-red-600 dark:text-red-400">140,000 Deaths</p>
+                    <p className="text-sm text-muted-foreground">Global deaths per year (2021)</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Parkinson's Disease: Key Statistics</h2>
+            
+            <h3 className="text-xl font-semibold mt-6 mb-3">Global Prevalence & Trends</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                <strong>8.5 million people worldwide</strong> currently live with Parkinson's disease, with projections 
+                indicating this will rise to <strong>25.2 million by 2050</strong>—a 112% increase driven primarily by 
+                population aging.<sup>1,2,3</sup>
+              </li>
+              <li>
+                Parkinson's is now the <strong>world's fastest-growing neurological disorder</strong>, with prevalence 
+                doubling over the past 25 years.<sup>3,7</sup>
+              </li>
+              <li>
+                In the United States, approximately <strong>1.1 million Americans</strong> live with Parkinson's today.<sup>13</sup>
+              </li>
+            </ul>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Mortality Rates</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                Between 1994 and 2019, more than <strong>1 million deaths globally</strong> were attributed to Parkinson's disease, 
+                with the annual mortality rate climbing from <strong>1.76 per 100,000 in 1994 to 5.67 per 100,000 in 2019</strong>.<sup>4</sup>
+              </li>
+              <li>
+                In the United States (1999-2022), there were <strong>947,272 deaths</strong> from Parkinson's, with age-adjusted 
+                mortality rates increasing from 88.9 per million (1999) to 110.6 per million (2022).<sup>5</sup>
+              </li>
+              <li>
+                Global data (1999-2020) shows death rates increased from <strong>5.3 to 9.8 per 100,000 population</strong>.<sup>6</sup>
+              </li>
+            </ul>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Epilepsy: Key Statistics</h2>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Global Prevalence</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                Current estimates indicate approximately <strong>65 million people worldwide</strong> live with epilepsy.<sup>8,9</sup>
+              </li>
+              <li>
+                In 2021, there were <strong>3.27 million new cases</strong> of epilepsy of unknown cause globally, with an 
+                incidence rate of <strong>42.8 per 100,000 people</strong>.<sup>8</sup>
+              </li>
+            </ul>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Mortality Rates & Trends</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                In 2021, approximately <strong>140,000 deaths</strong> were attributed to epilepsy of unknown cause globally, 
+                with an age-standardized death rate of <strong>1.74 per 100,000</strong>. Mortality was highest in those over 60 
+                and children under 5.<sup>8,9</sup>
+              </li>
+              <li>
+                United States data (2011-2021): Epilepsy was linked to <strong>43,231 adult deaths</strong>. The death rate 
+                with epilepsy as the underlying cause increased by <strong>84% (from 2.9 to 6.4 per million)</strong>, while 
+                deaths with epilepsy as a contributing cause jumped <strong>144% (from 3.3 to 11 per million)</strong> over 
+                the decade.<sup>10</sup>
+              </li>
+              <li>
+                Global mortality data show that older adults (>50, especially >75) are driving a rise in epilepsy-related deaths 
+                in high-income countries, even as general elderly mortality declines.<sup>11</sup>
+              </li>
+            </ul>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Catamenial Epilepsy: Critical Research Gap</h2>
+
+            <div className="p-6 bg-pink-50 dark:bg-pink-950/20 border-2 border-pink-300 dark:border-pink-700 rounded-lg mb-6">
+              <h3 className="text-xl font-bold mb-3 text-pink-900 dark:text-pink-100">The Research Crisis</h3>
+              <p className="mb-3">
+                <strong>40% of women with epilepsy</strong> experience catamenial epilepsy—seizures that worsen 
+                during specific phases of the menstrual cycle. Yet this condition represents only <strong>0.19% of 
+                all epilepsy research</strong>, despite affecting millions of women worldwide.
+              </p>
+              <p className="font-semibold">
+                No standardized tracking exists. No specific treatments are available.
+              </p>
+            </div>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Treatment Challenges</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                Despite extensive research, treatment options remain limited. The landmark NIH Progesterone Trial 
+                showed mixed results, with <strong>only 22.8% of progesterone-treated women achieving ≥50% seizure 
+                reduction</strong> compared to 20% with placebo.
+              </li>
+              <li>
+                Recent systematic reviews (including a 2021 Cochrane analysis) have highlighted significant gaps in 
+                understanding and treatment approaches for catamenial epilepsy.
+              </li>
+              <li>
+                Emerging neurosteroid replacement therapy and modified ketogenic diet approaches show promise, with 
+                some studies demonstrating <strong>25-62% of participants achieving ≥50% seizure reduction</strong>.
+              </li>
+            </ul>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">SUDEP (Sudden Unexpected Death in Epilepsy)</h2>
+
+            <p className="mb-4">
+              SUDEP represents the most important direct epilepsy-related cause of death, particularly among young 
+              and middle-aged populations.
+            </p>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Risk Stratification</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>General epilepsy population: <strong>1.0 per 1,000 person-years</strong></li>
+              <li>Children: <strong>0.22 per 1,000 person-years</strong> (significantly lower risk)</li>
+              <li>Drug-resistant epilepsy: <strong>2.0 per 1,000 person-years</strong></li>
+              <li>Refractory epilepsy (surgical candidates): <strong>9.3 per 1,000 person-years</strong></li>
+            </ul>
+
+            <p className="mt-4">
+              SUDEP is estimated to cause <strong>50,000-55,000 deaths globally each year</strong>. In Australia alone, 
+              approximately <strong>300 SUDEP deaths</strong> occur annually among 270,000 people with epilepsy, 
+              representing a rate of <strong>1.2 per 1,000 persons</strong> with epilepsy annually.
+            </p>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Status Epilepticus</h2>
+
+            <p className="mb-4">
+              Status epilepticus represents a neurological emergency with substantial mortality rates:
+            </p>
+
+            <ul className="list-disc pl-6 space-y-3">
+              <li>Adults: <strong>15.9% case fatality rate</strong></li>
+              <li>Children: <strong>3.6% case fatality rate</strong></li>
+              <li>All ages combined: <strong>13.0% case fatality rate</strong></li>
+              <li>Refractory status epilepticus: <strong>17.3% case fatality rate</strong></li>
+            </ul>
+
+            <p className="mt-4">
+              The age-standardized incidence is <strong>25.5 cases per 100,000 persons annually</strong>. The 2015 
+              ILAE redefinition changed the diagnostic threshold from 30 minutes to <strong>5 minutes</strong>, 
+              resulting in approximately <strong>25% reduction in mortality</strong> since implementation.
+            </p>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Treatment Gaps & Challenges</h2>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Drug-Resistant Epilepsy</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                Approximately <strong>30-40% of patients</strong> develop drug-resistant epilepsy through multiple mechanisms.
+              </li>
+              <li>
+                <strong>50.5% of patients</strong> achieve seizure freedom with their first antiepileptic drug, but only 
+                <strong>11.6% respond to the second medication</strong> if the first fails.
+              </li>
+              <li>
+                The probability of seizure control decreases dramatically with each subsequent treatment failure, with 
+                <strong>less than 5% achieving optimal control after the third medication regimen</strong>.
+              </li>
+            </ul>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Surgical Interventions</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>
+                Epilepsy surgery remains the most effective treatment for drug-resistant focal epilepsy, with 
+                <strong>60-70% of patients achieving seizure freedom</strong>.
+              </li>
+              <li>
+                Long-term studies show <strong>75% seizure freedom at 10+ years</strong> following temporal lobe 
+                resection for appropriate candidates.
+              </li>
+              <li>
+                However, <strong>80% of people with epilepsy live in low- and middle-income countries</strong> 
+                with severely limited surgical access.
+              </li>
+            </ul>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Regional Analysis: Australia</h2>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Epilepsy Burden</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>Active epilepsy cases: <strong>142,740 people (0.56% prevalence)</strong></li>
+              <li>Annual incidence: <strong>14,603 new cases</strong></li>
+              <li>Total annual economic burden: <strong>$12.3 billion AUD</strong></li>
+              <li>Lifetime costs for new cases: <strong>$22.2 billion AUD</strong></li>
+            </ul>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Cost Breakdown</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>Health system costs: <strong>$557.1 million annually</strong></li>
+              <li>Productivity losses: <strong>$2.3 billion annually</strong> (largest component)</li>
+              <li>Informal care costs: <strong>$438.2 million annually</strong></li>
+              <li>Loss of wellbeing (non-financial): <strong>$8.2 billion annually</strong></li>
+            </ul>
+
+            <h3 className="text-xl font-semibold mt-6 mb-3">Queensland-Specific Data</h3>
+            <ul className="list-disc pl-6 space-y-3">
+              <li>Current active epilepsy cases: <strong>28,740-30,000 people</strong></li>
+              <li>Lifetime epilepsy prevalence: <strong>51,646 Queenslanders</strong></li>
+              <li>
+                Hospitalization rates <strong>20% above national average</strong>, 30-40% higher than Victoria/NSW
+              </li>
+              <li>
+                Cairns has <strong>210% higher epilepsy admission rates</strong> than Brisbane, highlighting 
+                geographic disparities
+              </li>
+              <li>
+                Indigenous Australians have <strong>3.5 times higher epilepsy-related hospitalization rates</strong>
+              </li>
+            </ul>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Why NeuroLoop Matters</h2>
+
+            <div className="p-6 bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-300 dark:border-blue-700 rounded-lg mb-6">
+              <h3 className="text-xl font-bold mb-3 text-blue-900 dark:text-blue-100">Evidence-Based Development</h3>
+              <p className="mb-3">
+                NeuroLoop is designed to address critical gaps identified in research:
+              </p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Standardized tracking for catamenial epilepsy patterns</li>
+                <li>Research-grade data capture following medical best practices</li>
+                <li>Objective biomarker development through consistent tracking</li>
+                <li>Patient-reported outcomes integration with clinical data</li>
+                <li>SUDEP risk assessment and monitoring support</li>
+                <li>Precision medicine approaches through detailed phenotyping</li>
+              </ul>
+            </div>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Citations & References</h2>
+
+            <div className="text-sm space-y-2 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
+              <h3 className="font-bold mb-3">Primary Sources:</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="font-semibold">1. BMJ (2025)</p>
+                  <a href="https://www.bmj.com/content/388/bmj-2024-080952" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Global Parkinson's disease projections <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">2. BMJ Group (2025)</p>
+                  <a href="https://bmjgroup.com/cases-of-parkinsons-disease-set-to-reach-25-million-worldwide-by-2050/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Parkinson's disease projections to 2050 <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">3. World Health Organization</p>
+                  <a href="https://www.who.int/news-room/fact-sheets/detail/parkinson-disease" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Parkinson's Disease Fact Sheet <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">4. Frontiers in Neurology (2022)</p>
+                  <a href="https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2022.956440/full" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Global Parkinson's mortality trends <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">5. PMC/NIH (2025)</p>
+                  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11755521/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    US Parkinson's mortality statistics <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">6. NIHR OpenResearch (2022)</p>
+                  <a href="https://openresearch.nihr.ac.uk/articles/4-50" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Parkinson's death rate trends 1999-2020 <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">7. Frontiers in Aging Neuroscience (2024)</p>
+                  <a href="https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2024.1498756/full" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Fastest-growing neurological disorder <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">8. Frontiers in Neurology (2025)</p>
+                  <a href="https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2025.1526984/full" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Global epilepsy burden 2021 <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">9. Frontiers in Neurology (2024)</p>
+                  <a href="https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2024.1448596/full" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Epilepsy mortality statistics <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">10. Epilepsy Alliance America / CDC</p>
+                  <a href="https://epilepsyallianceamerica.org/centers-for-disease-control-cdc-epilepsy-program/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    US epilepsy mortality trends 2011-2021 <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">11. PMC/NIH (2024)</p>
+                  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11937074/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Age-stratified epilepsy mortality trends <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">12. BMJ Open (2020)</p>
+                  <a href="https://bmjopen.bmj.com/content/10/8/e035767" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    Epilepsy burden analysis <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">13. Parkinson's Foundation</p>
+                  <a href="https://www.parkinson.org/understanding-parkinsons/statistics" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                    US Parkinson's statistics <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div>
+                  <p className="font-semibold">Additional Regional Sources:</p>
+                  <ul className="list-disc pl-6 mt-2 space-y-1">
+                    <li>
+                      <a href="https://epilepsyfoundation.org.au/wp-content/uploads/2020/02/Economic-burden-of-epilepsy-Final-Report-Feb-2020.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                        Economic Burden of Epilepsy in Australia (2020) <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.deloitte.com/au/en/services/economics/perspectives/economic-burden-of-epilepsy-australia.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                        Deloitte: Economic Analysis of Epilepsy in Australia <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://epilepsyfoundation.org.au/managing-epilepsy/health-and-wellbeing/sudep/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                        Epilepsy Foundation Australia: SUDEP Information <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 p-6 bg-teal-50 dark:bg-teal-950/20 border-2 border-teal-300 dark:border-teal-700 rounded-lg">
+              <h3 className="text-xl font-bold mb-3 text-teal-900 dark:text-teal-100">
+                <Brain className="inline h-6 w-6 mr-2" />
+                Our Commitment to Evidence-Based Care
+              </h3>
+              <p className="text-teal-800 dark:text-teal-200">
+                All statistics and research cited on this page are from peer-reviewed medical journals, government health 
+                agencies, and reputable medical organizations. We regularly update this information as new research becomes 
+                available. NeuroLoop is committed to translating research evidence into practical tools that improve lives.
+              </p>
+            </div>
+
+            <h2 className="text-2xl font-bold mt-12 mb-4">Contact Us</h2>
+            <p>
+              For questions about our research methodology or to collaborate:<br />
+              <strong>Email:</strong> bec@elevitaai.com
+            </p>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}

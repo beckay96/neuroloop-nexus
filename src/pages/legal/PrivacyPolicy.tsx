@@ -130,16 +130,8 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-bold mt-8 mb-4">11. Contact Us</h2>
             <p>
               For privacy questions or to exercise your rights:<br />
-              <strong>Email:</strong> privacy@elevita.ai<br />
-              <strong>Data Protection Officer:</strong> dpo@elevita.ai<br />
-              <strong>Address:</strong> Elevita AI, [Address to be provided]
+              <strong>Email:</strong> bec@elevitaai.com
             </p>
-
-            <div className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-              <p className="text-sm">
-                <strong>DEMO NOTICE:</strong> This is a demonstration environment. Do not enter real personal health information. All data may be deleted without notice.
-              </p>
-            </div>
           </div>
         </Card>
       </div>
