@@ -26,7 +26,7 @@ export default function ResearchAndCitations() {
         <Card className="p-8">
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-6">
-              <strong>Last Updated:</strong> January 10, 2025
+              <strong>Last Updated:</strong> October 10, 2025
             </p>
 
             <div className="p-6 bg-gradient-to-r from-purple-50 to-teal-50 dark:from-purple-950/30 dark:to-teal-950/30 border-2 border-purple-300 dark:border-purple-700 rounded-lg mb-8">

@@ -27,7 +27,7 @@ export default function TermsOfService() {
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-6">
               <strong>Effective Date:</strong> October 7, 2025<br />
-              <strong>Last Updated:</strong> October 7, 2025
+              <strong>Last Updated:</strong> October 10, 2025
             </p>
 
             <h2 className="text-2xl font-bold mt-8 mb-4">1. Acceptance of Terms</h2>

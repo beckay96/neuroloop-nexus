@@ -26,7 +26,7 @@ export default function Accessibility() {
         <Card className="p-8">
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-6">
-              <strong>Last Updated:</strong> January 10, 2025
+              <strong>Last Updated:</strong> October 10, 2025
             </p>
 
             <h2 className="text-2xl font-bold mt-8 mb-4">Our Commitment</h2>

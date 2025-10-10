@@ -313,7 +313,7 @@ export default function LandingPage() {
                 </video>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 text-center italic">
-                Security camera footage • June 2024 • Click play button to view
+                Security camera footage • September 2025 • Click play button to view
               </p>
             </div>
           </div>

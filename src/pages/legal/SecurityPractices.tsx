@@ -26,7 +26,7 @@ export default function SecurityPractices() {
         <Card className="p-8">
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-6">
-              <strong>Last Updated:</strong> January 10, 2025
+              <strong>Last Updated:</strong> October 10, 2025
             </p>
 
             <p className="lead text-lg mb-6">

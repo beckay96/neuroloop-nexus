@@ -26,7 +26,7 @@ export default function SafetyGuidelines() {
         <Card className="p-8">
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-6">
-              <strong>Last Updated:</strong> January 10, 2025
+              <strong>Last Updated:</strong> October 10, 2025
             </p>
 
             <div className="p-6 bg-red-50 dark:bg-red-950/20 border-2 border-red-500 rounded-lg mb-8">
