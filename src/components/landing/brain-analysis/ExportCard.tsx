@@ -41,6 +41,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         style={{
           width: '1080px',
           minHeight: '1080px',
+          height: sortedRegions.length <= 3 ? '1080px' : 'auto',
           maxHeight: '1350px',
           background: darkMode 
             ? '#1a0b2e'
@@ -49,6 +50,8 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           fontFamily: 'system-ui, -apple-system, sans-serif',
           position: 'relative',
           overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         {/* Background Image */}
@@ -153,7 +156,10 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           border: darkMode ? '2px solid rgba(147, 51, 234, 0.3)' : '2px solid rgba(168, 85, 247, 0.25)',
           position: 'relative',
           zIndex: 10,
-          marginBottom: '28px',
+          marginBottom: 'auto',
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
         }}>
           {/* Summary Header */}
           <div style={{
@@ -222,7 +228,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             </div>
           )}
 
-          {/* Other Regions - Grid Layout with Max Height */}
+          {/* Other Regions - Conditional Grid/Flex Layout */}
           <div style={{ marginTop: '20px' }}>
             <p style={{
               fontSize: '20px',
@@ -233,11 +239,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               Other Probable Regions:
             </p>
             <div style={{ 
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              display: sortedRegions.length > 3 ? 'grid' : 'flex',
+              gridTemplateColumns: sortedRegions.length > 3 ? 'repeat(auto-fit, minmax(400px, 1fr))' : undefined,
+              flexDirection: sortedRegions.length <= 3 ? 'column' : undefined,
               gap: '20px',
-              maxHeight: '350px',
-              overflowY: 'auto',
+              maxHeight: sortedRegions.length > 3 ? '350px' : undefined,
+              overflowY: sortedRegions.length > 3 ? 'auto' : undefined,
             }}>
               {sortedRegions.slice(1, 5).map(([region, probability], index) => (
                 <div
@@ -266,7 +273,9 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                       fontSize: '22px',
                       fontWeight: '700',
                       color: probability <= 40 ? '#000' : '#fff',
-                      lineHeight: 1,
+                      lineHeight: '50px',
+                      textAlign: 'center',
+                      padding: 0,
                     }}>
                       {index + 2}
                     </div>
@@ -281,7 +290,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                   <span style={{
                     fontSize: '26px',
                     fontWeight: '700',
-                    color: '#000000',
+                    color: darkMode ? '#f1f5f9' : '#000000',
                     marginLeft: '15px',
                   }}>
                     {probability}%

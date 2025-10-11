@@ -23,7 +23,7 @@ export default function BrainVisualizationImages({
 }: BrainVisualizationImagesProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
-  const [exportMode, setExportMode] = useState<'light' | 'dark'>('light');
+  const [exportMode, setExportMode] = useState<'light' | 'dark' | 'both'>('light');
   const exportCardRef = useRef<HTMLDivElement>(null);
   const exportCardDarkRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -49,41 +49,100 @@ export default function BrainVisualizationImages({
     const today = new Date().toISOString().split('T')[0];
 
     try {
-      // Single mode export
-      const isDark = exportMode === 'dark';
-      const cardRef = isDark ? exportCardDarkRef : exportCardRef;
-      
-      if (!cardRef.current) return;
+      if (exportMode === 'both') {
+        // Export both light and dark modes
+        toast({
+          title: "🎨 Creating both versions...",
+          description: "Generating light and dark mode exports. Your browser may ask permission for multiple downloads.",
+        });
 
-      toast({
-        title: "🎨 Creating your export...",
-        description: `Generating beautiful ${isDark ? 'dark' : 'light'} mode image.`,
-      });
+        await new Promise(resolve => setTimeout(resolve, 100));
 
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: null,
-        scale: 2,
-        logging: false,
-        useCORS: true,
-      });
-
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.download = `neuroloop-brain-localization-${isDark ? 'dark' : 'light'}-${today}.png`;
-          link.href = url;
-          link.click();
-          URL.revokeObjectURL(url);
-
-          toast({
-            title: "✅ Export successful!",
-            description: `Your ${isDark ? 'dark' : 'light'} mode brain map is ready to share!`,
+        // Light mode export
+        if (exportCardRef.current) {
+          const canvasLight = await html2canvas(exportCardRef.current, {
+            backgroundColor: null,
+            scale: 2,
+            logging: false,
+            useCORS: true,
           });
+
+          canvasLight.toBlob((blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.download = `neuroloop-brain-localization-light-${today}.png`;
+              link.href = url;
+              link.click();
+              URL.revokeObjectURL(url);
+            }
+          }, 'image/png', 1.0);
         }
-      }, 'image/png', 1.0);
+
+        // Dark mode export (with delay for browser)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (exportCardDarkRef.current) {
+          const canvasDark = await html2canvas(exportCardDarkRef.current, {
+            backgroundColor: null,
+            scale: 2,
+            logging: false,
+            useCORS: true,
+          });
+
+          canvasDark.toBlob((blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.download = `neuroloop-brain-localization-dark-${today}.png`;
+              link.href = url;
+              link.click();
+              URL.revokeObjectURL(url);
+            }
+          }, 'image/png', 1.0);
+        }
+
+        toast({
+          title: "✅ Both exports successful!",
+          description: "Light and dark mode brain maps downloaded. Perfect for any platform!",
+        });
+      } else {
+        // Single mode export
+        const isDark = exportMode === 'dark';
+        const cardRef = isDark ? exportCardDarkRef : exportCardRef;
+        
+        if (!cardRef.current) return;
+
+        toast({
+          title: "🎨 Creating your export...",
+          description: `Generating beautiful ${isDark ? 'dark' : 'light'} mode image.`,
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const canvas = await html2canvas(cardRef.current, {
+          backgroundColor: null,
+          scale: 2,
+          logging: false,
+          useCORS: true,
+        });
+
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `neuroloop-brain-localization-${isDark ? 'dark' : 'light'}-${today}.png`;
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+
+            toast({
+              title: "✅ Export successful!",
+              description: `Your ${isDark ? 'dark' : 'light'} mode brain map is ready to share!`,
+            });
+          }
+        }, 'image/png', 1.0);
+      }
     } catch (error) {
       console.error('Export error:', error);
       toast({
@@ -261,15 +320,15 @@ export default function BrainVisualizationImages({
             </div>
             
             {/* Export Style Selector */}
-            <div className="flex items-center justify-center gap-3 p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-950/40 dark:to-pink-950/40 rounded-lg border-2 border-purple-300 dark:border-purple-700">
-              <p className="text-sm font-semibold text-purple-700 dark:text-purple-300 mr-2">Export Style:</p>
+            <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-950/40 dark:to-pink-950/40 rounded-lg border-2 border-purple-300 dark:border-purple-700">
+              <p className="text-sm font-semibold text-purple-700 dark:text-purple-300 mr-1">Export Style:</p>
               <Button
                 size="sm"
                 variant={exportMode === 'light' ? 'default' : 'outline'}
                 onClick={() => setExportMode('light')}
                 className={exportMode === 'light' ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'hover:bg-purple-50 dark:hover:bg-purple-950/50'}
               >
-                ☀️ Light Mode
+                ☀️ Light
               </Button>
               <Button
                 size="sm"
@@ -277,7 +336,15 @@ export default function BrainVisualizationImages({
                 onClick={() => setExportMode('dark')}
                 className={exportMode === 'dark' ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'hover:bg-purple-50 dark:hover:bg-purple-950/50'}
               >
-                🌙 Dark Mode
+                🌙 Dark
+              </Button>
+              <Button
+                size="sm"
+                variant={exportMode === 'both' ? 'default' : 'outline'}
+                onClick={() => setExportMode('both')}
+                className={exportMode === 'both' ? 'bg-gradient-to-r from-purple-500 via-pink-500 to-teal-500' : 'hover:bg-purple-50 dark:hover:bg-purple-950/50'}
+              >
+                ✨ Both
               </Button>
             </div>
             
