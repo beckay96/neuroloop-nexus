@@ -34,9 +34,14 @@ export default function BrainVisualizationImages({
     <div className="space-y-6">
       {/* Animated Header */}
       {sortedRegions.length > 0 && (
-        <div className="flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-400 animate-pulse">
-          <Sparkles className="h-4 w-4" />
-          <span>Brain regions lighting up based on your seizure signs!</span>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-400 animate-pulse">
+            <Sparkles className="h-4 w-4" />
+            <span>Brain regions lighting up based on your seizure signs!</span>
+          </div>
+          <p className="text-xs text-gray-600 dark:text-gray-400 italic">
+            These patterns are population estimates — your data helps improve global accuracy.
+          </p>
         </div>
       )}
 

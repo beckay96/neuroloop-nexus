@@ -1129,6 +1129,7 @@ export default function LandingPage() {
                     <p><strong>Education:</strong> Sydney University & Harvard Graduate</p>
                     <p><strong>Awards:</strong> REDI Fellowship Recipient</p>
                     <p>Co-author on various biomedical research papers published in leading medical journals</p>
+                    <p className="pt-2 italic text-gray-700 dark:text-gray-400">Peyman is driven by innovation that bridges cutting-edge science with meaningful patient outcomes.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -1150,6 +1151,7 @@ export default function LandingPage() {
                     <p><strong>Founder:</strong> The Project Love App</p>
                     <p>Award-winning educator, co-authored Australia's first wellbeing guideline for perioperative nurses</p>
                     <p>Led UN/WHO lobbying for end-of-life care</p>
+                    <p className="pt-2 italic text-gray-700 dark:text-gray-400">Michael champions compassion in healthcare, ensuring every patient journey is met with dignity and understanding.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -1171,6 +1173,7 @@ export default function LandingPage() {
                     <p><strong>Previous:</strong> Director at Bupa (AU)</p>
                     <p>Delivered Australia's first Clinical Governance Framework for Digital Health</p>
                     <p>Global executive nurse leader</p>
+                    <p className="pt-2 italic text-gray-700 dark:text-gray-400">Liz is passionate about safe, patient-centred care in the digital age.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -1192,6 +1195,7 @@ export default function LandingPage() {
                     <p><strong>Founder:</strong> North Star Strategies</p>
                     <p>Global advisor to governments and private sectors on cybersecurity and smart infrastructure</p>
                     <p>Spearheaded global "Smart Cities" initiatives</p>
+                    <p className="pt-2 italic text-gray-700 dark:text-gray-400">Tiago believes that robust cybersecurity is essential for protecting the trust patients place in digital health platforms.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -1201,6 +1205,9 @@ export default function LandingPage() {
 
           {/* CTA */}
           <div className="text-center mt-16">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 font-medium">
+              These are the minds building the future of neurological health.
+            </p>
             <Button 
               size="lg"
               className="relative overflow-hidden text-xl px-12 py-8 bg-gradient-to-r from-teal-500 via-purple-600 to-pink-600 hover:from-teal-600 hover:via-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-pink-500/50 hover:scale-105 transition-all duration-500 group"

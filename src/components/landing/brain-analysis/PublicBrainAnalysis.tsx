@@ -153,9 +153,9 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
             <div className="flex items-start gap-3">
               <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-primary mt-1 flex-shrink-0" />
               <div>
-                <DialogTitle className="text-xl sm:text-2xl leading-tight">Brain Seizure Localization Tool</DialogTitle>
+                <DialogTitle className="text-xl sm:text-2xl leading-tight">Interactive Brain Localization Tool</DialogTitle>
                 <DialogDescription className="mt-1 text-sm">
-                  Research-grade educational tool. Select signs to explore likely brain regions (population estimates).
+                  For Seizure Research & Education. Select signs to explore likely brain regions (population estimates).
                 </DialogDescription>
               </div>
               
@@ -264,6 +264,9 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
               <p className="font-semibold text-amber-900 dark:text-amber-100 mb-1">Educational Tool Only - Not for Diagnosis</p>
               <p className="text-amber-800 dark:text-amber-200">
                 This tool provides educational information based on population research. It cannot diagnose conditions or replace medical evaluation. Consult a neurologist for medical care.
+              </p>
+              <p className="text-xs text-amber-700 dark:text-amber-300 mt-2 font-medium">
+                Built from global epilepsy research data (ILAE-aligned).
               </p>
             </div>
           </div>
