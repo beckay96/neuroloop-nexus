@@ -193,7 +193,9 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               borderRadius: '20px',
               padding: '28px',
               marginBottom: '20px',
-              boxShadow: `0 10px 30px ${getProbabilityColor(topRegion[1])}40, inset 0 1px 0 rgba(255,255,255,0.1)`,
+              boxShadow: darkMode 
+                ? `0 10px 30px ${getProbabilityColor(topRegion[1])}40, 0 4px 12px rgba(0, 0, 0, 0.3)`
+                : `0 10px 30px ${getProbabilityColor(topRegion[1])}40, inset 0 1px 0 rgba(255,255,255,0.15)`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
