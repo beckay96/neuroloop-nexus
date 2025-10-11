@@ -19,7 +19,7 @@ import {
   SheetDescription,
   SheetTrigger
 } from "@/components/ui/sheet";
-import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check, EyeOff } from "lucide-react";
+import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check, EyeOff, ChevronDown, ChevronUp, ArrowDown } from "lucide-react";
 import BrainVisualizationImages from "./BrainVisualizationImages";
 import { SEIZURE_SEMIOLOGY, BRAIN_REGIONS } from "@/data/brain-seizure-data";
 import { useToast } from "@/hooks/use-toast";
@@ -38,6 +38,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
   const [showGeneralized, setShowGeneralized] = useState(false);
   const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [selectionPanelOpen, setSelectionPanelOpen] = useState(false);
   const { toast } = useToast();
 
   // Debounce search input (200ms)
@@ -278,24 +279,106 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
-          {/* Left Panel - Symptom Selection */}
-          <div className="lg:col-span-1">
-            <Card className="p-6 bg-gradient-to-br from-white to-purple-50/30 dark:from-gray-900 dark:to-purple-950/20 border-2 border-purple-200 dark:border-purple-800/50 shadow-lg">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-                  Select Seizure Signs
-                </h2>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleClearSelections}
-                  disabled={selectedSigns.length === 0}
-                  className="border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/50"
-                >
-                  Clear All
-                </Button>
-              </div>
+        <div className="space-y-6 mt-4">
+          {/* Brain Visualization - Now First */}
+          <Card className="p-6 bg-gradient-to-br from-white to-teal-50/30 dark:from-gray-900 dark:to-teal-950/20 border-2 border-teal-200 dark:border-teal-800/50 shadow-lg">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-teal-600 via-purple-600 to-pink-600 dark:from-teal-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                Brain Region Localization
+              </h2>
+            </div>
+            
+            <div aria-live="polite" aria-atomic="true">
+              <BrainVisualizationImages 
+                highlightedRegions={highlightedRegions}
+                selectedSigns={selectedSigns}
+                onWaitlistOpen={onWaitlistOpen}
+                onClose={onClose}
+              />
+            </div>
+
+            {/* CTA to Select Symptoms Below */}
+            {selectedSigns.length === 0 && (
+              <Card className="mt-6 p-5 bg-gradient-to-r from-purple-50 via-pink-50 to-teal-50 dark:from-purple-950/40 dark:via-pink-950/40 dark:to-teal-950/40 border-2 border-purple-300 dark:border-purple-600 animate-pulse">
+                <div className="text-center space-y-3">
+                  <div className="flex justify-center">
+                    <ArrowDown className="h-8 w-8 text-purple-600 dark:text-purple-400 animate-bounce" />
+                  </div>
+                  <h3 className="text-lg font-bold text-purple-900 dark:text-purple-100">
+                    Select Your Seizure Signs Below
+                  </h3>
+                  <p className="text-sm text-purple-700 dark:text-purple-300">
+                    Choose symptoms from the list below to see which brain regions they map to. Results appear instantly!
+                  </p>
+                  <Button
+                    size="lg"
+                    onClick={() => setSelectionPanelOpen(true)}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  >
+                    Select Symptoms ⬇️
+                  </Button>
+                </div>
+              </Card>
+            )}
+
+            {/* Generalized Seizure Alert */}
+            {showGeneralized && (
+              <Card className="mt-6 p-4 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-700">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                  <div className="text-sm">
+                    <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Generalized Seizure Pattern Detected</p>
+                    <p className="text-red-800 dark:text-red-200">
+                      Your selected signs suggest a generalized seizure pattern. This tool is optimized for focal seizures. Consult a neurologist for evaluation.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            )}
+          </Card>
+
+          {/* Symptom Selection Panel - Now Below, Collapsible */}
+          <div>
+            <Card className="bg-gradient-to-br from-white to-purple-50/30 dark:from-gray-900 dark:to-purple-950/20 border-2 border-purple-200 dark:border-purple-800/50 shadow-lg overflow-hidden">
+              {/* Collapsible Header */}
+              <button
+                onClick={() => setSelectionPanelOpen(!selectionPanelOpen)}
+                className="w-full p-6 flex items-center justify-between hover:bg-purple-50/50 dark:hover:bg-purple-950/50 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                    Select Seizure Signs
+                  </h2>
+                  {selectedSigns.length > 0 && (
+                    <Badge variant="secondary" className="bg-purple-100 dark:bg-purple-900">
+                      {selectedSigns.length} selected
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClearSelections();
+                    }}
+                    disabled={selectedSigns.length === 0}
+                    className="border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/50"
+                  >
+                    Clear All
+                  </Button>
+                  {selectionPanelOpen ? (
+                    <ChevronUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  ) : (
+                    <ChevronDown className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  )}
+                </div>
+              </button>
+
+              {/* Collapsible Content */}
+              {selectionPanelOpen && (
+                <div className="px-6 pb-6 animate-in slide-in-from-top-2">
 
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 font-medium">
                 ✨ Tick all signs that apply. Results update instantly.
@@ -393,112 +476,12 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
                   )
                 ))}
               </div>
-            </Card>
-          </div>
-
-          {/* Right Panel - Brain Visualization */}
-          <div className="lg:col-span-2">
-            <Card className="p-6 bg-gradient-to-br from-white to-teal-50/30 dark:from-gray-900 dark:to-teal-950/20 border-2 border-teal-200 dark:border-teal-800/50 shadow-lg">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-teal-600 via-purple-600 to-pink-600 dark:from-teal-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-                  Brain Region Localization
-                </h2>
-              </div>
-              
-              <div aria-live="polite" aria-atomic="true">
-                <BrainVisualizationImages 
-                  highlightedRegions={highlightedRegions}
-                  selectedSigns={selectedSigns}
-                  onWaitlistOpen={onWaitlistOpen}
-                  onClose={onClose}
-                />
-              </div>
-
-              {/* Generalized Seizure Alert */}
-              {showGeneralized && (
-                <Card className="mt-6 p-4 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-700">
-                  <div className="flex items-start gap-3">
-                    <Info className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-red-900 dark:text-red-100 mb-2">
-                        Generalized Seizure Pattern Detected
-                      </h3>
-                      <p className="text-sm text-red-800 dark:text-red-200">
-                        The selected signs suggest possible generalized seizure involvement affecting bilateral brain networks. This requires comprehensive evaluation.
-                      </p>
-                    </div>
-                  </div>
-                </Card>
+                </div>
               )}
             </Card>
-
-            <Card className="mt-6 p-6 bg-sky-50 dark:bg-sky-950/30 border-sky-200 dark:border-sky-800">
-              <div className="flex items-start gap-3">
-                <EyeOff className="h-5 w-5 text-sky-700 dark:text-sky-300 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-sky-900 dark:text-sky-100">
-                    Why Some Regions Disappear
-                  </h3>
-                  <ul className="text-sm space-y-2 text-sky-900 dark:text-sky-200 list-disc list-inside">
-                    <li>
-                      <strong>Probability thresholds:</strong> When multiple signs are selected, regions that fall below the display threshold (e.g., &lt;20% or unsupported by the chosen semiologies) are hidden to prevent low-confidence noise.
-                    </li>
-                    <li>
-                      <strong>Combination logic:</strong> Each new sign triggers a recomputation against the population meta-analysis, mirroring how neurologists narrow localization as more evidence accumulates.
-                    </li>
-                    <li>
-                      <strong>Research-backed behavior:</strong> Strong localizers (for example, epigastric aura or déjà vu) push temporal lobe probabilities high, while less associated regions (frontal, insula, parietal) naturally approach zero and are removed to reduce cognitive overload.
-                    </li>
-                  </ul>
-                  <p className="text-xs text-sky-800/80 dark:text-sky-300/80">
-                    Sources: Brain Communications (2022) meta-analysis; PubMed-indexed semiology localization studies.
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            {/* Next Steps & Safety Info */}
-            <Card className="mt-6 p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Next Steps & Important Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <h3 className="font-medium mb-2 text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    <Info className="h-4 w-4" />
-                    When to Seek Medical Care
-                  </h3>
-                  <ul className="text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
-                    <li>Seizures lasting &gt;5 minutes</li>
-                    <li>Injury during seizure</li>
-                    <li>First-time seizure</li>
-                    <li>Recurrent seizures</li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-medium mb-2 text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    <BookOpen className="h-4 w-4" />
-                    Typical Evaluation Process
-                  </h3>
-                  <ul className="text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
-                    <li>EEG (brain wave test)</li>
-                    <li>MRI brain imaging</li>
-                    <li>Neurologist consultation</li>
-                    <li>Video EEG if needed</li>
-                  </ul>
-                </div>
-              </div>
-            </Card>
-
-            {/* Data Privacy Notice */}
-            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <p className="text-xs text-blue-800 dark:text-blue-200 flex items-center gap-2">
-                <Info className="h-3 w-3" />
-                <span>
-                  <strong>Privacy:</strong> Data not saved. Selections stay in your browser only. 
-                </span>
-              </p>
-            </div>
           </div>
         </div>
+
       </DialogContent>
     </Dialog>
   );
