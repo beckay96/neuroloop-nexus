@@ -40,9 +40,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         className="relative"
         style={{
           width: '1080px',
-          minHeight: '1080px',
-          height: sortedRegions.length <= 3 ? '1080px' : 'auto',
-          maxHeight: '1350px',
+          height: '1080px',
           background: darkMode 
             ? '#1a0b2e'
             : '#f8f4ff',
@@ -115,12 +113,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <img 
               src={darkMode 
-                ? 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/dark-mode-wide-logo.png.png'
-                : 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/light-mode-wide-logo.PNG'}
+                ? 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/neurloop-logo-wide-darkmode.png'
+                : 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/neurloop-logo-wide-lightmode.png'}
               alt="NeuroLoop"
               style={{
-                height: darkMode ? '190px' : '380px',
-                width: 'auto',
+                width: '490px',
+                height: 'auto',
                 filter: darkMode ? 'drop-shadow(0 8px 30px rgba(147, 51, 234, 0.7))' : 'drop-shadow(0 12px 40px rgba(168, 85, 247, 0.7))',
               }}
             />
