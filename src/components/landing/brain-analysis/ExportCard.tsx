@@ -29,94 +29,102 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         className="relative"
         style={{
           width: '1080px',
-          height: '1080px',
+          minHeight: '1080px',
+          maxHeight: '1350px',
           background: darkMode 
-            ? 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)'
-            : 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 50%, #e9d5ff 100%)',
-          padding: '60px',
+            ? '#1a0b2e'
+            : '#f8f4ff',
+          padding: '50px',
           fontFamily: 'system-ui, -apple-system, sans-serif',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Decorative Background Elements */}
+        {/* Background Image */}
         <div 
           style={{
             position: 'absolute',
-            top: '100px',
-            right: '100px',
-            width: '300px',
-            height: '300px',
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%)',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: darkMode 
+              ? 'url(https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/dark-mode-bg-image-for-posts.png.PNG)'
+              : 'url(https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/light-mode-bg-image-for-posts.png.PNG)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.6,
+            zIndex: 0,
+          }}
+        />
+        
+        {/* Glowing Decorative Elements */}
+        <div 
+          style={{
+            position: 'absolute',
+            top: '80px',
+            right: '80px',
+            width: '400px',
+            height: '400px',
+            background: darkMode 
+              ? 'radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%)',
             borderRadius: '50%',
-            filter: 'blur(60px)',
+            filter: 'blur(80px)',
+            zIndex: 1,
           }}
         />
         <div 
           style={{
             position: 'absolute',
-            bottom: '150px',
-            left: '150px',
-            width: '250px',
-            height: '250px',
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%)',
-            borderRadius: '50%',
-            filter: 'blur(50px)',
+            bottom: '100px',
+            left: '100px',
+            width: '350px',
+            height: '350px',
+            background: darkMode
+              ? 'radial-gradient(circle, rgba(236, 72, 153, 0.25) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%)',
+            filter: 'blur(70px)',
+            zIndex: 1,
           }}
         />
 
-        {/* Header with Logo */}
+        {/* Header with Wide Logo */}
         <div style={{ 
           display: 'flex', 
-          alignItems: 'center', 
+          alignItems: 'flex-start', 
           justifyContent: 'space-between',
-          marginBottom: '40px',
+          marginBottom: '35px',
           position: 'relative',
           zIndex: 10,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-              borderRadius: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 10px 30px rgba(168, 85, 247, 0.4)',
+          <div>
+            <img 
+              src={darkMode 
+                ? 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/dark-mode-wide-logo.png.png'
+                : 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/light-mode-wide-logo.PNG'}
+              alt="NeuroLoop"
+              style={{
+                height: '65px',
+                width: 'auto',
+                filter: darkMode ? 'drop-shadow(0 4px 20px rgba(147, 51, 234, 0.6))' : 'drop-shadow(0 4px 20px rgba(168, 85, 247, 0.5))',
+              }}
+            />
+            <p style={{
+              fontSize: '18px',
+              color: darkMode ? '#e2e8f0' : '#64748b',
+              margin: '8px 0 0 0',
+              fontWeight: '500',
+              letterSpacing: '0.5px',
             }}>
-              <Brain style={{ 
-                width: '48px', 
-                height: '48px', 
-                color: 'white',
-              }} />
-            </div>
-            <div>
-              <h1 style={{
-                fontSize: '48px',
-                fontWeight: '800',
-                backgroundImage: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                display: 'inline-block',
-                margin: 0,
-                lineHeight: 1,
-              }}>
-                NeuroLoop
-              </h1>
-              <p style={{
-                fontSize: '20px',
-                color: darkMode ? '#cbd5e1' : '#64748b',
-                margin: '5px 0 0 0',
-                fontWeight: '500',
-              }}>
-                Brain Localization Analysis
-              </p>
-            </div>
+              Brain Localization Analysis
+            </p>
           </div>
           <div style={{
-            fontSize: '18px',
-            color: darkMode ? '#94a3b8' : '#64748b',
+            fontSize: '17px',
+            color: darkMode ? '#cbd5e1' : '#64748b',
             textAlign: 'right',
+            fontWeight: '500',
           }}>
             {today}
           </div>
@@ -124,18 +132,17 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
 
         {/* Main Results Card */}
         <div style={{
-          background: darkMode ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-          borderRadius: '30px',
+          background: darkMode ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.92)',
+          borderRadius: '28px',
           padding: '40px',
           boxShadow: darkMode 
-            ? '0 20px 60px rgba(0, 0, 0, 0.5)'
-            : '0 20px 60px rgba(0, 0, 0, 0.1)',
-          backdropFilter: 'blur(10px)',
-          border: darkMode ? '2px solid rgba(148, 163, 184, 0.2)' : '2px solid rgba(168, 85, 247, 0.2)',
+            ? '0 25px 70px rgba(0, 0, 0, 0.6), 0 0 40px rgba(147, 51, 234, 0.15)'
+            : '0 25px 70px rgba(0, 0, 0, 0.12), 0 0 40px rgba(168, 85, 247, 0.1)',
+          backdropFilter: 'blur(20px)',
+          border: darkMode ? '2px solid rgba(147, 51, 234, 0.3)' : '2px solid rgba(168, 85, 247, 0.25)',
           position: 'relative',
           zIndex: 10,
-          marginBottom: '30px',
-          maxHeight: '820px',
+          marginBottom: '28px',
         }}>
           {/* Summary Header */}
           <div style={{
@@ -147,7 +154,8 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             <Sparkles style={{ 
               width: '32px', 
               height: '32px', 
-              color: '#a855f7',
+              color: darkMode ? '#c084fc' : '#a855f7',
+              filter: darkMode ? 'drop-shadow(0 0 8px rgba(192, 132, 252, 0.6))' : 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.4))',
             }} />
             <h2 style={{
               fontSize: '32px',
@@ -155,6 +163,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               color: darkMode ? '#f1f5f9' : '#1e293b',
               margin: 0,
               letterSpacing: '0.5px',
+              textShadow: darkMode ? '0 2px 10px rgba(192, 132, 252, 0.3)' : 'none',
             }}>
               Your Brain Localization Results
             </h2>
@@ -308,11 +317,14 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             boxShadow: '0 8px 25px rgba(168, 85, 247, 0.4)',
           }}>
             <img 
-              src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png" 
+              src={darkMode 
+                ? "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png"
+                : "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/lightmodelogo-neuroloop.png"}
               alt="NeuroLoop" 
               style={{
-                width: '28px',
-                height: '28px',
+                width: '30px',
+                height: '30px',
+                filter: darkMode ? 'drop-shadow(0 0 12px rgba(192, 132, 252, 0.7))' : 'drop-shadow(0 0 10px rgba(168, 85, 247, 0.5))',
               }}
             />
             <div>
