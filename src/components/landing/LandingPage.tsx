@@ -138,7 +138,11 @@ export default function LandingPage() {
             </div>
           </div>
           
-          <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.1s'}}>
+          <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up italic font-medium" style={{animationDelay: '0.1s'}}>
+            Every seizure, tremor, and symptom tells a story — NeuroLoop helps make sure it's never lost.
+          </p>
+          
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.15s'}}>
             Research-grade health tracking for epilepsy, Parkinson's, and neurological conditions
           </p>
 
@@ -773,9 +777,9 @@ export default function LandingPage() {
       <div className="bg-white dark:bg-gray-950 py-16 border-y-4 border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">How NeuroLoop Works</h2>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">How It All Comes Together</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Four simple steps to better neurological health management
+              Four simple steps to transform neurological health management
             </p>
           </div>
           
@@ -813,13 +817,19 @@ export default function LandingPage() {
             </Card>
           </div>
           
+          <div className="text-center mt-8">
+            <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+              It's that simple — standardised, secure, and built to advance global research.
+            </p>
+          </div>
+          
           {/* Technical Details */}
           <div className="mt-12 grid md:grid-cols-2 gap-6">
             <Card className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-2 border-gray-300 dark:border-gray-700">
               <CardContent className="pt-6">
                 <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Lock className="h-5 w-5" />
-                  Security & Privacy
+                  Your Data. Protected by Design.
                 </h3>
                 <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                   <li className="flex items-start gap-2">
@@ -876,6 +886,9 @@ export default function LandingPage() {
       <div className="bg-white dark:bg-gray-950 py-16 border-y-4 border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4 italic">
+              Neurological care doesn't happen in isolation — so we built a platform that connects everyone who's part of it.
+            </p>
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Built For Everyone in the Care Journey</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
               Patients, carers, and healthcare providers united in one platform
@@ -931,7 +944,7 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-purple-600 dark:text-purple-400" />
-                    <span>Receive alerts and stay connected</span>
+                    <span>Get notified instantly when your loved one needs help</span>
                   </li>
                 </ul>
               </CardContent>
@@ -959,6 +972,10 @@ export default function LandingPage() {
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-pink-600 dark:text-pink-400" />
                     <span>Communicate securely with patients</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 mt-0.5 text-pink-600 dark:text-pink-400" />
+                    <span>Gain insights that improve treatment precision</span>
                   </li>
                 </ul>
               </CardContent>
@@ -1035,6 +1052,9 @@ export default function LandingPage() {
       <div className="bg-gradient-to-br from-teal-50 via-purple-50 to-white dark:from-teal-950/20 dark:via-purple-950/20 dark:to-black py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4 italic">
+              Behind NeuroLoop is a team of experts, clinicians, and innovators driven by a shared mission: to close the loop in neurological care.
+            </p>
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
               Meet Our Team
             </h2>
@@ -1083,6 +1103,10 @@ export default function LandingPage() {
                       <p className="flex items-start gap-2">
                         <Heart className="h-5 w-5 mt-0.5 flex-shrink-0 text-pink-300" />
                         <span className="font-semibold">Driven by lived experience with epilepsy, shaping patient-focused solutions</span>
+                      </p>
+                      <p className="flex items-start gap-2 pt-2">
+                        <Sparkles className="h-5 w-5 mt-0.5 flex-shrink-0 text-yellow-300" />
+                        <span className="italic text-white font-medium">Rebecca's mission: to ensure no seizure, tremor, or symptom ever goes unseen again.</span>
                       </p>
                     </div>
                     <a 
