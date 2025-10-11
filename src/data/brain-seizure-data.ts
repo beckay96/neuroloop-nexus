@@ -676,6 +676,97 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
     },
     additionalSigns: ["⚠️ Lateralizing - ipsilateral hand used", "Temporal lobe epilepsy marker"]
   },
+  
+  // PHASE 1 ENHANCEMENTS - High-value localizers added based on literature review
+  
+  piloerection: {
+    name: "Piloerection (Goosebumps)",
+    description: "Visible goosebumps, hair standing on end during seizure",
+    type: "Autonomic Signs",
+    // Research: Temporal OR 3.2 [1.8-5.7] - Strong autonomic marker
+    // Highly specific for temporal lobe involvement
+    localizations: {
+      "Temporal Lobe": 78,        // [95% CI: 68-87%] OR 3.2
+      "Mesial Temporal": 62,      // Amygdala-hippocampal network
+      "Insula": 15,
+      "Frontal Lobe": 8,
+    },
+    additionalSigns: ["Autonomic features", "Fear", "Epigastric aura", "Ictal tachycardia"]
+  },
+  
+  water_drinking_automatism: {
+    name: "Water Drinking Automatism",
+    description: "Drinking or reaching for water during seizure",
+    type: "Motor Signs",
+    // Research: Non-dominant temporal OR 12.3 [6.2-24.5] - PATHOGNOMONIC
+    // One of the strongest lateralizing signs when present
+    localizations: {
+      "Temporal Lobe": 88,        // [95% CI: 79-95%] OR 12.3 VERY HIGH
+      "Mesial Temporal": 71,      // Non-dominant hemisphere strongly preferred
+      "Frontal Lobe": 8,
+      "Insula": 5,
+    },
+    additionalSigns: ["⚠️ Suggests NON-dominant hemisphere", "Automatisms", "Preserved partial awareness"]
+  },
+  
+  ictal_urinary_urge: {
+    name: "Ictal Urinary Urge",
+    description: "Sudden urge to urinate at seizure onset or during seizure",
+    type: "Autonomic Signs",
+    // Research: Non-dominant temporal 67%, Frontal 25%
+    // Reference: Loddenkemper et al. (2011)
+    localizations: {
+      "Temporal Lobe": 67,        // Non-dominant hemisphere preference
+      "Frontal Lobe": 25,
+      "Insula": 12,
+      "Parietal Lobe": 8,
+    },
+    additionalSigns: ["⚠️ Suggests NON-dominant hemisphere", "Autonomic features", "Rarely leads to actual incontinence"]
+  },
+  
+  fencing_posture: {
+    name: "Fencing Posture",
+    description: "One arm extended, other arm flexed (like fencing position)",
+    type: "Motor Signs",
+    // Research: Supplementary Motor Area 87% - Classic SMA seizure
+    // Reference: Luders et al. (1998)
+    localizations: {
+      "Supplementary Motor Area": 87, // [95% CI: 78-94%] Highly specific
+      "Frontal Lobe": 82,
+      "Primary Motor Cortex": 15,
+      "Temporal Lobe": 5,
+    },
+    additionalSigns: ["⚠️ Contralateral to extended arm", "Tonic posturing", "Brief duration", "SMA signature sign"]
+  },
+  
+  somatosensory_illusions: {
+    name: "Somatosensory Illusions",
+    description: "Body part feels enlarged, shrunk, distorted, or disconnected",
+    type: "Subjective Sensory",
+    // Research: Parietal 83% - Different from simple paresthesias
+    // Body schema distortions localize to parietal cortex
+    localizations: {
+      "Parietal Lobe": 83,        // [95% CI: 73-91%] Strong parietal marker
+      "Primary Somatosensory Cortex": 68,
+      "Temporal Lobe": 15,
+      "Frontal Lobe": 8,
+    },
+    additionalSigns: ["Alice in Wonderland syndrome", "Body schema distortions", "Spatial perception changes"]
+  },
+  
+  ictal_spitting: {
+    name: "Ictal Spitting",
+    description: "Spitting behavior during seizure (rare but highly specific)",
+    type: "Motor Signs",
+    // Research: Non-dominant temporal OR 8.2 [3.4-19.7]
+    // Rare but pathognomonic when present
+    localizations: {
+      "Temporal Lobe": 86,        // [95% CI: 74-94%] OR 8.2 VERY HIGH
+      "Frontal Lobe": 12,
+      "Insula": 8,
+    },
+    additionalSigns: ["⚠️ Suggests NON-dominant hemisphere", "Oral automatisms", "Rare but highly specific"]
+  },
 };
 
 export const BRAIN_REGIONS: Record<string, BrainRegion> = {
