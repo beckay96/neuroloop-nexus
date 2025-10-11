@@ -450,6 +450,25 @@ export default function BrainVisualizationImages({
         </Card>
       )}
       
+      {/* Hidden Export Cards for html2canvas */}
+      <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+        {/* Light Mode Export Card */}
+        <ExportCard
+          ref={exportCardRef}
+          highlightedRegions={highlightedRegions}
+          selectedSignsCount={selectedSigns.length}
+          darkMode={false}
+        />
+        
+        {/* Dark Mode Export Card */}
+        <ExportCard
+          ref={exportCardDarkRef}
+          highlightedRegions={highlightedRegions}
+          selectedSignsCount={selectedSigns.length}
+          darkMode={true}
+        />
+      </div>
+      
       {/* Bottom CTA - Transition from Exploration to Purpose */}
       {sortedRegions.length > 0 && (
         <Card className="p-6 bg-gradient-to-r from-pink-50 via-purple-50 to-teal-50 dark:from-pink-950/40 dark:via-purple-950/40 dark:to-teal-950/40 border-2 border-pink-300 dark:border-pink-700">
@@ -472,25 +491,6 @@ export default function BrainVisualizationImages({
           </div>
         </Card>
       )}
-      
-      {/* Hidden Export Cards for html2canvas */}
-      <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
-        {/* Light Mode Export Card */}
-        <ExportCard
-          ref={exportCardRef}
-          highlightedRegions={highlightedRegions}
-          selectedSignsCount={selectedSigns.length}
-          darkMode={false}
-        />
-        
-        {/* Dark Mode Export Card */}
-        <ExportCard
-          ref={exportCardDarkRef}
-          highlightedRegions={highlightedRegions}
-          selectedSignsCount={selectedSigns.length}
-          darkMode={true}
-        />
-      </div>
     </div>
   );
 }
