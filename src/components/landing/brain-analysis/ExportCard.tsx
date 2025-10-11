@@ -119,16 +119,16 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 : 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/light-mode-wide-logo.PNG'}
               alt="NeuroLoop"
               style={{
-                height: '65px',
+                height: '190px',
                 width: 'auto',
-                filter: darkMode ? 'drop-shadow(0 4px 20px rgba(147, 51, 234, 0.6))' : 'drop-shadow(0 4px 20px rgba(168, 85, 247, 0.5))',
+                filter: darkMode ? 'drop-shadow(0 8px 30px rgba(147, 51, 234, 0.7))' : 'drop-shadow(0 8px 30px rgba(168, 85, 247, 0.6))',
               }}
             />
             <p style={{
-              fontSize: '18px',
+              fontSize: '24px',
               color: darkMode ? '#e2e8f0' : '#64748b',
-              margin: '8px 0 0 0',
-              fontWeight: '500',
+              margin: '12px 0 0 0',
+              fontWeight: '600',
               letterSpacing: '0.5px',
             }}>
               Brain Localization Analysis
