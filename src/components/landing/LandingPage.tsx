@@ -1093,6 +1093,7 @@ export default function LandingPage() {
         <PublicBrainAnalysis 
           isOpen={showBrainAnalysis}
           onClose={() => setShowBrainAnalysis(false)}
+          onWaitlistOpen={() => setShowWaitlist(true)}
         />
       )}
 

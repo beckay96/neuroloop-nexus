@@ -27,9 +27,10 @@ import { useToast } from "@/hooks/use-toast";
 interface PublicBrainAnalysisProps {
   isOpen: boolean;
   onClose: () => void;
+  onWaitlistOpen?: () => void;
 }
 
-export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAnalysisProps) {
+export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen }: PublicBrainAnalysisProps) {
   const [selectedSigns, setSelectedSigns] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -147,14 +148,19 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pt-12 sm:pt-6">
-        <DialogHeader className="space-y-4 pb-4">
+      <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 dark:from-gray-950 dark:via-purple-950/30 dark:to-gray-900 pt-12 sm:pt-6">
+        <DialogHeader className="space-y-4 pb-6 border-b-2 border-purple-200 dark:border-purple-800/50">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-primary mt-1 flex-shrink-0" />
+              <div className="relative">
+                <Brain className="h-8 w-8 sm:h-10 sm:w-10 text-purple-600 dark:text-purple-400 flex-shrink-0 animate-pulse" />
+                <div className="absolute -inset-1 bg-purple-400/30 dark:bg-purple-600/30 rounded-full blur-lg -z-10"></div>
+              </div>
               <div>
-                <DialogTitle className="text-xl sm:text-2xl leading-tight">Interactive Brain Localization Tool</DialogTitle>
-                <DialogDescription className="mt-1 text-sm">
+                <DialogTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent leading-tight">
+                  Interactive Brain Localization Tool
+                </DialogTitle>
+                <DialogDescription className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium">
                   🧠 Try the free Brain Seizure Localisation Tool — discover which brain regions are most often linked to your seizure symptoms.
                 </DialogDescription>
               </div>
@@ -275,21 +281,24 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
           {/* Left Panel - Symptom Selection */}
           <div className="lg:col-span-1">
-            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+            <Card className="p-6 bg-gradient-to-br from-white to-purple-50/30 dark:from-gray-900 dark:to-purple-950/20 border-2 border-purple-200 dark:border-purple-800/50 shadow-lg">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Select Seizure Signs</h2>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                  Select Seizure Signs
+                </h2>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={handleClearSelections}
                   disabled={selectedSigns.length === 0}
+                  className="border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/50"
                 >
                   Clear All
                 </Button>
               </div>
 
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Tick all signs that apply. Results update instantly.
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 font-medium">
+                ✨ Tick all signs that apply. Results update instantly.
               </p>
               
               {/* Quick Example Buttons - Gamification */}
@@ -389,15 +398,19 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
 
           {/* Right Panel - Brain Visualization */}
           <div className="lg:col-span-2">
-            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Brain Region Localization</h2>
+            <Card className="p-6 bg-gradient-to-br from-white to-teal-50/30 dark:from-gray-900 dark:to-teal-950/20 border-2 border-teal-200 dark:border-teal-800/50 shadow-lg">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-teal-600 via-purple-600 to-pink-600 dark:from-teal-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                  Brain Region Localization
+                </h2>
               </div>
               
               <div aria-live="polite" aria-atomic="true">
                 <BrainVisualizationImages 
                   highlightedRegions={highlightedRegions}
                   selectedSigns={selectedSigns}
+                  onWaitlistOpen={onWaitlistOpen}
+                  onClose={onClose}
                 />
               </div>
 

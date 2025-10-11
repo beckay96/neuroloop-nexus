@@ -2,18 +2,22 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Brain as BrainIcon, Bell, Share2, Camera } from "lucide-react";
+import { Sparkles, Brain as BrainIcon, Bell, Share2, Camera, Download, Copy, ExternalLink } from "lucide-react";
 import { getProbabilityColor, BRAIN_REGIONS } from "@/data/brain-seizure-data";
 import { useToast } from "@/hooks/use-toast";
 
 interface BrainVisualizationImagesProps {
   highlightedRegions: Record<string, number>;
   selectedSigns: string[];
+  onWaitlistOpen?: () => void;
+  onClose?: () => void;
 }
 
 export default function BrainVisualizationImages({ 
   highlightedRegions, 
-  selectedSigns 
+  selectedSigns,
+  onWaitlistOpen,
+  onClose
 }: BrainVisualizationImagesProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const { toast } = useToast();
@@ -25,12 +29,35 @@ export default function BrainVisualizationImages({
     });
   };
   
-  const handleWaitlistClick = () => {
-    // Will be connected to actual waitlist modal
+  const handleDownloadImage = async () => {
     toast({
-      title: "Join the Waitlist",
-      description: "Redirecting to waitlist signup...",
+      title: "📥 Download feature coming soon!",
+      description: "We're building a beautiful branded export for your brain map.",
     });
+  };
+  
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "🔗 Link copied!",
+        description: "Share this tool with friends, family, or healthcare providers.",
+      });
+    } catch (err) {
+      toast({
+        title: "❌ Copy failed",
+        description: "Please try again or manually copy the URL.",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  const handleWaitlistClick = () => {
+    // Close brain tool and open waitlist modal
+    if (onClose) onClose();
+    setTimeout(() => {
+      if (onWaitlistOpen) onWaitlistOpen();
+    }, 100); // Small delay for smooth transition
   };
 
   // Get the dominant highlighted region (highest probability)
@@ -50,14 +77,13 @@ export default function BrainVisualizationImages({
 
   return (
     <div className="space-y-6">
-      {/* Animated Header */}
+      {/* Animated Header - ENHANCED WITH GRADIENTS */}
       {sortedRegions.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-400 animate-pulse">
-            <Sparkles className="h-4 w-4" />
-            <span>Brain regions lighting up based on your seizure signs!</span>
-          </div>
-          <p className="text-xs text-gray-600 dark:text-gray-400 italic">
+        <div className="space-y-3 mb-6">
+          <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent animate-pulse">
+            ✨ Brain regions lighting up based on your seizure signs!
+          </h3>
+          <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
             These patterns are population estimates — your data helps improve global accuracy.
           </p>
         </div>
@@ -66,16 +92,25 @@ export default function BrainVisualizationImages({
       {/* Brain Regions - Interactive Cards */}
       <div className="space-y-3">
         {sortedRegions.length === 0 ? (
-          <Card className="p-8 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border-purple-200 dark:border-purple-700">
-            <div className="text-center space-y-3">
-              <BrainIcon className="h-16 w-16 mx-auto text-purple-400 dark:text-purple-600" />
-              <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-100">
-                Ready to explore your brain?
+          <Card className="p-8 sm:p-12 bg-gradient-to-br from-purple-50 via-pink-50 to-teal-50 dark:from-purple-950/50 dark:via-pink-950/50 dark:to-teal-950/50 border-2 border-purple-300 dark:border-purple-600 shadow-2xl relative overflow-hidden">
+            {/* Animated background circles */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-300/20 dark:bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-pink-300/20 dark:bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            
+            <div className="text-center space-y-4 relative z-10">
+              <BrainIcon className="h-20 w-20 sm:h-24 sm:w-24 mx-auto text-purple-500 dark:text-purple-400 animate-bounce" />
+              <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent">
+                ✨ Ready to explore your brain?
               </h3>
-              <p className="text-sm text-purple-700 dark:text-purple-300">
+              <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 max-w-md mx-auto leading-relaxed">
                 Select seizure signs from the list above to see which brain regions they're associated with.
-                Each region will light up with its probability percentage!
+                Each region will <strong className="text-purple-600 dark:text-purple-400">light up</strong> with its probability percentage!
               </p>
+              <div className="pt-4">
+                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 text-sm">
+                  🎯 Try the quick examples to get started!
+                </Badge>
+              </div>
             </div>
           </Card>
         ) : (
@@ -86,12 +121,13 @@ export default function BrainVisualizationImages({
             return (
               <Card
                 key={region}
-                className="p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg animate-in slide-in-from-bottom-4"
+                className="p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] animate-in slide-in-from-bottom-4 relative overflow-hidden"
                 style={{
                   backgroundColor: `${getProbabilityColor(probability)}20`,
                   borderColor: getProbabilityColor(probability),
-                  borderWidth: '2px',
-                  animationDelay: `${index * 100}ms`
+                  borderWidth: '3px',
+                  animationDelay: `${index * 100}ms`,
+                  boxShadow: `0 4px 20px ${getProbabilityColor(probability)}40, 0 0 30px ${getProbabilityColor(probability)}20`
                 }}
                 onClick={() => setSelectedRegion(selectedRegion === region ? null : region)}
               >
@@ -147,28 +183,56 @@ export default function BrainVisualizationImages({
         )}
       </div>
 
-      {/* Screenshot Share Prompt */}
+      {/* Enhanced Share Section - Multiple Options */}
       {sortedRegions.length > 0 && (
-        <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-2 border-blue-300 dark:border-blue-700">
-          <div className="flex items-center justify-between gap-4">
+        <Card className="p-5 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/40 dark:via-purple-950/40 dark:to-pink-950/40 border-2 border-purple-300 dark:border-purple-600 shadow-xl">
+          <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-semibold mb-1 text-blue-900 dark:text-blue-100 flex items-center gap-2">
-                <Camera className="h-4 w-4" />
+              <h3 className="text-lg font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+                <Camera className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 Share Your Brain Map
               </h3>
-              <p className="text-xs text-blue-700 dark:text-blue-300">
-                📸 Tap to share your brain map (no personal data included)
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                📸 Export, share, or save your results (no personal data included)
               </p>
             </div>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleShareScreenshot}
-              className="flex-shrink-0"
-            >
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
+            
+            {/* Mobile-friendly button grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleShareScreenshot}
+                className="w-full border-2 border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50"
+              >
+                <Camera className="h-4 w-4 mr-2" />
+                Screenshot Tip
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDownloadImage}
+                className="w-full border-2 border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/50"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download (Soon)
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCopyLink}
+                className="w-full border-2 border-pink-400 hover:bg-pink-50 dark:hover:bg-pink-950/50"
+              >
+                <Copy className="h-4 w-4 mr-2" />
+                Copy Link
+              </Button>
+            </div>
+            
+            <p className="text-xs text-center text-gray-600 dark:text-gray-400 italic">
+              💡 Perfect for Instagram, health forums, or sharing with your neurologist
+            </p>
           </div>
         </Card>
       )}
@@ -205,15 +269,15 @@ export default function BrainVisualizationImages({
         <Card className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border-gray-200 dark:border-gray-700">
           <h3 className="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-100">🎨 Color Guide - What the colors mean:</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
-              <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#E8E8E8' }}></div>
-              <span className="font-medium text-gray-900 dark:text-gray-100">0-20%</span>
-              <span className="text-gray-600 dark:text-gray-400">Unlikely</span>
+            <div className="flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 shadow-sm" style={{ backgroundColor: '#E8E8E8', borderColor: '#C0C0C0' }}>
+              <div className="w-12 h-12 rounded-full border-2 border-gray-400" style={{ backgroundColor: '#E8E8E8' }}></div>
+              <span className="font-bold text-black">0-20%</span>
+              <span className="font-medium text-gray-800">Unlikely</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
-              <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#FFE5B4' }}></div>
-              <span className="font-medium text-gray-900 dark:text-gray-100">21-40%</span>
-              <span className="text-gray-600 dark:text-gray-400">Possible</span>
+            <div className="flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 shadow-sm" style={{ backgroundColor: '#FFE5B4', borderColor: '#FFD700' }}>
+              <div className="w-12 h-12 rounded-full border-2 border-orange-300" style={{ backgroundColor: '#FFE5B4' }}></div>
+              <span className="font-bold text-black">21-40%</span>
+              <span className="font-medium text-gray-900">Possible</span>
             </div>
             <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
               <div className="w-10 h-10 rounded-full" style={{ backgroundColor: '#FFB347' }}></div>
