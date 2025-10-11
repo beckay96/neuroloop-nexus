@@ -93,11 +93,11 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               <h1 style={{
                 fontSize: '48px',
                 fontWeight: '800',
-                background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
+                backgroundImage: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                color: 'transparent',
+                display: 'inline-block',
                 margin: 0,
                 lineHeight: 1,
               }}>
@@ -126,7 +126,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         <div style={{
           background: darkMode ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)',
           borderRadius: '30px',
-          padding: '50px',
+          padding: '40px',
           boxShadow: darkMode 
             ? '0 20px 60px rgba(0, 0, 0, 0.5)'
             : '0 20px 60px rgba(0, 0, 0, 0.1)',
@@ -134,7 +134,8 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           border: darkMode ? '2px solid rgba(148, 163, 184, 0.2)' : '2px solid rgba(168, 85, 247, 0.2)',
           position: 'relative',
           zIndex: 10,
-          marginBottom: '40px',
+          marginBottom: '30px',
+          maxHeight: '820px',
         }}>
           {/* Summary Header */}
           <div style={{
@@ -153,6 +154,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               fontWeight: '700',
               color: darkMode ? '#f1f5f9' : '#1e293b',
               margin: 0,
+              letterSpacing: '0.5px',
             }}>
               Your Brain Localization Results
             </h2>
@@ -200,7 +202,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             </div>
           )}
 
-          {/* Other Regions */}
+          {/* Other Regions - Grid Layout with Max Height */}
           <div style={{ marginTop: '30px' }}>
             <p style={{
               fontSize: '20px',
@@ -210,7 +212,13 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             }}>
               Other Probable Regions:
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: '15px',
+              maxHeight: '350px',
+              overflowY: 'auto',
+            }}>
               {sortedRegions.slice(1, 5).map(([region, probability], index) => (
                 <div
                   key={region}
@@ -218,16 +226,18 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '20px 25px',
+                    padding: '18px 22px',
                     background: darkMode ? 'rgba(51, 65, 85, 0.5)' : 'rgba(248, 250, 252, 0.8)',
                     borderRadius: '15px',
                     border: `2px solid ${getProbabilityColor(probability)}40`,
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
                     <div style={{
                       width: '50px',
                       height: '50px',
+                      minWidth: '50px',
+                      minHeight: '50px',
                       borderRadius: '10px',
                       background: getProbabilityColor(probability),
                       display: 'flex',
@@ -236,12 +246,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                       fontSize: '22px',
                       fontWeight: '700',
                       color: probability <= 40 ? '#000' : '#fff',
-                      flexShrink: 0,
+                      lineHeight: 1,
                     }}>
                       {index + 2}
                     </div>
                     <span style={{
-                      fontSize: '24px',
+                      fontSize: '22px',
                       fontWeight: '600',
                       color: darkMode ? '#f1f5f9' : '#1e293b',
                     }}>
@@ -249,9 +259,10 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                     </span>
                   </div>
                   <span style={{
-                    fontSize: '28px',
+                    fontSize: '26px',
                     fontWeight: '700',
                     color: '#000000',
+                    marginLeft: '15px',
                   }}>
                     {probability}%
                   </span>
@@ -268,10 +279,11 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           justifyContent: 'space-between',
           position: 'relative',
           zIndex: 10,
+          marginTop: 'auto',
         }}>
           <div>
             <p style={{
-              fontSize: '18px',
+              fontSize: '17px',
               color: darkMode ? '#94a3b8' : '#64748b',
               margin: 0,
               fontWeight: '500',
@@ -279,7 +291,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               Based on {selectedSignsCount} seizure sign{selectedSignsCount !== 1 ? 's' : ''}
             </p>
             <p style={{
-              fontSize: '16px',
+              fontSize: '15px',
               color: darkMode ? '#64748b' : '#94a3b8',
               margin: '5px 0 0 0',
             }}>
@@ -291,21 +303,21 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             alignItems: 'center',
             gap: '12px',
             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-            padding: '15px 25px',
-            borderRadius: '15px',
-            boxShadow: '0 10px 30px rgba(168, 85, 247, 0.3)',
+            padding: '12px 22px',
+            borderRadius: '12px',
+            boxShadow: '0 8px 25px rgba(168, 85, 247, 0.4)',
           }}>
             <img 
               src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png" 
               alt="NeuroLoop" 
               style={{
-                width: '32px',
-                height: '32px',
+                width: '28px',
+                height: '28px',
               }}
             />
             <div>
               <p style={{
-                fontSize: '20px',
+                fontSize: '18px',
                 fontWeight: '700',
                 color: 'white',
                 margin: 0,
@@ -314,9 +326,9 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 NeuroLoop
               </p>
               <p style={{
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: '500',
-                color: 'rgba(255, 255, 255, 0.9)',
+                color: 'rgba(255, 255, 255, 0.95)',
                 margin: 0,
                 lineHeight: 1.2,
               }}>
