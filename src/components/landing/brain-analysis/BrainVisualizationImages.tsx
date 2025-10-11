@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Brain as BrainIcon, Bell, Share2, Camera, Download, Copy, ExternalLink } from "lucide-react";
 import { getProbabilityColor, BRAIN_REGIONS } from "@/data/brain-seizure-data";
 import { useToast } from "@/hooks/use-toast";
+import html2canvas from "html2canvas";
+import ExportCard from "./ExportCard";
 
 interface BrainVisualizationImagesProps {
   highlightedRegions: Record<string, number>;
@@ -20,6 +22,8 @@ export default function BrainVisualizationImages({
   onClose
 }: BrainVisualizationImagesProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const exportCardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
   const handleShareScreenshot = async () => {
@@ -30,10 +34,59 @@ export default function BrainVisualizationImages({
   };
   
   const handleDownloadImage = async () => {
+    if (!exportCardRef.current || Object.keys(highlightedRegions).length === 0) {
+      toast({
+        title: "⚠️ No results to export",
+        description: "Please select seizure signs first to generate results.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsExporting(true);
     toast({
-      title: "📥 Download feature coming soon!",
-      description: "We're building a beautiful branded export for your brain map.",
+      title: "🎨 Creating your export...",
+      description: "Generating beautiful branded image. This will take a few seconds.",
     });
+
+    try {
+      // Wait a moment for the component to render
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const canvas = await html2canvas(exportCardRef.current, {
+        backgroundColor: null,
+        scale: 2, // Higher quality
+        logging: false,
+        useCORS: true,
+      });
+
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          const today = new Date().toISOString().split('T')[0];
+          link.download = `neuroloop-brain-localization-${today}.png`;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+
+          toast({
+            title: "✅ Export successful!",
+            description: "Your brain map has been downloaded. Perfect for Instagram and social sharing!",
+          });
+        }
+      }, 'image/png', 1.0);
+    } catch (error) {
+      console.error('Export error:', error);
+      toast({
+        title: "❌ Export failed",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
   
   const handleCopyLink = async () => {
@@ -171,8 +224,11 @@ export default function BrainVisualizationImages({
                   </div>
 
                   <div 
-                    className="w-20 h-20 rounded-lg flex-shrink-0 flex items-center justify-center text-white font-bold text-2xl shadow-lg"
-                    style={{ backgroundColor: getProbabilityColor(probability) }}
+                    className="w-20 h-20 rounded-lg flex-shrink-0 flex items-center justify-center font-bold text-2xl shadow-lg"
+                    style={{ 
+                      backgroundColor: getProbabilityColor(probability),
+                      color: probability <= 40 ? '#000000' : '#FFFFFF'
+                    }}
                   >
                     #{index + 1}
                   </div>
@@ -213,10 +269,11 @@ export default function BrainVisualizationImages({
                 variant="outline"
                 size="sm"
                 onClick={handleDownloadImage}
-                className="w-full border-2 border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/50"
+                disabled={isExporting}
+                className="w-full border-2 border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/50 disabled:opacity-50"
               >
                 <Download className="h-4 w-4 mr-2" />
-                Download (Soon)
+                {isExporting ? "Exporting..." : "Download Image"}
               </Button>
               
               <Button
@@ -320,6 +377,16 @@ export default function BrainVisualizationImages({
           </div>
         </Card>
       )}
+      
+      {/* Hidden Export Card for html2canvas */}
+      <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+        <ExportCard
+          ref={exportCardRef}
+          highlightedRegions={highlightedRegions}
+          selectedSignsCount={selectedSigns.length}
+          darkMode={false}
+        />
+      </div>
     </div>
   );
 }
