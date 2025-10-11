@@ -22,6 +22,17 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
       month: 'long', 
       day: 'numeric' 
     });
+    
+    // Helper: Desaturate colors for smaller tiles
+    const getDesaturatedColor = (probability: number) => {
+      const baseColor = getProbabilityColor(probability);
+      const desaturatedMap: Record<string, string> = {
+        '#FFB347': '#FFA86A',  // Medium orange -> lighter
+        '#FF6B35': '#FF8C5A',  // Dark orange -> softer
+        '#DC143C': '#E94560',  // Red -> softer red
+      };
+      return desaturatedMap[baseColor] || baseColor;
+    };
 
     return (
       <div
@@ -132,12 +143,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
 
         {/* Main Results Card */}
         <div style={{
-          background: darkMode ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.92)',
+          background: darkMode ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.94)',
           borderRadius: '28px',
           padding: '40px',
           boxShadow: darkMode 
-            ? '0 25px 70px rgba(0, 0, 0, 0.6), 0 0 40px rgba(147, 51, 234, 0.15)'
-            : '0 25px 70px rgba(0, 0, 0, 0.12), 0 0 40px rgba(168, 85, 247, 0.1)',
+            ? '0 25px 70px rgba(0, 0, 0, 0.6), 0 0 40px rgba(147, 51, 234, 0.15), 0 8px 24px rgba(0,0,0,0.15)'
+            : '0 25px 70px rgba(0, 0, 0, 0.14), 0 0 40px rgba(168, 85, 247, 0.12), 0 8px 24px rgba(0,0,0,0.06)',
           backdropFilter: 'blur(20px)',
           border: darkMode ? '2px solid rgba(147, 51, 234, 0.3)' : '2px solid rgba(168, 85, 247, 0.25)',
           position: 'relative',
@@ -149,7 +160,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             display: 'flex',
             alignItems: 'center',
             gap: '15px',
-            marginBottom: '35px',
+            marginBottom: '22px',
           }}>
             <Sparkles style={{ 
               width: '32px', 
@@ -176,8 +187,8 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               border: `3px solid ${getProbabilityColor(topRegion[1])}`,
               borderRadius: '20px',
               padding: '35px',
-              marginBottom: '30px',
-              boxShadow: `0 10px 30px ${getProbabilityColor(topRegion[1])}40`,
+              marginBottom: '25px',
+              boxShadow: `0 10px 30px ${getProbabilityColor(topRegion[1])}40, inset 0 1px 0 rgba(255,255,255,0.1)`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
@@ -194,15 +205,15 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                   <h3 style={{
                     fontSize: '42px',
                     fontWeight: '800',
-                    color: darkMode ? '#f1f5f9' : '#0f172a',
+                    color: darkMode ? '#f1f5f9' : '#1a1a1a',
                     margin: 0,
                   }}>
                     {topRegion[0]}
                   </h3>
                 </div>
                 <div style={{
-                  fontSize: '64px',
-                  fontWeight: '800',
+                  fontSize: '58px',
+                  fontWeight: '700',
                   color: getProbabilityColor(topRegion[1]),
                 }}>
                   {topRegion[1]}%
@@ -212,19 +223,19 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           )}
 
           {/* Other Regions - Grid Layout with Max Height */}
-          <div style={{ marginTop: '30px' }}>
+          <div style={{ marginTop: '20px' }}>
             <p style={{
               fontSize: '20px',
               fontWeight: '600',
               color: darkMode ? '#cbd5e1' : '#475569',
-              marginBottom: '20px',
+              marginBottom: '18px',
             }}>
               Other Probable Regions:
             </p>
             <div style={{ 
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-              gap: '15px',
+              gap: '20px',
               maxHeight: '350px',
               overflowY: 'auto',
             }}>
@@ -248,7 +259,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                       minWidth: '50px',
                       minHeight: '50px',
                       borderRadius: '10px',
-                      background: getProbabilityColor(probability),
+                      background: getDesaturatedColor(probability),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -292,17 +303,18 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         }}>
           <div>
             <p style={{
-              fontSize: '17px',
-              color: darkMode ? '#94a3b8' : '#64748b',
+              fontSize: '18px',
+              color: darkMode ? '#94a3b8' : '#6C6C6C',
               margin: 0,
               fontWeight: '500',
             }}>
               Based on {selectedSignsCount} seizure sign{selectedSignsCount !== 1 ? 's' : ''}
             </p>
             <p style={{
-              fontSize: '15px',
-              color: darkMode ? '#64748b' : '#94a3b8',
+              fontSize: '16px',
+              color: darkMode ? '#64748b' : '#8A8A8A',
               margin: '5px 0 0 0',
+              fontWeight: '500',
             }}>
               Population estimates • ILAE-aligned research data
             </p>
@@ -310,11 +322,13 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
+            gap: '14px',
             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-            padding: '12px 22px',
-            borderRadius: '12px',
-            boxShadow: '0 8px 25px rgba(168, 85, 247, 0.4)',
+            padding: '14px 26px',
+            borderRadius: '14px',
+            boxShadow: '0 8px 25px rgba(168, 85, 247, 0.45)',
+            transform: 'scale(1.12)',
+            marginRight: '-12px',
           }}>
             <img 
               src={darkMode 
@@ -322,14 +336,14 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 : "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/lightmodelogo-neuroloop.png"}
               alt="NeuroLoop" 
               style={{
-                width: '30px',
-                height: '30px',
+                width: '34px',
+                height: '34px',
                 filter: darkMode ? 'drop-shadow(0 0 12px rgba(192, 132, 252, 0.7))' : 'drop-shadow(0 0 10px rgba(168, 85, 247, 0.5))',
               }}
             />
             <div>
               <p style={{
-                fontSize: '18px',
+                fontSize: '19px',
                 fontWeight: '700',
                 color: 'white',
                 margin: 0,
@@ -338,7 +352,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 NeuroLoop
               </p>
               <p style={{
-                fontSize: '13px',
+                fontSize: '14px',
                 fontWeight: '500',
                 color: 'rgba(255, 255, 255, 0.95)',
                 margin: 0,

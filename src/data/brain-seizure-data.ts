@@ -575,22 +575,6 @@ export const SEIZURE_SEMIOLOGY: Record<string, SeizureSign> = {
   
   // NEW SIGNS - High-value localizers from Alim-Marvasti et al.
   
-  fear_anxiety_aura: {
-    name: "Fear/Anxiety Aura",
-    description: "Intense feeling of fear, dread, panic without external cause",
-    type: "Subjective Sensory",
-    // Research: Temporal OR 2.1 [1.5-3.0], Amygdala involvement high
-    // Classic temporal lobe/amygdala activation
-    localizations: {
-      "Temporal Lobe": 71,       // [95% CI: 61-80%]
-      "Mesial Temporal": 58,     // Amygdala-hippocampal complex
-      "Amygdala": 52,
-      "Frontal Lobe": 18,
-      "Insula": 12,
-    },
-    additionalSigns: ["Epigastric aura", "Déjà vu", "Autonomic changes", "Tachycardia"]
-  },
-  
   jacksonian_march: {
     name: "Jacksonian March",
     description: "Progressive spreading of motor activity (e.g., hand → arm → face)",
