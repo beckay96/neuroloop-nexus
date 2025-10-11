@@ -112,22 +112,22 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           position: 'relative',
           zIndex: 10,
         }}>
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <img 
               src={darkMode 
                 ? 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/dark-mode-wide-logo.png.png'
                 : 'https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/light-mode-wide-logo.PNG'}
               alt="NeuroLoop"
               style={{
-                height: '190px',
+                height: darkMode ? '190px' : '380px',
                 width: 'auto',
-                filter: darkMode ? 'drop-shadow(0 8px 30px rgba(147, 51, 234, 0.7))' : 'drop-shadow(0 8px 30px rgba(168, 85, 247, 0.6))',
+                filter: darkMode ? 'drop-shadow(0 8px 30px rgba(147, 51, 234, 0.7))' : 'drop-shadow(0 12px 40px rgba(168, 85, 247, 0.7))',
               }}
             />
             <p style={{
-              fontSize: '24px',
+              fontSize: darkMode ? '24px' : '32px',
               color: darkMode ? '#e2e8f0' : '#64748b',
-              margin: '12px 0 0 0',
+              margin: darkMode ? '12px 0 0 0' : '18px 0 0 0',
               fontWeight: '600',
               letterSpacing: '0.5px',
             }}>
@@ -139,6 +139,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             color: darkMode ? '#cbd5e1' : '#64748b',
             textAlign: 'right',
             fontWeight: '500',
+            paddingTop: '4px',
           }}>
             {today}
           </div>
@@ -273,9 +274,6 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                       fontSize: '22px',
                       fontWeight: '700',
                       color: probability <= 40 ? '#000' : '#fff',
-                      lineHeight: '50px',
-                      textAlign: 'center',
-                      padding: 0,
                     }}>
                       {index + 2}
                     </div>
@@ -304,11 +302,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         {/* Footer */}
         <div style={{
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
+          gap: '20px',
           position: 'relative',
           zIndex: 10,
           marginTop: 'auto',
+          paddingTop: '30px',
         }}>
           <div>
             <p style={{
@@ -331,13 +330,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '14px',
+            justifyContent: 'center',
+            gap: '16px',
             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-            padding: '14px 26px',
-            borderRadius: '14px',
+            padding: '18px 32px',
+            borderRadius: '16px',
             boxShadow: '0 8px 25px rgba(168, 85, 247, 0.45)',
-            transform: 'scale(1.12)',
-            marginRight: '-12px',
           }}>
             <img 
               src={darkMode 
@@ -345,31 +343,22 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 : "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/lightmodelogo-neuroloop.png"}
               alt="NeuroLoop" 
               style={{
-                width: '34px',
-                height: '34px',
+                width: '48px',
+                height: '48px',
                 filter: darkMode ? 'drop-shadow(0 0 12px rgba(192, 132, 252, 0.7))' : 'drop-shadow(0 0 10px rgba(168, 85, 247, 0.5))',
               }}
             />
-            <div>
-              <p style={{
-                fontSize: '19px',
-                fontWeight: '700',
-                color: 'white',
-                margin: 0,
-                lineHeight: 1.2,
-              }}>
-                NeuroLoop
-              </p>
-              <p style={{
-                fontSize: '14px',
-                fontWeight: '500',
-                color: 'rgba(255, 255, 255, 0.95)',
-                margin: 0,
-                lineHeight: 1.2,
-              }}>
-                NeuroLoop.app
-              </p>
-            </div>
+            <p style={{
+              fontSize: '17px',
+              fontWeight: '600',
+              color: 'white',
+              margin: 0,
+              lineHeight: 1.5,
+              textAlign: 'center',
+            }}>
+              Want to learn what areas your seizure signs could relate to?<br />
+              Try for free with no sign-up at <strong>NeuroLoop.app</strong>
+            </p>
           </div>
         </div>
       </div>
