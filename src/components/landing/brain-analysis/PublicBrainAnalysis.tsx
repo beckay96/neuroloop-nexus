@@ -155,7 +155,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
               <div>
                 <DialogTitle className="text-xl sm:text-2xl leading-tight">Interactive Brain Localization Tool</DialogTitle>
                 <DialogDescription className="mt-1 text-sm">
-                  For Seizure Research & Education. Select signs to explore likely brain regions (population estimates).
+                  🧠 Try the free Brain Seizure Localisation Tool — discover which brain regions are most often linked to your seizure symptoms.
                 </DialogDescription>
               </div>
               
@@ -291,6 +291,45 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose }: PublicBrainAn
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 Tick all signs that apply. Results update instantly.
               </p>
+              
+              {/* Quick Example Buttons - Gamification */}
+              <div className="mb-4 p-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 rounded-lg border border-purple-200 dark:border-purple-700">
+                <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2">Try Quick Examples:</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    onClick={() => setSelectedSigns(['visual_aura'])}
+                  >
+                    Visual Aura
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    onClick={() => setSelectedSigns(['olfactory_aura'])}
+                  >
+                    Olfactory Aura
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    onClick={() => setSelectedSigns(['automatisms'])}
+                  >
+                    Automatisms
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-xs"
+                    onClick={() => setSelectedSigns(['epigastric_aura', 'fear_anxiety_aura'])}
+                  >
+                    Multiple Signs
+                  </Button>
+                </div>
+              </div>
 
               {/* Search */}
               <div className="relative mb-4">
