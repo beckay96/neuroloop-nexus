@@ -97,6 +97,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                color: 'transparent',
                 margin: 0,
                 lineHeight: 1,
               }}>
@@ -191,10 +192,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 <div style={{
                   fontSize: '64px',
                   fontWeight: '800',
-                  background: getProbabilityColor(topRegion[1]),
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  color: getProbabilityColor(topRegion[1]),
                 }}>
                   {topRegion[1]}%
                 </div>
@@ -228,16 +226,17 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                     <div style={{
-                      width: '40px',
-                      height: '40px',
+                      width: '50px',
+                      height: '50px',
                       borderRadius: '10px',
                       background: getProbabilityColor(probability),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '20px',
+                      fontSize: '22px',
                       fontWeight: '700',
                       color: probability <= 40 ? '#000' : '#fff',
+                      flexShrink: 0,
                     }}>
                       {index + 2}
                     </div>
@@ -252,7 +251,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                   <span style={{
                     fontSize: '28px',
                     fontWeight: '700',
-                    color: getProbabilityColor(probability),
+                    color: '#000000',
                   }}>
                     {probability}%
                   </span>
@@ -288,19 +287,42 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             </p>
           </div>
           <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-            padding: '15px 30px',
+            padding: '15px 25px',
             borderRadius: '15px',
             boxShadow: '0 10px 30px rgba(168, 85, 247, 0.3)',
           }}>
-            <p style={{
-              fontSize: '20px',
-              fontWeight: '700',
-              color: 'white',
-              margin: 0,
-            }}>
-              Powered by NeuroLoop
-            </p>
+            <img 
+              src="https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/darkmodelogo-neuroloop.png" 
+              alt="NeuroLoop" 
+              style={{
+                width: '32px',
+                height: '32px',
+              }}
+            />
+            <div>
+              <p style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: 'white',
+                margin: 0,
+                lineHeight: 1.2,
+              }}>
+                NeuroLoop
+              </p>
+              <p style={{
+                fontSize: '14px',
+                fontWeight: '500',
+                color: 'rgba(255, 255, 255, 0.9)',
+                margin: 0,
+                lineHeight: 1.2,
+              }}>
+                NeuroLoop.app
+              </p>
+            </div>
           </div>
         </div>
       </div>
