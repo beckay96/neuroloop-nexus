@@ -17,6 +17,7 @@ export default function LandingPage() {
   const [showFullWarning, setShowFullWarning] = useState(false);
   const [showBrainAnalysis, setShowBrainAnalysis] = useState(false);
   const [showWaitlist, setShowWaitlist] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Auto-open waitlist after 3 seconds
   useEffect(() => {
@@ -24,6 +25,15 @@ export default function LandingPage() {
       setShowWaitlist(true);
     }, 3000);
     return () => clearTimeout(timer);
+  }, []);
+  
+  // Track scroll for floating CTA
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 800);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const features = [{
     icon: Brain,
@@ -182,7 +192,7 @@ export default function LandingPage() {
               <span className="relative z-10 flex items-center gap-2">
                 <Sparkles className="h-5 w-5" />
                 <Bell className="h-5 w-5" />
-                Join Waitlist - Get Notified
+                Join Before Launch – Help Close the Loop
                 <Sparkles className="h-5 w-5" />
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -408,16 +418,20 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-2 border-gray-200 dark:border-gray-700">
                 <h3 className="font-bold text-xl text-teal-600 dark:text-teal-400 mb-4">The Week NeuroLoop Was Born</h3>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                  Less than an hour after my Elevita pitch to a major health research group, I had a seizure at home. 
-                  For the first time in six years, the security camera caught the whole event.
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Less than an hour after pitching Elevita…
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  I had a seizure at home.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  For the first time in six years, a security camera caught everything.
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                  <strong>Seeing myself convulse and lose control was deeply confronting</strong> in a way I'd never experienced before.
+                  <strong>Watching myself convulse was confronting</strong> — but what hit hardest… was realising what was missing:
                 </p>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  As my family scrambled to help, I realised what was missing wasn't just real-time safety or reassurance
-                  <strong className="text-purple-600 dark:text-purple-400">—it was the data</strong>.
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg font-semibold">
+                  <strong className="text-purple-600 dark:text-purple-400">The data.</strong>
                 </p>
               </div>
 
@@ -480,7 +494,7 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3 mb-4">
                   <TrendingDown className="h-8 w-8 text-red-600 dark:text-red-400 shrink-0" />
                   <div>
-                    <h3 className="font-bold text-xl mb-2 text-red-900 dark:text-red-100">Appalling Research Scarcity</h3>
+                    <h3 className="font-bold text-xl mb-2 text-red-900 dark:text-red-100">Alarming Research Neglect</h3>
                     <p className="text-sm text-red-900 dark:text-red-100 italic mb-3">
                       "Only 0.19% [440/229,521] of all publications on epilepsy" focus on catamenial epilepsy despite affecting 40%+ of women
                     </p>
@@ -537,9 +551,13 @@ export default function LandingPage() {
                   <AlertCircle className="h-8 w-8 text-yellow-600 dark:text-yellow-400 shrink-0" />
                   <div>
                     <h3 className="font-bold text-xl mb-2 text-yellow-900 dark:text-yellow-100">Existing Apps Fail Women</h3>
-                    <p className="text-sm text-yellow-900 dark:text-yellow-100 italic mb-3">
+                    <p className="text-sm text-yellow-900 dark:text-yellow-100 mb-2">
                       Current epilepsy apps don't track menstrual cycles or hormonal factors
                     </p>
+                    <div className="text-sm font-semibold mt-3 pt-3 border-t border-yellow-300 dark:border-yellow-700">
+                      <p className="text-red-700 dark:text-red-300">Existing apps: manual, patchy, unverified ❌</p>
+                      <p className="text-green-700 dark:text-green-300 mt-1">NeuroLoop: clinical-grade, research-ready ✅</p>
+                    </div>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm text-yellow-900 dark:text-yellow-100">
@@ -564,8 +582,11 @@ export default function LandingPage() {
                 <div className="flex items-start gap-3 mb-4">
                   <Heart className="h-8 w-8 text-pink-600 dark:text-pink-400 shrink-0" />
                   <div>
-                    <h3 className="font-bold text-xl mb-2 text-pink-900 dark:text-pink-100">The NeuroLoop Solution</h3>
-                    <p className="text-sm text-pink-900 dark:text-pink-100 italic mb-3">
+                    <h3 className="font-bold text-2xl mb-2 text-pink-900 dark:text-pink-100">The NeuroLoop Solution</h3>
+                    <p className="text-base text-pink-900 dark:text-pink-100 font-semibold mb-3">
+                      We're building the world's first standardised dataset for women's neurological health.
+                    </p>
+                    <p className="text-sm text-pink-900 dark:text-pink-100 italic">
                       The world's first comprehensive catamenial epilepsy tracking platform
                     </p>
                   </div>
@@ -624,6 +645,9 @@ export default function LandingPage() {
       <div className="bg-white dark:bg-gray-950 py-16 border-y-4 border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4 italic">
+              NeuroLoop isn't solving a niche problem — it's addressing one of the largest unmet needs in global health.
+            </p>
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">The Global Impact</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
               Why better neurological health tracking matters
@@ -769,6 +793,22 @@ export default function LandingPage() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+          
+          {/* CTA After Stats */}
+          <div className="text-center mt-12">
+            <Button 
+              size="lg" 
+              className="relative overflow-hidden text-lg px-10 py-7 bg-gradient-to-r from-teal-500 to-purple-600 hover:from-teal-600 hover:to-purple-700 shadow-xl shadow-teal-500/30 hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-110 transition-all duration-500 group" 
+              onClick={() => setShowWaitlist(true)}
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                <Heart className="h-5 w-5" />
+                Be Part of the Solution
+                <ArrowRight className="h-5 w-5" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            </Button>
           </div>
         </div>
       </div>
@@ -1001,7 +1041,7 @@ export default function LandingPage() {
                 <span className="relative z-10 flex items-center gap-2">
                   <Sparkles className="h-5 w-5" />
                   <Bell className="h-5 w-5" />
-                  Join Waitlist Now
+                  Join NeuroLoop – The Future Starts Here
                   <Sparkles className="h-5 w-5" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -1013,6 +1053,20 @@ export default function LandingPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Floating Waitlist Button - Mobile Only */}
+      {scrolled && (
+        <Button
+          className="fixed bottom-4 right-4 z-40 md:hidden shadow-2xl bg-gradient-to-r from-teal-500 to-purple-600 hover:from-teal-600 hover:to-purple-700 text-white px-6 py-6 rounded-full hover:scale-110 transition-all duration-300"
+          onClick={() => setShowWaitlist(true)}
+          size="lg"
+        >
+          <span className="flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            Join Waitlist
+          </span>
+        </Button>
+      )}
 
       {/* Floating Brain Analysis Button - STUNNING! */}
       <div 
