@@ -192,10 +192,17 @@ export function CustomDatePicker({
     inputRef.current?.focus();
   };
 
-  // Close calendar when clicking outside
+  // Close calendar when clicking outside (but not on Select dropdown items)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement;
+      
+      // Don't close if clicking on Select dropdown content (Radix portals)
+      if (target.closest('[role="listbox"]') || target.closest('[data-radix-popper-content-wrapper]')) {
+        return;
+      }
+      
+      if (containerRef.current && !containerRef.current.contains(target)) {
         setIsOpen(false);
       }
     };
@@ -315,7 +322,7 @@ export function CustomDatePicker({
 
       {/* Calendar Popup */}
       {isOpen && !disabled && (
-        <div className="absolute z-50 mt-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 min-w-[320px]">
+        <div className="absolute z-50 mt-2 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 min-w-[320px] backdrop-blur-sm">
           {/* Custom Header with Month/Year Dropdowns and Navigation */}
           <div className="mb-4 space-y-3">
             {/* Navigation Buttons Row */}
@@ -373,7 +380,7 @@ export function CustomDatePicker({
                 <SelectTrigger className="flex-1 h-9">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="max-h-60">
+                <SelectContent className="max-h-60 bg-popover border border-border z-[60]">
                   {monthNames.map((month, index) => (
                     <SelectItem key={index} value={index.toString()}>
                       {month}
@@ -386,7 +393,7 @@ export function CustomDatePicker({
                 <SelectTrigger className="w-24 h-9">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="max-h-60">
+                <SelectContent className="max-h-60 bg-popover border border-border z-[60]">
                   {yearOptions.map((year) => (
                     <SelectItem key={year} value={year.toString()}>
                       {year}

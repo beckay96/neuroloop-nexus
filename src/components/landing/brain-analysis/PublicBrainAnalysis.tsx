@@ -174,30 +174,40 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 dark:from-gray-950 dark:via-purple-950/30 dark:to-gray-900 pt-12 sm:pt-6">
-        <DialogHeader className="space-y-4 pb-6 border-b-2 border-purple-200 dark:border-purple-800/50">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <DialogContent className="max-w-[95vw] sm:max-w-[90vw] lg:max-w-7xl max-h-[95vh] overflow-y-auto overflow-x-hidden bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 dark:from-gray-950 dark:via-purple-950/30 dark:to-gray-900 px-4 sm:px-6 pt-6">
+        {/* Close Button - Absolutely Positioned Top Right */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={onClose}
+          className="absolute right-4 top-4 z-50 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800 shadow-lg"
+        >
+          <X className="h-5 w-5" />
+        </Button>
+
+        <DialogHeader className="space-y-4 pb-6 border-b-2 border-purple-200 dark:border-purple-800/50 pr-12">
+          <div className="flex flex-col gap-4">
             <div className="flex items-start gap-3">
-              <div className="relative">
-                <Brain className="h-8 w-8 sm:h-10 sm:w-10 text-purple-600 dark:text-purple-400 flex-shrink-0 animate-pulse" />
+              <div className="relative flex-shrink-0">
+                <Brain className="h-8 w-8 sm:h-10 sm:w-10 text-purple-600 dark:text-purple-400 animate-pulse" />
                 <div className="absolute -inset-1 bg-purple-400/30 dark:bg-purple-600/30 rounded-full blur-lg -z-10"></div>
               </div>
-              <div>
-                <DialogTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent leading-tight">
+              <div className="flex-1 min-w-0">
+                <DialogTitle className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent leading-tight">
                   Interactive Brain Localization Tool
                 </DialogTitle>
                 <DialogDescription className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium">
                   🧠 Try the free Brain Seizure Localisation Tool — discover which brain regions are most often linked to your seizure symptoms.
                 </DialogDescription>
               </div>
-              
             </div>
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-2">
               <Sheet open={methodologyOpen} onOpenChange={setMethodologyOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="flex-shrink-0">
                     <BookOpen className="h-4 w-4 mr-2" />
-                    Methodology
+                    <span className="hidden sm:inline">Methodology</span>
+                    <span className="sm:hidden">Info</span>
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="w-full sm:w-[540px] md:w-[640px] lg:w-[700px] overflow-y-auto">
@@ -306,16 +316,12 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
                   </div>
                 </SheetContent>
               </Sheet>
-
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X className="h-5 w-5" />
-              </Button>
             </div>
           </div>
         </DialogHeader>
 
         {/* Educational Disclaimer - Always Visible */}
-        <Card className="p-4 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-700">
+        <Card className="p-3 sm:p-4 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-700">
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
             <div className="text-sm">
@@ -330,11 +336,11 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
           </div>
         </Card>
 
-        <div className="space-y-6 mt-4">
+        <div className="space-y-4 sm:space-y-6 mt-4">
           {/* Brain Visualization - Now First */}
-          <Card className="p-6 bg-gradient-to-br from-white to-teal-50/30 dark:from-gray-900 dark:to-teal-950/20 border-2 border-teal-200 dark:border-teal-800/50 shadow-lg">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-teal-600 via-purple-600 to-pink-600 dark:from-teal-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+          <Card className="p-4 sm:p-6 bg-gradient-to-br from-white to-teal-50/30 dark:from-gray-900 dark:to-teal-950/20 border-2 border-teal-200 dark:border-teal-800/50 shadow-lg overflow-x-hidden">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-teal-600 via-purple-600 to-pink-600 dark:from-teal-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                 Brain Region Localization
               </h2>
             </div>
@@ -350,7 +356,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
 
             {/* CTA to Select Symptoms Below */}
             {selectedSigns.length === 0 && (
-              <Card className="mt-6 p-5 bg-gradient-to-r from-purple-50 via-pink-50 to-teal-50 dark:from-purple-950/40 dark:via-pink-950/40 dark:to-teal-950/40 border-2 border-purple-300 dark:border-purple-600 animate-pulse">
+              <Card className="mt-4 sm:mt-6 p-4 sm:p-5 bg-gradient-to-r from-purple-50 via-pink-50 to-teal-50 dark:from-purple-950/40 dark:via-pink-950/40 dark:to-teal-950/40 border-2 border-purple-300 dark:border-purple-600 animate-pulse">
                 <div className="text-center space-y-3">
                   <div className="flex justify-center">
                     <ArrowDown className="h-8 w-8 text-purple-600 dark:text-purple-400 animate-bounce" />
@@ -374,7 +380,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
 
             {/* Generalized Seizure Alert */}
             {showGeneralized && (
-              <Card className="mt-6 p-4 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-700">
+              <Card className="mt-4 sm:mt-6 p-3 sm:p-4 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-700">
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
                   <div className="text-sm">
@@ -394,10 +400,10 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
               {/* Collapsible Header */}
               <button
                 onClick={() => setSelectionPanelOpen(!selectionPanelOpen)}
-                className="w-full p-6 flex items-center justify-between hover:bg-purple-50/50 dark:hover:bg-purple-950/50 transition-colors"
+                className="w-full p-4 sm:p-6 flex items-center justify-between hover:bg-purple-50/50 dark:hover:bg-purple-950/50 transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent truncate">
                     Select Seizure Signs
                   </h2>
                   {selectedSigns.length > 0 && (
@@ -429,7 +435,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
 
               {/* Collapsible Content */}
               {selectionPanelOpen && (
-                <div className="px-6 pb-6 animate-in slide-in-from-top-2">
+                <div className="px-4 sm:px-6 pb-4 sm:pb-6 animate-in slide-in-from-top-2">
 
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 font-medium">
                 ✨ Tick all signs that apply. Results update instantly.

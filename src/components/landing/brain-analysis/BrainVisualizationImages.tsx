@@ -198,8 +198,8 @@ export default function BrainVisualizationImages({
     <div className="space-y-6">
       {/* Animated Header - ENHANCED WITH GRADIENTS */}
       {sortedRegions.length > 0 && (
-        <div className="space-y-3 mb-6">
-          <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent animate-pulse">
+        <div className="space-y-3 mb-4 sm:mb-6">
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-teal-500 dark:from-purple-400 dark:via-pink-400 dark:to-teal-400 bg-clip-text text-transparent animate-pulse break-words">
             ✨ Brain regions lighting up based on your seizure signs!
           </h3>
           <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
@@ -240,7 +240,7 @@ export default function BrainVisualizationImages({
             return (
               <Card
                 key={region}
-                className="p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] animate-in slide-in-from-bottom-4 relative overflow-hidden"
+                className="p-3 sm:p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] animate-in slide-in-from-bottom-4 relative overflow-hidden"
                 style={{
                   backgroundColor: `${getProbabilityColor(probability)}20`,
                   borderColor: getProbabilityColor(probability),
@@ -250,10 +250,10 @@ export default function BrainVisualizationImages({
                 }}
                 onClick={() => setSelectedRegion(selectedRegion === region ? null : region)}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-lg">{region}</h3>
+                <div className="flex items-start justify-between gap-3 sm:gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <h3 className="font-bold text-base sm:text-lg">{region}</h3>
                       <Badge 
                         className="font-bold"
                         style={{ 
@@ -310,9 +310,9 @@ export default function BrainVisualizationImages({
         <Card className="p-5 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/40 dark:via-purple-950/40 dark:to-pink-950/40 border-2 border-purple-300 dark:border-purple-600 shadow-xl">
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
-                <Camera className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                Share Your Brain Map
+              <h3 className="text-base sm:text-lg font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+                <Camera className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                <span className="break-words">Share Your Brain Map</span>
               </h3>
               <p className="text-sm text-gray-700 dark:text-gray-300">
                 📸 Export, share, or save your results (no personal data included)
@@ -393,10 +393,10 @@ export default function BrainVisualizationImages({
       {sortedRegions.length > 0 && (
         <Card className="p-6 bg-gradient-to-br from-teal-50 via-purple-50 to-pink-50 dark:from-teal-950/40 dark:via-purple-950/40 dark:to-pink-950/40 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
           <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-2 text-purple-600 dark:text-purple-400">
-              <Sparkles className="h-5 w-5" />
-              <h3 className="text-lg font-bold">Want to track your symptoms, medications, and seizure videos?</h3>
-              <Sparkles className="h-5 w-5" />
+            <div className="flex items-center justify-center gap-2 text-purple-600 dark:text-purple-400 flex-wrap">
+              <Sparkles className="h-5 w-5 flex-shrink-0" />
+              <h3 className="text-base sm:text-lg font-bold text-center">Want to track your symptoms, medications, and seizure videos?</h3>
+              <Sparkles className="h-5 w-5 flex-shrink-0" />
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Join the NeuroLoop waitlist and contribute to real research. It's free and secure.
