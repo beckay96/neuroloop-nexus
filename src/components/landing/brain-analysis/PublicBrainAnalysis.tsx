@@ -19,7 +19,7 @@ import {
   SheetDescription,
   SheetTrigger
 } from "@/components/ui/sheet";
-import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check, EyeOff, ChevronDown, ChevronUp, ArrowDown } from "lucide-react";
+import { Brain, Search, X, Info, AlertCircle, BookOpen, Share2, ExternalLink, Copy, Check, EyeOff, ChevronDown, ChevronUp, ArrowDown, Sparkles, ArrowLeftRight, Star } from "lucide-react";
 import BrainVisualizationImages from "./BrainVisualizationImages";
 import { SEIZURE_SEMIOLOGY, BRAIN_REGIONS } from "@/data/brain-seizure-data";
 import { useToast } from "@/hooks/use-toast";
@@ -136,14 +136,39 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
     sign.description.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
+  // Helper function to get lateralization badge
+  const getLateralizationBadge = (lateralization?: string) => {
+    if (!lateralization || lateralization === "non_lateralizing") return null;
+    
+    const config = {
+      ipsilateral: { icon: "→", label: "Same Side", color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" },
+      contralateral: { icon: "←→", label: "Opposite Side", color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" },
+      bilateral: { icon: "⇄", label: "Both Sides", color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200" },
+    };
+    
+    const item = config[lateralization as keyof typeof config];
+    if (!item) return null;
+    
+    return (
+      <Badge variant="outline" className={`text-xs ${item.color} flex items-center gap-1`}>
+        <ArrowLeftRight className="h-3 w-3" />
+        {item.label}
+      </Badge>
+    );
+  };
+
   const categories = {
-    "Auras (Subjective Sensations)": filteredSigns.filter(([_, s]) => s.type === "Subjective Sensory"),
-    "Motor Signs and Movements": filteredSigns.filter(([_, s]) => s.type === "Motor Signs"),
-    "Autonomic Symptoms": filteredSigns.filter(([_, s]) => s.type === "Autonomic Signs"),
+    "🌟 Pathognomonic Signs (Diagnostic)": filteredSigns.filter(([_, s]) => s.pathognomonic === true),
+    "⚡ Lateralizing Signs (Left vs Right Brain)": filteredSigns.filter(([_, s]) => 
+      s.lateralization && s.lateralization !== "non_lateralizing" && s.lateralization !== "bilateral" && !s.pathognomonic
+    ),
+    "Auras (Subjective Sensations)": filteredSigns.filter(([_, s]) => s.type === "Subjective Sensory" && !s.pathognomonic),
+    "Motor Signs and Movements": filteredSigns.filter(([_, s]) => s.type === "Motor Signs" && !s.pathognomonic && (!s.lateralization || s.lateralization === "non_lateralizing" || s.lateralization === "bilateral")),
+    "Autonomic Symptoms": filteredSigns.filter(([_, s]) => s.type === "Autonomic Signs" && !s.pathognomonic),
     "Consciousness Changes": filteredSigns.filter(([_, s]) => s.type === "Consciousness"),
     "Language and Speech": filteredSigns.filter(([_, s]) => s.type === "Language"),
-    "Post-Ictal Symptoms": filteredSigns.filter(([_, s]) => s.type === "Post-Ictal"),
-    "Behavioral Changes": filteredSigns.filter(([_, s]) => s.type === "Behavioral"),
+    "Post-Ictal Symptoms": filteredSigns.filter(([_, s]) => s.type === "Post-Ictal" && !s.pathognomonic && (!s.lateralization || s.lateralization === "non_lateralizing")),
+    "Behavioral Changes": filteredSigns.filter(([_, s]) => s.type === "Behavioral" && !s.pathognomonic),
     "Generalized/Bilateral Indicators": filteredSigns.filter(([_, s]) => s.type === "Generalized" || s.type === "Associated Features"),
   };
 
@@ -208,6 +233,32 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         Each percentage represents the probability that a specific seizure sign originates from that brain region, based on population-level research data. For example, "Epigastric Aura - Temporal Lobe 83%" means that in research studies, 83% of patients with epigastric auras had temporal lobe involvement.
                       </p>
+                    </div>
+
+                    <div>
+                      <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">🌟 Pathognomonic vs Lateralizing Signs</h3>
+                      <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <div>
+                          <strong className="text-yellow-700 dark:text-yellow-400">⭐ Pathognomonic Signs:</strong> These are "diagnostic" - when present, they strongly indicate a specific brain region. Examples: Figure-of-4 sign (temporal lobe), Gelastic seizures (hypothalamus), Fencing posture (SMA).
+                        </div>
+                        <div>
+                          <strong className="text-purple-700 dark:text-purple-400">⚡ Lateralizing Signs:</strong> These help identify which side of the brain (left vs right hemisphere) is involved:
+                          <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
+                            <li><strong>Same Side (Ipsilateral):</strong> Sign on same side as seizure focus</li>
+                            <li><strong>Opposite Side (Contralateral):</strong> Sign opposite to seizure focus - most common</li>
+                            <li><strong>Both Sides:</strong> Complex bilateral patterns with specific meanings</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Data Verification & Transparency</h3>
+                      <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong className="text-green-700 dark:text-green-400">✓ Verified Data:</strong> 40+ signs with exact percentages from Alim-Marvasti et al. (2022) meta-analysis with confidence intervals.</p>
+                        <p><strong className="text-orange-700 dark:text-orange-400">⚠️ Literature-Supported:</strong> Lateralizing signs with verified concepts (e.g., contralateral/ipsilateral rules from Kotagal 2005) but estimated regional percentages pending primary source verification.</p>
+                        <p><strong>All lateralization directions are clinically verified.</strong> Specific regional percentages for newer signs marked with ⚠️ are estimates pending verification.</p>
+                      </div>
                     </div>
 
                     <div>
@@ -458,7 +509,7 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
                       </legend>
                       <div className="space-y-2">
                         {signs.map(([id, sign]) => (
-                          <div key={id} className="flex items-start space-x-2">
+                          <div key={id} className={`flex items-start space-x-2 p-2 rounded-lg transition-colors ${sign.pathognomonic ? 'bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}>
                             <Checkbox
                               checked={selectedSigns.includes(id)}
                               onCheckedChange={() => handleSignToggle(id)}
@@ -466,7 +517,21 @@ export default function PublicBrainAnalysisV2({ isOpen, onClose, onWaitlistOpen 
                               aria-label={`${sign.name}: ${sign.description}`}
                             />
                             <label htmlFor={id} className="text-sm cursor-pointer flex-1">
-                              <div className="font-medium text-gray-900 dark:text-gray-100">{sign.name}</div>
+                              <div className="flex items-center gap-2 flex-wrap mb-1">
+                                <span className="font-medium text-gray-900 dark:text-gray-100">{sign.name}</span>
+                                {sign.pathognomonic && (
+                                  <Badge variant="default" className="bg-yellow-500 text-yellow-900 text-xs flex items-center gap-1">
+                                    <Star className="h-3 w-3" />
+                                    Diagnostic
+                                  </Badge>
+                                )}
+                                {getLateralizationBadge(sign.lateralization)}
+                                {sign.confidence === "very_high" && !sign.pathognomonic && (
+                                  <Badge variant="outline" className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                    High Confidence
+                                  </Badge>
+                                )}
+                              </div>
                               <div className="text-xs text-gray-600 dark:text-gray-400">{sign.description}</div>
                             </label>
                           </div>

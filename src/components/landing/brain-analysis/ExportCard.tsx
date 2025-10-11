@@ -106,7 +106,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           display: 'flex', 
           alignItems: 'flex-start', 
           justifyContent: 'space-between',
-          marginBottom: '35px',
+          marginBottom: '25px',
           position: 'relative',
           zIndex: 10,
         }}>
@@ -123,9 +123,9 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               }}
             />
             <p style={{
-              fontSize: darkMode ? '24px' : '32px',
+              fontSize: darkMode ? '22px' : '28px',
               color: darkMode ? '#e2e8f0' : '#64748b',
-              margin: darkMode ? '12px 0 0 0' : '18px 0 0 0',
+              margin: darkMode ? '10px 0 0 0' : '14px 0 0 0',
               fontWeight: '600',
               letterSpacing: '0.5px',
             }}>
@@ -147,7 +147,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         <div style={{
           background: darkMode ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.94)',
           borderRadius: '28px',
-          padding: '40px',
+          padding: '32px',
           boxShadow: darkMode 
             ? '0 25px 70px rgba(0, 0, 0, 0.6), 0 0 40px rgba(147, 51, 234, 0.15), 0 8px 24px rgba(0,0,0,0.15)'
             : '0 25px 70px rgba(0, 0, 0, 0.14), 0 0 40px rgba(168, 85, 247, 0.12), 0 8px 24px rgba(0,0,0,0.06)',
@@ -165,7 +165,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             display: 'flex',
             alignItems: 'center',
             gap: '15px',
-            marginBottom: '22px',
+            marginBottom: '18px',
           }}>
             <Sparkles style={{ 
               width: '32px', 
@@ -174,7 +174,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               filter: darkMode ? 'drop-shadow(0 0 8px rgba(192, 132, 252, 0.6))' : 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.4))',
             }} />
             <h2 style={{
-              fontSize: '32px',
+              fontSize: '28px',
               fontWeight: '700',
               color: darkMode ? '#f1f5f9' : '#1e293b',
               margin: 0,
@@ -191,8 +191,8 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               background: `${getProbabilityColor(topRegion[1])}20`,
               border: `3px solid ${getProbabilityColor(topRegion[1])}`,
               borderRadius: '20px',
-              padding: '35px',
-              marginBottom: '25px',
+              padding: '28px',
+              marginBottom: '20px',
               boxShadow: `0 10px 30px ${getProbabilityColor(topRegion[1])}40, inset 0 1px 0 rgba(255,255,255,0.1)`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -208,7 +208,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                     Most Likely Region
                   </p>
                   <h3 style={{
-                    fontSize: '42px',
+                    fontSize: '38px',
                     fontWeight: '800',
                     color: darkMode ? '#f1f5f9' : '#1a1a1a',
                     margin: 0,
@@ -217,7 +217,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                   </h3>
                 </div>
                 <div style={{
-                  fontSize: '58px',
+                  fontSize: '52px',
                   fontWeight: '700',
                   color: getProbabilityColor(topRegion[1]),
                 }}>
@@ -228,12 +228,12 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
           )}
 
           {/* Other Regions - Conditional Grid/Flex Layout */}
-          <div style={{ marginTop: '20px' }}>
+          <div style={{ marginTop: '15px' }}>
             <p style={{
-              fontSize: '20px',
+              fontSize: '18px',
               fontWeight: '600',
               color: darkMode ? '#cbd5e1' : '#475569',
-              marginBottom: '18px',
+              marginBottom: '15px',
             }}>
               Other Probable Regions:
             </p>
@@ -241,7 +241,7 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               display: sortedRegions.length > 3 ? 'grid' : 'flex',
               gridTemplateColumns: sortedRegions.length > 3 ? 'repeat(auto-fit, minmax(400px, 1fr))' : undefined,
               flexDirection: sortedRegions.length <= 3 ? 'column' : undefined,
-              gap: '20px',
+              gap: '15px',
               maxHeight: sortedRegions.length > 3 ? '350px' : undefined,
               overflowY: sortedRegions.length > 3 ? 'auto' : undefined,
             }}>
@@ -301,15 +301,15 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '20px',
+          gap: '15px',
           position: 'relative',
           zIndex: 10,
           marginTop: 'auto',
-          paddingTop: '30px',
+          paddingTop: '20px',
         }}>
           <div>
             <p style={{
-              fontSize: '18px',
+              fontSize: '16px',
               color: darkMode ? '#94a3b8' : '#6C6C6C',
               margin: 0,
               fontWeight: '500',
@@ -317,9 +317,9 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
               Based on {selectedSignsCount} seizure sign{selectedSignsCount !== 1 ? 's' : ''}
             </p>
             <p style={{
-              fontSize: '16px',
+              fontSize: '14px',
               color: darkMode ? '#64748b' : '#8A8A8A',
-              margin: '5px 0 0 0',
+              margin: '4px 0 0 0',
               fontWeight: '500',
             }}>
               Population estimates • ILAE-aligned research data
@@ -329,10 +329,10 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '16px',
+            gap: '14px',
             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-            padding: '18px 32px',
-            borderRadius: '16px',
+            padding: '16px 28px',
+            borderRadius: '14px',
             boxShadow: '0 8px 25px rgba(168, 85, 247, 0.45)',
           }}>
             <img 
@@ -341,17 +341,17 @@ const ExportCard = forwardRef<HTMLDivElement, ExportCardProps>(
                 : "https://evcdikzpnjjpotbkkshs.supabase.co/storage/v1/object/public/public-bucket/lightmodelogo-neuroloop.png"}
               alt="NeuroLoop" 
               style={{
-                width: '48px',
-                height: '48px',
+                width: '42px',
+                height: '42px',
                 filter: darkMode ? 'drop-shadow(0 0 12px rgba(192, 132, 252, 0.7))' : 'drop-shadow(0 0 10px rgba(168, 85, 247, 0.5))',
               }}
             />
             <p style={{
-              fontSize: '17px',
+              fontSize: '15px',
               fontWeight: '600',
               color: 'white',
               margin: 0,
-              lineHeight: 1.5,
+              lineHeight: 1.4,
               textAlign: 'center',
             }}>
               Want to learn what areas your seizure signs could relate to?<br />
